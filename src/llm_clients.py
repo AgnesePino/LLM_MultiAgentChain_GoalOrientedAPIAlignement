@@ -10,7 +10,7 @@ API clients for OpenAI and LLaMA are initialized at the beginning.
 """
 import groq
 from openai import OpenAI, RateLimitError
-from data_key.key import get_key_openai, get_key_llama, count_Llama_keys
+from key import get_key_openai, get_key_llama, count_Llama_keys
 
 # Set your GPT-4 API key
 client = OpenAI(
