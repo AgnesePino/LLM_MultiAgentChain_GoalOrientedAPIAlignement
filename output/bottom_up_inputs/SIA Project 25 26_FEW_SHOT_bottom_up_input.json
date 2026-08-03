@@ -1,0 +1,595 @@
+{
+  "schema_version": "1.0",
+  "status": "READY_FOR_BOTTOM_UP_RECONSTRUCTION",
+  "source": {
+    "file_name": "SIA Project 25 26_FEW_SHOT.json",
+    "dataset_name": "SIA Project 25 26",
+    "prompting_mode": "FEW_SHOT",
+    "no_llama": false
+  },
+  "project_description": "\n    In the Municipality of Turin, a system called Participium is being developed — an information \nsystem that enables citizen participation in the management of urban environments. It allows \ncitizens to interact with the public administration by reporting inconveniences and malfunctions \nfound in the city (e.g., potholes in the asphalt, sidewalks with architectural barriers, garbage in the \nstreets, broken streetlights, etc.). An example of a similar information system is IRIS in Venice: \nhttps://iris.sad.ve.it/. The system, once developed, will be made available as open-source \nsoftware to all Italian public administrations through the portal https://developers.italia.it/.\n\nA. REPORTS \nCitizens can submit reports only if they have registered in the system with a username, first name, \nand last name. Once the registration is received, the user gets an email with a confirmation link. \nThe registration becomes valid, and the user can use the system only after confirming through \nthat link. Once registered, a citizen can submit reports by selecting a point on the map of Turin \n(which will be saved with latitude and longitude values) and filling in a problem form with the \nfollowing mandatory fields: title, textual description, category (chosen from a predefined list). It is \nalso mandatory to attach one or more photos (up to 3 per report, with each photo stored with its \nfile path on the server). The possible problem categories are: \n• Waterworks – Drinking water \n• Architectural Barriers \n• Sewerage \n• Public Lighting \n• Waste \n• Road Signs and Traffic Lights \n• Roads and Urban Furniture \n• Public Green Areas and Playgrounds \n• Other \nAfter entering all the information and the pictures, the system asks the citizen whether they want \nthe report to be anonymous (the name will not appear in the public list of all reports).  \n\nB. REPORT LIFECYCLE \nOnce submitted, the report is in the “Pending Approval” state until the Organization Office of the \nMunicipality of Turin performs a preliminary review of citizen reports, marking them as accepted \nor rejected. The possible states for a report are: Pending Approval, In Progress, Work in Progress, \nSuspended, Rejected. After approval, accepted reports move to the “In Progress” state, at which \npoint they are assigned to the technical office responsible, based on the problem category. Once \nthe intervention is planned, the state changes to “Work in Progress”, indicating that the issue \nresolution has started. In some cases, for organizational or technical reasons, the report can be \nset to “Suspended”, awaiting further evaluation or resources. When the problem is solved, the \ntechnical office updates the status and closes the report. In case of rejection, a written explanation \nfrom the Organization Office is mandatory (see next section).  \nIf the intervention must be carried out by maintenance personnel from an external company (for \nexample, Enel X for Public Lighting, or company Y for specific reports based on their content), \ntwo cases are possible: - Case 1: The company has access to Participium. In this case, the technical office assigns the \nreport to users from the corresponding company. External maintenance personnel can move the \nreport from Assigned to In Progress. Staff from the technical office and external maintenance \nworkers can exchange information and comments through the report, but these are not visible to \nthe reporting citizen (nor to other citizens). Once the work is completed, the external maintainer \ncan mark the report as resolved. \nNote: Automatic assignment of all reports in a certain category to the external company \n(bypassing the initial review by the public relations officer of the municipality) is possible only if \npreviously configured by the municipal administrator. - Case 2: The company does NOT have access to Participium. In this case, the external company \nupdates the technical office outside Participium, and once the problems are solved, a staff \nmember from the technical office will manually move the report to the Resolved state. \n\n\nC. CITIZEN UPDATES \nTo strengthen trust between citizens and institutions, the citizen can receive updates regarding \ntheir own reports through various channels. First, at every state change, the citizen receives a \nnotification on the platform with the corresponding update. Furthermore, municipal operators \nupdating reports can send the reporting citizen a message through the platform, to which it can \nreply. The system must allow this functionality to be accessible by external chatbots as well. Each \ntime the citizen receives a notification on the platform, they also get an email (this option can be \ndisabled in the user settings panel, where they can also upload a personal photo). \nMoreover, after the approval phase, accepted reports immediately become visible on the \nParticipium portal: they appear both on an interactive map of Turin, geolocated based on the \ncitizen’s selected point, and in a summary table that allows filtering and sorting reports by \ncategory, status, or date. In both views, the reporter’s name (“anonymous” if that option was \nchosen) and the report title are displayed. Clicking on the title opens a page with the description.  \nEven non-registered users can view both the maps and the summary table. Once logged into \nParticipium, citizens can follow other citizens’ open reports and receive notifications (following the \nsame rules as for their own reports). \n\n\nD. STATISTICS \nThe system allows viewing public and private statistics. Public statistics are visible in a dedicated \nsection of the website and concern the number of reports per category, and trends over day, week, \nor month. They are also visible to non-registered users. In the private section, accessible only to \nadministrators, it is possible to view, in addition to the public statistics, charts and tables. \n    ",
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "HLG_001",
+        "description": "Citizens should be able to submit reports by selecting a location on the map and filling out a problem form with necessary details.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+        }
+      },
+      {
+        "name": "HLG_002",
+        "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+        "actor": {
+          "name": "Municipal Operators",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+        }
+      },
+      {
+        "name": "HLG_003",
+        "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+        "actor": {
+          "name": "External Maintenance Personnel",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+        }
+      },
+      {
+        "name": "HLG_004",
+        "description": "Administrators require access to both public and private statistics to monitor system performance and report trends.",
+        "actor": {
+          "name": "Administrators",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 3)."
+        }
+      },
+      {
+        "name": "HLG_005",
+        "description": "Non-registered users should have access to view reports and statistics without needing to create an account, enhancing public engagement.",
+        "actor": {
+          "name": "Non-registered Users",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 4)."
+        }
+      },
+      {
+        "name": "HLG_006",
+        "description": "Citizens should receive timely notifications about the status changes of their reports and be able to communicate with municipal operators through the platform.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+        }
+      },
+      {
+        "name": "HLG_007",
+        "description": "The system should allow citizens to submit reports anonymously, ensuring their identity is not disclosed in public listings.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "LLG_001",
+        "description": "Citizens can interact with a map interface to pinpoint the exact location of the issue they are reporting.",
+        "high_level_associated": {
+          "name": "HLG_001",
+          "description": "Citizens should be able to submit reports by selecting a location on the map and filling out a problem form with necessary details.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+          }
+        }
+      },
+      {
+        "name": "LLG_002",
+        "description": "Citizens can input specific information about the issue they are reporting, including type, description, and urgency.",
+        "high_level_associated": {
+          "name": "HLG_001",
+          "description": "Citizens should be able to submit reports by selecting a location on the map and filling out a problem form with necessary details.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+          }
+        }
+      },
+      {
+        "name": "LLG_006",
+        "description": "Municipal operators can access a dashboard that displays all submitted reports for management and review.",
+        "high_level_associated": {
+          "name": "HLG_002",
+          "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+          }
+        }
+      },
+      {
+        "name": "LLG_007",
+        "description": "Municipal operators can take action on reports, determining their validity and next steps.",
+        "high_level_associated": {
+          "name": "HLG_002",
+          "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+          }
+        }
+      },
+      {
+        "name": "LLG_008",
+        "description": "Municipal operators can communicate directly with citizens through the platform to provide updates or request more information.",
+        "high_level_associated": {
+          "name": "HLG_002",
+          "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+          }
+        }
+      },
+      {
+        "name": "LLG_009",
+        "description": "Municipal operators can change the status of reports to reflect their current state in the management process.",
+        "high_level_associated": {
+          "name": "HLG_002",
+          "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+          }
+        }
+      },
+      {
+        "name": "LLG_010",
+        "description": "External maintenance workers can log in to view the reports that have been assigned for their action.",
+        "high_level_associated": {
+          "name": "HLG_003",
+          "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+          "actor": {
+            "name": "External Maintenance Personnel",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+          }
+        }
+      },
+      {
+        "name": "LLG_011",
+        "description": "External maintenance workers can mark reports as 'in progress', 'completed', or 'requires further action'.",
+        "high_level_associated": {
+          "name": "HLG_003",
+          "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+          "actor": {
+            "name": "External Maintenance Personnel",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+          }
+        }
+      },
+      {
+        "name": "LLG_012",
+        "description": "External maintenance workers can send messages to municipal operators regarding the status or needs of the reports they are handling.",
+        "high_level_associated": {
+          "name": "HLG_003",
+          "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+          "actor": {
+            "name": "External Maintenance Personnel",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+          }
+        }
+      },
+      {
+        "name": "LLG_013",
+        "description": "Administrators can access analytics tools to generate reports on system usage, report trends, and user engagement.",
+        "high_level_associated": {
+          "name": "HLG_004",
+          "description": "Administrators require access to both public and private statistics to monitor system performance and report trends.",
+          "actor": {
+            "name": "Administrators",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 3)."
+          }
+        }
+      },
+      {
+        "name": "LLG_014",
+        "description": "Administrators can create, update, or deactivate user accounts and set permissions for different roles.",
+        "high_level_associated": {
+          "name": "HLG_004",
+          "description": "Administrators require access to both public and private statistics to monitor system performance and report trends.",
+          "actor": {
+            "name": "Administrators",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 3)."
+          }
+        }
+      },
+      {
+        "name": "LLG_015",
+        "description": "Non-registered users can access a public interface to view reports and statistics related to urban issues.",
+        "high_level_associated": {
+          "name": "HLG_005",
+          "description": "Non-registered users should have access to view reports and statistics without needing to create an account, enhancing public engagement.",
+          "actor": {
+            "name": "Non-registered Users",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 4)."
+          }
+        }
+      },
+      {
+        "name": "LLG_016",
+        "description": "Non-registered users can customize their view of public reports to find relevant information more easily.",
+        "high_level_associated": {
+          "name": "HLG_005",
+          "description": "Non-registered users should have access to view reports and statistics without needing to create an account, enhancing public engagement.",
+          "actor": {
+            "name": "Non-registered Users",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 4)."
+          }
+        }
+      },
+      {
+        "name": "LLG_004",
+        "description": "Citizens can opt-in to receive updates on their report status changes to stay informed.",
+        "high_level_associated": {
+          "name": "HLG_006",
+          "description": "Citizens should receive timely notifications about the status changes of their reports and be able to communicate with municipal operators through the platform.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+          }
+        }
+      },
+      {
+        "name": "LLG_005",
+        "description": "Citizens can set their preferences for how and when they receive notifications about their reports.",
+        "high_level_associated": {
+          "name": "HLG_006",
+          "description": "Citizens should receive timely notifications about the status changes of their reports and be able to communicate with municipal operators through the platform.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+          }
+        }
+      },
+      {
+        "name": "LLG_003",
+        "description": "Citizens can opt to submit their reports without providing personal information to protect their identity.",
+        "high_level_associated": {
+          "name": "HLG_007",
+          "description": "The system should allow citizens to submit reports anonymously, ensuring their identity is not disclosed in public listings.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+          }
+        }
+      }
+    ]
+  },
+  "grouped_branches": [
+    {
+      "branch_id": "branch_001",
+      "high_level_goal": {
+        "name": "HLG_001",
+        "description": "Citizens should be able to submit reports by selecting a location on the map and filling out a problem form with necessary details.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_001",
+          "description": "Citizens can interact with a map interface to pinpoint the exact location of the issue they are reporting.",
+          "high_level_associated": {
+            "name": "HLG_001",
+            "description": "Citizens should be able to submit reports by selecting a location on the map and filling out a problem form with necessary details.",
+            "actor": {
+              "name": "Citizens",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+            }
+          }
+        },
+        {
+          "name": "LLG_002",
+          "description": "Citizens can input specific information about the issue they are reporting, including type, description, and urgency.",
+          "high_level_associated": {
+            "name": "HLG_001",
+            "description": "Citizens should be able to submit reports by selecting a location on the map and filling out a problem form with necessary details.",
+            "actor": {
+              "name": "Citizens",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        0,
+        1
+      ],
+      "is_empty_branch": false
+    },
+    {
+      "branch_id": "branch_002",
+      "high_level_goal": {
+        "name": "HLG_002",
+        "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+        "actor": {
+          "name": "Municipal Operators",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_006",
+          "description": "Municipal operators can access a dashboard that displays all submitted reports for management and review.",
+          "high_level_associated": {
+            "name": "HLG_002",
+            "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+            "actor": {
+              "name": "Municipal Operators",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+            }
+          }
+        },
+        {
+          "name": "LLG_007",
+          "description": "Municipal operators can take action on reports, determining their validity and next steps.",
+          "high_level_associated": {
+            "name": "HLG_002",
+            "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+            "actor": {
+              "name": "Municipal Operators",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+            }
+          }
+        },
+        {
+          "name": "LLG_008",
+          "description": "Municipal operators can communicate directly with citizens through the platform to provide updates or request more information.",
+          "high_level_associated": {
+            "name": "HLG_002",
+            "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+            "actor": {
+              "name": "Municipal Operators",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+            }
+          }
+        },
+        {
+          "name": "LLG_009",
+          "description": "Municipal operators can change the status of reports to reflect their current state in the management process.",
+          "high_level_associated": {
+            "name": "HLG_002",
+            "description": "Municipal operators need tools to review, approve, and manage the lifecycle of reports submitted by citizens.",
+            "actor": {
+              "name": "Municipal Operators",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 1)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "is_empty_branch": false
+    },
+    {
+      "branch_id": "branch_003",
+      "high_level_goal": {
+        "name": "HLG_003",
+        "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+        "actor": {
+          "name": "External Maintenance Personnel",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_010",
+          "description": "External maintenance workers can log in to view the reports that have been assigned for their action.",
+          "high_level_associated": {
+            "name": "HLG_003",
+            "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+            "actor": {
+              "name": "External Maintenance Personnel",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+            }
+          }
+        },
+        {
+          "name": "LLG_011",
+          "description": "External maintenance workers can mark reports as 'in progress', 'completed', or 'requires further action'.",
+          "high_level_associated": {
+            "name": "HLG_003",
+            "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+            "actor": {
+              "name": "External Maintenance Personnel",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+            }
+          }
+        },
+        {
+          "name": "LLG_012",
+          "description": "External maintenance workers can send messages to municipal operators regarding the status or needs of the reports they are handling.",
+          "high_level_associated": {
+            "name": "HLG_003",
+            "description": "External maintenance workers should be able to interact with the system to manage reports assigned to them and communicate with municipal staff.",
+            "actor": {
+              "name": "External Maintenance Personnel",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 2)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        9,
+        10,
+        11
+      ],
+      "is_empty_branch": false
+    },
+    {
+      "branch_id": "branch_004",
+      "high_level_goal": {
+        "name": "HLG_004",
+        "description": "Administrators require access to both public and private statistics to monitor system performance and report trends.",
+        "actor": {
+          "name": "Administrators",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 3)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_013",
+          "description": "Administrators can access analytics tools to generate reports on system usage, report trends, and user engagement.",
+          "high_level_associated": {
+            "name": "HLG_004",
+            "description": "Administrators require access to both public and private statistics to monitor system performance and report trends.",
+            "actor": {
+              "name": "Administrators",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 3)."
+            }
+          }
+        },
+        {
+          "name": "LLG_014",
+          "description": "Administrators can create, update, or deactivate user accounts and set permissions for different roles.",
+          "high_level_associated": {
+            "name": "HLG_004",
+            "description": "Administrators require access to both public and private statistics to monitor system performance and report trends.",
+            "actor": {
+              "name": "Administrators",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 3)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        12,
+        13
+      ],
+      "is_empty_branch": false
+    },
+    {
+      "branch_id": "branch_005",
+      "high_level_goal": {
+        "name": "HLG_005",
+        "description": "Non-registered users should have access to view reports and statistics without needing to create an account, enhancing public engagement.",
+        "actor": {
+          "name": "Non-registered Users",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 4)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_015",
+          "description": "Non-registered users can access a public interface to view reports and statistics related to urban issues.",
+          "high_level_associated": {
+            "name": "HLG_005",
+            "description": "Non-registered users should have access to view reports and statistics without needing to create an account, enhancing public engagement.",
+            "actor": {
+              "name": "Non-registered Users",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 4)."
+            }
+          }
+        },
+        {
+          "name": "LLG_016",
+          "description": "Non-registered users can customize their view of public reports to find relevant information more easily.",
+          "high_level_associated": {
+            "name": "HLG_005",
+            "description": "Non-registered users should have access to view reports and statistics without needing to create an account, enhancing public engagement.",
+            "actor": {
+              "name": "Non-registered Users",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 4)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        14,
+        15
+      ],
+      "is_empty_branch": false
+    },
+    {
+      "branch_id": "branch_006",
+      "high_level_goal": {
+        "name": "HLG_006",
+        "description": "Citizens should receive timely notifications about the status changes of their reports and be able to communicate with municipal operators through the platform.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_004",
+          "description": "Citizens can opt-in to receive updates on their report status changes to stay informed.",
+          "high_level_associated": {
+            "name": "HLG_006",
+            "description": "Citizens should receive timely notifications about the status changes of their reports and be able to communicate with municipal operators through the platform.",
+            "actor": {
+              "name": "Citizens",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+            }
+          }
+        },
+        {
+          "name": "LLG_005",
+          "description": "Citizens can set their preferences for how and when they receive notifications about their reports.",
+          "high_level_associated": {
+            "name": "HLG_006",
+            "description": "Citizens should receive timely notifications about the status changes of their reports and be able to communicate with municipal operators through the platform.",
+            "actor": {
+              "name": "Citizens",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        3,
+        4
+      ],
+      "is_empty_branch": false
+    },
+    {
+      "branch_id": "branch_007",
+      "high_level_goal": {
+        "name": "HLG_007",
+        "description": "The system should allow citizens to submit reports anonymously, ensuring their identity is not disclosed in public listings.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+        }
+      },
+      "low_level_goals": [
+        {
+          "name": "LLG_003",
+          "description": "Citizens can opt to submit their reports without providing personal information to protect their identity.",
+          "high_level_associated": {
+            "name": "HLG_007",
+            "description": "The system should allow citizens to submit reports anonymously, ensuring their identity is not disclosed in public listings.",
+            "actor": {
+              "name": "Citizens",
+              "description": "Actor imported unchanged from the saved top-down extraction (source actor index 0)."
+            }
+          }
+        }
+      ],
+      "source_low_level_goal_indices": [
+        2
+      ],
+      "is_empty_branch": false
+    }
+  ],
+  "mapping_summary": {
+    "high_level_goal_count": 7,
+    "low_level_goal_count": 16,
+    "empty_branch_ids": []
+  },
+  "created_at_utc": "2026-08-03T16:43:27.829407+00:00"
+}
