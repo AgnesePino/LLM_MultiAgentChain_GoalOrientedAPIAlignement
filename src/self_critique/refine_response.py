@@ -3,8 +3,8 @@ from enum import Enum
 
 from sympy.strategies.core import switch
 
-import examples.shot_learning
-from data_model import Critique
+import src.examples.shot_learning
+from src.data_model import Critique
 from  src.examples.shot_learning import ShotPromptingMode
 from src.llm_clients import generate_response_llama, generate_response
 
@@ -45,57 +45,57 @@ def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=No
 
     if eval_mode == EvalMode.ACTORS:
         sys_prompt += f"""
-            {examples.shot_learning.example1_actors_withFeedback1}
+            {src.examples.shot_learning.example1_actors_withFeedback1}
             
             ---
             
-            {examples.shot_learning.example1_actors_withFeedback2}
+            {src.examples.shot_learning.example1_actors_withFeedback2}
             
             ---
             
-            {examples.shot_learning.example1_actors_withFeedback3}
+            {src.examples.shot_learning.example1_actors_withFeedback3}
             
             ---
             
-            {examples.shot_learning.example1_actors_withFeedback4}
+            {src.examples.shot_learning.example1_actors_withFeedback4}
             
             ---
         """
 
     elif eval_mode == EvalMode.HIGH_LEVEL:
         sys_prompt += f"""
-            {examples.shot_learning.example1_hl_withFeedback1}
+            {src.examples.shot_learning.example1_hl_withFeedback1}
 
             ---
 
-            {examples.shot_learning.example1_hl_withFeedback2}
+            {src.examples.shot_learning.example1_hl_withFeedback2}
 
             ---
 
-            {examples.shot_learning.example1_hl_withFeedback3}
+            {src.examples.shot_learning.example1_hl_withFeedback3}
 
             ---
 
-            {examples.shot_learning.example1_hl_withFeedback4}
+            {src.examples.shot_learning.example1_hl_withFeedback4}
 
             ---
         """
 
     if eval_mode == EvalMode.LOW_LEVEL:
         sys_prompt += f"""
-            {examples.shot_learning.example1_ll_withFeedback1}
+            {src.examples.shot_learning.example1_ll_withFeedback1}
 
             ---
 
-            {examples.shot_learning.example1_ll_withFeedback2}
+            {src.examples.shot_learning.example1_ll_withFeedback2}
 
             ---
 
-            {examples.shot_learning.example1_ll_withFeedback3}
+            {src.examples.shot_learning.example1_ll_withFeedback3}
 
             ---
 
-            {examples.shot_learning.example1_ll_withFeedback4}
+            {src.examples.shot_learning.example1_ll_withFeedback4}
 
             ---
         """

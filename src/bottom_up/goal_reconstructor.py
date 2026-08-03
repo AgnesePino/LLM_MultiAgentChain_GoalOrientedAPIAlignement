@@ -48,6 +48,8 @@ def normalize_goal_name(name: str) -> str:
     This avoids branch-assignment failures caused only by irrelevant
     differences in capitalization or spacing.
     """
+    # casefold() normalizza maiuscole/minuscole in modo più robusto di
+    # lower(); split()/join() collassano gli spazi multipli in uno solo.
     return " ".join(name.casefold().strip().split())
 
 
@@ -63,6 +65,8 @@ def assign_branch_ids(
     so that the bottom-up generator cannot be anchored by the parent's
     wording.
     """
+    # Id opachi tipo "branch_001": non contengono nulla del testo originale
+    # dell'HLG, così il modello non può "copiare" la formulazione del padre.
     return {
         f"branch_{i + 1:03d}": hlg
         for i, hlg in enumerate(high_level_goals.goals)
@@ -90,6 +94,8 @@ def group_low_level_goals_by_branch(
     """
     normalized_names: dict[str, list[str]] = {}
 
+    # Raggruppa i branch_id per nome HLG normalizzato: se un nome compare
+    # più di una volta, l'assegnazione dei LLG diventerebbe ambigua.
     for branch_id, high_level_goal in branch_map.items():
         normalized_name = normalize_goal_name(high_level_goal.name)
         normalized_names.setdefault(normalized_name, []).append(branch_id)
@@ -123,6 +129,8 @@ def group_low_level_goals_by_branch(
 
     unassigned: list[LowLevelGoal] = []
 
+    # Join deterministico lato Python: ogni LLG viene assegnato al branch
+    # il cui HLG ha lo stesso nome (normalizzato) del padre dichiarato dal LLG.
     for low_level_goal in low_level_goals.low_level_goals:
         normalized_parent_name = normalize_goal_name(
             low_level_goal.high_level_associated.name
@@ -251,7 +259,7 @@ def reconstruct_high_level_goal(
     )
 
     goals_block = "\n".join(
-        f"- [{local_id}] {goal.name}: {goal.description}"
+        f"- [{local_id}] {goal.description}"
         for local_id, goal in local_ids.items()
     )
 
@@ -277,6 +285,9 @@ def reconstruct_high_level_goal(
         BottomUpHighLevelGoalLLMOutput,
     )
 
+    # Da qui in poi si valida che gli id di supporto restituiti dal modello
+    # siano non vuoti, ben formati, senza duplicati e tutti riconosciuti
+    # tra quelli assegnati localmente a questo branch (local_ids).
     supporting_ids = llm_output.supporting_low_level_goal_ids
 
     if not supporting_ids:
