@@ -1,5 +1,11 @@
 from  src.examples.shot_learning import ShotPromptingMode, example1_actors, example2_actors, example3_actors, example1_hl, example2_hl, example3_hl, example1_ll, example2_ll, example3_ll
-from src.data_model import DocumentDescription,  Actors,  LowLevelGoals,  HighLevelGoals
+from src.data_model import (
+    DocumentDescription,
+    Actors,
+    LowLevelGoals,
+    HighLevelGoals,
+    HighLevelGoalGenerationRequest,
+)
 from src.utils import get_markdown
 from src.llm_clients import generate_response
 
@@ -127,6 +133,31 @@ def generate_high_level_goals(project_description, actors, feedback=None, mode=S
     high_level_goals = generate_response(prompt, sys_prompt, HighLevelGoals)
 
     return high_level_goals
+
+
+def generate_high_level_goals_from_request(
+    request: HighLevelGoalGenerationRequest,
+    mode=ShotPromptingMode.ZERO_SHOT,
+) -> HighLevelGoals:
+    """
+    Adapter used by the bottom-up cycle to invoke the existing top-down HLG
+    generator without changing its original interface or prompting logic.
+
+    Only the normal top-down inputs contained in ``request.generator_input``
+    are forwarded. Evaluator decisions, branch identifiers, replacement
+    metadata, and previous outputs remain hidden from the generator.
+    """
+    if not isinstance(request, HighLevelGoalGenerationRequest):
+        raise TypeError(
+            "request must be a HighLevelGoalGenerationRequest instance."
+        )
+
+    return generate_high_level_goals(
+        project_description=request.generator_input.project_description,
+        actors=request.generator_input.actors,
+        feedback=None,
+        mode=mode,
+    )
 
 
 #------------------------------------------- Define low level goals from high level goals

@@ -1,6 +1,4 @@
 """
-goal_cycle_orchestrator.py
-
 Deterministic orchestration of the bounded outer
 refinement-abstraction-verification cycle.
 
@@ -8,10 +6,18 @@ The initial top-down pipeline is not executed by this module. The cycle starts
 from already-generated HighLevelGoals and LowLevelGoals. During refinement it:
 1. reconstructs high-level goal candidates bottom-up;
 2. evaluates each branch;
-3. preserves the low-level goals of confirmed branches;
-4. regenerates only branches that require revision or newly added HLGs;
-5. checks global documentation coverage when all branches are confirmed;
-6. repeats until all branches are confirmed and coverage is complete.
+3. asks the original top-down HLG generator to generate only the missing or
+   replacement HLGs requested by the evaluator;
+4. applies additions and replacements deterministically;
+5. preserves the low-level goals of confirmed branches;
+6. regenerates only branches that require revision or newly added HLGs;
+7. checks global documentation coverage when all branches are confirmed;
+8. repeats until all branches are confirmed and coverage is complete.
+
+The HLG generator receives only the request's ``generator_input`` through the
+injected callback. It is therefore invoked as a normal top-down generation and
+is not exposed to branch identifiers, evaluator decisions, previous attempts,
+or replacement metadata.
 """
 
 import hashlib
@@ -20,11 +26,12 @@ from pathlib import Path
 from typing import Callable
 
 from src.data_model import (
+    DocumentationCoverageResult,
     GlobalGoalCycleIteration,
     GlobalGoalCycleResult,
-    DocumentationCoverageResult,
     GlobalGoalEvaluationResult,
     HighLevelGoal,
+    HighLevelGoalGenerationRequest,
     HighLevelGoals,
     LowLevelGoal,
     LowLevelGoals,
@@ -41,7 +48,15 @@ from src.bottom_up.global_goal_evaluator import (
 )
 
 
-# The injected callback receives ONLY the HLGs whose LLGs must be generated.
+# The injected callback receives one validated request and must internally call
+# the original top-down HLG generator with request.generator_input and
+# feedback=None. The original generator may return one or more HLGs.
+HighLevelGoalGenerator = Callable[
+    [HighLevelGoalGenerationRequest],
+    HighLevelGoals,
+]
+
+# The injected callback receives only the HLGs whose LLGs must be generated.
 LowLevelGoalRegenerator = Callable[[HighLevelGoals], LowLevelGoals]
 
 
@@ -135,78 +150,12 @@ def load_documentation_coverage(
     return DocumentationCoverageResult.model_validate(raw_result)
 
 
-def apply_global_evaluations(
-    existing_high_level_goals: dict[str, HighLevelGoal],
-    evaluations: dict[str, GlobalGoalEvaluationResult],
-) -> HighLevelGoals:
-    """Apply evaluator decisions to the HLG collection without calling an LLM."""
-    updated_goals: list[HighLevelGoal] = []
-    seen_normalized_names: set[str] = set()
-
-    # Primo passaggio: per ogni HLG esistente, sostituiscilo con la
-    # riscrittura proposta se la decisione lo richiede, altrimenti mantieni
-    # l'originale.
-    for branch_id, original in existing_high_level_goals.items():
-        evaluation = evaluations.get(branch_id)
-
-        if (
-            evaluation is not None
-            and evaluation.decision == "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL"
-        ):
-            resulting = evaluation.new_or_replacement_high_level_goal
-            if resulting is None:
-                raise ValueError(
-                    f"Branch '{branch_id}' requires a replacement HLG but none exists."
-                )
-        else:
-            resulting = original
-
-        updated_goals.append(resulting)
-        seen_normalized_names.add(normalize_goal_name(resulting.name))
-
-    # Secondo passaggio: aggiungi i nuovi HLG proposti, evitando duplicati
-    # (per nome normalizzato) rispetto a quelli già presenti.
-    for evaluation in evaluations.values():
-        if evaluation.decision != "ADD_NEW_HIGH_LEVEL_GOAL":
-            continue
-
-        new_goal = evaluation.new_or_replacement_high_level_goal
-        if new_goal is None:
-            raise ValueError(
-                f"Branch '{evaluation.branch_id}' requires a new HLG but none exists."
-            )
-
-        normalized_name = normalize_goal_name(new_goal.name)
-        if normalized_name in seen_normalized_names:
-            continue
-
-        seen_normalized_names.add(normalized_name)
-        updated_goals.append(new_goal)
-
-    return HighLevelGoals(goals=updated_goals)
-
-
-def append_missing_high_level_goals(
-    current_high_level_goals: HighLevelGoals,
-    coverage_result: DocumentationCoverageResult,
-) -> HighLevelGoals:
-    """Apply validated documentation-coverage additions to the HLG collection."""
-    return _deduplicate_goals(
-        [
-            *current_high_level_goals.goals,
-            *coverage_result.added_high_level_goals,
-        ]
-    )
-
-
 def _build_state_signature(
     high_level_goals: HighLevelGoals,
     low_level_goals: LowLevelGoals,
-    decisions: dict[str, object] | None = None,
+    decisions: dict[str, GlobalGoalEvaluationResult] | None = None,
 ) -> str:
-    # Serializza lo stato corrente (HLG, LLG, decisioni) in modo canonico e
-    # ne calcola l'hash: se lo stesso stato si ripresenta a un'iterazione
-    # successiva, il ciclo è entrato in un loop e va interrotto.
+    """Build a canonical state hash used to detect non-converging cycles."""
     serialized_state = {
         "high_level_goals": high_level_goals.model_dump(mode="json"),
         "low_level_goals": low_level_goals.model_dump(mode="json"),
@@ -226,8 +175,8 @@ def _build_state_signature(
 
 
 def _all_expected_branches_confirmed(
-    branch_map: dict[str, object],
-    evaluations: dict[str, object],
+    branch_map: dict[str, HighLevelGoal],
+    evaluations: dict[str, GlobalGoalEvaluationResult],
     reconstruction_errors: dict[str, str],
     evaluation_errors: dict[str, str],
     empty_branches: list[str],
@@ -245,27 +194,307 @@ def _all_expected_branches_confirmed(
 def _deduplicate_goals(goals: list[HighLevelGoal]) -> HighLevelGoals:
     result: list[HighLevelGoal] = []
     seen: set[str] = set()
+
     for goal in goals:
         key = normalize_goal_name(goal.name)
         if key in seen:
             continue
         seen.add(key)
         result.append(goal)
+
     return HighLevelGoals(goals=result)
+
+
+def _collect_high_level_generation_requests(
+    evaluations: dict[str, GlobalGoalEvaluationResult],
+) -> list[HighLevelGoalGenerationRequest]:
+    """
+    Collect the validated HLG-generation requests emitted by branch evaluation.
+
+    The function also verifies that the orchestration metadata in each request
+    is consistent with the evaluator decision and dictionary branch key.
+    """
+    requests: list[HighLevelGoalGenerationRequest] = []
+    seen_request_ids: set[str] = set()
+
+    for branch_id, evaluation in evaluations.items():
+        if not evaluation.requires_high_level_regeneration:
+            continue
+
+        request = evaluation.generation_request
+        if request is None:
+            raise ValueError(
+                f"Branch '{branch_id}' requires HLG generation but contains "
+                "no generation_request."
+            )
+
+        if request.origin_branch_id != branch_id:
+            raise ValueError(
+                f"Request '{request.request_id}' has origin_branch_id "
+                f"'{request.origin_branch_id}', expected '{branch_id}'."
+            )
+
+        if evaluation.decision == "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL":
+            if request.action != "REPLACE_EXISTING_HIGH_LEVEL_GOAL":
+                raise ValueError(
+                    f"Branch '{branch_id}' requires a replacement request, "
+                    f"but action is '{request.action}'."
+                )
+            if request.target_branch_id != branch_id:
+                raise ValueError(
+                    f"Request '{request.request_id}' targets branch "
+                    f"'{request.target_branch_id}', expected '{branch_id}'."
+                )
+
+        elif evaluation.decision == "ADD_NEW_HIGH_LEVEL_GOAL":
+            if request.action != "ADD_NEW_HIGH_LEVEL_GOAL":
+                raise ValueError(
+                    f"Branch '{branch_id}' requires an addition request, "
+                    f"but action is '{request.action}'."
+                )
+            if request.target_branch_id is not None:
+                raise ValueError(
+                    f"Addition request '{request.request_id}' must not target "
+                    "an existing branch."
+                )
+
+        else:
+            raise ValueError(
+                f"Branch '{branch_id}' unexpectedly requires HLG generation "
+                f"for decision '{evaluation.decision}'."
+            )
+
+        if request.request_id in seen_request_ids:
+            raise ValueError(
+                f"Duplicate HLG generation request id: '{request.request_id}'."
+            )
+
+        seen_request_ids.add(request.request_id)
+        requests.append(request)
+
+    return requests
+
+
+def _generate_requested_high_level_goals(
+    generate_high_level_goals: HighLevelGoalGenerator,
+    requests: list[HighLevelGoalGenerationRequest],
+) -> tuple[dict[str, list[HighLevelGoal]], str | None]:
+    """
+    Execute each request through the original top-down HLG generator.
+
+    The original top-down generator returns ``HighLevelGoals`` and is left
+    unchanged. A focused request can therefore still produce one or more HLGs.
+    The orchestrator validates every returned goal and keeps the complete list
+    associated with the request that produced it.
+    """
+    generated_by_request: dict[str, list[HighLevelGoal]] = {}
+
+    for request in requests:
+        try:
+            generated = generate_high_level_goals(request)
+        except Exception as exc:
+            return {}, (
+                f"{type(exc).__name__}: HLG request "
+                f"'{request.request_id}' failed: {exc}"
+            )
+
+        if not isinstance(generated, HighLevelGoals):
+            return {}, (
+                "TypeError: generate_high_level_goals must return a "
+                "HighLevelGoals instance."
+            )
+
+        if not generated.goals:
+            return {}, (
+                f"ValueError: request '{request.request_id}' returned no HLGs."
+            )
+
+        allowed_actor_names = {
+            normalize_goal_name(actor.name)
+            for actor in request.generator_input.actors.actors
+        }
+        seen_names_in_request: set[str] = set()
+        validated_goals: list[HighLevelGoal] = []
+
+        for generated_goal in generated.goals:
+            if (
+                not generated_goal.name.strip()
+                or not generated_goal.description.strip()
+            ):
+                return {}, (
+                    f"ValueError: request '{request.request_id}' returned an "
+                    "HLG with an empty name or description."
+                )
+
+            returned_actor_name = normalize_goal_name(
+                generated_goal.actor.name
+            )
+            if returned_actor_name not in allowed_actor_names:
+                return {}, (
+                    f"ValueError: request '{request.request_id}' returned "
+                    f"actor '{generated_goal.actor.name}', which was not "
+                    "supplied to the top-down generator."
+                )
+
+            normalized_name = normalize_goal_name(generated_goal.name)
+            if normalized_name in seen_names_in_request:
+                return {}, (
+                    f"ValueError: request '{request.request_id}' returned "
+                    f"duplicate HLG name '{generated_goal.name}'."
+                )
+
+            seen_names_in_request.add(normalized_name)
+            validated_goals.append(generated_goal)
+
+        generated_by_request[request.request_id] = validated_goals
+
+    return generated_by_request, None
+
+
+def _flatten_generated_high_level_goals(
+    generated_by_request: dict[str, list[HighLevelGoal]],
+) -> list[HighLevelGoal]:
+    """Flatten generated HLG lists while preserving request/output order."""
+    return [
+        goal
+        for goals in generated_by_request.values()
+        for goal in goals
+    ]
+
+
+def _apply_branch_high_level_generation(
+    existing_high_level_goals: dict[str, HighLevelGoal],
+    requests: list[HighLevelGoalGenerationRequest],
+    generated_by_request: dict[str, list[HighLevelGoal]],
+) -> tuple[HighLevelGoals, list[HighLevelGoal]]:
+    """
+    Apply generated branch replacements and additions deterministically.
+
+    A replacement request may yield one or more HLGs. In that case the target
+    branch is removed and the complete generated list is inserted in its
+    position. An addition request appends every generated HLG.
+    """
+    replacements: dict[str, list[HighLevelGoal]] = {}
+    additions: list[HighLevelGoal] = []
+
+    for request in requests:
+        generated_goals = generated_by_request.get(request.request_id)
+        if not generated_goals:
+            raise ValueError(
+                f"No generated HLGs exist for request '{request.request_id}'."
+            )
+
+        if request.action == "REPLACE_EXISTING_HIGH_LEVEL_GOAL":
+            target_branch_id = request.target_branch_id
+            if target_branch_id is None:
+                raise ValueError(
+                    f"Request '{request.request_id}' has no target branch."
+                )
+            if target_branch_id not in existing_high_level_goals:
+                raise ValueError(
+                    f"Request '{request.request_id}' references unknown branch "
+                    f"'{target_branch_id}'."
+                )
+            if target_branch_id in replacements:
+                raise ValueError(
+                    "Multiple HLG replacements target branch "
+                    f"'{target_branch_id}'."
+                )
+            replacements[target_branch_id] = generated_goals
+
+        elif request.action == "ADD_NEW_HIGH_LEVEL_GOAL":
+            additions.extend(generated_goals)
+
+        else:
+            raise ValueError(
+                f"Unsupported HLG generation action '{request.action}'."
+            )
+
+    updated: list[HighLevelGoal] = []
+    seen_names: set[str] = set()
+
+    def append_unique(goal: HighLevelGoal) -> None:
+        normalized_name = normalize_goal_name(goal.name)
+        if normalized_name in seen_names:
+            raise ValueError(
+                f"HLG generation produced duplicate goal name '{goal.name}'."
+            )
+        seen_names.add(normalized_name)
+        updated.append(goal)
+
+    for branch_id, original in existing_high_level_goals.items():
+        replacement_goals = replacements.get(branch_id)
+        if replacement_goals is None:
+            append_unique(original)
+        else:
+            for replacement_goal in replacement_goals:
+                append_unique(replacement_goal)
+
+    for new_goal in additions:
+        append_unique(new_goal)
+
+    return HighLevelGoals(goals=updated), additions
+
+
+def _append_coverage_generated_goals(
+    current_high_level_goals: HighLevelGoals,
+    requests: list[HighLevelGoalGenerationRequest],
+    generated_by_request: dict[str, list[HighLevelGoal]],
+) -> tuple[HighLevelGoals, list[HighLevelGoal]]:
+    """Append all HLGs generated from documentation-coverage requests."""
+    current_goals = list(current_high_level_goals.goals)
+    seen_names = {
+        normalize_goal_name(goal.name)
+        for goal in current_goals
+    }
+    added: list[HighLevelGoal] = []
+
+    for request in requests:
+        if request.source != "DOCUMENTATION_COVERAGE":
+            raise ValueError(
+                f"Coverage request '{request.request_id}' has invalid source "
+                f"'{request.source}'."
+            )
+
+        if request.action != "ADD_NEW_HIGH_LEVEL_GOAL":
+            raise ValueError(
+                "Documentation coverage may only add new HLGs."
+            )
+
+        generated_goals = generated_by_request.get(request.request_id)
+        if not generated_goals:
+            raise ValueError(
+                f"No generated HLGs exist for request '{request.request_id}'."
+            )
+
+        for generated_goal in generated_goals:
+            normalized_name = normalize_goal_name(generated_goal.name)
+            if normalized_name in seen_names:
+                raise ValueError(
+                    f"Coverage-generated HLG '{generated_goal.name}' "
+                    "duplicates an existing goal."
+                )
+
+            seen_names.add(normalized_name)
+            current_goals.append(generated_goal)
+            added.append(generated_goal)
+
+    return HighLevelGoals(goals=current_goals), added
 
 
 def _collect_branch_regeneration_targets(
     branch_map: dict[str, HighLevelGoal],
     evaluations: dict[str, GlobalGoalEvaluationResult],
+    generated_by_request: dict[str, list[HighLevelGoal]],
 ) -> tuple[HighLevelGoals, set[str]]:
     """
-    Returns:
-    - the HLGs whose low-level decomposition must be generated;
-    - the normalized parent names whose existing LLGs must be removed.
+    Return the HLGs whose LLGs must be generated and the old parent names whose
+    current LLGs must be removed.
 
-    The evaluator JSON is complete, so every branch must have exactly one
-    evaluation. Empty branches are represented through the deterministic
-    REGENERATE_LOW_LEVEL_GOALS decision and require no special handling here.
+    If a rewrite request produces multiple HLGs, every generated replacement is
+    decomposed. If an addition request produces multiple HLGs, the original
+    branch is decomposed again and every newly generated HLG receives its first
+    low-level decomposition.
     """
     if set(branch_map) != set(evaluations):
         missing = set(branch_map) - set(evaluations)
@@ -279,41 +508,44 @@ def _collect_branch_regeneration_targets(
     targets: list[HighLevelGoal] = []
     replaced_parent_names: set[str] = set()
 
-    # Per ogni branch non confermato, decide quali HLG devono ricevere una
-    # nuova decomposizione in base al tipo di decisione preso dal valutatore.
     for branch_id, original in branch_map.items():
         evaluation = evaluations[branch_id]
 
         if evaluation.decision == "CONFIRM_BRANCH":
             continue
 
-        replaced_parent_names.add(
-            normalize_goal_name(original.name)
-        )
+        replaced_parent_names.add(normalize_goal_name(original.name))
 
         if evaluation.decision == "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL":
-            replacement = (
-                evaluation.new_or_replacement_high_level_goal
-            )
-            if replacement is None:
+            request = evaluation.generation_request
+            if request is None:
                 raise ValueError(
-                    f"Branch '{branch_id}' requires a replacement HLG "
-                    "but none exists."
+                    f"Branch '{branch_id}' has no generation request."
                 )
 
-            targets.append(replacement)
+            replacements = generated_by_request.get(request.request_id)
+            if not replacements:
+                raise ValueError(
+                    f"Branch '{branch_id}' has no generated replacement HLGs."
+                )
+
+            targets.extend(replacements)
 
         elif evaluation.decision == "ADD_NEW_HIGH_LEVEL_GOAL":
-            targets.append(original)
-
-            new_goal = evaluation.new_or_replacement_high_level_goal
-            if new_goal is None:
+            request = evaluation.generation_request
+            if request is None:
                 raise ValueError(
-                    f"Branch '{branch_id}' requires a new HLG "
-                    "but none exists."
+                    f"Branch '{branch_id}' has no generation request."
                 )
 
-            targets.append(new_goal)
+            new_goals = generated_by_request.get(request.request_id)
+            if not new_goals:
+                raise ValueError(
+                    f"Branch '{branch_id}' has no generated new HLGs."
+                )
+
+            targets.append(original)
+            targets.extend(new_goals)
 
         elif evaluation.decision in {
             "REGENERATE_LOW_LEVEL_GOALS",
@@ -323,8 +555,8 @@ def _collect_branch_regeneration_targets(
 
         else:
             raise ValueError(
-                f"Branch '{branch_id}' has unsupported evaluator "
-                f"decision '{evaluation.decision}'."
+                f"Branch '{branch_id}' has unsupported decision "
+                f"'{evaluation.decision}'."
             )
 
     return _deduplicate_goals(targets), replaced_parent_names
@@ -335,7 +567,7 @@ def _merge_selectively_regenerated_low_level_goals(
     regenerated_low_level_goals: LowLevelGoals,
     replaced_parent_names: set[str],
 ) -> LowLevelGoals:
-    """Preserves confirmed branches and replaces only requested branches."""
+    """Preserve confirmed branches and replace only requested branches."""
     preserved: list[LowLevelGoal] = [
         goal
         for goal in current_low_level_goals.low_level_goals
@@ -411,6 +643,7 @@ def _build_result(
     evaluation_errors: dict[str, str] | None = None,
     empty_branches: list[str] | None = None,
     coverage_error: str | None = None,
+    high_level_regeneration_error: str | None = None,
 ) -> GlobalGoalCycleResult:
     return GlobalGoalCycleResult(
         converged=converged,
@@ -425,6 +658,9 @@ def _build_result(
         unresolved_global_evaluation_errors=evaluation_errors or {},
         unresolved_empty_branches=empty_branches or [],
         unresolved_documentation_coverage_error=coverage_error,
+        unresolved_high_level_regeneration_error=(
+            high_level_regeneration_error
+        ),
     )
 
 
@@ -432,20 +668,21 @@ def run_global_goal_cycle(
     project_description: str,
     initial_high_level_goals: HighLevelGoals,
     initial_low_level_goals: LowLevelGoals,
+    generate_high_level_goals: HighLevelGoalGenerator,
     regenerate_low_level_goals: LowLevelGoalRegenerator,
     evaluation_output_directory: str | Path,
     max_iterations: int = 5,
 ) -> GlobalGoalCycleResult:
     """
-    Executes only the added bottom-up/refinement pipeline.
+    Execute the added bottom-up/refinement pipeline.
 
-    The initial top-down actors, HLGs and LLGs are treated as immutable input.
-    Confirmed branches retain their original/current LLGs. The injected
-    generator is called only with HLGs that require a new decomposition.
+    The initial top-down actors, HLGs, and LLGs are treated as input state.
+    Confirmed branches retain their current LLGs. HLG generation is invoked only
+    for validated generation requests, and LLG generation is invoked only for
+    branches that require a new decomposition.
 
-    Every evaluator result is obligatorily persisted as one complete JSON for
-    all expected branches and loaded back before any decision is applied. The
-    evaluator JSON is therefore the mandatory, validated boundary between the
+    Every evaluator result is persisted and loaded back before any decision is
+    applied. The JSON is therefore the mandatory validated boundary between the
     evaluator and the orchestrator.
     """
     if max_iterations < 1:
@@ -466,7 +703,6 @@ def run_global_goal_cycle(
     last_empty_branches: list[str] = []
 
     for iteration_number in range(1, max_iterations + 1):
-        # Passo 1: ricostruzione bottom-up di un HLG candidato per ogni branch.
         (
             reconstructed_goals,
             branch_map,
@@ -478,7 +714,6 @@ def run_global_goal_cycle(
             low_level_goals=current_low_level_goals,
         )
 
-        # Passo 2: valutazione globale di ogni branch (LLM di confronto).
         evaluations, evaluation_errors = evaluate_all_branches(
             project_description=project_description,
             existing_high_level_goals=branch_map,
@@ -486,8 +721,6 @@ def run_global_goal_cycle(
             empty_branches=empty_branches,
         )
 
-        # Passo 3: persiste la valutazione su file e la ricarica, così che
-        # il JSON validato sia l'unico confine tra valutatore e orchestratore.
         evaluation_file = (
             output_directory
             / f"iteration_{iteration_number:03d}_global_evaluations.json"
@@ -544,8 +777,6 @@ def run_global_goal_cycle(
         last_evaluation_errors = evaluation_errors
         last_empty_branches = empty_branches
 
-        # Se lo stato è già stato visto in un'iterazione precedente, il
-        # ciclo non sta convergendo: si interrompe per evitare un loop infinito.
         if state_signature in seen_state_signatures:
             return _build_result(
                 converged=False,
@@ -592,8 +823,6 @@ def run_global_goal_cycle(
             )
 
         if all_branches_confirmed:
-            # Tutti i branch sono confermati: prima di dichiarare convergenza
-            # si verifica che la documentazione sia coperta interamente dagli HLG.
             try:
                 coverage = evaluate_documentation_coverage(
                     project_description=project_description,
@@ -622,7 +851,6 @@ def run_global_goal_cycle(
 
             trace.documentation_coverage = coverage
             trace.documentation_fully_covered = coverage.status == "COMPLETE"
-            trace.newly_added_high_level_goals = coverage.added_high_level_goals
 
             if coverage.status == "COMPLETE":
                 return _build_result(
@@ -638,13 +866,61 @@ def run_global_goal_cycle(
                     added_high_level_goals=all_added_high_level_goals,
                 )
 
-            updated_high_level_goals = append_missing_high_level_goals(
-                current_high_level_goals,
-                coverage,
+            generation_requests = coverage.generation_requests
+            trace.high_level_generation_requests = generation_requests
+
+            generated_by_request, high_level_error = (
+                _generate_requested_high_level_goals(
+                    generate_high_level_goals=generate_high_level_goals,
+                    requests=generation_requests,
+                )
             )
-            all_added_high_level_goals.extend(coverage.added_high_level_goals)
+
+            if high_level_error is not None:
+                trace.high_level_regeneration_error = high_level_error
+                return _build_result(
+                    converged=False,
+                    stop_reason="HIGH_LEVEL_REGENERATION_FAILED",
+                    completed_iterations=iteration_number,
+                    max_iterations=max_iterations,
+                    final_high_level_goals=current_high_level_goals,
+                    final_low_level_goals=current_low_level_goals,
+                    iterations=iteration_traces,
+                    added_high_level_goals=all_added_high_level_goals,
+                    high_level_regeneration_error=high_level_error,
+                )
+
+            trace.generated_high_level_goals = HighLevelGoals(
+                goals=_flatten_generated_high_level_goals(generated_by_request)
+            )
+
+            try:
+                updated_high_level_goals, added_goals = (
+                    _append_coverage_generated_goals(
+                        current_high_level_goals=current_high_level_goals,
+                        requests=generation_requests,
+                        generated_by_request=generated_by_request,
+                    )
+                )
+            except Exception as exc:
+                high_level_error = f"{type(exc).__name__}: {exc}"
+                trace.high_level_regeneration_error = high_level_error
+                return _build_result(
+                    converged=False,
+                    stop_reason="HIGH_LEVEL_REGENERATION_FAILED",
+                    completed_iterations=iteration_number,
+                    max_iterations=max_iterations,
+                    final_high_level_goals=current_high_level_goals,
+                    final_low_level_goals=current_low_level_goals,
+                    iterations=iteration_traces,
+                    added_high_level_goals=all_added_high_level_goals,
+                    high_level_regeneration_error=high_level_error,
+                )
+
+            trace.newly_added_high_level_goals = added_goals
             trace.updated_high_level_goals = updated_high_level_goals
             trace.requires_regeneration = True
+            all_added_high_level_goals.extend(added_goals)
 
             if iteration_number == max_iterations:
                 return _build_result(
@@ -658,12 +934,10 @@ def run_global_goal_cycle(
                     added_high_level_goals=all_added_high_level_goals,
                 )
 
-            # Coverage additions create only new branches. Existing confirmed
-            # branch decompositions are preserved unchanged.
-            targets = HighLevelGoals(goals=coverage.added_high_level_goals)
+            targets = HighLevelGoals(goals=added_goals)
             replaced_parent_names = {
                 normalize_goal_name(goal.name)
-                for goal in coverage.added_high_level_goals
+                for goal in added_goals
             }
             merged, regeneration_error = _regenerate_selected_branches(
                 regenerate_low_level_goals=regenerate_low_level_goals,
@@ -671,8 +945,12 @@ def run_global_goal_cycle(
                 current_low_level_goals=current_low_level_goals,
                 replaced_parent_names=replaced_parent_names,
             )
+
             if regeneration_error is not None or merged is None:
-                error = regeneration_error or "Unknown selective regeneration error."
+                error = (
+                    regeneration_error
+                    or "Unknown selective regeneration error."
+                )
                 trace.global_evaluation_errors["low_level_regeneration"] = error
                 return _build_result(
                     converged=False,
@@ -706,34 +984,93 @@ def run_global_goal_cycle(
                 empty_branches=empty_branches,
             )
 
-        # Non tutti i branch sono confermati: applica le decisioni del
-        # valutatore agli HLG e rigenera selettivamente solo i branch necessari.
-        updated_high_level_goals = apply_global_evaluations(
-            existing_high_level_goals=branch_map,
-            evaluations=evaluations,
+        try:
+            generation_requests = _collect_high_level_generation_requests(
+                evaluations
+            )
+        except Exception as exc:
+            high_level_error = f"{type(exc).__name__}: {exc}"
+            trace.high_level_regeneration_error = high_level_error
+            return _build_result(
+                converged=False,
+                stop_reason="HIGH_LEVEL_REGENERATION_FAILED",
+                completed_iterations=iteration_number,
+                max_iterations=max_iterations,
+                final_high_level_goals=current_high_level_goals,
+                final_low_level_goals=current_low_level_goals,
+                iterations=iteration_traces,
+                added_high_level_goals=all_added_high_level_goals,
+                evaluation_errors=evaluation_errors,
+                empty_branches=empty_branches,
+                high_level_regeneration_error=high_level_error,
+            )
+
+        trace.high_level_generation_requests = generation_requests
+
+        generated_by_request, high_level_error = (
+            _generate_requested_high_level_goals(
+                generate_high_level_goals=generate_high_level_goals,
+                requests=generation_requests,
+            )
         )
+
+        if high_level_error is not None:
+            trace.high_level_regeneration_error = high_level_error
+            return _build_result(
+                converged=False,
+                stop_reason="HIGH_LEVEL_REGENERATION_FAILED",
+                completed_iterations=iteration_number,
+                max_iterations=max_iterations,
+                final_high_level_goals=current_high_level_goals,
+                final_low_level_goals=current_low_level_goals,
+                iterations=iteration_traces,
+                added_high_level_goals=all_added_high_level_goals,
+                evaluation_errors=evaluation_errors,
+                empty_branches=empty_branches,
+                high_level_regeneration_error=high_level_error,
+            )
+
+        if generated_by_request:
+            trace.generated_high_level_goals = HighLevelGoals(
+                goals=_flatten_generated_high_level_goals(generated_by_request)
+            )
+
+        try:
+            updated_high_level_goals, newly_added = (
+                _apply_branch_high_level_generation(
+                    existing_high_level_goals=branch_map,
+                    requests=generation_requests,
+                    generated_by_request=generated_by_request,
+                )
+            )
+
+            targets, replaced_parent_names = (
+                _collect_branch_regeneration_targets(
+                    branch_map=branch_map,
+                    evaluations=evaluations,
+                    generated_by_request=generated_by_request,
+                )
+            )
+        except Exception as exc:
+            high_level_error = f"{type(exc).__name__}: {exc}"
+            trace.high_level_regeneration_error = high_level_error
+            return _build_result(
+                converged=False,
+                stop_reason="HIGH_LEVEL_REGENERATION_FAILED",
+                completed_iterations=iteration_number,
+                max_iterations=max_iterations,
+                final_high_level_goals=current_high_level_goals,
+                final_low_level_goals=current_low_level_goals,
+                iterations=iteration_traces,
+                added_high_level_goals=all_added_high_level_goals,
+                evaluation_errors=evaluation_errors,
+                empty_branches=empty_branches,
+                high_level_regeneration_error=high_level_error,
+            )
+
         trace.updated_high_level_goals = updated_high_level_goals
-
-        already_recorded_names = {
-            normalize_goal_name(goal.name)
-            for goal in all_added_high_level_goals
-        }
-        for evaluation in evaluations.values():
-            if evaluation.decision != "ADD_NEW_HIGH_LEVEL_GOAL":
-                continue
-            new_goal = evaluation.new_or_replacement_high_level_goal
-            if new_goal is None:
-                continue
-            normalized_name = normalize_goal_name(new_goal.name)
-            if normalized_name in already_recorded_names:
-                continue
-            already_recorded_names.add(normalized_name)
-            all_added_high_level_goals.append(new_goal)
-
-        targets, replaced_parent_names = _collect_branch_regeneration_targets(
-            branch_map=branch_map,
-            evaluations=evaluations,
-        )
+        trace.newly_added_high_level_goals = newly_added
+        all_added_high_level_goals.extend(newly_added)
 
         merged, regeneration_error = _regenerate_selected_branches(
             regenerate_low_level_goals=regenerate_low_level_goals,
@@ -741,6 +1078,7 @@ def run_global_goal_cycle(
             current_low_level_goals=current_low_level_goals,
             replaced_parent_names=replaced_parent_names,
         )
+
         if regeneration_error is not None or merged is None:
             error = regeneration_error or "Unknown selective regeneration error."
             trace.global_evaluation_errors["low_level_regeneration"] = error
