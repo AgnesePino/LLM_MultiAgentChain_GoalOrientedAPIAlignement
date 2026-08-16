@@ -56,12 +56,18 @@ class BranchSpecification:
     low_level_goal_indices: tuple[int, ...]
 
 
-# Mapping hard-coded, specifico per dataset/modalità di prompting: dice a
-# quale attore e a quali indici di LLG corrisponde ogni HLG del top-down.
-# Va aggiornato manualmente se cambiano i dataset o il modo in cui il
-# top-down genera i suoi output.
+# Hard-coded mapping, specific to each dataset/prompting-mode combination:
+# tells which actor and which LLG indices belong to each top-down HLG. Must
+# be updated manually whenever a dataset changes or the top-down phase's
+# output format changes.
+#
 # Keys: (dataset_name, prompting_mode, no_llama)
-# Values: one BranchSpecification for each HLG, in source order.
+# Values: one BranchSpecification per HLG, in the same order as the source
+# file's "highLevelGoals" list. Each BranchSpecification's
+# low_level_goal_indices are 0-based indices into that same source file's
+# "lowLevelGoals" list (not local/branch-scoped ids) — every index in
+# range(len(lowLevelGoals)) must appear in exactly one branch across the
+# whole tuple, which _validate_mapping enforces at load time.
 BRANCH_SPECIFICATIONS: dict[
     tuple[str, str, bool], tuple[BranchSpecification, ...]
 ] = {
@@ -271,8 +277,8 @@ def _validate_mapping(
             f"but source has {len(payload['highLevelGoals'])} HLGs."
         )
 
-    # Verifica che ogni indice di attore sia valido e raccoglie tutti gli
-    # indici di LLG assegnati a un branch qualsiasi della specifica.
+    # Check that every actor index is valid, and collect every LLG index
+    # assigned to any branch in the specification.
     assigned: list[int] = []
     for hlg_index, branch in enumerate(specification):
         if not 0 <= branch.actor_index < len(payload["actors"]):
@@ -282,7 +288,7 @@ def _validate_mapping(
             )
         assigned.extend(branch.low_level_goal_indices)
 
-    # Nessun indice di LLG deve essere assegnato a più di un branch.
+    # No LLG index may be assigned to more than one branch.
     duplicate_indices = sorted(
         index for index in set(assigned) if assigned.count(index) > 1
     )
@@ -292,9 +298,9 @@ def _validate_mapping(
             f"{duplicate_indices}."
         )
 
-    # Ogni LLG del file sorgente deve comparire in esattamente un branch:
-    # niente indici mancanti (LLG non assegnati) e niente indici invalidi
-    # (fuori dal range dei LLG realmente presenti).
+    # Every LLG in the source file must appear in exactly one branch: no
+    # missing indices (unassigned LLGs) and no invalid indices (out of range
+    # for the LLGs actually present).
     expected = set(range(len(payload["lowLevelGoals"])))
     actual = set(assigned)
     missing = sorted(expected - actual)
@@ -343,8 +349,8 @@ def map_low_level_goals(
 
     _validate_mapping(source_path, payload, specification)
 
-    # Costruisce gli oggetti HLG a partire dal testo già estratto dal
-    # top-down, associando a ciascuno l'attore indicato dalla specifica.
+    # Build the HLG objects from the text already extracted by the top-down
+    # phase, attaching to each the actor indicated by the specification.
     high_level_objects: list[dict[str, Any]] = []
     for hlg_index, (hlg_text, branch) in enumerate(
         zip(payload["highLevelGoals"], specification, strict=True)
@@ -363,8 +369,8 @@ def map_low_level_goals(
     low_level_objects: list[dict[str, Any]] = []
     grouped_branches: list[dict[str, Any]] = []
 
-    # Per ogni branch, raggruppa i LLG che gli appartengono (secondo gli
-    # indici della specifica) sotto il relativo HLG padre.
+    # For each branch, group the LLGs that belong to it (per the
+    # specification's indices) under its parent HLG.
     for hlg_index, branch in enumerate(specification):
         parent = high_level_objects[hlg_index]
         branch_llgs: list[dict[str, Any]] = []

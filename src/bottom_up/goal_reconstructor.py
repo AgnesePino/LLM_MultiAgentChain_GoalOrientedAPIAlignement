@@ -15,16 +15,20 @@ goals' own content (plus, optionally, the associated actor) are ever included
 in the LLM prompt.
 """
 
+from openai import ContentFilterFinishReasonError, LengthFinishReasonError
+
 from src.data_model import (
     Actor,
     HighLevelGoal,
     HighLevelGoals,
     LowLevelGoal,
     LowLevelGoals,
+)
+from src.bottom_up.models import (
     BottomUpHighLevelGoal,
     BottomUpHighLevelGoalLLMOutput,
 )
-from src.llm_clients import generate_response
+from src.llm_clients import generate_response, MAX_SEMANTIC_RETRIES
 
 
 class BranchAssignmentError(ValueError):
@@ -33,6 +37,20 @@ class BranchAssignmentError(ValueError):
     assigned to a branch, or when the grouped total does not match the
     original number of low-level goals. Unassigned goals must never be
     silently dropped.
+    """
+
+
+class BottomUpOutputValidationError(ValueError):
+    """
+    Raised exclusively by ``_validate_bottom_up_llm_output`` when the
+    bottom-up LLM output violates a supporting-low-level-goal-id rule
+    (empty, malformed, duplicate, or unknown ids).
+
+    Kept as a distinct subclass of ``ValueError`` so that
+    ``reconstruct_high_level_goal``'s semantic retry can catch exactly this
+    condition instead of every ``ValueError``, which could otherwise also
+    mask unrelated bugs or client-side errors as recoverable LLM output
+    issues.
     """
 
 
@@ -48,8 +66,8 @@ def normalize_goal_name(name: str) -> str:
     This avoids branch-assignment failures caused only by irrelevant
     differences in capitalization or spacing.
     """
-    # casefold() normalizza maiuscole/minuscole in modo più robusto di
-    # lower(); split()/join() collassano gli spazi multipli in uno solo.
+    # casefold() normalizes case more robustly than lower(); split()/join()
+    # collapse any run of whitespace into a single space.
     return " ".join(name.casefold().strip().split())
 
 
@@ -65,8 +83,8 @@ def assign_branch_ids(
     so that the bottom-up generator cannot be anchored by the parent's
     wording.
     """
-    # Id opachi tipo "branch_001": non contengono nulla del testo originale
-    # dell'HLG, così il modello non può "copiare" la formulazione del padre.
+    # Opaque ids like "branch_001": they carry none of the original HLG's
+    # text, so the model cannot "copy" the parent's wording.
     return {
         f"branch_{i + 1:03d}": hlg
         for i, hlg in enumerate(high_level_goals.goals)
@@ -94,8 +112,8 @@ def group_low_level_goals_by_branch(
     """
     normalized_names: dict[str, list[str]] = {}
 
-    # Raggruppa i branch_id per nome HLG normalizzato: se un nome compare
-    # più di una volta, l'assegnazione dei LLG diventerebbe ambigua.
+    # Group branch_ids by normalized HLG name: if a name appears more than
+    # once, LLG assignment would become ambiguous.
     for branch_id, high_level_goal in branch_map.items():
         normalized_name = normalize_goal_name(high_level_goal.name)
         normalized_names.setdefault(normalized_name, []).append(branch_id)
@@ -129,8 +147,8 @@ def group_low_level_goals_by_branch(
 
     unassigned: list[LowLevelGoal] = []
 
-    # Join deterministico lato Python: ogni LLG viene assegnato al branch
-    # il cui HLG ha lo stesso nome (normalizzato) del padre dichiarato dal LLG.
+    # Deterministic Python-side join: each LLG is assigned to the branch
+    # whose HLG has the same (normalized) name as the parent the LLG declares.
     for low_level_goal in low_level_goals.low_level_goals:
         normalized_parent_name = normalize_goal_name(
             low_level_goal.high_level_associated.name
@@ -269,7 +287,7 @@ def reconstruct_high_level_goal(
         else ""
     )
 
-    prompt = (
+    base_prompt = (
         f"{actor_block}"
         "**Low-level goals in this branch:**\n"
         f"{goals_block}\n\n"
@@ -279,19 +297,74 @@ def reconstruct_high_level_goal(
         "**Output:**"
     )
 
-    llm_output: BottomUpHighLevelGoalLLMOutput = generate_response(
-        prompt,
-        sys_prompt,
-        BottomUpHighLevelGoalLLMOutput,
-    )
+    # Semantic retry: the structured output can either (a) fail to be
+    # produced at all as a valid BottomUpHighLevelGoalLLMOutput (the model's
+    # response was truncated or refused, so the OpenAI client itself raises
+    # LengthFinishReasonError / ContentFilterFinishReasonError), or (b) be a
+    # well-formed BottomUpHighLevelGoalLLMOutput that still references
+    # supporting ids invalid for this branch's low-level goals (raised by
+    # _validate_bottom_up_llm_output as BottomUpOutputValidationError, a
+    # ValueError subclass). Only these three exception types are caused by
+    # the LLM's response: catching bare ValueError here would also swallow
+    # unrelated client-side or programming errors as if they were
+    # recoverable LLM output issues, so the retry must not do that.
+    retry_feedback = ""
+    last_error: (
+        BottomUpOutputValidationError
+        | LengthFinishReasonError
+        | ContentFilterFinishReasonError
+        | None
+    ) = None
 
-    # Da qui in poi si valida che gli id di supporto restituiti dal modello
-    # siano non vuoti, ben formati, senza duplicati e tutti riconosciuti
-    # tra quelli assegnati localmente a questo branch (local_ids).
+    for _ in range(MAX_SEMANTIC_RETRIES + 1):
+        prompt = (
+            base_prompt
+            if not retry_feedback
+            else f"{base_prompt}\n\n{retry_feedback}"
+        )
+
+        try:
+            llm_output: BottomUpHighLevelGoalLLMOutput = generate_response(
+                prompt,
+                sys_prompt,
+                BottomUpHighLevelGoalLLMOutput,
+            )
+
+            return _validate_bottom_up_llm_output(
+                branch_id=branch_id,
+                llm_output=llm_output,
+                local_ids=local_ids,
+            )
+        except (
+            BottomUpOutputValidationError,
+            LengthFinishReasonError,
+            ContentFilterFinishReasonError,
+        ) as exc:
+            last_error = exc
+            retry_feedback = (
+                f"The previous answer was invalid because: {exc} "
+                "Regenerate the output respecting this constraint."
+            )
+
+    raise last_error
+
+
+def _validate_bottom_up_llm_output(
+    branch_id: str,
+    llm_output: BottomUpHighLevelGoalLLMOutput,
+    local_ids: dict[str, LowLevelGoal],
+) -> BottomUpHighLevelGoal:
+    """
+    Validates that the supporting ids returned by the model are non-empty,
+    well-formed, free of duplicates, and all recognized among the ids
+    assigned locally to this branch (local_ids), then builds the final
+    BottomUpHighLevelGoal. Raises BottomUpOutputValidationError on any
+    semantic violation.
+    """
     supporting_ids = llm_output.supporting_low_level_goal_ids
 
     if not supporting_ids:
-        raise ValueError(
+        raise BottomUpOutputValidationError(
             f"Branch '{branch_id}': the model returned no supporting "
             "low-level goal identifiers."
         )
@@ -300,13 +373,13 @@ def reconstruct_high_level_goal(
         not isinstance(local_id, str) or not local_id.strip()
         for local_id in supporting_ids
     ):
-        raise ValueError(
+        raise BottomUpOutputValidationError(
             f"Branch '{branch_id}': the model returned one or more empty "
             "or invalid supporting low-level goal identifiers."
         )
 
     if len(supporting_ids) != len(set(supporting_ids)):
-        raise ValueError(
+        raise BottomUpOutputValidationError(
             f"Branch '{branch_id}': duplicate supporting low-level goal "
             "identifiers were returned."
         )
@@ -320,7 +393,7 @@ def reconstruct_high_level_goal(
     ]
 
     if invalid_ids:
-        raise ValueError(
+        raise BottomUpOutputValidationError(
             f"Branch '{branch_id}': the model referenced unknown "
             f"low-level goal id(s) {invalid_ids}. Valid ids for this "
             f"branch are: {sorted(valid_local_ids)}."
@@ -336,6 +409,17 @@ def reconstruct_high_level_goal(
         for local_id in local_ids
     ]
 
+    # Deterministically computed in Python, never requested from the LLM:
+    # source_low_level_goal_ids minus supporting_low_level_goal_ids, in the
+    # original source order (not a plain set difference, which would not
+    # preserve order).
+    supporting_full_ids_set = set(supporting_full_ids)
+    non_supporting_full_ids = [
+        full_id
+        for full_id in source_full_ids
+        if full_id not in supporting_full_ids_set
+    ]
+
     return BottomUpHighLevelGoal(
         branch_id=branch_id,
         reconstructed_high_level_goal=(
@@ -344,6 +428,7 @@ def reconstruct_high_level_goal(
         abstraction_rationale=llm_output.abstraction_rationale,
         supporting_low_level_goal_ids=supporting_full_ids,
         source_low_level_goal_ids=source_full_ids,
+        non_supporting_low_level_goal_ids=non_supporting_full_ids,
         cohesion=llm_output.cohesion,
         confidence=llm_output.confidence,
     )

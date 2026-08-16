@@ -8,9 +8,14 @@ responses using various models, handling system prompts and formatting.
 
 API clients for OpenAI and LLaMA are initialized at the beginning.
 """
-import groq
 from openai import OpenAI, RateLimitError
 from key import get_key_openai, get_key_llama, count_Llama_keys
+
+# Maximum number of extra attempts allowed when an LLM output is formally
+# valid but semantically incompatible with the pipeline's rules (invalid
+# ids, incoherent decisions, ...). This is distinct from the technical retry
+# already performed below for RateLimitError.
+MAX_SEMANTIC_RETRIES = 3
 
 # Set your GPT-4 API key
 client = OpenAI(

@@ -1,11 +1,19 @@
-from  src.examples.shot_learning import ShotPromptingMode, example1_actors, example2_actors, example3_actors, example1_hl, example2_hl, example3_hl, example1_ll, example2_ll, example3_ll
+from src.examples.shot_learning import (
+    ShotPromptingMode,
+    example1_actors,
+    example2_actors,
+    example1_hl,
+    example2_hl,
+    example1_ll,
+    example2_ll,
+)
 from src.data_model import (
     DocumentDescription,
     Actors,
     LowLevelGoals,
     HighLevelGoals,
-    HighLevelGoalGenerationRequest,
 )
+from src.bottom_up.models import HighLevelGoalGenerationRequest
 from src.utils import get_markdown
 from src.llm_clients import generate_response
 
