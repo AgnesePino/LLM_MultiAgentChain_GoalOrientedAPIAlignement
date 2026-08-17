@@ -1,91 +1,100 @@
-
 """
-llm_client.py
+llm_clients.py
 
-This module provides utility functions to interact with different LLM APIs, 
-such as OpenAI's GPT-4 and Meta's LLaMA. It includes functions to generate 
-responses using various models, handling system prompts and formatting.
+Utility functions for the two LLM providers used by the project:
+- OpenAI for the generators/reconstructors;
+- Groq for the evaluator/critic role.
 
-API clients for OpenAI and LLaMA are initialized at the beginning.
+The historical function name ``generate_response_llama`` is kept for backward
+compatibility with the existing project imports, even though the configured
+Groq evaluator model is now selected through ``GROQ_EVALUATOR_MODEL``.
 """
 from openai import OpenAI, RateLimitError
 from key import get_key_openai, get_key_llama, count_Llama_keys
 
-# Maximum number of extra attempts allowed when an LLM output is formally
-# valid but semantically incompatible with the pipeline's rules (invalid
-# ids, incoherent decisions, ...). This is distinct from the technical retry
-# already performed below for RateLimitError.
+
+# How many times a caller may re-ask a generator for a *semantically* better
+# answer (e.g. a missing branch, a rejected duplicate). Unrelated to the
+# RateLimitError key-rotation retries in generate_response_evaluator below.
 MAX_SEMANTIC_RETRIES = 3
 
-# Set your GPT-4 API key
-client = OpenAI(
-    api_key= get_key_openai()
-)
+# Groq retired llama-3.3-70b-versatile for Free/Developer usage on 2026-08-16.
+# Keep the evaluator model in one place so an infrastructure change never
+# requires editing every evaluator call site.
+GROQ_EVALUATOR_MODEL = "openai/gpt-oss-120b"
 
-# Set your llama API key, still using the OpenAI client API
+
+client = OpenAI(api_key=get_key_openai())
+
+# The existing key helpers keep their historical "llama" names because they
+# actually manage Groq API keys in this project.
 llama = OpenAI(
     api_key=get_key_llama(),
-    base_url = "https://api.groq.com/openai/v1"
+    base_url="https://api.groq.com/openai/v1",
 )
 
-def generate_response(prompt, sys_prompt, response_format=None) -> str:
+
+def generate_response(prompt, sys_prompt, response_format=None):
+    """Call OpenAI. With a Pydantic ``response_format`` it returns a parsed
+    structured object; without one it returns the raw text content."""
     messages = [
         {"role": "system", "content": sys_prompt},
-        {"role": "user", "content": prompt}
+        {"role": "user", "content": prompt},
     ]
 
     if response_format is not None:
         response = client.beta.chat.completions.parse(
             messages=messages,
-            #model="gpt-4o",
             model="gpt-4o-mini",
             max_tokens=6000,
             response_format=response_format,
-            temperature=0
+            temperature=0,
         )
         return response.choices[0].message.parsed
-    else:
-        response = client.beta.chat.completions.create(
-            messages=messages,
-            model="gpt-4o",
-            #model="gpt-4o-mini",
-            max_tokens=6000,
-            temperature=0
-        )
-        return response.choices[0].message.content
+
+    response = client.beta.chat.completions.create(
+        messages=messages,
+        model="gpt-4o",
+        max_tokens=6000,
+        temperature=0,
+    )
+    return response.choices[0].message.content
 
 
-
-def generate_response_llama(prompt, sys_prompt):
+def generate_response_evaluator(prompt, sys_prompt):
+    """Call the Groq-backed evaluator, rotating Groq keys on rate limiting."""
     global llama
     last_exception = None
 
-    for _ in range(0, count_Llama_keys()*2):
+    # x2 so every configured key gets a second chance after the rotation has
+    # gone all the way around once, instead of giving up after a single pass.
+    for _ in range(count_Llama_keys() * 2):
         try:
             response = llama.beta.chat.completions.parse(
                 messages=[
                     {"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": prompt},
                 ],
-                model = "llama-3.3-70b-versatile",
-                    # model="llama3.1-8b",
-                max_tokens = 6000,
-                temperature = 0
+                model=GROQ_EVALUATOR_MODEL,
+                max_tokens=6000,
+                temperature=0,
             )
             return response.choices[0].message.content
 
-        except RateLimitError as e:
-            last_exception = e
-
+        except RateLimitError as exc:
+            last_exception = exc
             llama = OpenAI(
                 api_key=get_key_llama(increment_counter=True),
-                base_url="https://api.groq.com/openai/v1"
+                base_url="https://api.groq.com/openai/v1",
             )
 
+    if last_exception is None:
+        # Only reachable if count_Llama_keys() returns 0, i.e. no key was
+        # ever configured, so the loop body above never ran.
+        raise RuntimeError("No Groq evaluator API key is available.")
     raise last_exception
 
 
-    
-
-
-
+# Backward-compatible name used throughout the existing codebase.
+def generate_response_llama(prompt, sys_prompt):
+    return generate_response_evaluator(prompt, sys_prompt)

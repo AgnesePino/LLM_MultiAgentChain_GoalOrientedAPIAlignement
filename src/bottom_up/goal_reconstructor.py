@@ -19,14 +19,12 @@ from openai import ContentFilterFinishReasonError, LengthFinishReasonError
 
 from src.data_model import (
     Actor,
+    BottomUpHighLevelGoal,
+    BottomUpHighLevelGoalLLMOutput,
     HighLevelGoal,
     HighLevelGoals,
     LowLevelGoal,
     LowLevelGoals,
-)
-from src.bottom_up.models import (
-    BottomUpHighLevelGoal,
-    BottomUpHighLevelGoalLLMOutput,
 )
 from src.llm_clients import generate_response, MAX_SEMANTIC_RETRIES
 
