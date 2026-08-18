@@ -1,0 +1,319 @@
+{
+    "name": "Gestao Hospital",
+    "description": "The project aims to develop an API for managing a public health system, specifically supporting the Sistema Único de Saúde (SUS) in Brazil. The SUS is a comprehensive public health system that provides universal and free access to healthcare for the entire population, addressing a wide range of health services from basic care to complex procedures like organ transplants. \n\nThe primary goal of this project is to enhance the efficiency of the SUS by organizing hospital resources, minimizing waste, and optimizing patient care. The system will facilitate various functionalities, including:\n\n- Registering hospitals and managing their information, such as location and available beds.\n- Identifying the nearest hospital for patients based on their location and current bed availability.\n- Managing hospital inventories, including medical supplies and blood bank resources.\n- Tracking patient admissions and discharges within hospitals.\n- Providing detailed information about hospital stocks and patient records.\n\nBy implementing this API, the project seeks to improve the overall management of healthcare resources within the SUS, ensuring better access and quality of care for patients.",
+    "rawDescription": "# Sistema de Gestão Hospitalar\n\n## Objetivo\n\nO objetivo do projeto é criar uma API para organizar um sistema público de saúde.\n\n## Contextualização\n\nO Sistema Único de Saúde (SUS) é um dos maiores e mais complexos sistemas de saúde pública do mundo, abrangendo desde o simples atendimento para avaliação da pressão arterial, por meio da Atenção Básica, até o transplante de órgãos, garantindo acesso integral, universal e gratuito para toda a população do país. Com a sua criação, o SUS proporcionou o acesso universal ao sistema público de saúde, sem discriminação. A atenção integral à saúde, e não somente aos cuidados assistenciais, passou a ser um direito de todos os brasileiros, desde a gestação e por toda a vida, com foco na saúde com qualidade de vida, visando a prevenção e a promoção da saúde. O objetivo desse projeto é criar uma ferramenta para auxiliar o SUS, evitar desperdício e potencializar os recursos a partir dos pacientes.\n\nAo final do programa, além de apresentar a API criada, cada squad deverá expor quais são os pontos de melhoria e quais seriam os próximos passos no projeto, caso fossem seguir adiante.\n\n## Requisitos técnicos obrigatórios\n\nPara o projeto é necessário que as squads se utilizem dos aprendizados repassados pelo programa AceleraDev, portanto a solução deve ser construída de acordo com os seguintes requisitos:\n\n- Banco de dados;\n- Desenvolvimento do backend e APIs com Java Spring Boot;\n- Testes unitários são obrigatórios\n\n## Definições do Sistema\n\n- Todo hospital tem um estoque contendo diversos produtos.\n- Um estoque tem produtos e suas respectivas quantidades.\n- Dentro do estoque também tem banco de sangue\n- O hospital também possui leitos.\n- Ao encontrar um paciente é importante o recomendar para um hospital mais próximo e que tenha vaga disponível.\n- Caso o hospital precise de um produto, por exemplo, um banco de sangue, é importante fazer o envio do hospital mais próximo ao local.\n- Caso o hospital tenha apenas 4 itens ou 4 litros ele terá apenas o suficiente para o próprio hospital.\n\n## Exemplos de chamadas:\n\nA partir da API que gerencia os hospitais dentro do SUS o usuário conseguirá, por exemplo:\n\n- Cadastrar o hospital\n- A partir da localização do paciente indicar o hospital mais próximo.\n- Realizar check-in/ check-out do paciente no hospital\n- Verificar quantos leitos disponíveis no hospital\n- Cadastrar produtos e suas respectivas quantidades\n- Cadastrar e gerenciar banco de sangue\n\n### /v1/hospitais/{id}\n\nMétodo: GET\nRetorna as informações do hospital, por exemplo:\n\n- Nome\n- Endereço\n- Número de leitos\n- Números de leitos disponíveis\n\n### /v1/hospitais/{id}/estoque\n\nMétodo: GET\nRetorna as informações dos produtos existentes estoque, por exemplo.\n\n### /v1/hospitais/{id}/estoque/{produto}\n\nMétodo: GET\nRetorna mais detalhes de um produto.\n\n- Nome\n- Descrição\n- Quantidade\n\n### /v1/hospitais/{id}/pacientes\n\nMétodo: GET\nRetorna o nome dos pacientes dentro do hospital.\n\n### /v1/hospitais/{id}/pacientes/{paciente}\n\nMétodo: GET\nRetorna todas as informações do paciente cadastrado, por exemplo:\n\n- Nome completo\n- CPF\n- Data de nascimento\n- Sexo\n- Data de entrada no hospital.\n",
+    "documentationPreprocessing": {
+        "chunked": false,
+        "chunkCount": 1,
+        "originalChars": 3156,
+        "processedChars": 1189,
+        "strategy": "original_generate_description"
+    },
+    "actors": [
+        "Patients",
+        "Hospital Administrators",
+        "Healthcare Providers",
+        "Public Health Officials",
+        "Inventory Managers"
+    ],
+    "highLevelGoals": [
+        "Facilitate the registration of hospitals and the management of their information, including location and available bed counts, to ensure accurate and up-to-date data for healthcare access.",
+        "Provide functionality to identify the nearest hospital for patients based on their location and current bed availability, ensuring timely access to healthcare services.",
+        "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+        "Implement tracking of patient admissions and discharges within hospitals to improve patient flow and resource allocation.",
+        "Ensure that detailed information about hospital stocks and patient records is accessible to authorized personnel for better decision-making and resource management."
+    ],
+    "lowLevelGoals": [
+        "Allow hospital administrators to input and save new hospital details including name, location, and contact information via an API call.",
+        "Enable hospital administrators to update the number of available beds in a hospital through an API call.",
+        "Allow hospital administrators to retrieve current hospital information including name, location, and available bed counts via an API call.",
+        "Allow patients to request a list of hospitals sorted by proximity to their current location via an API call.",
+        "Allow patients to request a list of hospitals sorted by proximity to their current location that have available beds via an API call.",
+        "Enable patients to check the current bed availability at a specific hospital through an API call.",
+        "Allow inventory managers to add new medical supplies or blood bank resources to the inventory system via an API call.",
+        "Enable inventory managers to update the quantity of existing medical supplies in the inventory through an API call.",
+        "Allow inventory managers to log and track expiration dates of medical supplies in the inventory system via an API call.",
+        "Enable inventory managers to receive alerts when stock levels of medical supplies fall below a specified threshold via an API call.",
+        "Allow healthcare providers to log a new patient admission into the system via an API call.",
+        "Enable healthcare providers to log a patient discharge from the hospital through an API call.",
+        "Allow public health officials to retrieve detailed information about hospital stock levels via an API call.",
+        "Enable public health officials to access and review patient records for analysis and reporting through an API call."
+    ],
+    "structuredActors": {
+        "actors": [
+            {
+                "name": "Patients",
+                "description": "Individuals seeking healthcare services within the public health system."
+            },
+            {
+                "name": "Hospital Administrators",
+                "description": "Personnel responsible for managing hospital operations and resources."
+            },
+            {
+                "name": "Healthcare Providers",
+                "description": "Medical professionals who deliver care to patients in hospitals."
+            },
+            {
+                "name": "Public Health Officials",
+                "description": "Government representatives overseeing the public health system and its efficiency."
+            },
+            {
+                "name": "Inventory Managers",
+                "description": "Staff responsible for managing medical supplies and resources within hospitals."
+            }
+        ]
+    },
+    "structuredHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Register Hospitals and Manage Information",
+                "description": "Facilitate the registration of hospitals and the management of their information, including location and available bed counts, to ensure accurate and up-to-date data for healthcare access.",
+                "actor": {
+                    "name": "Hospital Administrators",
+                    "description": "Personnel responsible for managing hospital operations and resources."
+                }
+            },
+            {
+                "name": "Identify Nearest Hospital",
+                "description": "Provide functionality to identify the nearest hospital for patients based on their location and current bed availability, ensuring timely access to healthcare services.",
+                "actor": {
+                    "name": "Patients",
+                    "description": "Individuals seeking healthcare services within the public health system."
+                }
+            },
+            {
+                "name": "Manage Hospital Inventories",
+                "description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+                "actor": {
+                    "name": "Inventory Managers",
+                    "description": "Staff responsible for managing medical supplies and resources within hospitals."
+                }
+            },
+            {
+                "name": "Track Patient Admissions and Discharges",
+                "description": "Implement tracking of patient admissions and discharges within hospitals to improve patient flow and resource allocation.",
+                "actor": {
+                    "name": "Healthcare Providers",
+                    "description": "Medical professionals who deliver care to patients in hospitals."
+                }
+            },
+            {
+                "name": "Provide Detailed Information on Hospital Stocks and Patient Records",
+                "description": "Ensure that detailed information about hospital stocks and patient records is accessible to authorized personnel for better decision-making and resource management.",
+                "actor": {
+                    "name": "Public Health Officials",
+                    "description": "Government representatives overseeing the public health system and its efficiency."
+                }
+            }
+        ]
+    },
+    "structuredLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Add Hospital Information",
+                "description": "Allow hospital administrators to input and save new hospital details including name, location, and contact information via an API call.",
+                "high_level_associated": {
+                    "name": "Register Hospitals and Manage Information",
+                    "description": "Facilitate the registration of hospitals and the management of their information, including location and available bed counts, to ensure accurate and up-to-date data for healthcare access.",
+                    "actor": {
+                        "name": "Hospital Administrators",
+                        "description": "Personnel responsible for managing hospital operations and resources."
+                    }
+                }
+            },
+            {
+                "name": "Update Hospital Bed Count",
+                "description": "Enable hospital administrators to update the number of available beds in a hospital through an API call.",
+                "high_level_associated": {
+                    "name": "Register Hospitals and Manage Information",
+                    "description": "Facilitate the registration of hospitals and the management of their information, including location and available bed counts, to ensure accurate and up-to-date data for healthcare access.",
+                    "actor": {
+                        "name": "Hospital Administrators",
+                        "description": "Personnel responsible for managing hospital operations and resources."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve Hospital Details",
+                "description": "Allow hospital administrators to retrieve current hospital information including name, location, and available bed counts via an API call.",
+                "high_level_associated": {
+                    "name": "Register Hospitals and Manage Information",
+                    "description": "Facilitate the registration of hospitals and the management of their information, including location and available bed counts, to ensure accurate and up-to-date data for healthcare access.",
+                    "actor": {
+                        "name": "Hospital Administrators",
+                        "description": "Personnel responsible for managing hospital operations and resources."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve Hospital List by Location",
+                "description": "Allow patients to request a list of hospitals sorted by proximity to their current location via an API call.",
+                "high_level_associated": {
+                    "name": "Identify Nearest Hospital",
+                    "description": "Provide functionality to identify the nearest hospital for patients based on their location and current bed availability, ensuring timely access to healthcare services.",
+                    "actor": {
+                        "name": "Patients",
+                        "description": "Individuals seeking healthcare services within the public health system."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve Hospitals with Available Beds Near Location",
+                "description": "Allow patients to request a list of hospitals sorted by proximity to their current location that have available beds via an API call.",
+                "high_level_associated": {
+                    "name": "Identify Nearest Hospital",
+                    "description": "Provide functionality to identify the nearest hospital for patients based on their location and current bed availability, ensuring timely access to healthcare services.",
+                    "actor": {
+                        "name": "Patients",
+                        "description": "Individuals seeking healthcare services within the public health system."
+                    }
+                }
+            },
+            {
+                "name": "Check Bed Availability at Hospital",
+                "description": "Enable patients to check the current bed availability at a specific hospital through an API call.",
+                "high_level_associated": {
+                    "name": "Identify Nearest Hospital",
+                    "description": "Provide functionality to identify the nearest hospital for patients based on their location and current bed availability, ensuring timely access to healthcare services.",
+                    "actor": {
+                        "name": "Patients",
+                        "description": "Individuals seeking healthcare services within the public health system."
+                    }
+                }
+            },
+            {
+                "name": "Add Inventory Item",
+                "description": "Allow inventory managers to add new medical supplies or blood bank resources to the inventory system via an API call.",
+                "high_level_associated": {
+                    "name": "Manage Hospital Inventories",
+                    "description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+                    "actor": {
+                        "name": "Inventory Managers",
+                        "description": "Staff responsible for managing medical supplies and resources within hospitals."
+                    }
+                }
+            },
+            {
+                "name": "Update Inventory Levels",
+                "description": "Enable inventory managers to update the quantity of existing medical supplies in the inventory through an API call.",
+                "high_level_associated": {
+                    "name": "Manage Hospital Inventories",
+                    "description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+                    "actor": {
+                        "name": "Inventory Managers",
+                        "description": "Staff responsible for managing medical supplies and resources within hospitals."
+                    }
+                }
+            },
+            {
+                "name": "Track Expiration Dates of Inventory Items",
+                "description": "Allow inventory managers to log and track expiration dates of medical supplies in the inventory system via an API call.",
+                "high_level_associated": {
+                    "name": "Manage Hospital Inventories",
+                    "description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+                    "actor": {
+                        "name": "Inventory Managers",
+                        "description": "Staff responsible for managing medical supplies and resources within hospitals."
+                    }
+                }
+            },
+            {
+                "name": "Alert on Low Stock",
+                "description": "Enable inventory managers to receive alerts when stock levels of medical supplies fall below a specified threshold via an API call.",
+                "high_level_associated": {
+                    "name": "Manage Hospital Inventories",
+                    "description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+                    "actor": {
+                        "name": "Inventory Managers",
+                        "description": "Staff responsible for managing medical supplies and resources within hospitals."
+                    }
+                }
+            },
+            {
+                "name": "Log Patient Admission",
+                "description": "Allow healthcare providers to log a new patient admission into the system via an API call.",
+                "high_level_associated": {
+                    "name": "Track Patient Admissions and Discharges",
+                    "description": "Implement tracking of patient admissions and discharges within hospitals to improve patient flow and resource allocation.",
+                    "actor": {
+                        "name": "Healthcare Providers",
+                        "description": "Medical professionals who deliver care to patients in hospitals."
+                    }
+                }
+            },
+            {
+                "name": "Log Patient Discharge",
+                "description": "Enable healthcare providers to log a patient discharge from the hospital through an API call.",
+                "high_level_associated": {
+                    "name": "Track Patient Admissions and Discharges",
+                    "description": "Implement tracking of patient admissions and discharges within hospitals to improve patient flow and resource allocation.",
+                    "actor": {
+                        "name": "Healthcare Providers",
+                        "description": "Medical professionals who deliver care to patients in hospitals."
+                    }
+                }
+            },
+            {
+                "name": "Access Hospital Stock Details",
+                "description": "Allow public health officials to retrieve detailed information about hospital stock levels via an API call.",
+                "high_level_associated": {
+                    "name": "Provide Detailed Information on Hospital Stocks and Patient Records",
+                    "description": "Ensure that detailed information about hospital stocks and patient records is accessible to authorized personnel for better decision-making and resource management.",
+                    "actor": {
+                        "name": "Public Health Officials",
+                        "description": "Government representatives overseeing the public health system and its efficiency."
+                    }
+                }
+            },
+            {
+                "name": "Access Patient Records",
+                "description": "Enable public health officials to access and review patient records for analysis and reporting through an API call.",
+                "high_level_associated": {
+                    "name": "Provide Detailed Information on Hospital Stocks and Patient Records",
+                    "description": "Ensure that detailed information about hospital stocks and patient records is accessible to authorized personnel for better decision-making and resource management.",
+                    "actor": {
+                        "name": "Public Health Officials",
+                        "description": "Government representatives overseeing the public health system and its efficiency."
+                    }
+                }
+            }
+        ]
+    },
+    "baselineScores": {
+        "actors": null,
+        "highLevelGoals": 10.0,
+        "lowLevelGoals": 8.5
+    },
+    "baselineCritiques": {
+        "actors": null,
+        "highLevelGoals": "The extraction is coherent and accurately reflects the functional capabilities described in the text. All key functionalities (hospital registration, nearest hospital identification, inventory management, patient tracking, and information provision) are captured as high-level goals. The actors are correctly mapped to these goals based on the descriptions provided. There are no contradictions, omissions, or non-functional goals included.",
+        "lowLevelGoals": "The extraction is coherent and covers the main functional aspects described in the high-level goals. However, there is a minor omission regarding the \"Register Hospitals\" goal: while adding, updating, and retrieving hospital info are covered, the ability to *delete* or *deactivate* a hospital record is a standard CRUD operation implied by \"managing information\" but not explicitly listed. Additionally, for the \"Track Patient Admissions and Discharges\" goal, while logging is covered, the ability to *retrieve* or *query* admission/discharge history (e.g., to check current occupancy or patient flow) is missing, which is crucial for the stated goal of \"improving patient flow and resource allocation.\" Without the ability to read this data, the tracking is incomplete. These are minor omissions rather than contradictions."
+    },
+    "baselineConfiguration": {
+        "generatorStructuredModel": "gpt-4o-mini",
+        "generatorTextModel": "gpt-4o",
+        "actorPromptingMode": "FEW_SHOT",
+        "actorEvaluatorEnabled": false,
+        "goalPromptingMode": "ZERO_SHOT",
+        "highLevelGoalEvaluatorEnabled": true,
+        "lowLevelGoalEvaluatorEnabled": true,
+        "goalEvaluatorModel": "qwen/qwen3.6-27b",
+        "qualityThreshold": 8.5,
+        "maxReflectionAttempts": 3
+    },
+    "pipelineConfiguration": {
+        "actors": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false
+        },
+        "highLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "lowLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "profile": "ZERO_SHOT_feedback_original_top_down"
+    }
+}

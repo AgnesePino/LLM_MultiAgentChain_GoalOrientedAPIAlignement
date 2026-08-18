@@ -1,0 +1,1579 @@
+{
+    "name": "Genome Nexus",
+    "description": "Genome Nexus is a resource designed for the rapid and automated annotation and interpretation of genetic variants, particularly in the context of cancer. It addresses the need for a comprehensive tool that consolidates information from various databases, enabling users to convert DNA changes into protein changes, predict the functional impacts of protein mutations, and access data on mutation frequencies, gene functions, variant effects, and clinical actionability. This integration facilitates high-throughput analysis, making it easier for researchers and clinicians to understand the implications of genetic variants in cancer.",
+    "rawDescription": "# Genome Nexus 🧬\n\nGenome Nexus, a comprehensive one-stop resource for fast, automated and\nhigh-throughput annotation and interpretation of genetic variants in cancer.\nGenome Nexus integrates information from a variety of existing resources,\nincluding databases that convert DNA changes to protein changes, predict the\nfunctional effects of protein mutations, and contain information about mutation\nfrequencies, gene function, variant effects, and clinical actionability.\n\n## Documentation 📖\nSee the [docs](https://docs.genomenexus.org)\n\n## Run 💻\n\n### Alternative 1 - run genome-nexus, mongoDB and genome-nexus-vep in docker containers\nFirst, set environment variables for Ensembl Release, VEP Assembly, location of VEP Cache, and species (since a mouse instalation is supported). If these are not, the default values from `.env` will be set.\n\nThe reference genome and Ensembl release must be consistent with a version in [genome-nexus-importer/data/](https://github.com/genome-nexus/genome-nexus-importer/tree/master/data).\nFor example `grch37_ensembl92`, `grch38_ensembl92` or `grch38_ensembl95`:\n```\nexport REF_ENSEMBL_VERSION=grch38_ensembl92\n```\nIf you want to setup Genome Nexus for mouse, also set the `SPECIES` variable to 'mus_musculus'. Also see the [docs](https://github.com/genome-nexus/genome-nexus-importer/blob/master/docs/setup-genome-nexus-mouse.md) to create a mouse database.\n```bash\nexport SPECIES=mus_musculus\n```\n\nIf you would like to do local VEP annotations instead of using the public Ensembl API, please uncomment `# gn_vep.region.url=http://localhost:6060/vep/human/region/VARIANT` in your `application.properties`. This will require you to download the VEP cache files for the preferred Ensembl Release and Reference genome, see our documentation on [downloading the Genome Nexus VEP Cache](https://github.com/genome-nexus/genome-nexus-vep/blob/master/README.md#create-vep-cache). This will take several hours.\n```\n# Set local cache dir\nexport VEP_CACHE=<local_vep_cache>\n\n# GRCh38 or GRCh37\nexport VEP_ASSEMBLY=GRCh38\n```\n\nRun docker-compose to create images and containers:\n```\ndocker-compose up --build -d\n```\n\nRun without recreating images:\n```\ndocker-compose up -d\n```\n\nRun without Genome Nexus VEP:\n```\n# Start both the Web and DB (dependency of Web) containers\ndocker-compose up -d web\n```\n\nStop and remove containers:\n```\ndocker-compose down\n```\n\n### Alternative 2 - run genome-nexus locally, but mongoDB in docker container\n```\n# the genomenexus/gn-mongo images comes with all the required tables imported\n# change latest to different version if necessary (only need to run this once)\ndocker run --name=gn-mongo --restart=always -p 27017:27017 -d genomenexus/gn-mongo:latest \nmvn  -DskipTests clean install\njava -jar web/target/web-*.war\n```\n\n### Alternative 3 - install mongoDB locally and run with local java\nInstall mongoDB manually. Then follow instructions in\n[genome-nexus-importer](https://github.com/genome-nexus/genome-nexus-importer)\nto initialize the database.\n\nAfter that run this:\n```\nmvn clean install\njava -jar web/target/web-*.war\n```\n\n## Test Status 👷‍♀️\n\n| branch | master | rc |\n| --- | --- | --- |\n| status | [![Build Status](https://travis-ci.org/genome-nexus/genome-nexus.svg?branch=master)](https://travis-ci.org/genome-nexus/genome-nexus/branches) | [![Build Status](https://travis-ci.org/genome-nexus/genome-nexus.svg?branch=rc)](https://travis-ci.org/genome-nexus/genome-nexus/branches) |\n\n## Deploy 🚀\n\n[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)\n",
+    "documentationPreprocessing": {
+        "chunked": false,
+        "chunkCount": 1,
+        "originalChars": 3549,
+        "processedChars": 634,
+        "strategy": "original_generate_description"
+    },
+    "actors": [
+        "Researchers",
+        "Clinicians",
+        "Bioinformaticians"
+    ],
+    "highLevelGoals": [
+        "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+        "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+        "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects."
+    ],
+    "lowLevelGoals": [
+        "Allow researchers to submit a genetic variant for annotation through an API call.",
+        "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
+        "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+        "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+        "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+        "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+        "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+        "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call."
+    ],
+    "structuredActors": {
+        "actors": [
+            {
+                "name": "Researchers",
+                "description": "Individuals conducting studies on genetic variants and their implications."
+            },
+            {
+                "name": "Clinicians",
+                "description": "Medical professionals who interpret genetic data to inform patient care."
+            },
+            {
+                "name": "Bioinformaticians",
+                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+            }
+        ]
+    },
+    "structuredHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Facilitate Rapid Genetic Variant Annotation",
+                "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                "actor": {
+                    "name": "Researchers",
+                    "description": "Individuals conducting studies on genetic variants and their implications."
+                }
+            },
+            {
+                "name": "Enhance Clinical Decision-Making",
+                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                "actor": {
+                    "name": "Clinicians",
+                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                }
+            },
+            {
+                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                "actor": {
+                    "name": "Bioinformaticians",
+                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                }
+            }
+        ]
+    },
+    "structuredLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Submit Genetic Variant for Annotation",
+                "description": "Allow researchers to submit a genetic variant for annotation through an API call.",
+                "high_level_associated": {
+                    "name": "Facilitate Rapid Genetic Variant Annotation",
+                    "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve Annotation Results",
+                "description": "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
+                "high_level_associated": {
+                    "name": "Facilitate Rapid Genetic Variant Annotation",
+                    "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Access Mutation Frequency Data",
+                "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                "high_level_associated": {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Fetch Clinical Actionability Information",
+                "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                "high_level_associated": {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Submit High-Throughput Analysis Job",
+                "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve High-Throughput Analysis Results",
+                "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Predict Functional Impact of Mutation",
+                "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Access Gene Function Data",
+                "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            }
+        ]
+    },
+    "baselineScores": {
+        "actors": null,
+        "highLevelGoals": 10.0,
+        "lowLevelGoals": 8.5
+    },
+    "baselineCritiques": {
+        "actors": null,
+        "highLevelGoals": "The extraction is coherent and accurately reflects the functional goals described in the text for all three actors. It correctly identifies the core functionalities: rapid annotation, clinical decision support via actionability data, and high-throughput analysis for bioinformaticians. No major omissions or contradictions are present.",
+        "lowLevelGoals": "The extraction is coherent and covers the main functional aspects described in the software description. However, there is a minor omission regarding the specific capability mentioned in the description: \"converting DNA changes into protein changes.\" While this is part of the annotation process, the low-level goals for researchers are generic (\"Submit Genetic Variant\", \"Retrieve Annotation Results\"). A more precise low-level goal could explicitly mention the conversion or the specific output format (e.g., amino acid change) to better reflect the \"how\" of the high-level goal. Additionally, the description mentions \"variant effects\" as a distinct data point alongside gene functions and mutation frequencies. While \"Predict Functional Impact\" covers some of this, a specific goal to \"Retrieve Variant Effect Data\" (e.g., from databases like ClinVar or COSMIC) would be more complete. Despite these minor refinements, the current goals are functionally sufficient and do not contain contradictions or major omissions that would invalidate the system's core purpose."
+    },
+    "baselineConfiguration": {
+        "generatorStructuredModel": "gpt-4o-mini",
+        "generatorTextModel": "gpt-4o",
+        "actorPromptingMode": "FEW_SHOT",
+        "actorEvaluatorEnabled": false,
+        "goalPromptingMode": "ZERO_SHOT",
+        "highLevelGoalEvaluatorEnabled": true,
+        "lowLevelGoalEvaluatorEnabled": true,
+        "goalEvaluatorModel": "qwen/qwen3.6-27b",
+        "qualityThreshold": 8.5,
+        "maxReflectionAttempts": 3
+    },
+    "pipelineConfiguration": {
+        "actors": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false
+        },
+        "highLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "lowLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "profile": "ZERO_SHOT_feedback_original_top_down"
+    },
+    "baselineSourceFile": "Genome Nexus_ZERO_SHOT_feedback_original_top_down_top_down.json",
+    "bottomUpInputSource": "structured baseline fields",
+    "bottomUpMappedInputFile": null,
+    "evaluationOutputDirectory": "C:\\Users\\agnes_lryeu3v\\Desktop\\tesi\\output\\bottom_up_iterations\\Genome Nexus_ZERO_SHOT_feedback_original_top_down",
+    "globalGoalCycle": {
+        "converged": true,
+        "stop_reason": "ALL_BRANCHES_CONFIRMED_AND_DOCUMENTATION_COVERED",
+        "completed_iterations": 2,
+        "max_iterations": 5,
+        "final_high_level_goals": {
+            "goals": [
+                {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                },
+                {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                },
+                {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            ]
+        },
+        "final_low_level_goals": {
+            "low_level_goals": [
+                {
+                    "name": "Access Mutation Frequency Data",
+                    "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                    "high_level_associated": {
+                        "name": "Enhance Clinical Decision-Making",
+                        "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                        "actor": {
+                            "name": "Clinicians",
+                            "description": "Medical professionals who interpret genetic data to inform patient care."
+                        }
+                    }
+                },
+                {
+                    "name": "Fetch Clinical Actionability Information",
+                    "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                    "high_level_associated": {
+                        "name": "Enhance Clinical Decision-Making",
+                        "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                        "actor": {
+                            "name": "Clinicians",
+                            "description": "Medical professionals who interpret genetic data to inform patient care."
+                        }
+                    }
+                },
+                {
+                    "name": "Submit High-Throughput Analysis Job",
+                    "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Retrieve High-Throughput Analysis Results",
+                    "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Predict Functional Impact of Mutation",
+                    "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Access Gene Function Data",
+                    "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Submit genetic variant data for annotation",
+                    "description": "Allow researchers to upload genetic variant data in a specified format for processing and annotation.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Retrieve annotated genetic variant results",
+                    "description": "Enable researchers to fetch the results of the annotation process, including details on the genetic variants and their predicted impacts.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Convert DNA changes to protein changes",
+                    "description": "Provide functionality to convert specific DNA mutations into their corresponding protein changes as part of the annotation process.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Predict functional impacts of genetic variants",
+                    "description": "Allow researchers to request predictions on the functional impacts of specific genetic variants based on existing biological data.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Access documentation for variant annotation methods",
+                    "description": "Provide researchers with access to documentation detailing the methods and algorithms used for genetic variant annotation and interpretation.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                }
+            ]
+        },
+        "best_validated_high_level_goals": null,
+        "best_validated_low_level_goals": null,
+        "last_candidate_high_level_goals": {
+            "goals": [
+                {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                },
+                {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                },
+                {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            ]
+        },
+        "last_candidate_low_level_goals": {
+            "low_level_goals": [
+                {
+                    "name": "Access Mutation Frequency Data",
+                    "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                    "high_level_associated": {
+                        "name": "Enhance Clinical Decision-Making",
+                        "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                        "actor": {
+                            "name": "Clinicians",
+                            "description": "Medical professionals who interpret genetic data to inform patient care."
+                        }
+                    }
+                },
+                {
+                    "name": "Fetch Clinical Actionability Information",
+                    "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                    "high_level_associated": {
+                        "name": "Enhance Clinical Decision-Making",
+                        "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                        "actor": {
+                            "name": "Clinicians",
+                            "description": "Medical professionals who interpret genetic data to inform patient care."
+                        }
+                    }
+                },
+                {
+                    "name": "Submit High-Throughput Analysis Job",
+                    "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Retrieve High-Throughput Analysis Results",
+                    "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Predict Functional Impact of Mutation",
+                    "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Access Gene Function Data",
+                    "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                    "high_level_associated": {
+                        "name": "Streamline High-Throughput Bioinformatics Analysis",
+                        "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                        "actor": {
+                            "name": "Bioinformaticians",
+                            "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        }
+                    }
+                },
+                {
+                    "name": "Submit genetic variant data for annotation",
+                    "description": "Allow researchers to upload genetic variant data in a specified format for processing and annotation.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Retrieve annotated genetic variant results",
+                    "description": "Enable researchers to fetch the results of the annotation process, including details on the genetic variants and their predicted impacts.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Convert DNA changes to protein changes",
+                    "description": "Provide functionality to convert specific DNA mutations into their corresponding protein changes as part of the annotation process.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Predict functional impacts of genetic variants",
+                    "description": "Allow researchers to request predictions on the functional impacts of specific genetic variants based on existing biological data.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                },
+                {
+                    "name": "Access documentation for variant annotation methods",
+                    "description": "Provide researchers with access to documentation detailing the methods and algorithms used for genetic variant annotation and interpretation.",
+                    "high_level_associated": {
+                        "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                        "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                        "actor": {
+                            "name": "Researchers",
+                            "description": "Individuals conducting studies on genetic variants and their implications."
+                        }
+                    }
+                }
+            ]
+        },
+        "added_high_level_goals": [],
+        "iterations": [
+            {
+                "iteration": 1,
+                "input_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Facilitate Rapid Genetic Variant Annotation",
+                            "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        },
+                        {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        },
+                        {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        }
+                    ]
+                },
+                "input_low_level_goals": {
+                    "low_level_goals": [
+                        {
+                            "name": "Submit Genetic Variant for Annotation",
+                            "description": "Allow researchers to submit a genetic variant for annotation through an API call.",
+                            "high_level_associated": {
+                                "name": "Facilitate Rapid Genetic Variant Annotation",
+                                "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Retrieve Annotation Results",
+                            "description": "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
+                            "high_level_associated": {
+                                "name": "Facilitate Rapid Genetic Variant Annotation",
+                                "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Access Mutation Frequency Data",
+                            "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                            "high_level_associated": {
+                                "name": "Enhance Clinical Decision-Making",
+                                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                                "actor": {
+                                    "name": "Clinicians",
+                                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Fetch Clinical Actionability Information",
+                            "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                            "high_level_associated": {
+                                "name": "Enhance Clinical Decision-Making",
+                                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                                "actor": {
+                                    "name": "Clinicians",
+                                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Submit High-Throughput Analysis Job",
+                            "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Retrieve High-Throughput Analysis Results",
+                            "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Predict Functional Impact of Mutation",
+                            "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Access Gene Function Data",
+                            "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        }
+                    ]
+                },
+                "branch_traceability": {
+                    "branch_001": {
+                        "original_high_level_goal": {
+                            "name": "Facilitate Rapid Genetic Variant Annotation",
+                            "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        }
+                    },
+                    "branch_002": {
+                        "original_high_level_goal": {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        }
+                    },
+                    "branch_003": {
+                        "original_high_level_goal": {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        }
+                    }
+                },
+                "reconstructed_high_level_goals": {
+                    "branch_001": {
+                        "reconstructed_high_level_goal": "Facilitate the efficient exchange of genetic variant information between researchers and the annotation system.",
+                        "abstraction_rationale": "The low-level goals focus on enabling researchers to submit and retrieve genetic variant annotations, which collectively aim to streamline the process of accessing and utilizing genetic data for research purposes.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_001",
+                        "source_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_002": {
+                        "reconstructed_high_level_goal": "Facilitate informed clinical decision-making by providing clinicians with essential genetic variant information.",
+                        "abstraction_rationale": "The low-level goals focus on enabling clinicians to access critical data regarding genetic variants, which supports their ability to make informed decisions in patient care. This shared intention of enhancing clinical decision-making justifies the implementation of both goals.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_002",
+                        "source_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_003": {
+                        "reconstructed_high_level_goal": "Facilitate comprehensive analysis and interpretation of genetic data for bioinformaticians.",
+                        "abstraction_rationale": "The low-level goals collectively aim to provide bioinformaticians with the necessary tools to perform various tasks related to genetic data analysis, including job submission, result retrieval, mutation impact prediction, and access to gene function data. This indicates a broader intention to enhance their ability to analyze and interpret genetic information effectively.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002",
+                            "branch_003_llg_003",
+                            "branch_003_llg_004"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_003",
+                        "source_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002",
+                            "branch_003_llg_003",
+                            "branch_003_llg_004"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    }
+                },
+                "bottom_up_errors": {},
+                "empty_branches": [],
+                "global_evaluations": {
+                    "branch_001": {
+                        "branch_id": "branch_001",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Facilitate Rapid Genetic Variant Annotation",
+                            "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Facilitate the efficient exchange of genetic variant information between researchers and the annotation system.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_001_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Enable researchers to rapidly and automatically annotate and interpret genetic variants in the context of cancer. This includes converting DNA changes into protein changes and predicting functional impacts to support high-throughput analysis.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "Researchers",
+                                            "description": "Individuals conducting studies on genetic variants and their implications."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_001",
+                            "origin_branch_id": "branch_001",
+                            "generator_guidance": "The reconstructed HLG incorrectly focuses on information exchange rather than the documented functional outcome of variant annotation and interpretation. The parent HLG correctly captures the stakeholder's intent to rapidly annotate and interpret genetic variants, including converting DNA changes to protein changes.",
+                            "rationale": "The reconstructed HLG incorrectly focuses on information exchange rather than the documented functional outcome of variant annotation and interpretation. The parent HLG correctly captures the stakeholder's intent to rapidly annotate and interpret genetic variants, including converting DNA changes to protein changes."
+                        },
+                        "rationale": "The reconstructed HLG incorrectly focuses on information exchange rather than the documented functional outcome of variant annotation and interpretation. The parent HLG correctly captures the stakeholder's intent to rapidly annotate and interpret genetic variants, including converting DNA changes to protein changes.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    },
+                    "branch_002": {
+                        "branch_id": "branch_002",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Facilitate informed clinical decision-making by providing clinicians with essential genetic variant information.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly states that the tool provides clinicians with data on mutation frequencies and clinical actionability to facilitate understanding of genetic variants. This directly supports the parent HLG's focus on enhancing clinical decision-making and the reconstructed HLG's focus on facilitating informed decisions through essential information. Alignment: The reconstructed HLG preserves the core intention by maintaining the clinician actor and the objective of supporting decision-making through genetic data. Although it generalizes 'comprehensive insights' to 'essential information', the fundamental WHY-level goal remains aligned with the parent.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    },
+                    "branch_003": {
+                        "branch_id": "branch_003",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Facilitate comprehensive analysis and interpretation of genetic data for bioinformaticians.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly supports the parent HLG by mentioning the facilitation of high-throughput analysis and access to data on gene functions and variant effects. The reconstructed HLG is also supported as it accurately summarizes the tool's purpose of comprehensive annotation and interpretation for the specified user group. Alignment: The reconstructed HLG preserves the core functional intention by maintaining the same actor (bioinformaticians) and objective (analyzing/interpreting genetic data), effectively summarizing the parent's specific high-throughput and variant-effect details into a broader but semantically equivalent goal.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    }
+                },
+                "global_evaluation_errors": {},
+                "high_level_generation_requests": [
+                    {
+                        "request_id": "branch_001_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Enable researchers to rapidly and automatically annotate and interpret genetic variants in the context of cancer. This includes converting DNA changes into protein changes and predicting functional impacts to support high-throughput analysis.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "Researchers",
+                                        "description": "Individuals conducting studies on genetic variants and their implications."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_001",
+                        "origin_branch_id": "branch_001",
+                        "generator_guidance": "The reconstructed HLG incorrectly focuses on information exchange rather than the documented functional outcome of variant annotation and interpretation. The parent HLG correctly captures the stakeholder's intent to rapidly annotate and interpret genetic variants, including converting DNA changes to protein changes.",
+                        "rationale": "The reconstructed HLG incorrectly focuses on information exchange rather than the documented functional outcome of variant annotation and interpretation. The parent HLG correctly captures the stakeholder's intent to rapidly annotate and interpret genetic variants, including converting DNA changes to protein changes."
+                    }
+                ],
+                "generated_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                            "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        }
+                    ]
+                },
+                "high_level_request_candidate_selections": [],
+                "high_level_duplicate_resolutions": [],
+                "high_level_regeneration_error": null,
+                "documentation_coverage": null,
+                "documentation_coverage_rechecks": [],
+                "documentation_coverage_error": null,
+                "documentation_fully_covered": false,
+                "newly_added_high_level_goals": [],
+                "updated_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                            "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        },
+                        {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        },
+                        {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        }
+                    ]
+                },
+                "regenerated_low_level_goals": {
+                    "low_level_goals": [
+                        {
+                            "name": "Access Mutation Frequency Data",
+                            "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                            "high_level_associated": {
+                                "name": "Enhance Clinical Decision-Making",
+                                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                                "actor": {
+                                    "name": "Clinicians",
+                                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Fetch Clinical Actionability Information",
+                            "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                            "high_level_associated": {
+                                "name": "Enhance Clinical Decision-Making",
+                                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                                "actor": {
+                                    "name": "Clinicians",
+                                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Submit High-Throughput Analysis Job",
+                            "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Retrieve High-Throughput Analysis Results",
+                            "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Predict Functional Impact of Mutation",
+                            "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Access Gene Function Data",
+                            "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Submit genetic variant data for annotation",
+                            "description": "Allow researchers to upload genetic variant data in a specified format for processing and annotation.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Retrieve annotated genetic variant results",
+                            "description": "Enable researchers to fetch the results of the annotation process, including details on the genetic variants and their predicted impacts.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Convert DNA changes to protein changes",
+                            "description": "Provide functionality to convert specific DNA mutations into their corresponding protein changes as part of the annotation process.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Predict functional impacts of genetic variants",
+                            "description": "Allow researchers to request predictions on the functional impacts of specific genetic variants based on existing biological data.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Access documentation for variant annotation methods",
+                            "description": "Provide researchers with access to documentation detailing the methods and algorithms used for genetic variant annotation and interpretation.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        }
+                    ]
+                },
+                "all_branches_confirmed": false,
+                "requires_regeneration": true,
+                "state_signature": "7d6a4987c6b75377b02cb6031611992cebac4a107f284a180bf6f1ec9b5d7f1e"
+            },
+            {
+                "iteration": 2,
+                "input_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                            "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        },
+                        {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        },
+                        {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        }
+                    ]
+                },
+                "input_low_level_goals": {
+                    "low_level_goals": [
+                        {
+                            "name": "Access Mutation Frequency Data",
+                            "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                            "high_level_associated": {
+                                "name": "Enhance Clinical Decision-Making",
+                                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                                "actor": {
+                                    "name": "Clinicians",
+                                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Fetch Clinical Actionability Information",
+                            "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                            "high_level_associated": {
+                                "name": "Enhance Clinical Decision-Making",
+                                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                                "actor": {
+                                    "name": "Clinicians",
+                                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Submit High-Throughput Analysis Job",
+                            "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Retrieve High-Throughput Analysis Results",
+                            "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Predict Functional Impact of Mutation",
+                            "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Access Gene Function Data",
+                            "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                            "high_level_associated": {
+                                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                                "actor": {
+                                    "name": "Bioinformaticians",
+                                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Submit genetic variant data for annotation",
+                            "description": "Allow researchers to upload genetic variant data in a specified format for processing and annotation.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Retrieve annotated genetic variant results",
+                            "description": "Enable researchers to fetch the results of the annotation process, including details on the genetic variants and their predicted impacts.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Convert DNA changes to protein changes",
+                            "description": "Provide functionality to convert specific DNA mutations into their corresponding protein changes as part of the annotation process.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Predict functional impacts of genetic variants",
+                            "description": "Allow researchers to request predictions on the functional impacts of specific genetic variants based on existing biological data.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Access documentation for variant annotation methods",
+                            "description": "Provide researchers with access to documentation detailing the methods and algorithms used for genetic variant annotation and interpretation.",
+                            "high_level_associated": {
+                                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                                "actor": {
+                                    "name": "Researchers",
+                                    "description": "Individuals conducting studies on genetic variants and their implications."
+                                }
+                            }
+                        }
+                    ]
+                },
+                "branch_traceability": {
+                    "branch_001": {
+                        "original_high_level_goal": {
+                            "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                            "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        }
+                    },
+                    "branch_002": {
+                        "original_high_level_goal": {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        }
+                    },
+                    "branch_003": {
+                        "original_high_level_goal": {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        }
+                    }
+                },
+                "reconstructed_high_level_goals": {
+                    "branch_001": {
+                        "reconstructed_high_level_goal": "Facilitate comprehensive analysis and interpretation of genetic variants for research purposes.",
+                        "abstraction_rationale": "The low-level goals collectively aim to support researchers in managing, processing, and understanding genetic variant data, which aligns with the overarching intention of enabling thorough analysis and interpretation in genetic research.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002",
+                            "branch_001_llg_003",
+                            "branch_001_llg_004",
+                            "branch_001_llg_005"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_001",
+                        "source_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002",
+                            "branch_001_llg_003",
+                            "branch_001_llg_004",
+                            "branch_001_llg_005"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_002": {
+                        "reconstructed_high_level_goal": "Facilitate informed clinical decision-making by providing clinicians with essential genetic variant information.",
+                        "abstraction_rationale": "The low-level goals focus on enabling clinicians to access critical data regarding genetic variants, which supports their ability to make informed decisions in patient care. This shared intention of enhancing clinical decision-making justifies the implementation of both goals.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_002",
+                        "source_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_003": {
+                        "reconstructed_high_level_goal": "Facilitate comprehensive analysis and interpretation of genetic data for bioinformaticians.",
+                        "abstraction_rationale": "The low-level goals collectively aim to provide bioinformaticians with the necessary tools to perform various tasks related to genetic data analysis, including job submission, result retrieval, mutation impact prediction, and access to gene function data. This indicates a broader intention to enhance their ability to analyze and interpret genetic information effectively.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002",
+                            "branch_003_llg_003",
+                            "branch_003_llg_004"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_003",
+                        "source_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002",
+                            "branch_003_llg_003",
+                            "branch_003_llg_004"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    }
+                },
+                "bottom_up_errors": {},
+                "empty_branches": [],
+                "global_evaluations": {
+                    "branch_001": {
+                        "branch_id": "branch_001",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                            "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                            "actor": {
+                                "name": "Researchers",
+                                "description": "Individuals conducting studies on genetic variants and their implications."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Facilitate comprehensive analysis and interpretation of genetic variants for research purposes.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly states the tool is designed for 'rapid and automated annotation and interpretation of genetic variants' to facilitate 'high-throughput analysis' for researchers. The reconstructed HLG aligns with this by focusing on facilitating comprehensive analysis and interpretation for research purposes. Alignment: The reconstructed HLG preserves the core functional intention of annotating and interpreting genetic variants for researchers, aligning with the parent's objective despite omitting specific performance constraints like 'rapidly' or 'automated'. The actor perspective and primary outcome remain consistent with the documented high-throughput analysis goal.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    },
+                    "branch_002": {
+                        "branch_id": "branch_002",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Enhance Clinical Decision-Making",
+                            "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                            "actor": {
+                                "name": "Clinicians",
+                                "description": "Medical professionals who interpret genetic data to inform patient care."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Facilitate informed clinical decision-making by providing clinicians with essential genetic variant information.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly states that the tool enables clinicians to access data on clinical actionability, supporting the parent HLG's focus on improving patient care and treatment decisions. The reconstructed HLG is also supported as it accurately reflects the provision of genetic variant information to facilitate clinical decisions. Alignment: The reconstructed HLG preserves the core intention of facilitating clinical decision-making through genetic data, aligning with the parent's goal of improving treatment decisions. Although specific details like mutation frequencies are omitted, the fundamental actor, objective, and functional scope remain consistent.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    },
+                    "branch_003": {
+                        "branch_id": "branch_003",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Streamline High-Throughput Bioinformatics Analysis",
+                            "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                            "actor": {
+                                "name": "Bioinformaticians",
+                                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Facilitate comprehensive analysis and interpretation of genetic data for bioinformaticians.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly supports the parent HLG by describing the tool's ability to facilitate high-throughput analysis and provide data on gene functions and variant effects for researchers and clinicians. The reconstructed HLG is also supported as it accurately reflects the documented purpose of enabling comprehensive analysis and interpretation of genetic data. Alignment: The reconstructed HLG preserves the core functional intention by maintaining the same actor (bioinformaticians) and objective (analyzing genetic data), albeit with less specific detail regarding high-throughput methods. The shift from 'streamline high-throughput' to 'facilitate comprehensive' retains the essential WHY-level goal of enabling efficient data analysis and interpretation.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    }
+                },
+                "global_evaluation_errors": {},
+                "high_level_generation_requests": [],
+                "generated_high_level_goals": null,
+                "high_level_request_candidate_selections": [],
+                "high_level_duplicate_resolutions": [],
+                "high_level_regeneration_error": null,
+                "documentation_coverage": {
+                    "status": "COMPLETE",
+                    "missing_high_level_goals": [],
+                    "generation_requests": [],
+                    "observations": [
+                        "The documentation explicitly identifies two primary stakeholder groups: 'researchers' and 'clinicians'.",
+                        "Current HLG [1] adequately covers the researcher's intention to 'rapidly and automatically annotate and interpret genetic variants' for 'high-throughput analysis'.",
+                        "Current HLG [2] adequately covers the clinician's intention to access 'mutation frequencies' and 'clinical actionability' to 'improve patient care and treatment decisions'.",
+                        "Current HLG [3] introduces 'Bioinformaticians' as an actor. While not explicitly named in the short documentation text, the documentation describes 'high-throughput analysis' and 'automated annotation' which are core bioinformatics tasks. The HLG captures the functional outcome of streamlining this analysis. Given the instruction to prefer coverage recall but avoid mere operational refinements, and considering the documentation's focus is on the *tool's* capability to facilitate these analyses for the mentioned users, the current set covers the distinct autonomous WHY-level intentions (Research/Interpretation vs. Clinical Decision Making). The 'Bioinformatician' HLG is a valid interpretation of the 'high-throughput' aspect for technical users, or can be seen as overlapping with Researchers, but does not represent a *missing* distinct intention unsupported by the text.",
+                        "No other distinct autonomous functional WHY-level intentions (e.g., data storage, user management, billing) are supported by the documentation."
+                    ]
+                },
+                "documentation_coverage_rechecks": [],
+                "documentation_coverage_error": null,
+                "documentation_fully_covered": true,
+                "newly_added_high_level_goals": [],
+                "updated_high_level_goals": null,
+                "regenerated_low_level_goals": null,
+                "all_branches_confirmed": true,
+                "requires_regeneration": false,
+                "state_signature": "168aada46c46396ab7ff71aa39d28ad2ee211c0f922608f0001255e035b284a2"
+            }
+        ],
+        "unresolved_bottom_up_errors": {},
+        "unresolved_global_evaluation_errors": {},
+        "unresolved_empty_branches": [],
+        "unresolved_documentation_coverage_error": null,
+        "unresolved_high_level_regeneration_error": null
+    },
+    "finalHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                "actor": {
+                    "name": "Researchers",
+                    "description": "Individuals conducting studies on genetic variants and their implications."
+                }
+            },
+            {
+                "name": "Enhance Clinical Decision-Making",
+                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                "actor": {
+                    "name": "Clinicians",
+                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                }
+            },
+            {
+                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                "actor": {
+                    "name": "Bioinformaticians",
+                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                }
+            }
+        ]
+    },
+    "finalLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Access Mutation Frequency Data",
+                "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                "high_level_associated": {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Fetch Clinical Actionability Information",
+                "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                "high_level_associated": {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Submit High-Throughput Analysis Job",
+                "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve High-Throughput Analysis Results",
+                "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Predict Functional Impact of Mutation",
+                "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Access Gene Function Data",
+                "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Submit genetic variant data for annotation",
+                "description": "Allow researchers to upload genetic variant data in a specified format for processing and annotation.",
+                "high_level_associated": {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve annotated genetic variant results",
+                "description": "Enable researchers to fetch the results of the annotation process, including details on the genetic variants and their predicted impacts.",
+                "high_level_associated": {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Convert DNA changes to protein changes",
+                "description": "Provide functionality to convert specific DNA mutations into their corresponding protein changes as part of the annotation process.",
+                "high_level_associated": {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Predict functional impacts of genetic variants",
+                "description": "Allow researchers to request predictions on the functional impacts of specific genetic variants based on existing biological data.",
+                "high_level_associated": {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Access documentation for variant annotation methods",
+                "description": "Provide researchers with access to documentation detailing the methods and algorithms used for genetic variant annotation and interpretation.",
+                "high_level_associated": {
+                    "name": "Rapidly annotate and interpret genetic variants in cancer research",
+                    "description": "Enable researchers to efficiently and automatically annotate and interpret genetic variants, including converting DNA changes to protein changes and predicting their functional impacts, to facilitate high-throughput analysis.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            }
+        ]
+    }
+}

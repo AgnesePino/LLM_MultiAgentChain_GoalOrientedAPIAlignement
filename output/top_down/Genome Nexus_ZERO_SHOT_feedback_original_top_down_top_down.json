@@ -1,0 +1,213 @@
+{
+    "name": "Genome Nexus",
+    "description": "Genome Nexus is a resource designed for the rapid and automated annotation and interpretation of genetic variants, particularly in the context of cancer. It addresses the need for a comprehensive tool that consolidates information from various databases, enabling users to convert DNA changes into protein changes, predict the functional impacts of protein mutations, and access data on mutation frequencies, gene functions, variant effects, and clinical actionability. This integration facilitates high-throughput analysis, making it easier for researchers and clinicians to understand the implications of genetic variants in cancer.",
+    "rawDescription": "# Genome Nexus 🧬\n\nGenome Nexus, a comprehensive one-stop resource for fast, automated and\nhigh-throughput annotation and interpretation of genetic variants in cancer.\nGenome Nexus integrates information from a variety of existing resources,\nincluding databases that convert DNA changes to protein changes, predict the\nfunctional effects of protein mutations, and contain information about mutation\nfrequencies, gene function, variant effects, and clinical actionability.\n\n## Documentation 📖\nSee the [docs](https://docs.genomenexus.org)\n\n## Run 💻\n\n### Alternative 1 - run genome-nexus, mongoDB and genome-nexus-vep in docker containers\nFirst, set environment variables for Ensembl Release, VEP Assembly, location of VEP Cache, and species (since a mouse instalation is supported). If these are not, the default values from `.env` will be set.\n\nThe reference genome and Ensembl release must be consistent with a version in [genome-nexus-importer/data/](https://github.com/genome-nexus/genome-nexus-importer/tree/master/data).\nFor example `grch37_ensembl92`, `grch38_ensembl92` or `grch38_ensembl95`:\n```\nexport REF_ENSEMBL_VERSION=grch38_ensembl92\n```\nIf you want to setup Genome Nexus for mouse, also set the `SPECIES` variable to 'mus_musculus'. Also see the [docs](https://github.com/genome-nexus/genome-nexus-importer/blob/master/docs/setup-genome-nexus-mouse.md) to create a mouse database.\n```bash\nexport SPECIES=mus_musculus\n```\n\nIf you would like to do local VEP annotations instead of using the public Ensembl API, please uncomment `# gn_vep.region.url=http://localhost:6060/vep/human/region/VARIANT` in your `application.properties`. This will require you to download the VEP cache files for the preferred Ensembl Release and Reference genome, see our documentation on [downloading the Genome Nexus VEP Cache](https://github.com/genome-nexus/genome-nexus-vep/blob/master/README.md#create-vep-cache). This will take several hours.\n```\n# Set local cache dir\nexport VEP_CACHE=<local_vep_cache>\n\n# GRCh38 or GRCh37\nexport VEP_ASSEMBLY=GRCh38\n```\n\nRun docker-compose to create images and containers:\n```\ndocker-compose up --build -d\n```\n\nRun without recreating images:\n```\ndocker-compose up -d\n```\n\nRun without Genome Nexus VEP:\n```\n# Start both the Web and DB (dependency of Web) containers\ndocker-compose up -d web\n```\n\nStop and remove containers:\n```\ndocker-compose down\n```\n\n### Alternative 2 - run genome-nexus locally, but mongoDB in docker container\n```\n# the genomenexus/gn-mongo images comes with all the required tables imported\n# change latest to different version if necessary (only need to run this once)\ndocker run --name=gn-mongo --restart=always -p 27017:27017 -d genomenexus/gn-mongo:latest \nmvn  -DskipTests clean install\njava -jar web/target/web-*.war\n```\n\n### Alternative 3 - install mongoDB locally and run with local java\nInstall mongoDB manually. Then follow instructions in\n[genome-nexus-importer](https://github.com/genome-nexus/genome-nexus-importer)\nto initialize the database.\n\nAfter that run this:\n```\nmvn clean install\njava -jar web/target/web-*.war\n```\n\n## Test Status 👷‍♀️\n\n| branch | master | rc |\n| --- | --- | --- |\n| status | [![Build Status](https://travis-ci.org/genome-nexus/genome-nexus.svg?branch=master)](https://travis-ci.org/genome-nexus/genome-nexus/branches) | [![Build Status](https://travis-ci.org/genome-nexus/genome-nexus.svg?branch=rc)](https://travis-ci.org/genome-nexus/genome-nexus/branches) |\n\n## Deploy 🚀\n\n[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)\n",
+    "documentationPreprocessing": {
+        "chunked": false,
+        "chunkCount": 1,
+        "originalChars": 3549,
+        "processedChars": 634,
+        "strategy": "original_generate_description"
+    },
+    "actors": [
+        "Researchers",
+        "Clinicians",
+        "Bioinformaticians"
+    ],
+    "highLevelGoals": [
+        "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+        "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+        "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects."
+    ],
+    "lowLevelGoals": [
+        "Allow researchers to submit a genetic variant for annotation through an API call.",
+        "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
+        "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+        "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+        "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+        "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+        "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+        "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call."
+    ],
+    "structuredActors": {
+        "actors": [
+            {
+                "name": "Researchers",
+                "description": "Individuals conducting studies on genetic variants and their implications."
+            },
+            {
+                "name": "Clinicians",
+                "description": "Medical professionals who interpret genetic data to inform patient care."
+            },
+            {
+                "name": "Bioinformaticians",
+                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+            }
+        ]
+    },
+    "structuredHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Facilitate Rapid Genetic Variant Annotation",
+                "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                "actor": {
+                    "name": "Researchers",
+                    "description": "Individuals conducting studies on genetic variants and their implications."
+                }
+            },
+            {
+                "name": "Enhance Clinical Decision-Making",
+                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                "actor": {
+                    "name": "Clinicians",
+                    "description": "Medical professionals who interpret genetic data to inform patient care."
+                }
+            },
+            {
+                "name": "Streamline High-Throughput Bioinformatics Analysis",
+                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                "actor": {
+                    "name": "Bioinformaticians",
+                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                }
+            }
+        ]
+    },
+    "structuredLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Submit Genetic Variant for Annotation",
+                "description": "Allow researchers to submit a genetic variant for annotation through an API call.",
+                "high_level_associated": {
+                    "name": "Facilitate Rapid Genetic Variant Annotation",
+                    "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve Annotation Results",
+                "description": "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
+                "high_level_associated": {
+                    "name": "Facilitate Rapid Genetic Variant Annotation",
+                    "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications."
+                    }
+                }
+            },
+            {
+                "name": "Access Mutation Frequency Data",
+                "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                "high_level_associated": {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Fetch Clinical Actionability Information",
+                "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                "high_level_associated": {
+                    "name": "Enhance Clinical Decision-Making",
+                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Submit High-Throughput Analysis Job",
+                "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve High-Throughput Analysis Results",
+                "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Predict Functional Impact of Mutation",
+                "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            },
+            {
+                "name": "Access Gene Function Data",
+                "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                "high_level_associated": {
+                    "name": "Streamline High-Throughput Bioinformatics Analysis",
+                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "actor": {
+                        "name": "Bioinformaticians",
+                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    }
+                }
+            }
+        ]
+    },
+    "baselineScores": {
+        "actors": null,
+        "highLevelGoals": 10.0,
+        "lowLevelGoals": 8.5
+    },
+    "baselineCritiques": {
+        "actors": null,
+        "highLevelGoals": "The extraction is coherent and accurately reflects the functional goals described in the text for all three actors. It correctly identifies the core functionalities: rapid annotation, clinical decision support via actionability data, and high-throughput analysis for bioinformaticians. No major omissions or contradictions are present.",
+        "lowLevelGoals": "The extraction is coherent and covers the main functional aspects described in the software description. However, there is a minor omission regarding the specific capability mentioned in the description: \"converting DNA changes into protein changes.\" While this is part of the annotation process, the low-level goals for researchers are generic (\"Submit Genetic Variant\", \"Retrieve Annotation Results\"). A more precise low-level goal could explicitly mention the conversion or the specific output format (e.g., amino acid change) to better reflect the \"how\" of the high-level goal. Additionally, the description mentions \"variant effects\" as a distinct data point alongside gene functions and mutation frequencies. While \"Predict Functional Impact\" covers some of this, a specific goal to \"Retrieve Variant Effect Data\" (e.g., from databases like ClinVar or COSMIC) would be more complete. Despite these minor refinements, the current goals are functionally sufficient and do not contain contradictions or major omissions that would invalidate the system's core purpose."
+    },
+    "baselineConfiguration": {
+        "generatorStructuredModel": "gpt-4o-mini",
+        "generatorTextModel": "gpt-4o",
+        "actorPromptingMode": "FEW_SHOT",
+        "actorEvaluatorEnabled": false,
+        "goalPromptingMode": "ZERO_SHOT",
+        "highLevelGoalEvaluatorEnabled": true,
+        "lowLevelGoalEvaluatorEnabled": true,
+        "goalEvaluatorModel": "qwen/qwen3.6-27b",
+        "qualityThreshold": 8.5,
+        "maxReflectionAttempts": 3
+    },
+    "pipelineConfiguration": {
+        "actors": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false
+        },
+        "highLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "lowLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "profile": "ZERO_SHOT_feedback_original_top_down"
+    }
+}

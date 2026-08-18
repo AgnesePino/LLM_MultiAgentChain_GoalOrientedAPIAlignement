@@ -1,0 +1,2280 @@
+{
+    "name": "London Ambulance Service",
+    "description": "The London Ambulance Service dispatches ambulances in emergencies. \n    The key goal is to allocate an available ambulance for every call that can reach the scene within 11 minutes. \n    The entire dispatch process must not exceed a set maximum time limit.\n\n    To make this work, the computer system (CAD) analyzes incident forms and assigns vehicles. \n    It is vital to track the exact location of moving ambulances. \n    This requires staff to follow standard routes and correctly communicate departure and destination, \n    allowing radio operators and the CAD to record data accurately.",
+    "rawDescription": "The London Ambulance Service dispatches ambulances in emergencies. \n    The key goal is to allocate an available ambulance for every call that can reach the scene within 11 minutes. \n    The entire dispatch process must not exceed a set maximum time limit.\n\n    To make this work, the computer system (CAD) analyzes incident forms and assigns vehicles. \n    It is vital to track the exact location of moving ambulances. \n    This requires staff to follow standard routes and correctly communicate departure and destination, \n    allowing radio operators and the CAD to record data accurately.",
+    "documentationPreprocessing": {
+        "chunked": false,
+        "chunkCount": 1,
+        "originalChars": 592,
+        "processedChars": 592,
+        "strategy": "groundtruth_description"
+    },
+    "actors": [
+        "Dispatch Operators",
+        "Ambulance Personnel",
+        "Radio Operators",
+        "System Administrators"
+    ],
+    "highLevelGoals": [
+        "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+        "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+        "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+        "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+        "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols."
+    ],
+    "lowLevelGoals": [
+        "Fetch a list of ambulances that are currently available for dispatch.",
+        "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+        "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+        "Receive and process the GPS coordinates sent from the ambulance to track its location in real-time.",
+        "Request the CAD system to analyze traffic data and suggest an optimized route for the ambulance.",
+        "Record all communication exchanges with the ambulance for future reference and accountability.",
+        "Transmit critical updates regarding the emergency situation to the ambulance personnel.",
+        "Check the operational status and performance metrics of the CAD system to ensure it is functioning correctly.",
+        "Execute routine maintenance tasks on the CAD system to prevent downtime and ensure reliability.",
+        "Report the departure of the ambulance from the station to the dispatch system.",
+        "Report the arrival of the ambulance at the emergency location to the dispatch system.",
+        "Check if the ambulance is following the defined standard route during its response to an emergency."
+    ],
+    "structuredActors": {
+        "actors": [
+            {
+                "name": "Dispatch Operators",
+                "description": "Staff responsible for managing ambulance dispatch and communication."
+            },
+            {
+                "name": "Ambulance Personnel",
+                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+            },
+            {
+                "name": "Radio Operators",
+                "description": "Staff who communicate with ambulances and relay information during emergencies."
+            },
+            {
+                "name": "System Administrators",
+                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+            }
+        ]
+    },
+    "structuredHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Ensure Timely Ambulance Dispatch",
+                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                "actor": {
+                    "name": "Dispatch Operators",
+                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                }
+            },
+            {
+                "name": "Provide Accurate Location Tracking",
+                "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                "actor": {
+                    "name": "Dispatch Operators",
+                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                }
+            },
+            {
+                "name": "Facilitate Effective Communication",
+                "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                "actor": {
+                    "name": "Radio Operators",
+                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                }
+            },
+            {
+                "name": "Maintain System Reliability",
+                "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                "actor": {
+                    "name": "System Administrators",
+                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                }
+            },
+            {
+                "name": "Support Efficient Route Management",
+                "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                "actor": {
+                    "name": "Ambulance Personnel",
+                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                }
+            }
+        ]
+    },
+    "structuredLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Retrieve Available Ambulances",
+                "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Calculate Estimated Arrival Time",
+                "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Dispatch Selected Ambulance",
+                "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Receive GPS Data from Ambulance",
+                "description": "Receive and process the GPS coordinates sent from the ambulance to track its location in real-time.",
+                "high_level_associated": {
+                    "name": "Provide Accurate Location Tracking",
+                    "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Request Route Optimization",
+                "description": "Request the CAD system to analyze traffic data and suggest an optimized route for the ambulance.",
+                "high_level_associated": {
+                    "name": "Provide Accurate Location Tracking",
+                    "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Log Communication with Ambulance",
+                "description": "Record all communication exchanges with the ambulance for future reference and accountability.",
+                "high_level_associated": {
+                    "name": "Facilitate Effective Communication",
+                    "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                    "actor": {
+                        "name": "Radio Operators",
+                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                    }
+                }
+            },
+            {
+                "name": "Send Emergency Updates to Ambulance",
+                "description": "Transmit critical updates regarding the emergency situation to the ambulance personnel.",
+                "high_level_associated": {
+                    "name": "Facilitate Effective Communication",
+                    "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                    "actor": {
+                        "name": "Radio Operators",
+                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                    }
+                }
+            },
+            {
+                "name": "Monitor System Performance",
+                "description": "Check the operational status and performance metrics of the CAD system to ensure it is functioning correctly.",
+                "high_level_associated": {
+                    "name": "Maintain System Reliability",
+                    "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                }
+            },
+            {
+                "name": "Perform System Maintenance",
+                "description": "Execute routine maintenance tasks on the CAD system to prevent downtime and ensure reliability.",
+                "high_level_associated": {
+                    "name": "Maintain System Reliability",
+                    "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                }
+            },
+            {
+                "name": "Report Departure Status",
+                "description": "Report the departure of the ambulance from the station to the dispatch system.",
+                "high_level_associated": {
+                    "name": "Support Efficient Route Management",
+                    "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                    "actor": {
+                        "name": "Ambulance Personnel",
+                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                    }
+                }
+            },
+            {
+                "name": "Report Arrival Status",
+                "description": "Report the arrival of the ambulance at the emergency location to the dispatch system.",
+                "high_level_associated": {
+                    "name": "Support Efficient Route Management",
+                    "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                    "actor": {
+                        "name": "Ambulance Personnel",
+                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                    }
+                }
+            },
+            {
+                "name": "Review Route Compliance",
+                "description": "Check if the ambulance is following the defined standard route during its response to an emergency.",
+                "high_level_associated": {
+                    "name": "Support Efficient Route Management",
+                    "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            }
+        ]
+    },
+    "baselineScores": {
+        "actors": null,
+        "highLevelGoals": 8.5,
+        "lowLevelGoals": 8.5
+    },
+    "baselineCritiques": {
+        "actors": null,
+        "highLevelGoals": "The extraction is coherent and covers the main functional aspects described in the text (dispatching, tracking, communication, routing). However, there is a slight omission regarding the specific role of the CAD system in \"analyzing incident forms,\" which is a distinct functional step mentioned in the description before vehicle assignment. Additionally, the goal \"Maintain System Reliability\" is arguably a non-functional quality attribute (availability/performance) rather than a functional goal, although it is tied to the system's operation. The most significant issue is that the description explicitly states the CAD \"analyzes incident forms and assigns vehicles,\" but the goals focus on the outcome (allocation) rather than the functional process of analysis which might be a distinct system capability. Despite this, the goals are largely representative. A minor deduction is given for the potential inclusion of a non-functional goal (Reliability) and the slight abstraction of the \"analysis\" step.",
+        "lowLevelGoals": "The extraction is coherent and covers the main functional aspects of the system described. However, there is a minor omission regarding the specific requirement mentioned in the description: \"It is vital to track the exact location of moving ambulances... allowing radio operators and the CAD to record data accurately.\" While \"Receive GPS Data\" is present, the explicit action of \"Recording/Logging Location Data\" by the Radio Operators or the System (as implied by \"allowing... to record data\") is not explicitly defined as a low-level goal for the Radio Operator actor, who is explicitly mentioned in the context of recording data. Additionally, the description mentions \"analyze incident forms,\" but the low-level goals jump straight to retrieving ambulances without a step for \"Process/Analyze Incident Form\" which is a prerequisite for dispatch. This is a minor omission in the workflow sequence."
+    },
+    "baselineConfiguration": {
+        "generatorStructuredModel": "gpt-4o-mini",
+        "generatorTextModel": "gpt-4o",
+        "actorPromptingMode": "FEW_SHOT",
+        "actorEvaluatorEnabled": false,
+        "goalPromptingMode": "ZERO_SHOT",
+        "highLevelGoalEvaluatorEnabled": true,
+        "lowLevelGoalEvaluatorEnabled": true,
+        "goalEvaluatorModel": "qwen/qwen3.6-27b",
+        "qualityThreshold": 8.5,
+        "maxReflectionAttempts": 3
+    },
+    "pipelineConfiguration": {
+        "actors": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false
+        },
+        "highLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "lowLevelGoals": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "profile": "ZERO_SHOT_feedback_original_top_down"
+    },
+    "baselineSourceFile": "London Ambulance Service_ZERO_SHOT_feedback_original_top_down_top_down.json",
+    "bottomUpInputSource": "structured baseline fields",
+    "bottomUpMappedInputFile": null,
+    "evaluationOutputDirectory": "C:\\Users\\agnes_lryeu3v\\Desktop\\tesi\\output\\bottom_up_iterations\\London Ambulance Service_ZERO_SHOT_feedback_original_top_down",
+    "globalGoalCycle": {
+        "converged": false,
+        "stop_reason": "HIGH_LEVEL_REGENERATION_FAILED",
+        "completed_iterations": 2,
+        "max_iterations": 5,
+        "final_high_level_goals": {
+            "goals": [
+                {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                },
+                {
+                    "name": "Ensure Accurate Tracking of Ambulance Locations",
+                    "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                },
+                {
+                    "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                    "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                    "actor": {
+                        "name": "Radio Operators",
+                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                    }
+                },
+                {
+                    "name": "Ensure Timely Ambulance Allocation",
+                    "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                },
+                {
+                    "name": "Ensure Compliance with Standard Routes",
+                    "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                    "actor": {
+                        "name": "Ambulance Personnel",
+                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                    }
+                }
+            ]
+        },
+        "final_low_level_goals": {
+            "low_level_goals": [
+                {
+                    "name": "Retrieve Available Ambulances",
+                    "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Dispatch",
+                        "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Calculate Estimated Arrival Time",
+                    "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Dispatch",
+                        "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Dispatch Selected Ambulance",
+                    "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Dispatch",
+                        "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Request Current GPS Location",
+                    "description": "Send a request to the system to retrieve the current GPS location of the ambulance.",
+                    "high_level_associated": {
+                        "name": "Ensure Accurate Tracking of Ambulance Locations",
+                        "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Update GPS Location",
+                    "description": "Automatically update the system with the current GPS location of the ambulance every minute.",
+                    "high_level_associated": {
+                        "name": "Ensure Accurate Tracking of Ambulance Locations",
+                        "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Record Departure Time",
+                    "description": "Input the exact time when the ambulance departs from the station into the system.",
+                    "high_level_associated": {
+                        "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                        "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                        "actor": {
+                            "name": "Radio Operators",
+                            "description": "Staff who communicate with ambulances and relay information during emergencies."
+                        }
+                    }
+                },
+                {
+                    "name": "Record Arrival Time",
+                    "description": "Input the exact time when the ambulance arrives at the destination into the system.",
+                    "high_level_associated": {
+                        "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                        "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                        "actor": {
+                            "name": "Radio Operators",
+                            "description": "Staff who communicate with ambulances and relay information during emergencies."
+                        }
+                    }
+                },
+                {
+                    "name": "Calculate Estimated Time of Arrival (ETA)",
+                    "description": "Request the system to calculate the estimated time of arrival for the allocated ambulance based on current location and destination.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Allocation",
+                        "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                        "actor": {
+                            "name": "System Administrators",
+                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                        }
+                    }
+                },
+                {
+                    "name": "Filter Ambulances by ETA",
+                    "description": "Request the system to filter available ambulances based on their estimated time of arrival to ensure they can reach the scene within 11 minutes.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Allocation",
+                        "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                        "actor": {
+                            "name": "System Administrators",
+                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                        }
+                    }
+                },
+                {
+                    "name": "Allocate Ambulance to Call",
+                    "description": "Request the system to allocate an available ambulance to a specific emergency call that meets the 11-minute ETA requirement.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Allocation",
+                        "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                        "actor": {
+                            "name": "System Administrators",
+                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                        }
+                    }
+                },
+                {
+                    "name": "Confirm Route Compliance",
+                    "description": "Send a confirmation to the system that the ambulance is following the designated route as per the standard operating procedures.",
+                    "high_level_associated": {
+                        "name": "Ensure Compliance with Standard Routes",
+                        "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                        "actor": {
+                            "name": "Ambulance Personnel",
+                            "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                        }
+                    }
+                },
+                {
+                    "name": "Update Route in System",
+                    "description": "Request the system to update the route if the ambulance deviates from the standard route due to unforeseen circumstances.",
+                    "high_level_associated": {
+                        "name": "Ensure Compliance with Standard Routes",
+                        "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                        "actor": {
+                            "name": "Ambulance Personnel",
+                            "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                        }
+                    }
+                }
+            ]
+        },
+        "best_validated_high_level_goals": null,
+        "best_validated_low_level_goals": null,
+        "last_candidate_high_level_goals": {
+            "goals": [
+                {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                },
+                {
+                    "name": "Ensure Accurate Tracking of Ambulance Locations",
+                    "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                },
+                {
+                    "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                    "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                    "actor": {
+                        "name": "Radio Operators",
+                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                    }
+                },
+                {
+                    "name": "Ensure Timely Ambulance Allocation",
+                    "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                },
+                {
+                    "name": "Ensure Compliance with Standard Routes",
+                    "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                    "actor": {
+                        "name": "Ambulance Personnel",
+                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                    }
+                }
+            ]
+        },
+        "last_candidate_low_level_goals": {
+            "low_level_goals": [
+                {
+                    "name": "Retrieve Available Ambulances",
+                    "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Dispatch",
+                        "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Calculate Estimated Arrival Time",
+                    "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Dispatch",
+                        "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Dispatch Selected Ambulance",
+                    "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Dispatch",
+                        "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Request Current GPS Location",
+                    "description": "Send a request to the system to retrieve the current GPS location of the ambulance.",
+                    "high_level_associated": {
+                        "name": "Ensure Accurate Tracking of Ambulance Locations",
+                        "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Update GPS Location",
+                    "description": "Automatically update the system with the current GPS location of the ambulance every minute.",
+                    "high_level_associated": {
+                        "name": "Ensure Accurate Tracking of Ambulance Locations",
+                        "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                        "actor": {
+                            "name": "Dispatch Operators",
+                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                        }
+                    }
+                },
+                {
+                    "name": "Record Departure Time",
+                    "description": "Input the exact time when the ambulance departs from the station into the system.",
+                    "high_level_associated": {
+                        "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                        "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                        "actor": {
+                            "name": "Radio Operators",
+                            "description": "Staff who communicate with ambulances and relay information during emergencies."
+                        }
+                    }
+                },
+                {
+                    "name": "Record Arrival Time",
+                    "description": "Input the exact time when the ambulance arrives at the destination into the system.",
+                    "high_level_associated": {
+                        "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                        "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                        "actor": {
+                            "name": "Radio Operators",
+                            "description": "Staff who communicate with ambulances and relay information during emergencies."
+                        }
+                    }
+                },
+                {
+                    "name": "Calculate Estimated Time of Arrival (ETA)",
+                    "description": "Request the system to calculate the estimated time of arrival for the allocated ambulance based on current location and destination.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Allocation",
+                        "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                        "actor": {
+                            "name": "System Administrators",
+                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                        }
+                    }
+                },
+                {
+                    "name": "Filter Ambulances by ETA",
+                    "description": "Request the system to filter available ambulances based on their estimated time of arrival to ensure they can reach the scene within 11 minutes.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Allocation",
+                        "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                        "actor": {
+                            "name": "System Administrators",
+                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                        }
+                    }
+                },
+                {
+                    "name": "Allocate Ambulance to Call",
+                    "description": "Request the system to allocate an available ambulance to a specific emergency call that meets the 11-minute ETA requirement.",
+                    "high_level_associated": {
+                        "name": "Ensure Timely Ambulance Allocation",
+                        "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                        "actor": {
+                            "name": "System Administrators",
+                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                        }
+                    }
+                },
+                {
+                    "name": "Confirm Route Compliance",
+                    "description": "Send a confirmation to the system that the ambulance is following the designated route as per the standard operating procedures.",
+                    "high_level_associated": {
+                        "name": "Ensure Compliance with Standard Routes",
+                        "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                        "actor": {
+                            "name": "Ambulance Personnel",
+                            "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                        }
+                    }
+                },
+                {
+                    "name": "Update Route in System",
+                    "description": "Request the system to update the route if the ambulance deviates from the standard route due to unforeseen circumstances.",
+                    "high_level_associated": {
+                        "name": "Ensure Compliance with Standard Routes",
+                        "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                        "actor": {
+                            "name": "Ambulance Personnel",
+                            "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                        }
+                    }
+                }
+            ]
+        },
+        "added_high_level_goals": [],
+        "iterations": [
+            {
+                "iteration": 1,
+                "input_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Provide Accurate Location Tracking",
+                            "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Facilitate Effective Communication",
+                            "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        },
+                        {
+                            "name": "Maintain System Reliability",
+                            "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        },
+                        {
+                            "name": "Support Efficient Route Management",
+                            "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        }
+                    ]
+                },
+                "input_low_level_goals": {
+                    "low_level_goals": [
+                        {
+                            "name": "Retrieve Available Ambulances",
+                            "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Estimated Arrival Time",
+                            "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Dispatch Selected Ambulance",
+                            "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Receive GPS Data from Ambulance",
+                            "description": "Receive and process the GPS coordinates sent from the ambulance to track its location in real-time.",
+                            "high_level_associated": {
+                                "name": "Provide Accurate Location Tracking",
+                                "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Request Route Optimization",
+                            "description": "Request the CAD system to analyze traffic data and suggest an optimized route for the ambulance.",
+                            "high_level_associated": {
+                                "name": "Provide Accurate Location Tracking",
+                                "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Log Communication with Ambulance",
+                            "description": "Record all communication exchanges with the ambulance for future reference and accountability.",
+                            "high_level_associated": {
+                                "name": "Facilitate Effective Communication",
+                                "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                                "actor": {
+                                    "name": "Radio Operators",
+                                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Send Emergency Updates to Ambulance",
+                            "description": "Transmit critical updates regarding the emergency situation to the ambulance personnel.",
+                            "high_level_associated": {
+                                "name": "Facilitate Effective Communication",
+                                "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                                "actor": {
+                                    "name": "Radio Operators",
+                                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Monitor System Performance",
+                            "description": "Check the operational status and performance metrics of the CAD system to ensure it is functioning correctly.",
+                            "high_level_associated": {
+                                "name": "Maintain System Reliability",
+                                "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Perform System Maintenance",
+                            "description": "Execute routine maintenance tasks on the CAD system to prevent downtime and ensure reliability.",
+                            "high_level_associated": {
+                                "name": "Maintain System Reliability",
+                                "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Report Departure Status",
+                            "description": "Report the departure of the ambulance from the station to the dispatch system.",
+                            "high_level_associated": {
+                                "name": "Support Efficient Route Management",
+                                "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                                "actor": {
+                                    "name": "Ambulance Personnel",
+                                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Report Arrival Status",
+                            "description": "Report the arrival of the ambulance at the emergency location to the dispatch system.",
+                            "high_level_associated": {
+                                "name": "Support Efficient Route Management",
+                                "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                                "actor": {
+                                    "name": "Ambulance Personnel",
+                                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Review Route Compliance",
+                            "description": "Check if the ambulance is following the defined standard route during its response to an emergency.",
+                            "high_level_associated": {
+                                "name": "Support Efficient Route Management",
+                                "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        }
+                    ]
+                },
+                "branch_traceability": {
+                    "branch_001": {
+                        "original_high_level_goal": {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        }
+                    },
+                    "branch_002": {
+                        "original_high_level_goal": {
+                            "name": "Provide Accurate Location Tracking",
+                            "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        }
+                    },
+                    "branch_003": {
+                        "original_high_level_goal": {
+                            "name": "Facilitate Effective Communication",
+                            "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        }
+                    },
+                    "branch_004": {
+                        "original_high_level_goal": {
+                            "name": "Maintain System Reliability",
+                            "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        }
+                    },
+                    "branch_005": {
+                        "original_high_level_goal": {
+                            "name": "Support Efficient Route Management",
+                            "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        }
+                    }
+                },
+                "reconstructed_high_level_goals": {
+                    "branch_001": {
+                        "reconstructed_high_level_goal": "Ensure timely and efficient ambulance response to emergency calls.",
+                        "abstraction_rationale": "The low-level goals focus on the operational steps necessary for dispatching ambulances, which collectively aim to enhance the responsiveness and effectiveness of emergency medical services.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002",
+                            "branch_001_llg_003"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_001",
+                        "source_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002",
+                            "branch_001_llg_003"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_002": {
+                        "reconstructed_high_level_goal": "Ensure efficient and timely ambulance dispatch and navigation.",
+                        "abstraction_rationale": "The low-level goals focus on real-time tracking and route optimization, which collectively aim to enhance the overall efficiency and effectiveness of ambulance dispatch operations.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_002",
+                        "source_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_003": {
+                        "reconstructed_high_level_goal": "Ensure effective communication and documentation during emergency response operations.",
+                        "abstraction_rationale": "The low-level goals focus on both recording communications and transmitting critical updates, which together aim to enhance the overall effectiveness and reliability of communication in emergency situations.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_003",
+                        "source_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_004": {
+                        "reconstructed_high_level_goal": "Ensure the continuous and reliable operation of the CAD system.",
+                        "abstraction_rationale": "The low-level goals focus on monitoring the system's performance and conducting maintenance, which collectively aim to maintain the system's operational integrity and prevent failures.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_004_llg_001",
+                            "branch_004_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_004",
+                        "source_low_level_goal_ids": [
+                            "branch_004_llg_001",
+                            "branch_004_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_005": {
+                        "reconstructed_high_level_goal": "Ensure effective and timely emergency response coordination.",
+                        "abstraction_rationale": "The low-level goals focus on communication and route adherence during ambulance operations, which collectively aim to enhance the overall coordination and efficiency of emergency responses.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_005_llg_001",
+                            "branch_005_llg_002",
+                            "branch_005_llg_003"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "medium",
+                        "branch_id": "branch_005",
+                        "source_low_level_goal_ids": [
+                            "branch_005_llg_001",
+                            "branch_005_llg_002",
+                            "branch_005_llg_003"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    }
+                },
+                "bottom_up_errors": {},
+                "empty_branches": [],
+                "global_evaluations": {
+                    "branch_001": {
+                        "branch_id": "branch_001",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure timely and efficient ambulance response to emergency calls.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly states the key goal is to allocate an ambulance for every call that can reach the scene within 11 minutes, supporting the parent HLG. The reconstructed HLG captures this core intent of ensuring timely response, which is directly grounded in the text. Alignment: The reconstructed HLG preserves the core functional intention of ensuring timely ambulance response, which aligns with the parent's objective of rapid dispatch. Although it omits the specific 11-minute metric, the high-level goal of timely and efficient response remains semantically equivalent to the parent's WHY-level objective.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    },
+                    "branch_002": {
+                        "branch_id": "branch_002",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Provide Accurate Location Tracking",
+                            "description": "Track the exact location of moving ambulances to ensure efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure efficient and timely ambulance dispatch and navigation.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_002_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Track the exact location of moving ambulances to enable accurate data recording by radio operators and the CAD system. This tracking is vital for ensuring efficient routing and timely arrival at the scene.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "Dispatch Operators",
+                                            "description": "Staff responsible for managing ambulance dispatch and communication."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_002",
+                            "origin_branch_id": "branch_002",
+                            "generator_guidance": "The reconstructed HLG fails to ground the specific functional intention of tracking exact ambulance locations, instead broadening the scope to general dispatch efficiency. This deviation loses the critical WHY-level requirement for accurate data recording by operators and the CAD system.",
+                            "rationale": "The reconstructed HLG fails to ground the specific functional intention of tracking exact ambulance locations, instead broadening the scope to general dispatch efficiency. This deviation loses the critical WHY-level requirement for accurate data recording by operators and the CAD system."
+                        },
+                        "rationale": "The reconstructed HLG fails to ground the specific functional intention of tracking exact ambulance locations, instead broadening the scope to general dispatch efficiency. This deviation loses the critical WHY-level requirement for accurate data recording by operators and the CAD system.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    },
+                    "branch_003": {
+                        "branch_id": "branch_003",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Facilitate Effective Communication",
+                            "description": "Ensure clear and accurate communication between ambulance personnel and dispatch operators to relay critical information during emergencies.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure effective communication and documentation during emergency response operations.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_003_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Staff must correctly communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "Radio Operators",
+                                            "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_003",
+                            "origin_branch_id": "branch_003",
+                            "generator_guidance": "The reconstructed HLG failed to preserve the parent's specific intent of facilitating communication between personnel, shifting focus to documentation instead. Regeneration is required to align with the documented need for staff to communicate departure and destination details.",
+                            "rationale": "The reconstructed HLG failed to preserve the parent's specific intent of facilitating communication between personnel, shifting focus to documentation instead. Regeneration is required to align with the documented need for staff to communicate departure and destination details."
+                        },
+                        "rationale": "The reconstructed HLG failed to preserve the parent's specific intent of facilitating communication between personnel, shifting focus to documentation instead. Regeneration is required to align with the documented need for staff to communicate departure and destination details.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    },
+                    "branch_004": {
+                        "branch_id": "branch_004",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Maintain System Reliability",
+                            "description": "Ensure the computer-aided dispatch (CAD) system is operational and efficient to support the dispatch process without exceeding the maximum time limit.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure the continuous and reliable operation of the CAD system.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_004_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Ensure the computer-aided dispatch system operates efficiently to support ambulance allocation within the maximum time limit. The system must analyze incident forms and assign vehicles without exceeding the set time constraints for the dispatch process.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "System Administrators",
+                                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_004",
+                            "origin_branch_id": "branch_004",
+                            "generator_guidance": "The reconstructed HLG fails to capture the critical efficiency constraint regarding the maximum time limit, which is central to the parent goal's functional intention. Regeneration is required to align the high-level goal with the documented requirement for timely dispatch support.",
+                            "rationale": "The reconstructed HLG fails to capture the critical efficiency constraint regarding the maximum time limit, which is central to the parent goal's functional intention. Regeneration is required to align the high-level goal with the documented requirement for timely dispatch support."
+                        },
+                        "rationale": "The reconstructed HLG fails to capture the critical efficiency constraint regarding the maximum time limit, which is central to the parent goal's functional intention. Regeneration is required to align the high-level goal with the documented requirement for timely dispatch support.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    },
+                    "branch_005": {
+                        "branch_id": "branch_005",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Support Efficient Route Management",
+                            "description": "Implement standard routes for ambulances to optimize travel time and ensure compliance with operational protocols.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure effective and timely emergency response coordination.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_005_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Ambulance personnel must adhere to standard routes to enable accurate location tracking by the CAD system. This compliance ensures that departure and destination data are recorded correctly for operational analysis.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "Ambulance Personnel",
+                                            "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_005",
+                            "origin_branch_id": "branch_005",
+                            "generator_guidance": "The reconstructed HLG failed to preserve the specific functional intention of route management defined in the parent HLG, shifting instead to a generic coordination outcome. Regeneration is required to focus strictly on the documented requirement for staff to follow standard routes for accurate tracking.",
+                            "rationale": "The reconstructed HLG failed to preserve the specific functional intention of route management defined in the parent HLG, shifting instead to a generic coordination outcome. Regeneration is required to focus strictly on the documented requirement for staff to follow standard routes for accurate tracking."
+                        },
+                        "rationale": "The reconstructed HLG failed to preserve the specific functional intention of route management defined in the parent HLG, shifting instead to a generic coordination outcome. Regeneration is required to focus strictly on the documented requirement for staff to follow standard routes for accurate tracking.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    }
+                },
+                "global_evaluation_errors": {},
+                "high_level_generation_requests": [
+                    {
+                        "request_id": "branch_002_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Track the exact location of moving ambulances to enable accurate data recording by radio operators and the CAD system. This tracking is vital for ensuring efficient routing and timely arrival at the scene.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "Dispatch Operators",
+                                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_002",
+                        "origin_branch_id": "branch_002",
+                        "generator_guidance": "The reconstructed HLG fails to ground the specific functional intention of tracking exact ambulance locations, instead broadening the scope to general dispatch efficiency. This deviation loses the critical WHY-level requirement for accurate data recording by operators and the CAD system.",
+                        "rationale": "The reconstructed HLG fails to ground the specific functional intention of tracking exact ambulance locations, instead broadening the scope to general dispatch efficiency. This deviation loses the critical WHY-level requirement for accurate data recording by operators and the CAD system."
+                    },
+                    {
+                        "request_id": "branch_003_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Staff must correctly communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "Radio Operators",
+                                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_003",
+                        "origin_branch_id": "branch_003",
+                        "generator_guidance": "The reconstructed HLG failed to preserve the parent's specific intent of facilitating communication between personnel, shifting focus to documentation instead. Regeneration is required to align with the documented need for staff to communicate departure and destination details.",
+                        "rationale": "The reconstructed HLG failed to preserve the parent's specific intent of facilitating communication between personnel, shifting focus to documentation instead. Regeneration is required to align with the documented need for staff to communicate departure and destination details."
+                    },
+                    {
+                        "request_id": "branch_004_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Ensure the computer-aided dispatch system operates efficiently to support ambulance allocation within the maximum time limit. The system must analyze incident forms and assign vehicles without exceeding the set time constraints for the dispatch process.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "System Administrators",
+                                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_004",
+                        "origin_branch_id": "branch_004",
+                        "generator_guidance": "The reconstructed HLG fails to capture the critical efficiency constraint regarding the maximum time limit, which is central to the parent goal's functional intention. Regeneration is required to align the high-level goal with the documented requirement for timely dispatch support.",
+                        "rationale": "The reconstructed HLG fails to capture the critical efficiency constraint regarding the maximum time limit, which is central to the parent goal's functional intention. Regeneration is required to align the high-level goal with the documented requirement for timely dispatch support."
+                    },
+                    {
+                        "request_id": "branch_005_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Ambulance personnel must adhere to standard routes to enable accurate location tracking by the CAD system. This compliance ensures that departure and destination data are recorded correctly for operational analysis.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "Ambulance Personnel",
+                                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_005",
+                        "origin_branch_id": "branch_005",
+                        "generator_guidance": "The reconstructed HLG failed to preserve the specific functional intention of route management defined in the parent HLG, shifting instead to a generic coordination outcome. Regeneration is required to focus strictly on the documented requirement for staff to follow standard routes for accurate tracking.",
+                        "rationale": "The reconstructed HLG failed to preserve the specific functional intention of route management defined in the parent HLG, shifting instead to a generic coordination outcome. Regeneration is required to focus strictly on the documented requirement for staff to follow standard routes for accurate tracking."
+                    }
+                ],
+                "generated_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Ensure Accurate Tracking of Ambulance Locations",
+                            "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                            "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        },
+                        {
+                            "name": "Ensure Timely Ambulance Allocation",
+                            "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        },
+                        {
+                            "name": "Ensure Compliance with Standard Routes",
+                            "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        }
+                    ]
+                },
+                "high_level_request_candidate_selections": [],
+                "high_level_duplicate_resolutions": [],
+                "high_level_regeneration_error": null,
+                "documentation_coverage": null,
+                "documentation_coverage_rechecks": [],
+                "documentation_coverage_error": null,
+                "documentation_fully_covered": false,
+                "newly_added_high_level_goals": [],
+                "updated_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Ensure Accurate Tracking of Ambulance Locations",
+                            "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                            "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        },
+                        {
+                            "name": "Ensure Timely Ambulance Allocation",
+                            "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        },
+                        {
+                            "name": "Ensure Compliance with Standard Routes",
+                            "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        }
+                    ]
+                },
+                "regenerated_low_level_goals": {
+                    "low_level_goals": [
+                        {
+                            "name": "Retrieve Available Ambulances",
+                            "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Estimated Arrival Time",
+                            "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Dispatch Selected Ambulance",
+                            "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Request Current GPS Location",
+                            "description": "Send a request to the system to retrieve the current GPS location of the ambulance.",
+                            "high_level_associated": {
+                                "name": "Ensure Accurate Tracking of Ambulance Locations",
+                                "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update GPS Location",
+                            "description": "Automatically update the system with the current GPS location of the ambulance every minute.",
+                            "high_level_associated": {
+                                "name": "Ensure Accurate Tracking of Ambulance Locations",
+                                "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Record Departure Time",
+                            "description": "Input the exact time when the ambulance departs from the station into the system.",
+                            "high_level_associated": {
+                                "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                                "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                                "actor": {
+                                    "name": "Radio Operators",
+                                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Record Arrival Time",
+                            "description": "Input the exact time when the ambulance arrives at the destination into the system.",
+                            "high_level_associated": {
+                                "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                                "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                                "actor": {
+                                    "name": "Radio Operators",
+                                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Estimated Time of Arrival (ETA)",
+                            "description": "Request the system to calculate the estimated time of arrival for the allocated ambulance based on current location and destination.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Allocation",
+                                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Filter Ambulances by ETA",
+                            "description": "Request the system to filter available ambulances based on their estimated time of arrival to ensure they can reach the scene within 11 minutes.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Allocation",
+                                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Allocate Ambulance to Call",
+                            "description": "Request the system to allocate an available ambulance to a specific emergency call that meets the 11-minute ETA requirement.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Allocation",
+                                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Confirm Route Compliance",
+                            "description": "Send a confirmation to the system that the ambulance is following the designated route as per the standard operating procedures.",
+                            "high_level_associated": {
+                                "name": "Ensure Compliance with Standard Routes",
+                                "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                                "actor": {
+                                    "name": "Ambulance Personnel",
+                                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Route in System",
+                            "description": "Request the system to update the route if the ambulance deviates from the standard route due to unforeseen circumstances.",
+                            "high_level_associated": {
+                                "name": "Ensure Compliance with Standard Routes",
+                                "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                                "actor": {
+                                    "name": "Ambulance Personnel",
+                                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                }
+                            }
+                        }
+                    ]
+                },
+                "all_branches_confirmed": false,
+                "requires_regeneration": true,
+                "state_signature": "47836f27d4f56691489f782a7d7eabcba5b2b6986676e55148ec3fa0389234d8"
+            },
+            {
+                "iteration": 2,
+                "input_high_level_goals": {
+                    "goals": [
+                        {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Ensure Accurate Tracking of Ambulance Locations",
+                            "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        {
+                            "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                            "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        },
+                        {
+                            "name": "Ensure Timely Ambulance Allocation",
+                            "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        },
+                        {
+                            "name": "Ensure Compliance with Standard Routes",
+                            "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        }
+                    ]
+                },
+                "input_low_level_goals": {
+                    "low_level_goals": [
+                        {
+                            "name": "Retrieve Available Ambulances",
+                            "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Estimated Arrival Time",
+                            "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Dispatch Selected Ambulance",
+                            "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Dispatch",
+                                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Request Current GPS Location",
+                            "description": "Send a request to the system to retrieve the current GPS location of the ambulance.",
+                            "high_level_associated": {
+                                "name": "Ensure Accurate Tracking of Ambulance Locations",
+                                "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update GPS Location",
+                            "description": "Automatically update the system with the current GPS location of the ambulance every minute.",
+                            "high_level_associated": {
+                                "name": "Ensure Accurate Tracking of Ambulance Locations",
+                                "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                                "actor": {
+                                    "name": "Dispatch Operators",
+                                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Record Departure Time",
+                            "description": "Input the exact time when the ambulance departs from the station into the system.",
+                            "high_level_associated": {
+                                "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                                "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                                "actor": {
+                                    "name": "Radio Operators",
+                                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Record Arrival Time",
+                            "description": "Input the exact time when the ambulance arrives at the destination into the system.",
+                            "high_level_associated": {
+                                "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                                "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                                "actor": {
+                                    "name": "Radio Operators",
+                                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Estimated Time of Arrival (ETA)",
+                            "description": "Request the system to calculate the estimated time of arrival for the allocated ambulance based on current location and destination.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Allocation",
+                                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Filter Ambulances by ETA",
+                            "description": "Request the system to filter available ambulances based on their estimated time of arrival to ensure they can reach the scene within 11 minutes.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Allocation",
+                                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Allocate Ambulance to Call",
+                            "description": "Request the system to allocate an available ambulance to a specific emergency call that meets the 11-minute ETA requirement.",
+                            "high_level_associated": {
+                                "name": "Ensure Timely Ambulance Allocation",
+                                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                                "actor": {
+                                    "name": "System Administrators",
+                                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Confirm Route Compliance",
+                            "description": "Send a confirmation to the system that the ambulance is following the designated route as per the standard operating procedures.",
+                            "high_level_associated": {
+                                "name": "Ensure Compliance with Standard Routes",
+                                "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                                "actor": {
+                                    "name": "Ambulance Personnel",
+                                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Route in System",
+                            "description": "Request the system to update the route if the ambulance deviates from the standard route due to unforeseen circumstances.",
+                            "high_level_associated": {
+                                "name": "Ensure Compliance with Standard Routes",
+                                "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                                "actor": {
+                                    "name": "Ambulance Personnel",
+                                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                }
+                            }
+                        }
+                    ]
+                },
+                "branch_traceability": {
+                    "branch_001": {
+                        "original_high_level_goal": {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        }
+                    },
+                    "branch_002": {
+                        "original_high_level_goal": {
+                            "name": "Ensure Accurate Tracking of Ambulance Locations",
+                            "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        }
+                    },
+                    "branch_003": {
+                        "original_high_level_goal": {
+                            "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                            "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        }
+                    },
+                    "branch_004": {
+                        "original_high_level_goal": {
+                            "name": "Ensure Timely Ambulance Allocation",
+                            "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        }
+                    },
+                    "branch_005": {
+                        "original_high_level_goal": {
+                            "name": "Ensure Compliance with Standard Routes",
+                            "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        }
+                    }
+                },
+                "reconstructed_high_level_goals": {
+                    "branch_001": {
+                        "reconstructed_high_level_goal": "Ensure timely and efficient ambulance response to emergency calls.",
+                        "abstraction_rationale": "The low-level goals collectively aim to facilitate the dispatching of ambulances in a manner that prioritizes quick response times and effective resource management, which aligns with the overarching intention of improving emergency response services.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002",
+                            "branch_001_llg_003"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_001",
+                        "source_low_level_goal_ids": [
+                            "branch_001_llg_001",
+                            "branch_001_llg_002",
+                            "branch_001_llg_003"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_002": {
+                        "reconstructed_high_level_goal": "Ensure real-time tracking of ambulance locations for efficient dispatching and response.",
+                        "abstraction_rationale": "The low-level goals focus on retrieving and updating the GPS location of ambulances, which collectively aim to maintain an accurate and up-to-date understanding of ambulance positions. This supports the overarching intention of improving dispatch efficiency and response times.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_002",
+                        "source_low_level_goal_ids": [
+                            "branch_002_llg_001",
+                            "branch_002_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_003": {
+                        "reconstructed_high_level_goal": "Ensure accurate tracking of ambulance response times during emergencies.",
+                        "abstraction_rationale": "The low-level goals focus on recording specific timestamps related to ambulance operations, which collectively serve the broader intention of monitoring and improving response efficiency in emergency situations.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_003",
+                        "source_low_level_goal_ids": [
+                            "branch_003_llg_001",
+                            "branch_003_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_004": {
+                        "reconstructed_high_level_goal": "Ensure timely ambulance response to emergency calls.",
+                        "abstraction_rationale": "The low-level goals focus on calculating, filtering, and allocating ambulances based on their estimated time of arrival, all aimed at achieving a prompt response to emergencies. This shared intention reflects the overarching goal of ensuring that ambulances arrive quickly when needed.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_004_llg_001",
+                            "branch_004_llg_002",
+                            "branch_004_llg_003"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_004",
+                        "source_low_level_goal_ids": [
+                            "branch_004_llg_001",
+                            "branch_004_llg_002",
+                            "branch_004_llg_003"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    },
+                    "branch_005": {
+                        "reconstructed_high_level_goal": "Ensure efficient and safe navigation of the ambulance during emergency response operations.",
+                        "abstraction_rationale": "The low-level goals focus on maintaining adherence to the designated route and managing deviations, which collectively aim to optimize the ambulance's operational efficiency and safety in emergency situations.",
+                        "supporting_low_level_goal_ids": [
+                            "branch_005_llg_001",
+                            "branch_005_llg_002"
+                        ],
+                        "cohesion": "high",
+                        "confidence": "high",
+                        "branch_id": "branch_005",
+                        "source_low_level_goal_ids": [
+                            "branch_005_llg_001",
+                            "branch_005_llg_002"
+                        ],
+                        "non_supporting_low_level_goal_ids": []
+                    }
+                },
+                "bottom_up_errors": {},
+                "empty_branches": [],
+                "global_evaluations": {
+                    "branch_001": {
+                        "branch_id": "branch_001",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Ensure Timely Ambulance Dispatch",
+                            "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure timely and efficient ambulance response to emergency calls.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The parent HLG (branch_001) is directly supported by the documentation's explicit goal to allocate ambulances within 11 minutes. The reconstructed HLG is also supported as it accurately summarizes the overarching objective of timely response described in the text. Alignment: The reconstructed HLG preserves the core functional intention of ensuring timely ambulance response, which aligns with the parent's objective of allocating ambulances within 11 minutes. While the specific 11-minute metric is omitted, the overarching goal of rapid response remains intact.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    },
+                    "branch_002": {
+                        "branch_id": "branch_002",
+                        "decision": "CONFIRM_BRANCH",
+                        "original_high_level_goal": {
+                            "name": "Ensure Accurate Tracking of Ambulance Locations",
+                            "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                            "actor": {
+                                "name": "Dispatch Operators",
+                                "description": "Staff responsible for managing ambulance dispatch and communication."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure real-time tracking of ambulance locations for efficient dispatching and response.",
+                        "matched_high_level_goal": null,
+                        "generation_request": null,
+                        "rationale": "Grounding: The documentation explicitly states that tracking the exact location of moving ambulances is vital for accurate data recording by radio operators and the CAD system. The reconstructed HLG aligns with this by focusing on real-time tracking for efficient dispatching, which is supported by the text's emphasis on location tracking enabling accurate system recording. Alignment: The reconstructed HLG preserves the core functional intention of tracking ambulance locations for efficient dispatching, which aligns with the parent's goal of ensuring accurate data recording for efficient routing. While the specific mention of radio operators and CAD systems is omitted, the high-level objective and intended outcome remain semantically equivalent.",
+                        "operational_action": "KEEP_BRANCH",
+                        "requires_high_level_regeneration": false,
+                        "requires_low_level_regeneration": false
+                    },
+                    "branch_003": {
+                        "branch_id": "branch_003",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                            "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actor": {
+                                "name": "Radio Operators",
+                                "description": "Staff who communicate with ambulances and relay information during emergencies."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure accurate tracking of ambulance response times during emergencies.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_003_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Staff must correctly communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "Radio Operators",
+                                            "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_003",
+                            "origin_branch_id": "branch_003",
+                            "generator_guidance": "The reconstructed HLG shifts focus to response time tracking, which is not the specific functional intention of this branch. The documentation explicitly links staff communication of departure and destination details to enabling accurate data recording by radio operators and the CAD system.",
+                            "rationale": "The reconstructed HLG shifts focus to response time tracking, which is not the specific functional intention of this branch. The documentation explicitly links staff communication of departure and destination details to enabling accurate data recording by radio operators and the CAD system."
+                        },
+                        "rationale": "The reconstructed HLG shifts focus to response time tracking, which is not the specific functional intention of this branch. The documentation explicitly links staff communication of departure and destination details to enabling accurate data recording by radio operators and the CAD system.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    },
+                    "branch_004": {
+                        "branch_id": "branch_004",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Ensure Timely Ambulance Allocation",
+                            "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                            "actor": {
+                                "name": "System Administrators",
+                                "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure timely ambulance response to emergency calls.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_004_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "The system must ensure that the entire ambulance dispatch process, from call receipt to vehicle allocation, is completed within a strict maximum time limit. This efficiency is critical to supporting the key goal of reaching emergency scenes within 11 minutes.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "System Administrators",
+                                            "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_004",
+                            "origin_branch_id": "branch_004",
+                            "generator_guidance": "The reconstructed HLG fails to preserve the specific functional scope of the parent HLG, which focuses on the system's allocation task within a time limit, rather than the broader operational outcome of response. Regeneration is required to align the high-level goal with the documented constraint on the dispatch process duration.",
+                            "rationale": "The reconstructed HLG fails to preserve the specific functional scope of the parent HLG, which focuses on the system's allocation task within a time limit, rather than the broader operational outcome of response. Regeneration is required to align the high-level goal with the documented constraint on the dispatch process duration."
+                        },
+                        "rationale": "The reconstructed HLG fails to preserve the specific functional scope of the parent HLG, which focuses on the system's allocation task within a time limit, rather than the broader operational outcome of response. Regeneration is required to align the high-level goal with the documented constraint on the dispatch process duration.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    },
+                    "branch_005": {
+                        "branch_id": "branch_005",
+                        "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+                        "original_high_level_goal": {
+                            "name": "Ensure Compliance with Standard Routes",
+                            "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                            "actor": {
+                                "name": "Ambulance Personnel",
+                                "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                            }
+                        },
+                        "reconstructed_high_level_goal": "Ensure efficient and safe navigation of the ambulance during emergency response operations.",
+                        "matched_high_level_goal": null,
+                        "generation_request": {
+                            "request_id": "branch_005_regenerate_hlg",
+                            "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                            "source": "BRANCH_EVALUATION",
+                            "generator_input": {
+                                "project_description": "Ambulance personnel must follow standard routes to enable the CAD system to accurately record departure and destination data.",
+                                "actors": {
+                                    "actors": [
+                                        {
+                                            "name": "Ambulance Personnel",
+                                            "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                        }
+                                    ]
+                                }
+                            },
+                            "target_branch_id": "branch_005",
+                            "origin_branch_id": "branch_005",
+                            "generator_guidance": "The reconstructed HLG introduces 'safe navigation' and 'efficiency', which are not supported by the documentation. The text explicitly links following standard routes to enabling accurate CAD data recording for departure and destination.",
+                            "rationale": "The reconstructed HLG introduces 'safe navigation' and 'efficiency', which are not supported by the documentation. The text explicitly links following standard routes to enabling accurate CAD data recording for departure and destination."
+                        },
+                        "rationale": "The reconstructed HLG introduces 'safe navigation' and 'efficiency', which are not supported by the documentation. The text explicitly links following standard routes to enabling accurate CAD data recording for departure and destination.",
+                        "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+                        "requires_high_level_regeneration": true,
+                        "requires_low_level_regeneration": true
+                    }
+                },
+                "global_evaluation_errors": {},
+                "high_level_generation_requests": [
+                    {
+                        "request_id": "branch_003_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Staff must correctly communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "Radio Operators",
+                                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_003",
+                        "origin_branch_id": "branch_003",
+                        "generator_guidance": "The reconstructed HLG shifts focus to response time tracking, which is not the specific functional intention of this branch. The documentation explicitly links staff communication of departure and destination details to enabling accurate data recording by radio operators and the CAD system.",
+                        "rationale": "The reconstructed HLG shifts focus to response time tracking, which is not the specific functional intention of this branch. The documentation explicitly links staff communication of departure and destination details to enabling accurate data recording by radio operators and the CAD system."
+                    },
+                    {
+                        "request_id": "branch_004_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "The system must ensure that the entire ambulance dispatch process, from call receipt to vehicle allocation, is completed within a strict maximum time limit. This efficiency is critical to supporting the key goal of reaching emergency scenes within 11 minutes.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "System Administrators",
+                                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_004",
+                        "origin_branch_id": "branch_004",
+                        "generator_guidance": "The reconstructed HLG fails to preserve the specific functional scope of the parent HLG, which focuses on the system's allocation task within a time limit, rather than the broader operational outcome of response. Regeneration is required to align the high-level goal with the documented constraint on the dispatch process duration.",
+                        "rationale": "The reconstructed HLG fails to preserve the specific functional scope of the parent HLG, which focuses on the system's allocation task within a time limit, rather than the broader operational outcome of response. Regeneration is required to align the high-level goal with the documented constraint on the dispatch process duration."
+                    },
+                    {
+                        "request_id": "branch_005_regenerate_hlg",
+                        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+                        "source": "BRANCH_EVALUATION",
+                        "generator_input": {
+                            "project_description": "Ambulance personnel must follow standard routes to enable the CAD system to accurately record departure and destination data.",
+                            "actors": {
+                                "actors": [
+                                    {
+                                        "name": "Ambulance Personnel",
+                                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                                    }
+                                ]
+                            }
+                        },
+                        "target_branch_id": "branch_005",
+                        "origin_branch_id": "branch_005",
+                        "generator_guidance": "The reconstructed HLG introduces 'safe navigation' and 'efficiency', which are not supported by the documentation. The text explicitly links following standard routes to enabling accurate CAD data recording for departure and destination.",
+                        "rationale": "The reconstructed HLG introduces 'safe navigation' and 'efficiency', which are not supported by the documentation. The text explicitly links following standard routes to enabling accurate CAD data recording for departure and destination."
+                    }
+                ],
+                "generated_high_level_goals": null,
+                "high_level_request_candidate_selections": [],
+                "high_level_duplicate_resolutions": [],
+                "high_level_regeneration_error": "ValueError: request 'branch_004_regenerate_hlg' returned actor 'Dispatchers', which was not supplied to the original HLG generator.",
+                "documentation_coverage": null,
+                "documentation_coverage_rechecks": [],
+                "documentation_coverage_error": null,
+                "documentation_fully_covered": false,
+                "newly_added_high_level_goals": [],
+                "updated_high_level_goals": null,
+                "regenerated_low_level_goals": null,
+                "all_branches_confirmed": false,
+                "requires_regeneration": true,
+                "state_signature": "02ee793c93423b4f9dfadba9f018c8c362d6502b038b5f4e7e61ccb8c5bb1e7f"
+            }
+        ],
+        "unresolved_bottom_up_errors": {},
+        "unresolved_global_evaluation_errors": {},
+        "unresolved_empty_branches": [],
+        "unresolved_documentation_coverage_error": null,
+        "unresolved_high_level_regeneration_error": "ValueError: request 'branch_004_regenerate_hlg' returned actor 'Dispatchers', which was not supplied to the original HLG generator."
+    },
+    "finalHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Ensure Timely Ambulance Dispatch",
+                "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                "actor": {
+                    "name": "Dispatch Operators",
+                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                }
+            },
+            {
+                "name": "Ensure Accurate Tracking of Ambulance Locations",
+                "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                "actor": {
+                    "name": "Dispatch Operators",
+                    "description": "Staff responsible for managing ambulance dispatch and communication."
+                }
+            },
+            {
+                "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                "actor": {
+                    "name": "Radio Operators",
+                    "description": "Staff who communicate with ambulances and relay information during emergencies."
+                }
+            },
+            {
+                "name": "Ensure Timely Ambulance Allocation",
+                "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                "actor": {
+                    "name": "System Administrators",
+                    "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                }
+            },
+            {
+                "name": "Ensure Compliance with Standard Routes",
+                "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                "actor": {
+                    "name": "Ambulance Personnel",
+                    "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                }
+            }
+        ]
+    },
+    "finalLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Retrieve Available Ambulances",
+                "description": "Fetch a list of ambulances that are currently available for dispatch.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Calculate Estimated Arrival Time",
+                "description": "Calculate the estimated arrival time of each available ambulance to the emergency location based on current traffic conditions.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Dispatch Selected Ambulance",
+                "description": "Send a dispatch command to the selected ambulance to respond to the emergency call.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Dispatch",
+                    "description": "Allocate an available ambulance for every emergency call that can reach the scene within 11 minutes, ensuring rapid response to emergencies.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Request Current GPS Location",
+                "description": "Send a request to the system to retrieve the current GPS location of the ambulance.",
+                "high_level_associated": {
+                    "name": "Ensure Accurate Tracking of Ambulance Locations",
+                    "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Update GPS Location",
+                "description": "Automatically update the system with the current GPS location of the ambulance every minute.",
+                "high_level_associated": {
+                    "name": "Ensure Accurate Tracking of Ambulance Locations",
+                    "description": "To enable accurate data recording by radio operators and the CAD system, ensuring efficient routing and timely arrival at the scene.",
+                    "actor": {
+                        "name": "Dispatch Operators",
+                        "description": "Staff responsible for managing ambulance dispatch and communication."
+                    }
+                }
+            },
+            {
+                "name": "Record Departure Time",
+                "description": "Input the exact time when the ambulance departs from the station into the system.",
+                "high_level_associated": {
+                    "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                    "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                    "actor": {
+                        "name": "Radio Operators",
+                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                    }
+                }
+            },
+            {
+                "name": "Record Arrival Time",
+                "description": "Input the exact time when the ambulance arrives at the destination into the system.",
+                "high_level_associated": {
+                    "name": "Facilitate Accurate Communication of Departure and Destination Details",
+                    "description": "Ensure that staff effectively communicate departure and destination details to enable radio operators and the CAD system to record data accurately.",
+                    "actor": {
+                        "name": "Radio Operators",
+                        "description": "Staff who communicate with ambulances and relay information during emergencies."
+                    }
+                }
+            },
+            {
+                "name": "Calculate Estimated Time of Arrival (ETA)",
+                "description": "Request the system to calculate the estimated time of arrival for the allocated ambulance based on current location and destination.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Allocation",
+                    "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                }
+            },
+            {
+                "name": "Filter Ambulances by ETA",
+                "description": "Request the system to filter available ambulances based on their estimated time of arrival to ensure they can reach the scene within 11 minutes.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Allocation",
+                    "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                }
+            },
+            {
+                "name": "Allocate Ambulance to Call",
+                "description": "Request the system to allocate an available ambulance to a specific emergency call that meets the 11-minute ETA requirement.",
+                "high_level_associated": {
+                    "name": "Ensure Timely Ambulance Allocation",
+                    "description": "To operate the computer-aided dispatch system efficiently, ensuring that ambulance allocation is completed within the maximum time limit set for the dispatch process.",
+                    "actor": {
+                        "name": "System Administrators",
+                        "description": "Individuals who maintain and manage the computer-aided dispatch (CAD) system."
+                    }
+                }
+            },
+            {
+                "name": "Confirm Route Compliance",
+                "description": "Send a confirmation to the system that the ambulance is following the designated route as per the standard operating procedures.",
+                "high_level_associated": {
+                    "name": "Ensure Compliance with Standard Routes",
+                    "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                    "actor": {
+                        "name": "Ambulance Personnel",
+                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                    }
+                }
+            },
+            {
+                "name": "Update Route in System",
+                "description": "Request the system to update the route if the ambulance deviates from the standard route due to unforeseen circumstances.",
+                "high_level_associated": {
+                    "name": "Ensure Compliance with Standard Routes",
+                    "description": "Ambulance personnel must follow designated routes to guarantee accurate tracking of their locations by the CAD system, facilitating precise recording of departure and destination data for operational analysis.",
+                    "actor": {
+                        "name": "Ambulance Personnel",
+                        "description": "Paramedics and drivers who operate the ambulances and provide medical assistance."
+                    }
+                }
+            }
+        ]
+    }
+}

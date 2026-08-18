@@ -1,0 +1,139 @@
+{
+  "schema_version": "4.0",
+  "status": "READY_FOR_ORCHESTRATION",
+  "expected_branch_ids": [
+    "branch_001",
+    "branch_002",
+    "branch_003",
+    "branch_004",
+    "branch_005"
+  ],
+  "evaluated_branch_ids": [
+    "branch_001",
+    "branch_002",
+    "branch_003",
+    "branch_004",
+    "branch_005"
+  ],
+  "missing_branch_ids": [],
+  "unexpected_branch_ids": [],
+  "inconsistent_branch_ids": [],
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "decision": "CONFIRM_BRANCH",
+      "original_high_level_goal": {
+        "name": "Register Hospitals and Manage Information",
+        "description": "Facilitate the registration of hospitals and the management of their information, including location and available bed counts, to ensure accurate and up-to-date data for healthcare access.",
+        "actor": {
+          "name": "Hospital Administrators",
+          "description": "Personnel responsible for managing hospital operations and resources."
+        }
+      },
+      "reconstructed_high_level_goal": "Facilitate effective management of hospital resources and information by hospital administrators.",
+      "matched_high_level_goal": null,
+      "generation_request": null,
+      "rationale": "Grounding: The documentation explicitly lists registering hospitals and managing their information (location, beds) as a primary functionality to enhance SUS efficiency. The reconstructed HLG accurately summarizes this specific functional intention regarding hospital resource and information management. Alignment: The reconstructed HLG preserves the actor (Hospital Administrators) and the core functional objective of managing hospital information and resources. Although it generalizes 'registration' and specific data points into 'resources and information', the fundamental WHY-level intention remains aligned with the parent.",
+      "operational_action": "KEEP_BRANCH",
+      "requires_high_level_regeneration": false,
+      "requires_low_level_regeneration": false
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "decision": "CONFIRM_BRANCH",
+      "original_high_level_goal": {
+        "name": "Identify Nearest Hospital",
+        "description": "Provide functionality to identify the nearest hospital for patients based on their location and current bed availability, ensuring timely access to healthcare services.",
+        "actor": {
+          "name": "Patients",
+          "description": "Individuals seeking healthcare services within the public health system."
+        }
+      },
+      "reconstructed_high_level_goal": "Facilitate timely access to healthcare services for patients by providing information on hospital proximity and bed availability.",
+      "matched_high_level_goal": null,
+      "generation_request": null,
+      "rationale": "Grounding: The documentation explicitly lists identifying the nearest hospital based on location and bed availability as a key functionality to ensure timely access. The reconstructed HLG accurately captures this specific functional intention and its underlying purpose. Alignment: The reconstructed HLG accurately preserves the core functional intention of identifying the nearest hospital based on location and bed availability to ensure timely access. It maintains the same actor perspective (patients) and intended outcome as the parent HLG.",
+      "operational_action": "KEEP_BRANCH",
+      "requires_high_level_regeneration": false,
+      "requires_low_level_regeneration": false
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "decision": "REGENERATE_HIGH_LEVEL_GOAL",
+      "original_high_level_goal": {
+        "name": "Manage Hospital Inventories",
+        "description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+        "actor": {
+          "name": "Inventory Managers",
+          "description": "Staff responsible for managing medical supplies and resources within hospitals."
+        }
+      },
+      "reconstructed_high_level_goal": "Ensure effective management and oversight of medical supplies within the inventory system.",
+      "matched_high_level_goal": null,
+      "generation_request": {
+        "request_id": "branch_003_regenerate_hlg",
+        "action": "REPLACE_EXISTING_HIGH_LEVEL_GOAL",
+        "source": "BRANCH_EVALUATION",
+        "generator_input": {
+          "project_description": "Enable effective management of hospital inventories, including medical supplies and blood bank resources, to minimize shortages and waste.",
+          "actors": {
+            "actors": [
+              {
+                "name": "Inventory Managers",
+                "description": "Staff responsible for managing medical supplies and resources within hospitals."
+              }
+            ]
+          }
+        },
+        "target_branch_id": "branch_003",
+        "origin_branch_id": "branch_003",
+        "generator_guidance": "The reconstructed HLG failed to preserve the full scope of the parent goal by omitting blood bank resources and the specific outcome of minimizing waste. Regeneration is required to ensure the high-level goal accurately reflects the documented functional intention for comprehensive inventory management.",
+        "rationale": "The reconstructed HLG failed to preserve the full scope of the parent goal by omitting blood bank resources and the specific outcome of minimizing waste. Regeneration is required to ensure the high-level goal accurately reflects the documented functional intention for comprehensive inventory management."
+      },
+      "rationale": "The reconstructed HLG failed to preserve the full scope of the parent goal by omitting blood bank resources and the specific outcome of minimizing waste. Regeneration is required to ensure the high-level goal accurately reflects the documented functional intention for comprehensive inventory management.",
+      "operational_action": "REGENERATE_HLG_AND_THEN_REGENERATE_ITS_LLGS",
+      "requires_high_level_regeneration": true,
+      "requires_low_level_regeneration": true
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "decision": "CONFIRM_BRANCH",
+      "original_high_level_goal": {
+        "name": "Track Patient Admissions and Discharges",
+        "description": "Implement tracking of patient admissions and discharges within hospitals to improve patient flow and resource allocation.",
+        "actor": {
+          "name": "Healthcare Providers",
+          "description": "Medical professionals who deliver care to patients in hospitals."
+        }
+      },
+      "reconstructed_high_level_goal": "Facilitate efficient patient management within the healthcare system.",
+      "matched_high_level_goal": null,
+      "generation_request": null,
+      "rationale": "Grounding: The documentation explicitly lists 'Tracking patient admissions and discharges' as a core functionality to improve patient flow, supporting the parent HLG. The reconstructed HLG generalizes this to 'efficient patient management,' which aligns with the documented goal of optimizing patient care and resource allocation. Alignment: The reconstructed HLG generalizes the specific tracking of admissions and discharges into the broader concept of 'efficient patient management,' which aligns with the documented goal of improving patient flow. This preserves the core functional intention and outcome defined in the parent HLG.",
+      "operational_action": "KEEP_BRANCH",
+      "requires_high_level_regeneration": false,
+      "requires_low_level_regeneration": false
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "decision": "CONFIRM_BRANCH",
+      "original_high_level_goal": {
+        "name": "Provide Detailed Information on Hospital Stocks and Patient Records",
+        "description": "Ensure that detailed information about hospital stocks and patient records is accessible to authorized personnel for better decision-making and resource management.",
+        "actor": {
+          "name": "Public Health Officials",
+          "description": "Government representatives overseeing the public health system and its efficiency."
+        }
+      },
+      "reconstructed_high_level_goal": "Facilitate informed decision-making for public health officials by providing access to critical health data.",
+      "matched_high_level_goal": null,
+      "generation_request": null,
+      "rationale": "Grounding: The documentation explicitly states the goal of providing detailed information about hospital stocks and patient records to ensure better decision-making and resource management. The reconstructed HLG accurately captures this intention by focusing on facilitating informed decision-making through access to critical health data. Alignment: The reconstructed HLG preserves the core intention of enabling informed decision-making for public health officials through data access. While it generalizes 'hospital stocks and patient records' to 'critical health data', the fundamental WHY-level objective and actor perspective remain aligned with the parent.",
+      "operational_action": "KEEP_BRANCH",
+      "requires_high_level_regeneration": false,
+      "requires_low_level_regeneration": false
+    }
+  },
+  "errors": {},
+  "created_at_utc": "2026-08-18T17:47:03.343512+00:00"
+}

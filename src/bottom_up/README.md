@@ -1,37 +1,86 @@
 # Bottom-Up Feedback Loop
 
-## 1. Cosa fa questo modulo
+## 1. Obiettivo dell’estensione
 
-La pipeline originale del progetto (`src/extraction`, `src/self_critique`, `src/mapping`) segue una direzione **top-down**: a partire dalla documentazione di progetto estrae gli Actor, genera gli High-Level Goals (HLG), li decompone in Low-Level Goals (LLG) e, successivamente, usa i LLG per il mapping verso le API.
+La pipeline originale del progetto segue una direzione **top-down**: a partire dalla documentazione identifica gli Actor, genera gli High-Level Goals (HLG), li decompone in Low-Level Goals (LLG) e utilizza infine i LLG per il mapping verso le API.
 
-Il modulo `src/bottom_up/` estende questa pipeline con un **feedback loop bottom-up** che verifica la coerenza tra il livello high-level e il livello low-level senza sostituire i generatori e gli evaluator originali.
+Il package `src/bottom_up/` introduce un **feedback loop di validazione** tra High-Level e Low-Level Goals, senza sostituire i generatori e gli evaluator già presenti nella pipeline.
 
-L'idea centrale è il controllo di round-trip:
+L’idea è verificare la decomposizione attraverso un round-trip semantico:
 
 ```text
 HLG corrente
-   |
-   | HOW?
-   v
+    |
+   HOW?
+    v
 LLG correnti
-   |
-   | WHY?
-   v
+    |
+   WHY?
+    v
 HLG' ricostruito bottom-up
 ```
 
-Per ogni branch, `goal_reconstructor.py` ricostruisce un HLG' a partire esclusivamente dai LLG del branch. Il Global Goal Evaluator confronta poi HLG', la documentazione e l'intera collezione corrente di HLG, usando il `branch_id` per identificare il padre del branch.
+Per ogni branch, i LLG vengono utilizzati per ricostruire un nuovo High-Level Goal `HLG'`. Questo goal non viene aggiunto direttamente alla gerarchia: rappresenta una **vista diagnostica bottom-up** dell’intenzione espressa dai LLG.
 
-La valutazione locale ha **solo due possibili decisioni**:
+Il sistema confronta quindi l’HLG ricostruito con il relativo HLG padre e con la documentazione originale. Se l’intenzione è preservata, il branch viene confermato; altrimenti viene rigenerato.
 
-- `CONFIRM_BRANCH`: HLG' preserva in modo sufficientemente coerente l'intenzione documentata dell'HLG corrente; il branch non viene modificato.
-- `REGENERATE_HIGH_LEVEL_GOAL`: il round-trip non è sufficientemente coerente; il branch viene rigenerato **a partire dal livello HLG**. Il vecchio HLG viene sostituito da un nuovo HLG prodotto dal generatore top-down originale e validato dal relativo HLG Evaluator; subito dopo vengono sempre generati e valutati anche i nuovi LLG del replacement HLG.
+La validazione locale prevede quindi soltanto due decisioni:
 
-Il ciclo non distingue più tra "errore dell'HLG" ed "errore dei LLG". Se un branch non supera la verifica bottom-up, viene ricostruito come unità completa `HLG + LLG`.
+* `CONFIRM_BRANCH`: la decomposizione è semanticamente coerente con il goal padre;
+* `REGENERATE_HIGH_LEVEL_GOAL`: il round-trip evidenzia una perdita o una modifica sostanziale dell’intenzione.
 
-Solo quando **tutti i branch correnti sono confermati** viene eseguita una seconda verifica globale di **documentation coverage**. Questa fase controlla se la documentazione contiene intenzioni funzionali autonome a livello WHY non ancora rappresentate dagli HLG correnti. Gli HLG' ricostruiti dai branch confermati vengono forniti come segnali aggiuntivi per individuare eventuali intenzioni emerse dai LLG, ma non costituiscono da soli evidenza sufficiente per creare un nuovo goal: ogni nuova intenzione deve essere supportata dalla documentazione e non deve essere già coperta semanticamente da un HLG corrente.
+Nel secondo caso non vengono modificati isolatamente i LLG. L’intero branch viene ricostruito:
 
-La convergenza richiede quindi entrambe le condizioni:
+```text
+Global Goal Evaluator
+        ↓
+nuovo HLG
+        ↓
+HLG Evaluator originale
+        ↓
+nuovi LLG
+        ↓
+LLG Evaluator originale
+        ↓
+nuova iterazione bottom-up
+```
+
+In questo modo la correzione mantiene attivi i normali meccanismi `Generator -> Evaluator` della pipeline top-down.
+
+---
+
+## 2. Flusso del feedback loop
+
+Il ciclo opera sulla collezione corrente di HLG e LLG.
+
+Per ogni iterazione:
+
+1. ricostruisce un `HLG'` dai LLG di ogni branch;
+2. valuta la coerenza del round-trip;
+3. rigenera completamente gli eventuali branch non coerenti;
+4. ripete la verifica sui goal aggiornati.
+
+Quando **tutti i branch sono confermati**, viene eseguito anche un controllo globale di **documentation coverage**.
+
+Questa fase verifica se nella documentazione sono presenti intenzioni funzionali autonome, a livello high-level, che non sono ancora rappresentate dagli HLG correnti. Gli `HLG'` ricostruiti possono essere utilizzati come segnali di discovery, ma una nuova intenzione viene aggiunta soltanto se è supportata dalla documentazione, non è già coperta semanticamente e possiede un livello di astrazione compatibile con un High-Level Goal.
+
+Gli eventuali nuovi HLG passano nuovamente attraverso:
+
+```text
+HLG Generator
+    ↓
+HLG Evaluator
+    ↓
+LLG Generator
+    ↓
+LLG Evaluator
+    ↓
+nuova iterazione bottom-up
+```
+
+Un goal aggiunto dalla coverage non è quindi automaticamente considerato validato.
+
+La convergenza richiede contemporaneamente:
 
 ```text
 tutti i branch = CONFIRM_BRANCH
@@ -39,482 +88,246 @@ tutti i branch = CONFIRM_BRANCH
 documentation coverage = COMPLETE
 ```
 
-Solo in questo caso gli HLG e LLG correnti sono considerati finali e possono essere inoltrati al successivo mapping verso le API.
+Solo in questo caso la gerarchia HLG/LLG può essere considerata validata dal feedback loop e inoltrata alla successiva fase di API mapping.
 
-## 2. Struttura dei file
+---
+
+## 3. File principali aggiornati
+
+La logica è stata suddivisa in moduli con responsabilità distinte:
 
 ```text
 src/bottom_up/
-├── low_level_goal_mapper.py   # adapter deterministico: output top-down -> input bottom-up
-├── goal_reconstructor.py      # ricostruzione bottom-up: LLG -> HLG'
-├── global_goal_evaluator.py   # verifica locale a 2 decisioni + documentation coverage globale
-├── goal_update.py             # applicazione deterministica di REPLACE/ADD e merge dei LLG
-├── cycle_state.py             # stato corrente, convergenza e repeated-state detection
-├── goal_cycle_orchestrator.py # controllo completo del ciclo e invocazione delle callback
-└── semantic_similarity.py     # duplicate guard e semantic repeated-state detection
+├── low_level_goal_mapper.py
+├── goal_reconstructor.py
+├── global_goal_evaluator.py
+├── goal_update.py
+├── cycle_state.py
+├── goal_cycle_orchestrator.py
+└── semantic_similarity.py
 ```
 
-La separazione delle responsabilità è la seguente:
+### `low_level_goal_mapper.py`
+
+È l’adapter tra gli output top-down e il nuovo ciclo bottom-up.
+
+Non utilizza LLM: associa deterministicamente ogni LLG al relativo HLG, costruisce i branch e converte gli output nel formato richiesto dai moduli bottom-up.
+
+La configurazione `BRANCH_SPECIFICATIONS` rimane legata agli output sperimentali correnti ed è quindi una componente dell’adapter, non della logica semantica del feedback loop.
+
+### `goal_reconstructor.py`
+
+Implementa la direzione bottom-up vera e propria:
 
 ```text
-low_level_goal_mapper.py
-        |
-        v
-goal_reconstructor.py
-  LLG -> HLG'
-        |
-        v
-global_goal_evaluator.py
-  CONFIRM / REGENERATE HLG
-        |
-        +---- CONFIRM ------------------------------+
-        |                                           |
-        +---- REGENERATE_HIGH_LEVEL_GOAL            |
-                         |                           |
-                         v                           |
-                HLG Generator originale             |
-                         |                           |
-                         v                           |
-                HLG Evaluator originale             |
-                         |                           |
-                         v                           |
-                    goal_update.py                   |
-                         |                           |
-                         v                           |
-                LLG Generator originale             |
-                         |                           |
-                         v                           |
-                LLG Evaluator originale             |
-                         |                           |
-                         +--------> nuova iterazione |
-                                                     |
-              tutti i branch confermati <-----------+
-                         |
-                         v
-             documentation coverage
-                  /            \
-              COMPLETE        MISSING
-                 |              |
-                 |        nuovo HLG + nuovi LLG
-                 |              |
-                 +------> nuova iterazione
+LLG -> HLG'
 ```
 
-## 3. `low_level_goal_mapper.py` — adapter deterministico
+Il reconstructor riceve i LLG di un branch ma **non vede l’HLG padre**. Deve quindi inferire il singolo obiettivo high-level che spiega perché quelle azioni operative dovrebbero essere realizzate insieme.
 
-`low_level_goal_mapper.py` non chiama alcun LLM. Serve soltanto a convertire gli output top-down salvati in formato piatto nella struttura richiesta dal feedback loop bottom-up.
+Oltre al goal ricostruito mantiene informazioni di traceability, come i LLG che supportano la ricostruzione, cohesion, confidence e abstraction rationale.
 
-Il modulo:
+### `global_goal_evaluator.py`
 
-- mantiene gli HLG già prodotti dalla pipeline top-down;
-- associa deterministicamente ogni LLG al proprio HLG padre;
-- costruisce oggetti `HighLevelGoal` e `LowLevelGoal` compatibili con `src.data_model`;
-- prepara i branch necessari al reconstructor;
-- valida che ogni LLG sia assegnato a un solo branch e che nessun LLG venga perso;
-- non genera, valuta, riscrive o elimina goal.
+È il componente responsabile della validazione.
 
-L'associazione iniziale usa `BRANCH_SPECIFICATIONS`, una mappa specifica per dataset e modalità di prompting. Questa dipendenza è un adapter sperimentale dovuto al formato piatto degli output top-down salvati e non fa parte della logica semantica del feedback loop.
+Per ogni branch confronta:
 
-## 4. `goal_reconstructor.py` — ricostruzione bottom-up `LLG -> HLG'`
+* documentazione;
+* HLG correnti;
+* `branch_id`;
+* HLG ricostruito bottom-up.
 
-Per ogni branch, `goal_reconstructor.py` ricostruisce un singolo HLG' a partire dai LLG correnti.
+Il `branch_id` rimane l’identificatore stabile del branch anche quando il testo dell’HLG viene sostituito.
 
-Il punto metodologicamente importante è che il reconstructor **non vede l'HLG padre originale**. Riceve soltanto:
+L’evaluator non modifica direttamente i goal. In caso di `REGENERATE_HIGH_LEVEL_GOAL` costruisce una richiesta focalizzata che viene passata al generatore HLG originale.
 
-- i LLG appartenenti al branch;
-- opzionalmente l'attore associato al branch;
-- identificatori locali e opachi usati per la traceability.
+Lo stesso modulo gestisce anche la **documentation coverage**, eseguita soltanto quando tutti i branch correnti sono stati confermati.
 
-Il prompt chiede al modello di inferire il singolo obiettivo high-level che meglio spiega **perché** quel gruppo di LLG dovrebbe essere realizzato insieme. L'output deve essere più astratto dei singoli LLG e non deve essere una semplice enumerazione o parafrasi delle azioni operative.
+Sono inoltre presenti controlli per limitare la proliferazione, verificando semanticamente che le nuove intenzioni non siano duplicati o semplici sotto-capability di HLG già presenti.
 
-Per ogni ricostruzione vengono mantenuti anche:
+### `goal_update.py`
 
-- `supporting_low_level_goal_ids`;
-- `source_low_level_goal_ids`;
-- `non_supporting_low_level_goal_ids`;
-- `cohesion`;
-- `confidence`;
-- `abstraction_rationale`.
+Gestisce esclusivamente gli aggiornamenti deterministici dello stato.
 
-Questi dati sono mantenuti per traceability e analisi sperimentale. Il Global Goal Evaluator corrente non riceve direttamente i singoli LLG: usa HLG' come rappresentazione bottom-up dell'intenzione espressa dal branch.
-
-`reconstruct_all_branches()` assegna `branch_id` opachi (`branch_001`, `branch_002`, ...), raggruppa i LLG, esegue la ricostruzione branch per branch e segnala separatamente errori ed eventuali branch privi di LLG.
-
-## 5. `global_goal_evaluator.py` — verifica locale e copertura globale
-
-### 5.1 Input della valutazione locale
-
-Per ogni branch non vuoto, il Global Goal Evaluator riceve soltanto:
+Le operazioni principali sono:
 
 ```text
-- documentazione completa del progetto
-- collezione completa degli HLG correnti
-- branch_id del branch in esame
-- HLG' ricostruito bottom-up
+REPLACE -> sostituzione dell'HLG di un branch instabile
+ADD     -> inserimento degli HLG individuati dalla coverage
 ```
 
-Il `branch_id` permette di individuare deterministicamente l'HLG padre all'interno della collezione corrente. I singoli LLG non vengono passati all'evaluator.
+Il modulo non chiama LLM. Riceve goal già generati e valutati dall’orchestrator, aggiorna la collezione e sostituisce selettivamente i LLG soltanto per i branch interessati.
 
-Questa scelta separa chiaramente i due compiti:
+### `cycle_state.py`
+
+Gestisce lo stato tecnico delle iterazioni e le condizioni necessarie alla convergenza.
+
+Gli stati precedenti non vengono utilizzati per scegliere un presunto “best state”: il ciclo mantiene una sola collezione corrente di HLG e LLG.
+
+Gli snapshot precedenti servono principalmente per traceability e per individuare situazioni in cui il ciclo ritorna allo stesso stato.
+
+### `goal_cycle_orchestrator.py`
+
+È il punto centrale dell’estensione.
+
+`run_global_goal_cycle(...)` coordina:
 
 ```text
-goal_reconstructor.py
-LLG -> intenzione WHY ricostruita
-
-Global Goal Evaluator
-HLG' -> verifica rispetto a HLG corrente + documentazione
+reconstruction
+    ↓
+evaluation
+    ↓
+HLG/LLG regeneration
+    ↓
+state update
+    ↓
+documentation coverage
+    ↓
+nuova iterazione
 ```
 
-### 5.2 Le due decisioni locali
+L’orchestrator garantisce inoltre che ogni HLG rigenerato riceva sempre una nuova decomposizione LLG e che ogni nuovo goal trovato dalla coverage venga validato in una successiva iterazione bottom-up.
 
-Il branch evaluator effettua una sola chiamata strutturata e può restituire esclusivamente:
+Gestisce infine le condizioni di stop, gli errori e il numero massimo di iterazioni.
 
-| Decisione | Significato | Effetto operativo |
-|---|---|---|
-| `CONFIRM_BRANCH` | HLG' preserva l'intenzione documentata dell'HLG corrente | HLG e LLG restano invariati |
-| `REGENERATE_HIGH_LEVEL_GOAL` | il round-trip presenta una divergenza materiale di intenzione, scope, attore o outcome | genera un replacement HLG e poi genera sempre i suoi nuovi LLG |
+### `semantic_similarity.py`
 
-Non esistono più, nella valutazione locale, le vecchie decisioni `REGENERATE_LOW_LEVEL_GOALS`, `MATCHES_OTHER_HIGH_LEVEL_GOAL`, `ADD_NEW_HIGH_LEVEL_GOAL` o `REWRITE_ORIGINAL_HIGH_LEVEL_GOAL`.
+Centralizza i controlli basati su embeddings utilizzati per due scopi distinti:
 
-Quando il branch viene confermato, `generation_project_description` deve essere `null`.
+* individuare HLG semanticamente duplicati;
+* riconoscere stati globali semanticamente equivalenti tra iterazioni.
 
-Quando viene richiesta `REGENERATE_HIGH_LEVEL_GOAL`, l'evaluator non genera direttamente il nuovo HLG. Produce invece una `generation_project_description` focalizzata e una `HighLevelGoalGenerationRequest` con azione `REPLACE_EXISTING_HIGH_LEVEL_GOAL`.
-
-### 5.3 Rigenerazione completa di un branch
-
-Una decisione `REGENERATE_HIGH_LEVEL_GOAL` attiva obbligatoriamente questa sequenza:
-
-```text
-Global Goal Evaluator
-        |
-        v
-HighLevelGoalGenerationRequest
-        |
-        v
-HLG Generator originale
-        |
-        v
-HLG Evaluator originale
-        |
-        v
-replacement HLG
-        |
-        v
-goal_update.py sostituisce il padre
-        |
-        v
-LLG Generator originale
-        |
-        v
-LLG Evaluator originale
-        |
-        v
-nuovi LLG del replacement HLG
-        |
-        v
-nuova iterazione bottom-up
-```
-
-La pipeline non conserva quindi il vecchio HLG rigenerandone soltanto i LLG: un branch instabile viene rigenerato interamente a partire dal livello high-level.
-
-### 5.4 Branch vuoti
-
-Un branch privo di LLG non può produrre HLG' e non può quindi superare il round-trip. Il path `evaluate_empty_branch()` richiede direttamente `REGENERATE_HIGH_LEVEL_GOAL` e prepara una descrizione focalizzata per il generatore HLG originale. Anche in questo caso, una volta prodotto il replacement HLG, vengono sempre generati i suoi LLG.
-
-### 5.5 Documentation coverage
-
-La documentation coverage viene eseguita **solo dopo che tutti i branch correnti hanno restituito `CONFIRM_BRANCH`**.
-
-L'input comprende:
-
-```text
-- documentazione completa
-- HLG correnti, che costituiscono la baseline effettiva di copertura
-- HLG' ricostruiti dai branch confermati, usati come segnali di discovery
-```
-
-Gli HLG' possono aiutare a mettere in evidenza un'intenzione emersa dai LLG ma non rappresentata come HLG autonomo. Tuttavia una proposta viene mantenuta soltanto se:
-
-1. è supportata esplicitamente o inequivocabilmente dalla documentazione;
-2. rappresenta un'intenzione funzionale autonoma a livello WHY;
-3. non è già semanticamente coperta da un HLG corrente;
-4. non è una semplice operazione, sotto-capability, canale, campo, vista, setting o dettaglio implementativo.
-
-Se tutte le intenzioni risultano già rappresentate, la coverage restituisce `COMPLETE`.
-
-Se viene identificata almeno una reale intenzione mancante, restituisce `MISSING_HIGH_LEVEL_GOALS` e costruisce una o più `HighLevelGoalGenerationRequest` con azione `ADD_NEW_HIGH_LEVEL_GOAL`.
-
-Ogni nuovo HLG passa quindi attraverso:
-
-```text
-HLG Generator originale
--> HLG Evaluator originale
--> nuovo HLG
--> LLG Generator originale
--> LLG Evaluator originale
--> nuovi LLG
--> nuova iterazione bottom-up
-```
-
-Il nuovo branch deve quindi superare lo stesso round-trip degli HLG già presenti.
-
-### 5.6 Controlli anti-proliferazione e retry
-
-La coverage usa più livelli di protezione contro HLG duplicati o troppo simili:
-
-- un proposal verifier seleziona un sottoinsieme minimo delle intenzioni candidate;
-- la proposta viene confrontata semanticamente con gli HLG correnti prima di diventare una generation request;
-- gli HLG generati vengono nuovamente controllati rispetto agli HLG esistenti e agli altri HLG prodotti nello stesso batch;
-- un `ADD` duplicato di un HLG esistente viene assorbito mantenendo il goal già presente;
-- se una coverage dichiara ancora una mancanza ma nessun nuovo HLG sopravvive ai controlli, viene eseguito un re-check limitato invece di aggiungere goal duplicati.
-
-I semantic retry sono limitati da `MAX_SEMANTIC_RETRIES` in `src/llm_clients.py`. I retry tecnici per rate limiting del provider evaluator sono gestiti separatamente dal client Groq.
-
-## 6. `goal_update.py` — aggiornamento deterministico dello stato
-
-`goal_update.py` non chiama mai un LLM, un generatore o un evaluator. Riceve soltanto oggetti già generati e validati dall'orchestrator.
-
-Nella logica corrente gestisce due operazioni HLG distinte:
-
-- **REPLACE locale**: applica il replacement HLG già prodotto per un branch con `REGENERATE_HIGH_LEVEL_GOAL`;
-- **ADD globale**: aggiunge gli HLG mancanti prodotti dalla documentation coverage.
-
-Il modulo contiene inoltre:
-
-- validazione dei risultati HLG già prodotti;
-- duplicate guard lessicali e semantiche;
-- merge selettivo dei nuovi LLG;
-- preservazione dei branch confermati che non devono essere toccati.
-
-La funzione `_merge_selectively_regenerated_low_level_goals()` rimuove i vecchi LLG soltanto per i parent sostituiti e aggiunge i nuovi LLG già passati attraverso il normale LLG Generator -> LLG Evaluator loop.
-
-## 6.1 Callback corrette da usare nel notebook
-
-L'orchestrator continua a ricevere due callback:
-
-```python
-HighLevelGoalGenerator = Callable[
-    [HighLevelGoalGenerationRequest],
-    HighLevelGoals,
-]
-
-LowLevelGoalRegenerator = Callable[
-    [LowLevelGoalRegenerationRequest],
-    LowLevelGoals,
-]
-```
-
-Il modo consigliato per costruirle è:
-
-```python
-from src.extraction.extractor import (
-    build_bottom_up_evaluated_generation_callbacks,
-)
-
-generate_hlg_cb, regenerate_llg_cb = (
-    build_bottom_up_evaluated_generation_callbacks(
-        project_description=project_description,
-        mode=STANDALONE_PROMPTING_MODE,
-        evaluator_ablation=False,
-    )
-)
-```
-
-In questo modo le correzioni non bypassano mai gli evaluator della pipeline originale.
-
-Per un branch instabile il percorso è sempre:
-
-```text
-Global Goal Evaluator
--> HLG Generator
--> HLG Evaluator
--> LLG Generator
--> LLG Evaluator
--> nuova verifica bottom-up
-```
-
-## 7. `cycle_state.py` — stato e convergenza
-
-`cycle_state.py` contiene helper puri e non modifica mai i goal.
-
-Uno **stato** è soltanto lo snapshot tecnico dell'iterazione corrente:
-
-```text
-current HLGs + current LLGs + decisioni strutturali
-```
-
-Gli stati precedenti non sono soluzioni candidate da confrontare o ordinare. Servono esclusivamente per:
-
-- rilevare una ripetizione esatta tramite hash SHA-256;
-- supportare il controllo di ripetizione semantica dell'orchestrator;
-- mantenere la trace sperimentale delle iterazioni.
-
-`_all_expected_branches_confirmed()` restituisce `True` soltanto quando:
-
-- non ci sono errori di ricostruzione;
-- non ci sono errori di valutazione;
-- non esistono branch vuoti residui;
-- esiste esattamente una evaluation per ogni branch corrente;
-- tutte le decisioni sono `CONFIRM_BRANCH`.
-
-Non esiste più una policy di scelta del `best_validated_state`. Il ciclo evolve una sola collezione corrente di HLG/LLG. I campi `best_validated_*` restano temporaneamente nel `GlobalGoalCycleResult` soltanto per compatibilità di schema e vengono valorizzati a `None`.
-
-## 8. `goal_cycle_orchestrator.py` — il ciclo esterno
-
-`run_global_goal_cycle(...)` è il punto di ingresso principale del feedback loop.
-
-Per ogni iterazione esegue, in ordine:
-
-1. ricostruzione bottom-up di HLG' per tutti i branch non vuoti;
-2. valutazione locale a due decisioni per ogni branch;
-3. persistenza e successiva ricarica del JSON delle evaluations;
-4. repeated-state detection esatta e semantica;
-5. stop immediato in presenza di errori di ricostruzione o valutazione;
-6. se almeno un branch richiede `REGENERATE_HIGH_LEVEL_GOAL`, generazione/evaluation del replacement HLG, applicazione del replacement e generazione/evaluation obbligatoria dei nuovi LLG;
-7. se tutti i branch sono confermati, esecuzione della documentation coverage;
-8. se la coverage trova nuovi HLG, generazione/evaluation degli HLG mancanti e generazione/evaluation dei loro LLG;
-9. nuova iterazione sul nuovo stato corrente.
-
-Il ciclo converge soltanto quando:
-
-```text
-all_branches_confirmed == True
-AND
-documentation_coverage.status == COMPLETE
-```
-
-In caso di `MAX_ITERATIONS_REACHED`, repeated state o errore, `final_high_level_goals` e `final_low_level_goals` contengono l'ultimo stato corrente solo per diagnostica. Il mapping API deve usare tali campi come risultato definitivo soltanto quando `result.converged` è `True`.
-
-## 9. `semantic_similarity.py` — utility condivise
-
-Il modulo centralizza due controlli distinti:
-
-- **HLG duplicate detection**: impedisce l'introduzione di HLG semanticamente equivalenti per lo stesso attore;
-- **semantic repeated-state detection**: verifica se due collezioni HLG/LLG complete rappresentano sostanzialmente lo stesso stato anche con formulazioni leggermente diverse.
-
-Le soglie correnti sono:
+Le soglie attuali sono:
 
 ```python
 DEFAULT_HLG_DUPLICATE_SIMILARITY_THRESHOLD = 0.90
 DEFAULT_STATE_SIMILARITY_THRESHOLD = 0.92
 ```
 
-Sono parametri sperimentali e devono essere calibrati sui dataset della tesi. La similarità semantica è usata come guardia anti-duplicato e anti-loop, non come sostituto del Global Goal Evaluator.
+Sono parametri sperimentali e possono essere calibrati sui dataset utilizzati nella tesi.
 
-## 10. `src/data_model.py` — modelli condivisi
+---
 
-`src/data_model.py` è la sorgente unica dei modelli Pydantic condivisi dalla pipeline top-down e dall'estensione bottom-up.
+## 4. Modifiche nei moduli condivisi
 
-Per la logica corrente, `GlobalGoalEvaluationDecision` contiene soltanto:
+L’estensione utilizza anche alcuni componenti della pipeline originale.
 
-```python
-CONFIRM_BRANCH
-REGENERATE_HIGH_LEVEL_GOAL
-```
-
-`GlobalGoalEvaluationLLMOutput` impone che:
-
-- `CONFIRM_BRANCH` non contenga `generation_project_description`;
-- `REGENERATE_HIGH_LEVEL_GOAL` contenga una `generation_project_description` non vuota;
-- `matched_branch_id` sia sempre `None`.
-
-`GlobalGoalEvaluationResult` valida inoltre la proprietà fondamentale della nuova architettura:
+`src/data_model.py` contiene i modelli condivisi e formalizza le due decisioni del Global Goal Evaluator. In particolare:
 
 ```text
 REGENERATE_HIGH_LEVEL_GOAL
-=> requires_high_level_regeneration = True
-=> requires_low_level_regeneration = True
+        ↓
+requires_high_level_regeneration = True
+        ↓
+requires_low_level_regeneration = True
 ```
 
-In altre parole, la rigenerazione dell'HLG implica sempre la rigenerazione della sua decomposizione LLG.
+La rigenerazione dell’HLG implica quindi sempre la rigenerazione della sua decomposizione.
 
-Alcuni vecchi modelli dei precedenti esperimenti a tre stage possono essere conservati nel file esclusivamente come schema legacy, ma non vengono più importati o usati dal runtime corrente del Global Goal Evaluator.
+`src/extraction/extractor.py` espone le callback utilizzate dal ciclo per richiamare i generatori originali di HLG e LLG mantenendo attivi i relativi evaluator.
 
-## 11. Integrazione con il resto del progetto
+`src/llm_clients.py` centralizza invece i client utilizzati dai nuovi moduli, compreso il provider Groq per la valutazione, e definisce il limite `MAX_SEMANTIC_RETRIES`.
 
-Le principali dipendenze esterne al package `src/bottom_up/` restano:
+Gli evaluator e il reflection loop già presenti nella pipeline top-down continuano quindi a essere riutilizzati anche durante le correzioni introdotte dal bottom-up.
 
-- `src/data_model.py`: modelli condivisi;
-- `src/llm_clients.py`: client OpenAI/Groq e `MAX_SEMANTIC_RETRIES`;
-- `src/extraction/extractor.py`: generatori originali e callback valutate per HLG/LLG;
-- `src/self_critique/refine_response.py`: reflection loop degli evaluator originali;
-- `src/evaluation/goal_evaluator.py`: embeddings riutilizzati da `semantic_similarity.py`.
+---
 
-La fase di mapping LLG -> API rimane esterna al feedback loop e deve essere eseguita soltanto dopo una convergenza valida.
+## 5. Convergenza e condizioni di stop
 
-`extractor.py` non richiede una nuova architettura: contiene già il percorso focused per una `HighLevelGoalGenerationRequest`, il relativo HLG Generator -> HLG Evaluator loop e la rigenerazione selettiva LLG -> LLG Evaluator.
-
-`llm_clients.py` non richiede modifiche logiche per questa revisione: espone già i client usati dal reconstructor e dal Global Goal Evaluator e il limite condiviso dei semantic retry.
-
-## 12. Uso tipico
+Uno stato viene considerato realmente convergente soltanto quando:
 
 ```python
-from src.bottom_up.low_level_goal_mapper import (
-    create_low_level_mapping_files,
-    load_mapped_bottom_up_input,
-)
-from src.bottom_up.goal_cycle_orchestrator import run_global_goal_cycle
+all_branches_confirmed == True
+and
+documentation_coverage.status == COMPLETE
+```
+
+Il ciclo può comunque terminare senza convergere, ad esempio per:
+
+```text
+MAX_ITERATIONS_REACHED
+REPEATED_STATE_DETECTED
+SEMANTIC_REPEATED_STATE_DETECTED
+BOTTOM_UP_RECONSTRUCTION_FAILED
+GLOBAL_EVALUATION_FAILED
+DOCUMENTATION_COVERAGE_EVALUATION_FAILED
+HIGH_LEVEL_REGENERATION_FAILED
+LOW_LEVEL_REGENERATION_FAILED
+```
+
+In questi casi lo stato HLG/LLG corrente viene comunque restituito per permettere analisi e debugging, ma **non rappresenta automaticamente un risultato validato**.
+
+Questo è particolarmente importante quando la documentation coverage aggiunge nuovi branch nell’ultima iterazione disponibile: i nuovi HLG e LLG possono essere presenti nello snapshot finale senza aver ancora completato un successivo round-trip.
+
+---
+
+## 6. Integrazione nei notebook
+
+`01_pipeline_execution_updated_bottom_up.ipynb` integra il nuovo feedback loop nell’esecuzione sperimentale della pipeline.
+
+Le callback utilizzate dall’orchestrator vengono costruite attraverso:
+
+```python
 from src.extraction.extractor import (
     build_bottom_up_evaluated_generation_callbacks,
 )
-
-# 1. Carica/adatta una baseline top-down già prodotta
-mapped_files = create_low_level_mapping_files("path/to/topdown_output_dir")
-project_description, initial_hlgs, initial_llgs = load_mapped_bottom_up_input(
-    mapped_files[0]
-)
-
-# 2. Costruisci le callback che mantengono attivi gli evaluator originali
-generate_hlg_cb, regenerate_llg_cb = (
-    build_bottom_up_evaluated_generation_callbacks(
-        project_description=project_description,
-        mode=STANDALONE_PROMPTING_MODE,
-        evaluator_ablation=False,
-    )
-)
-
-# 3. Esegui il feedback loop
-result = run_global_goal_cycle(
-    project_description=project_description,
-    initial_high_level_goals=initial_hlgs,
-    initial_low_level_goals=initial_llgs,
-    generate_high_level_goals=generate_hlg_cb,
-    regenerate_low_level_goals=regenerate_llg_cb,
-    evaluation_output_directory="path/to/output_dir",
-)
-
-if result.converged:
-    final_hlgs = result.final_high_level_goals
-    final_llgs = result.final_low_level_goals
-    # Solo qui i goal sono pronti per il mapping API.
-else:
-    print(result.stop_reason)
 ```
 
-## 13. Limiti noti
+In questo modo un branch rigenerato segue sempre il percorso:
 
-### 13.1 Limiti di design espliciti
+```text
+Global Goal Evaluator
+        ↓
+HLG Generator
+        ↓
+HLG Evaluator
+        ↓
+LLG Generator
+        ↓
+LLG Evaluator
+        ↓
+nuova verifica bottom-up
+```
 
-- Il feedback loop parte da HLG/LLG già prodotti dalla pipeline top-down iniziale.
-- Il Global Goal Evaluator non genera mai direttamente il replacement HLG: prepara una richiesta per il generatore top-down originale.
-- Una divergenza locale non viene classificata come errore HLG o errore LLG: il branch viene rigenerato interamente da HLG in giù.
-- La documentation coverage viene eseguita solo dopo la conferma di tutti i branch correnti.
-- Gli HLG' ricostruiti sono segnali di discovery, non una seconda collezione di HLG finali e non vengono aggiunti direttamente allo stato.
-- `BRANCH_SPECIFICATIONS` del mapper rimane specifica per i dataset sperimentali correnti.
-- Le soglie di similarità semantica devono essere calibrate sperimentalmente.
-- Il numero massimo di iterazioni è limitato; se il branch continua a produrre un round-trip incoerente, il ciclo può terminare senza convergenza.
+La fase `LLG -> API` rimane invece esterna al ciclo e dovrebbe essere utilizzata come output definitivo soltanto quando `result.converged == True`.
 
-### 13.2 Condizioni di stop senza convergenza
+---
 
-Il ciclo può interrompersi prima della convergenza per:
+## 7. Valutazione sperimentale
 
-- `MAX_ITERATIONS_REACHED`;
-- `REPEATED_STATE_DETECTED`;
-- `SEMANTIC_REPEATED_STATE_DETECTED`;
-- `BOTTOM_UP_RECONSTRUCTION_FAILED`;
-- `GLOBAL_EVALUATION_FAILED`;
-- `DOCUMENTATION_COVERAGE_EVALUATION_FAILED`;
-- `HIGH_LEVEL_REGENERATION_FAILED`;
-- `LOW_LEVEL_REGENERATION_FAILED`.
+`02_experimental_evaluation_final.ipynb` è stato aggiornato per valutare non soltanto lo stato finale, ma anche la **traiettoria delle iterazioni** prodotte dal feedback loop.
 
-In questi casi l'ultimo HLG/LLG state viene conservato per traceability e analisi sperimentale, ma non deve essere interpretato come modello finale validato.
+Gli HLG e LLG generati vengono confrontati con la ground truth tramite embeddings, cosine similarity e matching one-to-one con algoritmo Hungarian. Dai match vengono calcolati **Precision, Recall e F1-score**, mentre cardinalità, proliferazione e duplicati semantici vengono utilizzati come metriche diagnostiche aggiuntive.
+
+Per il run sperimentale `SIA Project 25 26_FEW_SHOT_noLlama`, la ground truth contiene **9 HLG e 21 LLG**.
+
+| Stato          | Livello | # Goal | Precision | Recall |        F1 |
+| -------------- | ------: | -----: | --------: | -----: | --------: |
+| Baseline       |     HLG |      5 |     0.704 |  0.391 |     0.503 |
+| Returned state |     HLG |      9 |     0.628 |  0.628 | **0.628** |
+| Baseline       |     LLG |     12 |     0.731 |  0.417 |     0.531 |
+| Iteration 5    |     LLG |     19 |     0.664 |  0.601 | **0.631** |
+| Returned state |     LLG |     28 |     0.485 |  0.647 |     0.555 |
+
+Sul livello HLG il feedback loop aumenta soprattutto la copertura: il recall passa da **0.391 a 0.628**, mentre l’F1 passa da **0.503 a 0.628**.
+
+Per i LLG il miglior stato effettivamente sottoposto al round-trip è l’iterazione 5, con **F1 = 0.631**, rispetto a **0.531** della baseline. In questo punto sono presenti 19 LLG, un valore vicino ai 21 della ground truth.
+
+Dopo la conferma dei branch, la documentation coverage individua cinque intenzioni mancanti. Quattro nuovi HLG vengono effettivamente aggiunti dopo i controlli sui duplicati, portando lo snapshot restituito a **9 HLG e 28 LLG**.
+
+L’aumento della coverage migliora ulteriormente il recall LLG fino a **0.647**, ma porta la precision a **0.485**. I 28 LLG rappresentano infatti **7 goal in più rispetto ai 21 di riferimento (+33.3%)**, mostrando il principale rischio di proliferazione.
+
+Il run termina con:
+
+```text
+converged = false
+stop_reason = MAX_ITERATIONS_REACHED
+completed_iterations = 5
+```
+
+I quattro nuovi HLG introdotti dalla coverage nell’ultima iterazione non hanno quindi avuto una sesta iterazione in cui completare il proprio round-trip bottom-up.
+
+I risultati preliminari mostrano quindi un trade-off: il feedback loop migliora la **copertura semantica** e raggiunge un F1 superiore alla baseline prima della coverage finale, mentre l’aggiunta di nuove intenzioni può aumentare il recall a costo di una minore precisione.
+
+Per questo motivo la valutazione dell’estensione considera congiuntamente **Precision, Recall, F1, cardinalità, duplicazione, proliferazione e convergenza**, invece di utilizzare il solo aumento della coverage come indicatore di miglioramento.

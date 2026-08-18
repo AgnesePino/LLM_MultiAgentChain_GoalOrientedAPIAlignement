@@ -322,19 +322,137 @@ def _actor_object(name: str, source_index: int) -> dict[str, str]:
     }
 
 
+def _normalize_goal_name(name: str) -> str:
+    return " ".join(name.casefold().strip().split())
+
+
+def _map_structured_top_down_output(
+    payload: dict[str, Any],
+    source_path: Path,
+    destination_path: Path,
+) -> dict[str, Any]:
+    """Map the structured HLG/LLG copies written by the updated top-down notebook.
+
+    This path needs no hard-coded BRANCH_SPECIFICATIONS because every LLG
+    already carries its exact HighLevelGoal parent. It therefore remains valid
+    across fresh stochastic top-down runs with different goal cardinalities.
+    """
+    from src.data_model import HighLevelGoals, LowLevelGoals
+
+    high_level_goals = HighLevelGoals.model_validate(
+        payload["structuredHighLevelGoals"]
+    )
+    low_level_goals = LowLevelGoals.model_validate(
+        payload["structuredLowLevelGoals"]
+    )
+
+    normalized_to_index: dict[str, int] = {}
+    for index, hlg in enumerate(high_level_goals.goals):
+        key = _normalize_goal_name(hlg.name)
+        if key in normalized_to_index:
+            raise LowLevelGoalMappingError(
+                f"'{source_path.name}': duplicate structured HLG name "
+                f"'{hlg.name}' prevents deterministic branch assignment."
+            )
+        normalized_to_index[key] = index
+
+    grouped_llgs: list[list[Any]] = [
+        [] for _ in high_level_goals.goals
+    ]
+
+    for llg in low_level_goals.low_level_goals:
+        parent_key = _normalize_goal_name(llg.high_level_associated.name)
+        hlg_index = normalized_to_index.get(parent_key)
+        if hlg_index is None:
+            raise LowLevelGoalMappingError(
+                f"'{source_path.name}': structured LLG '{llg.name}' refers to "
+                f"unknown parent HLG '{llg.high_level_associated.name}'."
+            )
+        grouped_llgs[hlg_index].append(llg)
+
+    grouped_branches = []
+    for hlg_index, hlg in enumerate(high_level_goals.goals):
+        branch_llgs = grouped_llgs[hlg_index]
+        grouped_branches.append(
+            {
+                "branch_id": f"branch_{hlg_index + 1:03d}",
+                "high_level_goal": hlg.model_dump(mode="json"),
+                "low_level_goals": [
+                    llg.model_dump(mode="json") for llg in branch_llgs
+                ],
+                "source_low_level_goal_indices": [
+                    index
+                    for index, candidate in enumerate(low_level_goals.low_level_goals)
+                    if _normalize_goal_name(candidate.high_level_associated.name)
+                    == _normalize_goal_name(hlg.name)
+                ],
+                "is_empty_branch": not branch_llgs,
+            }
+        )
+
+    prompting_mode, no_llama = _infer_variant(source_path)
+    mapped = {
+        "schema_version": "2.0",
+        "status": "READY_FOR_BOTTOM_UP_RECONSTRUCTION",
+        "source": {
+            "file_name": source_path.name,
+            "dataset_name": payload["name"].strip(),
+            "prompting_mode": prompting_mode,
+            "no_llama": no_llama,
+            "mapping_strategy": "structured_parent_links",
+        },
+        "project_description": payload["description"],
+        "high_level_goals": high_level_goals.model_dump(mode="json"),
+        "low_level_goals": low_level_goals.model_dump(mode="json"),
+        "grouped_branches": grouped_branches,
+        "mapping_summary": {
+            "high_level_goal_count": len(high_level_goals.goals),
+            "low_level_goal_count": len(low_level_goals.low_level_goals),
+            "empty_branch_ids": [
+                branch["branch_id"]
+                for branch in grouped_branches
+                if branch["is_empty_branch"]
+            ],
+        },
+        "created_at_utc": _utc_timestamp(),
+    }
+
+    destination_path.parent.mkdir(parents=True, exist_ok=True)
+    destination_path.write_text(
+        json.dumps(mapped, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return mapped
+
+
 def map_low_level_goals(
     source_file: str | Path,
     destination_file: str | Path,
 ) -> dict[str, Any]:
-    """
-    Group existing LLGs under existing HLGs and write a bottom-up-ready JSON.
+    """Group top-down LLGs under their HLGs for bottom-up reconstruction.
 
-    No semantic goal generation or evaluation is performed here.
+    Preferred path: use the structured HLG/LLG copies written by the current
+    top-down notebook. Legacy flat repository outputs still fall back to the
+    historical BRANCH_SPECIFICATIONS table.
     """
     source_path = Path(source_file)
     destination_path = Path(destination_file)
 
     payload = _read_source_json(source_path)
+
+    if (
+        isinstance(payload.get("structuredHighLevelGoals"), dict)
+        and isinstance(payload.get("structuredLowLevelGoals"), dict)
+    ):
+        return _map_structured_top_down_output(
+            payload=payload,
+            source_path=source_path,
+            destination_path=destination_path,
+        )
+
+    # ------------------------------------------------------------------
+    # Legacy path for old flat outputs from the original experiment code.
+    # ------------------------------------------------------------------
     prompting_mode, no_llama = _infer_variant(source_path)
     dataset_name = payload["name"].strip()
 
@@ -349,8 +467,6 @@ def map_low_level_goals(
 
     _validate_mapping(source_path, payload, specification)
 
-    # Build the HLG objects from the text already extracted by the top-down
-    # phase, attaching to each the actor indicated by the specification.
     high_level_objects: list[dict[str, Any]] = []
     for hlg_index, (hlg_text, branch) in enumerate(
         zip(payload["highLevelGoals"], specification, strict=True)
@@ -369,8 +485,6 @@ def map_low_level_goals(
     low_level_objects: list[dict[str, Any]] = []
     grouped_branches: list[dict[str, Any]] = []
 
-    # For each branch, group the LLGs that belong to it (per the
-    # specification's indices) under its parent HLG.
     for hlg_index, branch in enumerate(specification):
         parent = high_level_objects[hlg_index]
         branch_llgs: list[dict[str, Any]] = []
@@ -404,6 +518,7 @@ def map_low_level_goals(
             "dataset_name": dataset_name,
             "prompting_mode": prompting_mode,
             "no_llama": no_llama,
+            "mapping_strategy": "legacy_branch_specifications",
         },
         "project_description": payload["description"],
         "high_level_goals": {"goals": high_level_objects},
@@ -427,7 +542,6 @@ def map_low_level_goals(
         encoding="utf-8",
     )
     return mapped
-
 
 def create_low_level_mapping_files(
     top_down_output_directory: str | Path,
