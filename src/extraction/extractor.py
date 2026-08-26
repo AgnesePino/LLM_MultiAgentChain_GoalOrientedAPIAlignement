@@ -1,28 +1,12 @@
-from src.examples.shot_learning import (
-    ShotPromptingMode,
-    example1_actors,
-    example2_actors,
-    example1_hl,
-    example2_hl,
-    example1_ll,
-    example2_ll,
-)
-from src.data_model import (
-    DocumentDescription,
-    Actors,
-    LowLevelGoals,
-    HighLevelGoals,
-    HighLevelGoalGenerationRequest,
-    LowLevelGoalRegenerationRequest,
-)
+from  src.examples.shot_learning import ShotPromptingMode, example1_actors, example2_actors, example3_actors, example1_hl, example2_hl, example3_hl, example1_ll, example2_ll, example3_ll
+from src.data_model import DocumentDescription,  Actors,  LowLevelGoals,  HighLevelGoals
 from src.utils import get_markdown
 from src.llm_clients import generate_response
 
-
 def generate_description(documentation_link=None):
-    if documentation_link is None:
+    if documentation_link == None:
         raise Exception("No documentation link provided")
-
+    
     sys_prompt = (
         "You are a technical writing assistant specialized in summarizing software documentation. "
         "Your goal is to extract a clear, well-written, and accurate description of a project from its README file. "
@@ -37,16 +21,16 @@ def generate_description(documentation_link=None):
         "Based on this README, write a well-structured description of the project. "
         "Explain its purpose, the problem it addresses (if mentioned), and its main functionalities. "
         "Do not include software implementation details"
+        #"Do not include implementation details, generic statements, or assumptions not explicitly stated in the README."
     )
+    
+    response = generate_response(prompt, sys_prompt, DocumentDescription)
+    
+    return response
 
-    return generate_response(prompt, sys_prompt, DocumentDescription)
 
+def generate_actors(project_description, feedback=None, mode=ShotPromptingMode.ZERO_SHOT):
 
-def generate_actors(
-    project_description,
-    feedback=None,
-    mode=ShotPromptingMode.ZERO_SHOT,
-):
     sys_prompt = (
         "You are a helpful assistant expert in software engineering tasks, specialized in extracting end-users roles from a high level description of a software project. \n"
         "Your task is to extract the actors (roles of end users of the system) from the given description.\n"
@@ -54,7 +38,7 @@ def generate_actors(
         "Each extracted actor name should be accompanied by a very short description.\n"
     )
 
-    if feedback is not None:
+    if feedback != None:
         print("Feedback provided!")
         sys_prompt += f"""
 
@@ -65,22 +49,16 @@ def generate_actors(
         **Previous attempt:**
         {feedback.previous_output}
 
+
         **Critique:**
         {feedback.critique}
+        
         """
     else:
         print("No feedback provided!")
-
-    examples = (
-        example1_actors
-        if mode == ShotPromptingMode.ONE_SHOT
-        else f"{example1_actors}, {example2_actors}"
-        if mode == ShotPromptingMode.FEW_SHOT
-        else ""
-    )
-
+    
     prompt = f"""
-        {examples}\n
+        {(example1_actors if mode == ShotPromptingMode.ONE_SHOT else f"{example1_actors}, {example2_actors}" if mode == ShotPromptingMode.FEW_SHOT else "")}\n
 
         Now extract the actors (roles of end users) from the following software description.
 
@@ -90,19 +68,13 @@ def generate_actors(
         **Output:**
     """
 
-    return generate_response(prompt, sys_prompt, Actors)
+    actors = generate_response(prompt, sys_prompt, Actors)
+
+    return actors
 
 
-def generate_high_level_goals(
-    project_description,
-    actors,
-    feedback=None,
-    mode=ShotPromptingMode.ZERO_SHOT,
-    *,
-    focused_request: bool = False,
-    generation_guidance: str | None = None,
-):
-    # Original repository prompt.
+#------------------------------------------- Define high level goals from description
+def generate_high_level_goals(project_description, actors, feedback=None, mode=ShotPromptingMode.ZERO_SHOT):
     sys_prompt = (
         "You are a helpful assistant expert in software engineering tasks."
         "You're tasked to extract high level goals from a software description for each provided actor that is expected to interact with the software."
@@ -110,26 +82,13 @@ def generate_high_level_goals(
         "They are usually abstract, business-oriented, and independent of technical implementation. They represent the needs of stakeholders or the organization. "
         "Focus: Vision and justification. "
         "Generate ONLY the functional goals."
+
+        #" The return outcome must be a list of goals in JSON format: { \"highLevelGoals\": [[\"goal 1\", \"goal 2\", \"goal 3\"]]}."
+        #" Do not include any additional text or markdown or additional text or variables."
     )
 
-    # Bottom-up-only extension; never used in the normal top-down call.
-    if focused_request:
-        sys_prompt += (
-            "\n\nFOCUSED BOTTOM-UP REGENERATION:\n"
-            "Generate exactly ONE High-Level Goal representing the single "
-            "stakeholder intention described in the supplied focused input. "
-            "Keep it at WHY level and do not infer unrelated goals."
-        )
 
-    if generation_guidance is not None and generation_guidance.strip():
-        sys_prompt += (
-            "\n\nBOTTOM-UP CORRECTION GUIDANCE:\n"
-            f"{generation_guidance.strip()}\n"
-            "Use the guidance only to correct the requested scope; do not "
-            "introduce unsupported facts."
-        )
-
-    if feedback is not None:
+    if feedback != None:
         print("Feedback provided!")
         sys_prompt += f"""
 
@@ -137,8 +96,10 @@ def generate_high_level_goals(
         The critique contains comments about high level goals, please take it into account when generating high level goals: with respect to the previous attempt,
         modify only what is mentioned in the critique.
 
+        
         **Previous attempt:**
         {feedback.previous_output}
+
 
         **Critique:**
         {feedback.critique}
@@ -148,30 +109,11 @@ def generate_high_level_goals(
 
     print("This is the provided sys prompt: ", sys_prompt)
 
-    examples = (
-        example1_hl
-        if mode == ShotPromptingMode.ONE_SHOT
-        else f"{example1_hl}, {example2_hl}"
-        if mode == ShotPromptingMode.FEW_SHOT
-        else ""
-    )
-
-    if focused_request:
-        task_instruction = (
-            "generate exactly one high level goal for the single stakeholder "
-            "intention represented by the following focused description."
-        )
-    else:
-        task_instruction = (
-            "based on your understanding of the typical needs and interests "
-            "of the following actors in the following software project, "
-            "generate a list of high level goals."
-        )
-
     prompt = f"""
-        {examples}\n
-
-        \nYour task: {task_instruction}\n
+        {(example1_hl if mode == ShotPromptingMode.ONE_SHOT else f"{example1_hl}, {example2_hl}" if mode == ShotPromptingMode.FEW_SHOT else "")}\n
+        
+        \nYour task: based on your understanding of the typical needs and interests of the following actors in the following software project, generate a list of high level goals.\n
+        
 
         **Description:** \n\n
         {project_description}\n
@@ -180,19 +122,15 @@ def generate_high_level_goals(
         {actors}\n
 
         **Output:**
-    """
+        """
 
-    return generate_response(prompt, sys_prompt, HighLevelGoals)
+    high_level_goals = generate_response(prompt, sys_prompt, HighLevelGoals)
+
+    return high_level_goals
 
 
-def generate_low_level_goals(
-    highLevelGoals,
-    feedback=None,
-    mode=ShotPromptingMode.ZERO_SHOT,
-    *,
-    generation_guidance: str | None = None,
-):
-    # Original repository prompt.
+#------------------------------------------- Define low level goals from high level goals
+def generate_low_level_goals(highLevelGoals, feedback=None, mode=ShotPromptingMode.ZERO_SHOT):
     sys_prompt = (
         "You are a helpful assistant expert in software engineering tasks. "
         "Elicit low-level goals for a specific stakeholder in a software project. "
@@ -206,16 +144,7 @@ def generate_low_level_goals(
         "Generate ONLY the functional goals."
     )
 
-    # Bottom-up-only extension; inert in normal top-down calls.
-    if generation_guidance is not None and generation_guidance.strip():
-        sys_prompt += (
-            "\n\nBOTTOM-UP DECOMPOSITION GUIDANCE:\n"
-            f"{generation_guidance.strip()}\n"
-            "Regenerate only the supplied HLG scope and do not introduce "
-            "unsupported functionality."
-        )
-
-    if feedback is not None:
+    if feedback != None:
         print("Feedback provided!")
         sys_prompt += f"""
 
@@ -223,186 +152,33 @@ def generate_low_level_goals(
         The critique contains comments about low-level goals, please take it into account when generating low-level goals: with respect to the previous attempt,
         modify only what is mentioned in the critique.
 
+
         **Previous attempt:**
         {feedback.previous_output}\n
-
+        
+        
+        
         **Critique:**
         {feedback.critique}\n
+        
         """
     else:
         print("No feedback provided!")
 
     print("This is the provided sys prompt: ", sys_prompt)
 
-    examples = (
-        example1_ll
-        if mode == ShotPromptingMode.ONE_SHOT
-        else f"{example1_ll}, {example2_ll}"
-        if mode == ShotPromptingMode.FEW_SHOT
-        else ""
-    )
+    prompt = f""" 
 
-    prompt = f"""
-        {examples}\n
-
-        \nYour task: based on your understanding of the typical tasks that compose the following sequence of high-level goals,
-        provide if possible a decomposition of goals into sub-goals.
+        {(example1_ll if mode == ShotPromptingMode.ONE_SHOT else f"{example1_ll}, {example2_ll}" if mode == ShotPromptingMode.FEW_SHOT else "")}\n
+         \nYour task: based on your understanding of the typical tasks that compose the following sequence of high-level goals,
+        provide if possible a decomposition of goals into sub-goals. 
         Each low-level goal should theoretically correspond to a single action of the actor with the software.
-
         **High-level goals:**\n\n
         {highLevelGoals}\n
 
         **Output:**
     """
 
-    return generate_response(prompt, sys_prompt, LowLevelGoals)
+    lowLevelGoals = generate_response(prompt, sys_prompt, LowLevelGoals)
 
-
-# ---------------------------------------------------------------------------
-# Bottom-up adapters
-# The original top-down functions above remain the single generators.
-# ---------------------------------------------------------------------------
-
-def generate_evaluated_high_level_goals_from_request(
-    request: HighLevelGoalGenerationRequest,
-    mode=ShotPromptingMode.ZERO_SHOT,
-    evaluator_ablation: bool = False,
-) -> HighLevelGoals:
-    if not isinstance(request, HighLevelGoalGenerationRequest):
-        raise TypeError("request must be a HighLevelGoalGenerationRequest instance.")
-
-    from src.self_critique.refine_response import (
-        EvalMode,
-        generate_response_with_reflection,
-    )
-
-    def _focused_generator(*, feedback=None, mode=mode):
-        return generate_high_level_goals(
-            project_description=request.generator_input.project_description,
-            actors=request.generator_input.actors,
-            feedback=feedback,
-            mode=mode,
-            focused_request=True,
-            generation_guidance=(
-                request.generator_guidance or request.rationale
-            ),
-        )
-
-    result, _, _ = generate_response_with_reflection(
-        target_type="Focused High Level Goal",
-        call_function=_focused_generator,
-        define_args=(),
-        eval_mode=EvalMode.HIGH_LEVEL,
-        eval_args=(
-            request.generator_input.project_description,
-            request.generator_input.actors,
-        ),
-        shotPromptingMode=mode,
-        llama_ablation=evaluator_ablation,
-        focused_scope=True,
-    )
-
-    if not isinstance(result, HighLevelGoals):
-        raise TypeError("The evaluated HLG pipeline did not return HighLevelGoals.")
-
-    if len(result.goals) != 1:
-        raise ValueError(
-            "A focused bottom-up HLG request must return exactly one HLG; "
-            f"received {len(result.goals)}."
-        )
-
-    return result
-
-
-def _actors_from_high_level_goals(high_level_goals: HighLevelGoals) -> Actors:
-    actors = []
-    seen = set()
-
-    for goal in high_level_goals.goals:
-        key = " ".join(goal.actor.name.casefold().split())
-        if key in seen:
-            continue
-        seen.add(key)
-        actors.append(goal.actor)
-
-    return Actors(actors=actors)
-
-
-def regenerate_evaluated_low_level_goals(
-    request: LowLevelGoalRegenerationRequest,
-    *,
-    project_description: str,
-    mode=ShotPromptingMode.ZERO_SHOT,
-    evaluator_ablation: bool = False,
-) -> LowLevelGoals:
-    if not isinstance(request, LowLevelGoalRegenerationRequest):
-        raise TypeError("request must be a LowLevelGoalRegenerationRequest instance.")
-
-    from src.self_critique.refine_response import (
-        EvalMode,
-        generate_response_with_reflection,
-    )
-
-    actors = _actors_from_high_level_goals(request.high_level_goals)
-
-    guidance_parts = [
-        f"- {parent_name}: {guidance}"
-        for parent_name, guidance in request.guidance_by_parent_name.items()
-    ]
-    guidance = (
-        "Regenerate only the supplied HLG branches.\n" + "\n".join(guidance_parts)
-        if guidance_parts
-        else "Regenerate a complete decomposition only for the supplied HLG branches."
-    )
-
-    def _focused_generator(*, feedback=None, mode=mode):
-        return generate_low_level_goals(
-            request.high_level_goals,
-            feedback=feedback,
-            mode=mode,
-            generation_guidance=guidance,
-        )
-
-    result, _, _ = generate_response_with_reflection(
-        target_type="Low Level Goals",
-        call_function=_focused_generator,
-        define_args=(),
-        eval_mode=EvalMode.LOW_LEVEL,
-        eval_args=(
-            project_description,
-            actors,
-            request.high_level_goals,
-        ),
-        shotPromptingMode=mode,
-        llama_ablation=evaluator_ablation,
-        focused_scope=True,
-    )
-
-    if not isinstance(result, LowLevelGoals):
-        raise TypeError("The evaluated LLG pipeline did not return LowLevelGoals.")
-
-    return result
-
-
-def build_bottom_up_evaluated_generation_callbacks(
-    *,
-    project_description: str,
-    mode=ShotPromptingMode.ZERO_SHOT,
-    evaluator_ablation: bool = False,
-):
-    def _generate_hlg(request: HighLevelGoalGenerationRequest) -> HighLevelGoals:
-        return generate_evaluated_high_level_goals_from_request(
-            request,
-            mode=mode,
-            evaluator_ablation=evaluator_ablation,
-        )
-
-    def _regenerate_llg(request: LowLevelGoalRegenerationRequest) -> LowLevelGoals:
-        return regenerate_evaluated_low_level_goals(
-            request,
-            project_description=project_description,
-            mode=mode,
-            evaluator_ablation=evaluator_ablation,
-        )
-
-    return _generate_hlg, _regenerate_llg
+    return lowLevelGoals

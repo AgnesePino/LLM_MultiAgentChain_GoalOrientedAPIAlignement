@@ -2,7 +2,12 @@
 
 ## Overview
 
-This repository presents a system that automates the alignment of high-level goals with API endpoints using Goal-Oriented Requirements Engineering (GORE) principles and Large Language Models (LLMs). The system extracts goals from natural language requirement documents, decomposes them into structured objectives, and maps them to corresponding API endpoints. This approach enhances the automation of software requirement analysis by translating system goals into actionable API calls.
+This repository extracts goal hierarchies from software documentation using
+Goal-Oriented Requirements Engineering (GORE) and Large Language Models. The
+top-down pipeline produces Actors, High-Level Goals (HLGs), and Low-Level Goals
+(LLGs). A bottom-up feedback cycle then reconstructs HLGs from their LLGs to
+confirm branches, repair or remove unsupported goals, discover missing goals,
+and regenerate incomplete decompositions before API mapping.
 
 ## Architecture: LLM Multi-Agent Chain
 
@@ -33,7 +38,9 @@ Ensure you have Python installed along with the necessary dependencies.
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run the notebook experiments.ipynb in notebook folder**
+3. Run `notebook/01_pipeline_execution_top_down_only.ipynb`.
+4. Run `notebook/01_pipeline_execution_bottom_up_only.ipynb`.
+5. Optionally run `notebook/02_experimental_evaluation_top_down_vs_bottom_up.ipynb`.
 
 ## License
 

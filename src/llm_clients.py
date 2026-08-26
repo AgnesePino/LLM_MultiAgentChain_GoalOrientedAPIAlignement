@@ -19,8 +19,6 @@ from openai import APIStatusError, OpenAI, RateLimitError
 from key import get_key_openai, get_key_llama, count_Llama_keys
 
 
-MAX_SEMANTIC_RETRIES = 3
-
 OPENAI_STRUCTURED_MODEL = os.getenv("OPENAI_STRUCTURED_MODEL", "gpt-4o-mini")
 OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4o")
 

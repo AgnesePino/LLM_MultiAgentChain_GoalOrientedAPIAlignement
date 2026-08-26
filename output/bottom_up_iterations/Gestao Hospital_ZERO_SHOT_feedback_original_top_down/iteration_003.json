@@ -1,0 +1,419 @@
+{
+  "iteration": 3,
+  "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Enhance hospital operational efficiency and resource management to improve patient care.",
+      "rationale": "All the low-level goals focus on optimizing the allocation of medical staff and equipment, analyzing patient flow, and improving decision-making processes. Together, they aim to streamline hospital operations, reduce waste, and ensure that resources are effectively utilized to enhance overall patient care.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "Allocate Resources",
+        "Track Resource Utilization",
+        "Analyze Patient Flow",
+        "Generate Efficiency Reports",
+        "Implement Waste Reduction Strategies",
+        "Find Nearest Hospital with Capacity",
+        "Track Patient Admissions and Discharges"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Manage patient records and visit logs in the healthcare system.",
+      "rationale": "These low-level goals are all focused on the management of patient information within a healthcare system, including registration, updates, and logging visits, which are essential for maintaining accurate and comprehensive patient records.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Register Patient",
+        "Update Patient Information",
+        "Log Patient Visit"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Facilitate the selection of the nearest hospital with available capacity for patient care.",
+      "rationale": "All the low-level goals are focused on determining the best hospital option for a patient based on their current location and the availability of services, which is essential for timely medical assistance.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "Get patient current location",
+        "Fetch list of hospitals within a specified radius",
+        "Check availability of each hospital",
+        "Calculate distance to each hospital",
+        "Select the nearest hospital with capacity"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Enhance public health decision-making through comprehensive data analysis and reporting.",
+      "rationale": "All the low-level goals focus on utilizing API calls to gather and analyze data related to hospital capacity, resource management, and public health trends. Together, they aim to provide a holistic view of public health resources and challenges, which is essential for informed decision-making and effective public health management.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Retrieve Hospital Capacity Data",
+        "Generate Reports on Resource Management",
+        "Monitor Public Health Trends"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "The original High-Level Goal 'Enhance Operational Efficiency' is directly supported by the project description, which explicitly states the primary goal is to 'enhance the efficiency of the SUS by organizing hospital resources, minimizing waste, and optimizing patient care.' The goal is appropriately scoped for the 'Healthcare Administrators' actor, who are responsible for overseeing these operations. It is not too generic (it specifies the domain of SUS/hospital operations), not too narrow (it covers the broad aim of efficiency), and faithful to the source text. The bottom-up reconstruction is similar but the original is sufficiently precise and aligned with the stated primary goal. The current LLGs are inconsistent with the project description and the parent HLG. The project description explicitly lists functionalities such as registering hospitals, managing inventories (supplies/blood), and tracking patient admissions/discharges. However, the current LLGs focus heavily on abstract management tasks like 'Allocate Resources' (staff), 'Track Resource Utilization' (equipment), and 'Implement Waste Reduction Strategies', which are not supported by the specific functional requirements listed in the project description. Furthermore, the actor 'Healthcare Administrators' is assigned to 'Find Nearest Hospital with Capacity', which is typically a patient-facing or triage function, not an administrative one. The LLGs are too operational in some aspects (specific implementation strategies) and unsupported in others (staff allocation is not mentioned in the scope). Therefore, they need to be regenerated to align with the specific features: Hospital Registration, Inventory Management, Patient Tracking, and Capacity Finding.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Enhance Operational Efficiency' is directly supported by the project description, which explicitly states the primary goal is to 'enhance the efficiency of the SUS by organizing hospital resources, minimizing waste, and optimizing patient care.' The goal is appropriately scoped for the 'Healthcare Administrators' actor, who are responsible for overseeing these operations. It is not too generic (it specifies the domain of SUS/hospital operations), not too narrow (it covers the broad aim of efficiency), and faithful to the source text. The bottom-up reconstruction is similar but the original is sufficiently precise and aligned with the stated primary goal.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The current LLGs are inconsistent with the project description and the parent HLG. The project description explicitly lists functionalities such as registering hospitals, managing inventories (supplies/blood), and tracking patient admissions/discharges. However, the current LLGs focus heavily on abstract management tasks like 'Allocate Resources' (staff), 'Track Resource Utilization' (equipment), and 'Implement Waste Reduction Strategies', which are not supported by the specific functional requirements listed in the project description. Furthermore, the actor 'Healthcare Administrators' is assigned to 'Find Nearest Hospital with Capacity', which is typically a patient-facing or triage function, not an administrative one. The LLGs are too operational in some aspects (specific implementation strategies) and unsupported in others (staff allocation is not mentioned in the scope). Therefore, they need to be regenerated to align with the specific features: Hospital Registration, Inventory Management, Patient Tracking, and Capacity Finding.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "The current LLGs do not accurately reflect the specific functionalities described in the project scope. Please regenerate LLGs that directly map to: 1) Registering and managing hospital information (location, beds), 2) Managing hospital inventories (supplies, blood bank), 3) Tracking patient admissions and discharges, and 4) Identifying the nearest hospital with available capacity. Ensure the actors are correctly assigned (e.g., Administrators for registration/inventory, Patients/Triage for finding hospitals). Remove unsupported goals like 'Allocate Staff' or 'Implement Waste Reduction Strategies' as they are not part of the defined scope.",
+        "unsupported_or_misleading_llg_ids": [
+          "Allocate Resources",
+          "Track Resource Utilization",
+          "Analyze Patient Flow",
+          "Generate Efficiency Reports",
+          "Implement Waste Reduction Strategies",
+          "Find Nearest Hospital with Capacity",
+          "Track Patient Admissions and Discharges"
+        ],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "The original High-Level Goal 'Streamline Patient Management' is supported by the project description, which explicitly mentions 'Tracking patient admissions and discharges' and 'Providing detailed information about... patient records'. The actor 'Hospital Staff' is correctly identified as the user who needs to 'access and update patient... information'. The goal is reasonably scoped, focusing on the functional intention of managing patient data to ensure effective care, which aligns with the project's aim to optimize patient care. It is not too generic (it specifies patient management), not too narrow (it covers registration and tracking), and faithful to the reconstruction. Therefore, it should be kept. The current LLGs are too operational and incomplete. The descriptions explicitly mention 'Make an API call', which is an implementation detail rather than a functional goal. Furthermore, the HLG 'Streamline Patient Management' includes 'tracking' patients, which implies monitoring their status (e.g., admission, discharge, current location/status) to ensure timely care. The current LLGs cover registration and updates but lack a specific goal for tracking patient status or managing admissions/discharges, which are critical for 'streamlining' management in a hospital context. Therefore, they need regeneration to be more goal-oriented and complete.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Streamline Patient Management' is supported by the project description, which explicitly mentions 'Tracking patient admissions and discharges' and 'Providing detailed information about... patient records'. The actor 'Hospital Staff' is correctly identified as the user who needs to 'access and update patient... information'. The goal is reasonably scoped, focusing on the functional intention of managing patient data to ensure effective care, which aligns with the project's aim to optimize patient care. It is not too generic (it specifies patient management), not too narrow (it covers registration and tracking), and faithful to the reconstruction. Therefore, it should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The current LLGs are too operational and incomplete. The descriptions explicitly mention 'Make an API call', which is an implementation detail rather than a functional goal. Furthermore, the HLG 'Streamline Patient Management' includes 'tracking' patients, which implies monitoring their status (e.g., admission, discharge, current location/status) to ensure timely care. The current LLGs cover registration and updates but lack a specific goal for tracking patient status or managing admissions/discharges, which are critical for 'streamlining' management in a hospital context. Therefore, they need regeneration to be more goal-oriented and complete.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "The current LLGs are too operational (focusing on API calls) and incomplete (missing tracking/admission aspects). Please regenerate LLGs that focus on the functional outcomes: 1. Register new patients with necessary demographic and medical data. 2. Update patient records to reflect changes in health status or personal details. 3. Track patient admissions and discharges to monitor hospital occupancy and patient flow. 4. Retrieve patient history and current status for clinical decision-making. Avoid mentioning technical implementation details like 'API calls' in the goal descriptions.",
+        "unsupported_or_misleading_llg_ids": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "The original High-Level Goal is directly supported by the project description, which explicitly lists 'Identifying the nearest hospital with available capacity for patients based on their location' as a key functionality. The goal is reasonably scoped, specific to the actor (Patients), and clearly defines the functional intention without being overly generic or ambiguous. The bottom-up reconstruction is semantically equivalent but less precise regarding the 'location' aspect which is central to the 'nearest' logic. Therefore, the original goal should be kept. The current Low-Level Goals (LLGs) correctly and completely decompose the High-Level Goal (HLG). The HLG requires identifying the nearest hospital with available capacity based on patient location. The LLGs break this down into logical, necessary steps: 1) Obtaining the patient's location, 2) Fetching nearby hospitals, 3) Checking their availability, 4) Calculating distances, and 5) Selecting the optimal one. These steps are consistent with the project description, which mentions managing hospital information (location, beds) and identifying the nearest hospital. The goals are not too operational (they describe 'what' needs to be done, not 'how' to implement the code), not too narrow (they cover the full scope of the HLG), and are supported by the system's stated functionalities. Therefore, no regeneration is needed.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal is directly supported by the project description, which explicitly lists 'Identifying the nearest hospital with available capacity for patients based on their location' as a key functionality. The goal is reasonably scoped, specific to the actor (Patients), and clearly defines the functional intention without being overly generic or ambiguous. The bottom-up reconstruction is semantically equivalent but less precise regarding the 'location' aspect which is central to the 'nearest' logic. Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The current Low-Level Goals (LLGs) correctly and completely decompose the High-Level Goal (HLG). The HLG requires identifying the nearest hospital with available capacity based on patient location. The LLGs break this down into logical, necessary steps: 1) Obtaining the patient's location, 2) Fetching nearby hospitals, 3) Checking their availability, 4) Calculating distances, and 5) Selecting the optimal one. These steps are consistent with the project description, which mentions managing hospital information (location, beds) and identifying the nearest hospital. The goals are not too operational (they describe 'what' needs to be done, not 'how' to implement the code), not too narrow (they cover the full scope of the HLG), and are supported by the system's stated functionalities. Therefore, no regeneration is needed.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "The original High-Level Goal 'Support Public Health Oversight' is supported by the project description, which explicitly states the goal is to 'enhance the efficiency of the SUS' and 'improve operational aspects' through resource organization and patient management. The actor 'Public Health Officials' is defined as overseeing policies and ensuring effective functioning. The original goal accurately captures the strategic intent of enabling these officials to monitor the system's effectiveness. The bottom-up reconstruction suggests 'data analysis and reporting,' which is a means to an end, whereas the original goal correctly identifies the higher-level purpose (oversight/evaluation). The original goal is not too generic, ambiguous, or incorrectly scoped; it aligns well with the actor's responsibilities and the project's aim to optimize resource allocation and patient care for oversight purposes. The current Low-Level Goals (LLGs) are too operational and narrow. They focus on specific API actions ('Make an API call to...') rather than the functional capabilities or value provided to the actor. For example, 'Retrieve Hospital Capacity Data' is a technical step, whereas a proper LLG should be 'View Real-Time Hospital Availability'. Furthermore, the decomposition is incomplete regarding the parent HLG's scope of 'evaluating effectiveness'. The current LLGs cover monitoring (capacity, trends) and reporting, but they lack goals related to evaluating specific resource management aspects mentioned in the project description, such as inventory levels or patient flow efficiency, which are crucial for 'oversight'. The descriptions are also misleading by framing user goals as backend API calls.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Support Public Health Oversight' is supported by the project description, which explicitly states the goal is to 'enhance the efficiency of the SUS' and 'improve operational aspects' through resource organization and patient management. The actor 'Public Health Officials' is defined as overseeing policies and ensuring effective functioning. The original goal accurately captures the strategic intent of enabling these officials to monitor the system's effectiveness. The bottom-up reconstruction suggests 'data analysis and reporting,' which is a means to an end, whereas the original goal correctly identifies the higher-level purpose (oversight/evaluation). The original goal is not too generic, ambiguous, or incorrectly scoped; it aligns well with the actor's responsibilities and the project's aim to optimize resource allocation and patient care for oversight purposes.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The current Low-Level Goals (LLGs) are too operational and narrow. They focus on specific API actions ('Make an API call to...') rather than the functional capabilities or value provided to the actor. For example, 'Retrieve Hospital Capacity Data' is a technical step, whereas a proper LLG should be 'View Real-Time Hospital Availability'. Furthermore, the decomposition is incomplete regarding the parent HLG's scope of 'evaluating effectiveness'. The current LLGs cover monitoring (capacity, trends) and reporting, but they lack goals related to evaluating specific resource management aspects mentioned in the project description, such as inventory levels or patient flow efficiency, which are crucial for 'oversight'. The descriptions are also misleading by framing user goals as backend API calls.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "The LLGs should be reframed from the perspective of the Public Health Official's needs, not the system's API endpoints. Avoid phrases like 'Make an API call'. Instead, use action-oriented verbs describing the outcome, such as 'Monitor', 'Analyze', 'Evaluate', or 'Generate'. Ensure the goals cover the full scope of 'oversight' and 'resource management effectiveness', including inventory and patient flow, not just capacity and general trends.",
+        "unsupported_or_misleading_llg_ids": [
+          "Retrieve Hospital Capacity Data",
+          "Generate Reports on Resource Management",
+          "Monitor Public Health Trends"
+        ],
+        "confidence": "HIGH"
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Enhance Operational Efficiency",
+        "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+        "actor": {
+          "name": "Healthcare Administrators",
+          "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+        }
+      },
+      {
+        "name": "Streamline Patient Management",
+        "description": "Facilitate the registration and tracking of patients within the health system to ensure timely and effective care.",
+        "actor": {
+          "name": "Hospital Staff",
+          "description": "Medical professionals and support staff working in hospitals who need to access and update patient and resource information."
+        }
+      },
+      {
+        "name": "Identify the nearest hospital with available capacity based on patient location",
+        "description": "The system should determine the closest hospital that can accommodate the patient, taking into account their current geographical location.",
+        "actor": {
+          "name": "Patients",
+          "description": "Individuals seeking medical care who need to be registered and tracked within the health system."
+        }
+      },
+      {
+        "name": "Support Public Health Oversight",
+        "description": "Enable public health officials to monitor and evaluate the effectiveness of the SUS and its resource management.",
+        "actor": {
+          "name": "Public Health Officials",
+          "description": "Government representatives who oversee public health policies and ensure the effective functioning of the health system."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Register Patient",
+        "description": "Make an API call to register a new patient in the system with their personal and medical information.",
+        "high_level_associated": {
+          "name": "Streamline Patient Management",
+          "description": "Facilitate the registration and tracking of patients within the health system to ensure timely and effective care.",
+          "actor": {
+            "name": "Hospital Staff",
+            "description": "Medical professionals and support staff working in hospitals who need to access and update patient and resource information."
+          }
+        }
+      },
+      {
+        "name": "Update Patient Information",
+        "description": "Make an API call to update existing patient information in the system, including changes in medical history or contact details.",
+        "high_level_associated": {
+          "name": "Streamline Patient Management",
+          "description": "Facilitate the registration and tracking of patients within the health system to ensure timely and effective care.",
+          "actor": {
+            "name": "Hospital Staff",
+            "description": "Medical professionals and support staff working in hospitals who need to access and update patient and resource information."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Hospital Capacity Data",
+        "description": "Make an API call to retrieve real-time data on hospital capacity and availability for public health monitoring.",
+        "high_level_associated": {
+          "name": "Support Public Health Oversight",
+          "description": "Enable public health officials to monitor and evaluate the effectiveness of the SUS and its resource management.",
+          "actor": {
+            "name": "Public Health Officials",
+            "description": "Government representatives who oversee public health policies and ensure the effective functioning of the health system."
+          }
+        }
+      },
+      {
+        "name": "Generate Reports on Resource Management",
+        "description": "Make an API call to generate reports that summarize resource management effectiveness and areas for improvement.",
+        "high_level_associated": {
+          "name": "Support Public Health Oversight",
+          "description": "Enable public health officials to monitor and evaluate the effectiveness of the SUS and its resource management.",
+          "actor": {
+            "name": "Public Health Officials",
+            "description": "Government representatives who oversee public health policies and ensure the effective functioning of the health system."
+          }
+        }
+      },
+      {
+        "name": "Log Patient Visit",
+        "description": "Make an API call to log a patient's visit to the hospital, including the date, time, and reason for the visit.",
+        "high_level_associated": {
+          "name": "Streamline Patient Management",
+          "description": "Facilitate the registration and tracking of patients within the health system to ensure timely and effective care.",
+          "actor": {
+            "name": "Hospital Staff",
+            "description": "Medical professionals and support staff working in hospitals who need to access and update patient and resource information."
+          }
+        }
+      },
+      {
+        "name": "Monitor Public Health Trends",
+        "description": "Make an API call to analyze public health data trends over time to identify potential health crises.",
+        "high_level_associated": {
+          "name": "Support Public Health Oversight",
+          "description": "Enable public health officials to monitor and evaluate the effectiveness of the SUS and its resource management.",
+          "actor": {
+            "name": "Public Health Officials",
+            "description": "Government representatives who oversee public health policies and ensure the effective functioning of the health system."
+          }
+        }
+      },
+      {
+        "name": "Get patient current location",
+        "description": "Retrieve the geographical coordinates of the patient using GPS or manual input.",
+        "high_level_associated": {
+          "name": "Identify the nearest hospital with available capacity based on patient location",
+          "description": "The system should determine the closest hospital that can accommodate the patient, taking into account their current geographical location.",
+          "actor": {
+            "name": "Patients",
+            "description": "Individuals seeking medical care who need to be registered and tracked within the health system."
+          }
+        }
+      },
+      {
+        "name": "Fetch list of hospitals within a specified radius",
+        "description": "Request a list of hospitals that are located within a certain distance from the patient's current location.",
+        "high_level_associated": {
+          "name": "Identify the nearest hospital with available capacity based on patient location",
+          "description": "The system should determine the closest hospital that can accommodate the patient, taking into account their current geographical location.",
+          "actor": {
+            "name": "Patients",
+            "description": "Individuals seeking medical care who need to be registered and tracked within the health system."
+          }
+        }
+      },
+      {
+        "name": "Check availability of each hospital",
+        "description": "For each hospital in the list, check if there is available capacity to accommodate the patient.",
+        "high_level_associated": {
+          "name": "Identify the nearest hospital with available capacity based on patient location",
+          "description": "The system should determine the closest hospital that can accommodate the patient, taking into account their current geographical location.",
+          "actor": {
+            "name": "Patients",
+            "description": "Individuals seeking medical care who need to be registered and tracked within the health system."
+          }
+        }
+      },
+      {
+        "name": "Calculate distance to each hospital",
+        "description": "Compute the distance from the patient's current location to each hospital that has available capacity.",
+        "high_level_associated": {
+          "name": "Identify the nearest hospital with available capacity based on patient location",
+          "description": "The system should determine the closest hospital that can accommodate the patient, taking into account their current geographical location.",
+          "actor": {
+            "name": "Patients",
+            "description": "Individuals seeking medical care who need to be registered and tracked within the health system."
+          }
+        }
+      },
+      {
+        "name": "Select the nearest hospital with capacity",
+        "description": "Identify the hospital that is closest to the patient and has available capacity.",
+        "high_level_associated": {
+          "name": "Identify the nearest hospital with available capacity based on patient location",
+          "description": "The system should determine the closest hospital that can accommodate the patient, taking into account their current geographical location.",
+          "actor": {
+            "name": "Patients",
+            "description": "Individuals seeking medical care who need to be registered and tracked within the health system."
+          }
+        }
+      },
+      {
+        "name": "Allocate Medical Staff",
+        "description": "Use the resource allocation API to assign medical staff to departments based on current patient load.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Update Equipment Availability",
+        "description": "Call the equipment management API to update the availability status of medical equipment based on current usage.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Analyze Resource Utilization",
+        "description": "Retrieve and analyze resource utilization data through the analytics API to identify underutilized resources.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Generate Efficiency Reports",
+        "description": "Use the reporting API to generate reports on operational efficiency metrics and resource allocation effectiveness.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Implement Shift Scheduling",
+        "description": "Call the scheduling API to optimize staff shift schedules based on predicted patient flow and peak hours.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Monitor Patient Admissions",
+        "description": "Use the patient flow API to monitor real-time patient admissions and discharges to adjust resource allocation dynamically.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Request Additional Resources",
+        "description": "Utilize the resource request API to submit requests for additional medical supplies or staff when current resources are insufficient.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      },
+      {
+        "name": "Track Resource Allocation Changes",
+        "description": "Call the resource tracking API to log and monitor changes in resource allocation over time for better decision-making.",
+        "high_level_associated": {
+          "name": "Enhance Operational Efficiency",
+          "description": "Improve the overall efficiency of the SUS by optimizing resource allocation and minimizing waste in hospital operations.",
+          "actor": {
+            "name": "Healthcare Administrators",
+            "description": "Individuals responsible for managing and overseeing public health systems and hospital operations."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Global coverage check deferred until all current branches are confirmed or stabilized.",
+    "missing_goal_requests": []
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "branch_001": 2
+  },
+  "warnings": []
+}

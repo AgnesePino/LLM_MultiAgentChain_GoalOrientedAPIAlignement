@@ -1,74 +1,78 @@
 {
     "name": "Genome Nexus",
-    "description": "Genome Nexus is a resource designed for the rapid and automated annotation and interpretation of genetic variants, particularly in the context of cancer. It addresses the need for a comprehensive tool that consolidates information from various databases, enabling users to convert DNA changes into protein changes, predict the functional impacts of protein mutations, and access data on mutation frequencies, gene functions, variant effects, and clinical actionability. This integration facilitates high-throughput analysis, making it easier for researchers and clinicians to understand the implications of genetic variants in cancer.",
+    "description": "Genome Nexus is a resource designed for the rapid and automated annotation and interpretation of genetic variants associated with cancer. It consolidates data from various existing databases to provide comprehensive insights into genetic mutations, including their conversion from DNA to protein changes, functional effects of protein mutations, mutation frequencies, gene functions, variant effects, and clinical actionability. This integration aims to facilitate high-throughput analysis, making it easier for researchers and clinicians to understand the implications of genetic variants in cancer.",
     "rawDescription": "# Genome Nexus 🧬\n\nGenome Nexus, a comprehensive one-stop resource for fast, automated and\nhigh-throughput annotation and interpretation of genetic variants in cancer.\nGenome Nexus integrates information from a variety of existing resources,\nincluding databases that convert DNA changes to protein changes, predict the\nfunctional effects of protein mutations, and contain information about mutation\nfrequencies, gene function, variant effects, and clinical actionability.\n\n## Documentation 📖\nSee the [docs](https://docs.genomenexus.org)\n\n## Run 💻\n\n### Alternative 1 - run genome-nexus, mongoDB and genome-nexus-vep in docker containers\nFirst, set environment variables for Ensembl Release, VEP Assembly, location of VEP Cache, and species (since a mouse instalation is supported). If these are not, the default values from `.env` will be set.\n\nThe reference genome and Ensembl release must be consistent with a version in [genome-nexus-importer/data/](https://github.com/genome-nexus/genome-nexus-importer/tree/master/data).\nFor example `grch37_ensembl92`, `grch38_ensembl92` or `grch38_ensembl95`:\n```\nexport REF_ENSEMBL_VERSION=grch38_ensembl92\n```\nIf you want to setup Genome Nexus for mouse, also set the `SPECIES` variable to 'mus_musculus'. Also see the [docs](https://github.com/genome-nexus/genome-nexus-importer/blob/master/docs/setup-genome-nexus-mouse.md) to create a mouse database.\n```bash\nexport SPECIES=mus_musculus\n```\n\nIf you would like to do local VEP annotations instead of using the public Ensembl API, please uncomment `# gn_vep.region.url=http://localhost:6060/vep/human/region/VARIANT` in your `application.properties`. This will require you to download the VEP cache files for the preferred Ensembl Release and Reference genome, see our documentation on [downloading the Genome Nexus VEP Cache](https://github.com/genome-nexus/genome-nexus-vep/blob/master/README.md#create-vep-cache). This will take several hours.\n```\n# Set local cache dir\nexport VEP_CACHE=<local_vep_cache>\n\n# GRCh38 or GRCh37\nexport VEP_ASSEMBLY=GRCh38\n```\n\nRun docker-compose to create images and containers:\n```\ndocker-compose up --build -d\n```\n\nRun without recreating images:\n```\ndocker-compose up -d\n```\n\nRun without Genome Nexus VEP:\n```\n# Start both the Web and DB (dependency of Web) containers\ndocker-compose up -d web\n```\n\nStop and remove containers:\n```\ndocker-compose down\n```\n\n### Alternative 2 - run genome-nexus locally, but mongoDB in docker container\n```\n# the genomenexus/gn-mongo images comes with all the required tables imported\n# change latest to different version if necessary (only need to run this once)\ndocker run --name=gn-mongo --restart=always -p 27017:27017 -d genomenexus/gn-mongo:latest \nmvn  -DskipTests clean install\njava -jar web/target/web-*.war\n```\n\n### Alternative 3 - install mongoDB locally and run with local java\nInstall mongoDB manually. Then follow instructions in\n[genome-nexus-importer](https://github.com/genome-nexus/genome-nexus-importer)\nto initialize the database.\n\nAfter that run this:\n```\nmvn clean install\njava -jar web/target/web-*.war\n```\n\n## Test Status 👷‍♀️\n\n| branch | master | rc |\n| --- | --- | --- |\n| status | [![Build Status](https://travis-ci.org/genome-nexus/genome-nexus.svg?branch=master)](https://travis-ci.org/genome-nexus/genome-nexus/branches) | [![Build Status](https://travis-ci.org/genome-nexus/genome-nexus.svg?branch=rc)](https://travis-ci.org/genome-nexus/genome-nexus/branches) |\n\n## Deploy 🚀\n\n[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)\n",
     "documentationPreprocessing": {
         "chunked": false,
         "chunkCount": 1,
         "originalChars": 3549,
-        "processedChars": 634,
+        "processedChars": 600,
         "strategy": "original_generate_description"
     },
     "actors": [
         "Researchers",
         "Clinicians",
-        "Bioinformaticians"
+        "Data Analysts"
     ],
     "highLevelGoals": [
-        "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
-        "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
-        "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects."
+        "Enable researchers to conduct thorough studies on genetic variants by providing integrated and detailed information about mutations and their implications in cancer.",
+        "Support clinicians in making informed decisions regarding patient treatment by providing clear interpretations of genetic data and its clinical relevance.",
+        "Allow data analysts to efficiently analyze and derive insights from consolidated genetic data, improving the speed and accuracy of their analyses."
     ],
     "lowLevelGoals": [
-        "Allow researchers to submit a genetic variant for annotation through an API call.",
-        "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
-        "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
-        "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
-        "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
-        "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
-        "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
-        "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call."
+        "Allow researchers to fetch detailed information about specific genetic variants from the database.",
+        "Enable researchers to submit a request for analysis of selected genetic variants to receive insights and implications.",
+        "Allow clinicians to retrieve clinical interpretations and recommendations based on genetic data for patient treatment.",
+        "Enable clinicians to input and log patient-specific genetic data into the system for analysis and interpretation.",
+        "Allow data analysts to combine multiple genetic datasets into a single view for easier analysis.",
+        "Enable data analysts to run algorithms on consolidated genetic data to extract meaningful insights and trends.",
+        "Allow researchers to request a comparison between different genetic variants to understand their differences and similarities.",
+        "Enable clinicians to update existing patient genetic data in the system for accurate analysis and interpretation.",
+        "Allow data analysts to export consolidated genetic data for external analysis or reporting purposes.",
+        "Allow researchers to retrieve metadata associated with genetic variants, such as frequency and population data.",
+        "Enable clinicians to log clinical recommendations based on genetic interpretations for future reference.",
+        "Allow data analysts to analyze trends in genetic data over time to identify patterns and anomalies."
     ],
     "structuredActors": {
         "actors": [
             {
                 "name": "Researchers",
-                "description": "Individuals conducting studies on genetic variants and their implications."
+                "description": "Individuals conducting studies on genetic variants and their implications in cancer."
             },
             {
                 "name": "Clinicians",
                 "description": "Medical professionals who interpret genetic data to inform patient care."
             },
             {
-                "name": "Bioinformaticians",
-                "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                "name": "Data Analysts",
+                "description": "Professionals who analyze and interpret the consolidated genetic data."
             }
         ]
     },
     "structuredHighLevelGoals": {
         "goals": [
             {
-                "name": "Facilitate Rapid Genetic Variant Annotation",
-                "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                "name": "Facilitate Comprehensive Genetic Analysis",
+                "description": "Enable researchers to conduct thorough studies on genetic variants by providing integrated and detailed information about mutations and their implications in cancer.",
                 "actor": {
                     "name": "Researchers",
-                    "description": "Individuals conducting studies on genetic variants and their implications."
+                    "description": "Individuals conducting studies on genetic variants and their implications in cancer."
                 }
             },
             {
-                "name": "Enhance Clinical Decision-Making",
-                "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                "name": "Enhance Patient Care through Genetic Insights",
+                "description": "Support clinicians in making informed decisions regarding patient treatment by providing clear interpretations of genetic data and its clinical relevance.",
                 "actor": {
                     "name": "Clinicians",
                     "description": "Medical professionals who interpret genetic data to inform patient care."
                 }
             },
             {
-                "name": "Streamline High-Throughput Bioinformatics Analysis",
-                "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                "name": "Streamline Data Interpretation Processes",
+                "description": "Allow data analysts to efficiently analyze and derive insights from consolidated genetic data, improving the speed and accuracy of their analyses.",
                 "actor": {
-                    "name": "Bioinformaticians",
-                    "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                    "name": "Data Analysts",
+                    "description": "Professionals who analyze and interpret the consolidated genetic data."
                 }
             }
         ]
@@ -76,35 +80,35 @@
     "structuredLowLevelGoals": {
         "low_level_goals": [
             {
-                "name": "Submit Genetic Variant for Annotation",
-                "description": "Allow researchers to submit a genetic variant for annotation through an API call.",
+                "name": "Retrieve Genetic Variant Data",
+                "description": "Allow researchers to fetch detailed information about specific genetic variants from the database.",
                 "high_level_associated": {
-                    "name": "Facilitate Rapid Genetic Variant Annotation",
-                    "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                    "name": "Facilitate Comprehensive Genetic Analysis",
+                    "description": "Enable researchers to conduct thorough studies on genetic variants by providing integrated and detailed information about mutations and their implications in cancer.",
                     "actor": {
                         "name": "Researchers",
-                        "description": "Individuals conducting studies on genetic variants and their implications."
+                        "description": "Individuals conducting studies on genetic variants and their implications in cancer."
                     }
                 }
             },
             {
-                "name": "Retrieve Annotation Results",
-                "description": "Enable researchers to retrieve the annotation results for a submitted genetic variant via an API call.",
+                "name": "Submit Genetic Variant Analysis Request",
+                "description": "Enable researchers to submit a request for analysis of selected genetic variants to receive insights and implications.",
                 "high_level_associated": {
-                    "name": "Facilitate Rapid Genetic Variant Annotation",
-                    "description": "Enable researchers to quickly annotate and interpret genetic variants to support their studies, including converting DNA changes into protein changes.",
+                    "name": "Facilitate Comprehensive Genetic Analysis",
+                    "description": "Enable researchers to conduct thorough studies on genetic variants by providing integrated and detailed information about mutations and their implications in cancer.",
                     "actor": {
                         "name": "Researchers",
-                        "description": "Individuals conducting studies on genetic variants and their implications."
+                        "description": "Individuals conducting studies on genetic variants and their implications in cancer."
                     }
                 }
             },
             {
-                "name": "Access Mutation Frequency Data",
-                "description": "Allow clinicians to access mutation frequency data for specific genetic variants through an API call.",
+                "name": "Access Clinical Interpretation of Genetic Data",
+                "description": "Allow clinicians to retrieve clinical interpretations and recommendations based on genetic data for patient treatment.",
                 "high_level_associated": {
-                    "name": "Enhance Clinical Decision-Making",
-                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "name": "Enhance Patient Care through Genetic Insights",
+                    "description": "Support clinicians in making informed decisions regarding patient treatment by providing clear interpretations of genetic data and its clinical relevance.",
                     "actor": {
                         "name": "Clinicians",
                         "description": "Medical professionals who interpret genetic data to inform patient care."
@@ -112,11 +116,11 @@
                 }
             },
             {
-                "name": "Fetch Clinical Actionability Information",
-                "description": "Enable clinicians to fetch clinical actionability information related to specific genetic variants via an API call.",
+                "name": "Log Patient Genetic Data",
+                "description": "Enable clinicians to input and log patient-specific genetic data into the system for analysis and interpretation.",
                 "high_level_associated": {
-                    "name": "Enhance Clinical Decision-Making",
-                    "description": "Provide clinicians with comprehensive insights into genetic data, including data on mutation frequencies and clinical actionability, to improve patient care and treatment decisions.",
+                    "name": "Enhance Patient Care through Genetic Insights",
+                    "description": "Support clinicians in making informed decisions regarding patient treatment by providing clear interpretations of genetic data and its clinical relevance.",
                     "actor": {
                         "name": "Clinicians",
                         "description": "Medical professionals who interpret genetic data to inform patient care."
@@ -124,50 +128,98 @@
                 }
             },
             {
-                "name": "Submit High-Throughput Analysis Job",
-                "description": "Allow bioinformaticians to submit a job for high-throughput analysis of genetic data through an API call.",
+                "name": "Consolidate Genetic Data for Analysis",
+                "description": "Allow data analysts to combine multiple genetic datasets into a single view for easier analysis.",
                 "high_level_associated": {
-                    "name": "Streamline High-Throughput Bioinformatics Analysis",
-                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "name": "Streamline Data Interpretation Processes",
+                    "description": "Allow data analysts to efficiently analyze and derive insights from consolidated genetic data, improving the speed and accuracy of their analyses.",
                     "actor": {
-                        "name": "Bioinformaticians",
-                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        "name": "Data Analysts",
+                        "description": "Professionals who analyze and interpret the consolidated genetic data."
                     }
                 }
             },
             {
-                "name": "Retrieve High-Throughput Analysis Results",
-                "description": "Enable bioinformaticians to retrieve the results of a high-throughput analysis job via an API call.",
+                "name": "Generate Insights from Consolidated Data",
+                "description": "Enable data analysts to run algorithms on consolidated genetic data to extract meaningful insights and trends.",
                 "high_level_associated": {
-                    "name": "Streamline High-Throughput Bioinformatics Analysis",
-                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "name": "Streamline Data Interpretation Processes",
+                    "description": "Allow data analysts to efficiently analyze and derive insights from consolidated genetic data, improving the speed and accuracy of their analyses.",
                     "actor": {
-                        "name": "Bioinformaticians",
-                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        "name": "Data Analysts",
+                        "description": "Professionals who analyze and interpret the consolidated genetic data."
                     }
                 }
             },
             {
-                "name": "Predict Functional Impact of Mutation",
-                "description": "Allow bioinformaticians to predict the functional impact of a specific protein mutation through an API call.",
+                "name": "Request Genetic Variant Comparison",
+                "description": "Allow researchers to request a comparison between different genetic variants to understand their differences and similarities.",
                 "high_level_associated": {
-                    "name": "Streamline High-Throughput Bioinformatics Analysis",
-                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "name": "Facilitate Comprehensive Genetic Analysis",
+                    "description": "Enable researchers to conduct thorough studies on genetic variants by providing integrated and detailed information about mutations and their implications in cancer.",
                     "actor": {
-                        "name": "Bioinformaticians",
-                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications in cancer."
                     }
                 }
             },
             {
-                "name": "Access Gene Function Data",
-                "description": "Enable bioinformaticians to access data on gene functions related to specific genetic variants via an API call.",
+                "name": "Update Patient Genetic Data",
+                "description": "Enable clinicians to update existing patient genetic data in the system for accurate analysis and interpretation.",
                 "high_level_associated": {
-                    "name": "Streamline High-Throughput Bioinformatics Analysis",
-                    "description": "Allow bioinformaticians to efficiently conduct high-throughput analysis of genetic information, including predicting functional impacts of protein mutations and accessing data on gene functions and variant effects.",
+                    "name": "Enhance Patient Care through Genetic Insights",
+                    "description": "Support clinicians in making informed decisions regarding patient treatment by providing clear interpretations of genetic data and its clinical relevance.",
                     "actor": {
-                        "name": "Bioinformaticians",
-                        "description": "Specialists who analyze and interpret biological data, particularly genetic information."
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Export Consolidated Genetic Data",
+                "description": "Allow data analysts to export consolidated genetic data for external analysis or reporting purposes.",
+                "high_level_associated": {
+                    "name": "Streamline Data Interpretation Processes",
+                    "description": "Allow data analysts to efficiently analyze and derive insights from consolidated genetic data, improving the speed and accuracy of their analyses.",
+                    "actor": {
+                        "name": "Data Analysts",
+                        "description": "Professionals who analyze and interpret the consolidated genetic data."
+                    }
+                }
+            },
+            {
+                "name": "Fetch Genetic Variant Metadata",
+                "description": "Allow researchers to retrieve metadata associated with genetic variants, such as frequency and population data.",
+                "high_level_associated": {
+                    "name": "Facilitate Comprehensive Genetic Analysis",
+                    "description": "Enable researchers to conduct thorough studies on genetic variants by providing integrated and detailed information about mutations and their implications in cancer.",
+                    "actor": {
+                        "name": "Researchers",
+                        "description": "Individuals conducting studies on genetic variants and their implications in cancer."
+                    }
+                }
+            },
+            {
+                "name": "Log Clinical Recommendations",
+                "description": "Enable clinicians to log clinical recommendations based on genetic interpretations for future reference.",
+                "high_level_associated": {
+                    "name": "Enhance Patient Care through Genetic Insights",
+                    "description": "Support clinicians in making informed decisions regarding patient treatment by providing clear interpretations of genetic data and its clinical relevance.",
+                    "actor": {
+                        "name": "Clinicians",
+                        "description": "Medical professionals who interpret genetic data to inform patient care."
+                    }
+                }
+            },
+            {
+                "name": "Analyze Genetic Data Trends",
+                "description": "Allow data analysts to analyze trends in genetic data over time to identify patterns and anomalies.",
+                "high_level_associated": {
+                    "name": "Streamline Data Interpretation Processes",
+                    "description": "Allow data analysts to efficiently analyze and derive insights from consolidated genetic data, improving the speed and accuracy of their analyses.",
+                    "actor": {
+                        "name": "Data Analysts",
+                        "description": "Professionals who analyze and interpret the consolidated genetic data."
                     }
                 }
             }
@@ -176,12 +228,12 @@
     "baselineScores": {
         "actors": null,
         "highLevelGoals": 10.0,
-        "lowLevelGoals": 8.5
+        "lowLevelGoals": 2.0
     },
     "baselineCritiques": {
         "actors": null,
-        "highLevelGoals": "The extraction is coherent and accurately reflects the functional goals described in the text for all three actors. It correctly identifies the core functionalities: rapid annotation, clinical decision support via actionability data, and high-throughput analysis for bioinformaticians. No major omissions or contradictions are present.",
-        "lowLevelGoals": "The extraction is coherent and covers the main functional aspects described in the software description. However, there is a minor omission regarding the specific capability mentioned in the description: \"converting DNA changes into protein changes.\" While this is part of the annotation process, the low-level goals for researchers are generic (\"Submit Genetic Variant\", \"Retrieve Annotation Results\"). A more precise low-level goal could explicitly mention the conversion or the specific output format (e.g., amino acid change) to better reflect the \"how\" of the high-level goal. Additionally, the description mentions \"variant effects\" as a distinct data point alongside gene functions and mutation frequencies. While \"Predict Functional Impact\" covers some of this, a specific goal to \"Retrieve Variant Effect Data\" (e.g., from databases like ClinVar or COSMIC) would be more complete. Despite these minor refinements, the current goals are functionally sufficient and do not contain contradictions or major omissions that would invalidate the system's core purpose."
+        "highLevelGoals": "The provided high-level goals are well-aligned with the software description and the defined actors. They correctly capture the core functional purpose of Genome Nexus",
+        "lowLevelGoals": "Major omission. The software description explicitly states that Genome Nexus provides \"conversion from DNA to protein changes\" and \"functional effects of protein mutations.\" The provided low-level goals focus on retrieving data, submitting requests, and analyzing trends, but they completely omit the specific functional capability of converting DNA variants to protein changes or retrieving functional effect annotations. These are core features described in the system's purpose. Additionally, the description mentions \"clinical actionability,\" which is only vaguely covered by \"Access Clinical Interpretation,\" but the specific action of retrieving actionability status is missing. The low-level goals are too generic and miss the specific domain functionalities (DNA-to-protein conversion, functional effects) highlighted in the description."
     },
     "baselineConfiguration": {
         "generatorStructuredModel": "gpt-4o-mini",
