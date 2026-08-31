@@ -14,7 +14,12 @@ All'inizio dell'iterazione gli LLG vengono raggruppati sotto il relativo HLG. Og
 
 L'evaluator confronta la descrizione completa del progetto, l'HLG originale con il suo attore e l'HLG ricostruito dagli LLG. Il giudizio può stabilire che l'HLG è corretto, che deve essere riscritto oppure che non è supportato dalla descrizione. Se l'HLG è valido, una seconda valutazione controlla se i suoi LLG lo rappresentano in modo completo.
 
-Gli LLG vengono rigenerati soltanto quando manca una parte importante, sono contraddittori o appartengono a un altro obiettivo. Il fatto che siano espressi come azioni compatibili con API non è, da solo, un errore. I prompt degli evaluator contengono esempi di questi casi per evitare rigenerazioni dovute soltanto a differenze stilistiche.
+Gli LLG vengono rigenerati soltanto con confidenza alta e con un difetto
+materiale esplicito: una capacità essenziale del parent assente oppure un LLG
+non supportato. Differenze di stile o granularità, CRUD opzionali e passi UI non
+sono errori. Una riparazione può aggiungere al massimo due LLG e viene rifiutata
+se è vuota o prolifera oltre il limite, conservando in quel caso il branch
+precedente.
 
 ## Una sola modifica per iterazione
 
@@ -36,10 +41,11 @@ decisioni ancora pendenti.
 
 ## Controllo degli HLG mancanti
 
-Quando tutti i branch correnti sono confermati o stabilizzati, il sistema esegue
-una verifica globale sulla descrizione completa del progetto. Il controllo
-considera gli HLG presenti, gli attori già identificati e le intenzioni
-funzionali esplicitamente descritte.
+Ad ogni iterazione il sistema esegue una verifica globale sulla descrizione
+completa del progetto. Il controllo considera gli HLG presenti, gli attori già
+identificati e le intenzioni funzionali esplicitamente descritte. Una lacuna HLG
+ha priorità su una rigenerazione LLG, evitando che il dettaglio impedisca il
+miglioramento della struttura superiore.
 
 Il controllo non genera direttamente HLG finali. Se trova una lacuna, produce una richiesta focalizzata per il generatore top-down. Nella stessa iterazione può essere aggiunto al massimo un nuovo HLG. Non vengono proposte intenzioni già coperte da un HLG corrente, né obiettivi tecnici o semplici varianti più ristrette di un obiettivo esistente.
 

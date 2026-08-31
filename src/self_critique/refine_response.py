@@ -1,4 +1,4 @@
-import sys
+import re
 from enum import Enum
 
 from src.examples import shot_learning
@@ -174,15 +174,25 @@ def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=No
 
 def parse_evaluation(evaluation: str|Critique):
     if type(evaluation) == str:
-        lines = evaluation.strip().split("\n")
-        score_line = lines[len(lines)-1]
-        if not score_line.startswith("Score:"):
-                raise ValueError("Input text does not contain a valid 'Score:' line.")
-        feedback_line = " ".join(lines[:len(lines)-1])
-        if not feedback_line.startswith("Feedback:"):
-                raise ValueError("Input text does not contain a valid 'Feedback:' line.")
-        score = float(score_line.split(":")[1].strip())
-        feedback = feedback_line.split(":")[1].strip()
+        text = evaluation.strip()
+        score_match = re.search(
+            r"(?:^|\n)\s*Score\s*:\s*([-+]?(?:\d+(?:\.\d*)?|\.\d+))\s*$",
+            text,
+            flags=re.IGNORECASE,
+        )
+        feedback_match = re.search(
+            r"^\s*Feedback\s*:\s*(.*?)\s*(?=\n\s*Score\s*:|$)",
+            text,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if not score_match or not feedback_match:
+            raise ValueError(
+                "Input text must contain Feedback: ... and a final Score: line."
+            )
+        score = float(score_match.group(1))
+        if not 0 <= score <= 10:
+            raise ValueError("Evaluation score must be between 0 and 10.")
+        feedback = feedback_match.group(1).strip()
 
     elif type(evaluation) == Critique:
         score = evaluation.score
@@ -198,7 +208,12 @@ def parse_evaluation(evaluation: str|Critique):
 
 
 def generate_response_with_reflection(target_type, call_function, define_args, eval_mode, eval_args, shotPromptingMode=ShotPromptingMode.ZERO_SHOT, max_attempts=MAX_ATTEMPTS, llama_ablation = False):
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be at least 1")
     feedback = None
+    score = None
+    critique = None
+    parse_error = None
     for attempt in range(1, max_attempts + 1):
         print(f"{target_type} STARTING... (attempt {attempt})")
         result = call_function(*define_args, feedback=feedback, mode = shotPromptingMode )
@@ -229,8 +244,20 @@ def generate_response_with_reflection(target_type, call_function, define_args, e
                 feedback = Feedback(previous_output=result, critique=critique)
         except ValueError as e:
             print(f"Error while parsing evaluation: {e}")
-            sys.exit(1)  # Exit the program if parsing fails
+            parse_error = e
+            feedback = Feedback(
+                previous_output=result,
+                critique=(
+                    "The evaluator response was malformed. Return exactly "
+                    "'Feedback: ...' followed by 'Score: 0-10'."
+                ),
+            )
+            critique = str(e)
 
-    #raise RuntimeError("Failed to achieve a satisfactory score within the maximum number of attempts.")
+    if score is None and parse_error is not None:
+        raise RuntimeError(
+            f"Evaluator returned malformed output after {max_attempts} attempts: "
+            f"{parse_error}"
+        ) from parse_error
     print("Failed to achieve a satisfactory score within the maximum number of attempts.")
     return result, score, critique

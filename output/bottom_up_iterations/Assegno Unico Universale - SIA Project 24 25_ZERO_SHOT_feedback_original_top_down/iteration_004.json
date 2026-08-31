@@ -1,0 +1,401 @@
+{
+  "iteration": 4,
+  "reconstructions": {
+    "branch_002": {
+      "reconstructed_high_level_goal": "Ensure the integrity and correctness of application submissions for child fiscal codes.",
+      "rationale": "All the low-level goals focus on validating the uniqueness and correctness of fiscal codes and application fields, which are essential for maintaining the integrity of the application process.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Validate Child Fiscal Code Against Active Applications",
+        "Detect Duplicate Fiscal Codes for Adult Children",
+        "Validate Application Fields",
+        "Notify Validation Errors"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Enhance the application evaluation and communication process for INPS staff.",
+      "rationale": "Both low-level goals focus on improving the efficiency and effectiveness of the application handling process by providing necessary tools and enabling status updates, which are essential for timely communication with applicants.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "Fetch Application Evaluation Tools",
+        "Update Application Status"
+      ]
+    },
+    "branch_008": {
+      "reconstructed_high_level_goal": "Facilitate a user-friendly application process by allowing applicants to manage their application drafts effectively.",
+      "rationale": "Both low-level goals focus on enhancing the applicant's experience by providing the ability to save and retrieve application drafts, which supports a more flexible and less stressful application process.",
+      "branch_id": "branch_008",
+      "source_low_level_goal_ids": [
+        "Save Application as Draft",
+        "Load Draft Application"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "The original High-Level Goal 'Ensure Application Validation' is too generic and incorrectly scoped. It frames the goal as a system implementation task ('Implement real-time validation') rather than a user intention. Furthermore, 'validation' is a broad concept that overlaps significantly with the existing HLG 'Facilitate Application Submission', which already covers the end-to-end process of submitting an application, including the necessary checks. The bottom-up reconstruction correctly identifies that the specific low-level goals focus on the integrity of child fiscal codes (uniqueness and correctness). However, since 'Facilitate Application Submission' is a broad umbrella goal for the applicant's primary task, and the specific validation of fiscal codes is a critical sub-step of that submission process, keeping a separate, generic 'Ensure Application Validation' goal creates redundancy and poor scoping. The specific concern about fiscal code integrity is better handled as a detailed requirement within the submission flow or as a specific constraint, rather than a top-level goal for the actor. Given the instruction to remove HLGs that split stakeholder intentions or are unsupported/too generic, and considering 'Facilitate Application Submission' covers the actor's intent to submit a valid application, the original HLG should be removed to avoid overlap and genericity.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Ensure Application Validation' is too generic and incorrectly scoped. It frames the goal as a system implementation task ('Implement real-time validation') rather than a user intention. Furthermore, 'validation' is a broad concept that overlaps significantly with the existing HLG 'Facilitate Application Submission', which already covers the end-to-end process of submitting an application, including the necessary checks. The bottom-up reconstruction correctly identifies that the specific low-level goals focus on the integrity of child fiscal codes (uniqueness and correctness). However, since 'Facilitate Application Submission' is a broad umbrella goal for the applicant's primary task, and the specific validation of fiscal codes is a critical sub-step of that submission process, keeping a separate, generic 'Ensure Application Validation' goal creates redundancy and poor scoping. The specific concern about fiscal code integrity is better handled as a detailed requirement within the submission flow or as a specific constraint, rather than a top-level goal for the actor. Given the instruction to remove HLGs that split stakeholder intentions or are unsupported/too generic, and considering 'Facilitate Application Submission' covers the actor's intent to submit a valid application, the original HLG should be removed to avoid overlap and genericity.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "The original High-Level Goal 'Streamline Application Evaluation' accurately captures the functional intention of the INPS Staff actor as described in the project description. The text explicitly states that 'authorized INPS staff' evaluate applications, which may result in acceptance, rejection, or suspension (requiring specific documentation requests), and that applicants are notified of these outcomes. The goal covers the core activities: evaluation, managing the decision (approval/rejection/suspension), and communication. It is not too generic, as it is specific to the evaluation phase handled by this actor. It is not too narrow, as it encompasses the full range of evaluation outcomes. There is no other HLG for INPS Staff that overlaps with this intention. Therefore, the original goal should be kept. The parent HLG 'Streamline Application Evaluation' explicitly requires the ability to 'manage approvals' and 'communicate outcomes'. The documentation specifies three distinct outcomes: accepted, rejected, and suspended. Crucially, when an application is suspended, the INPS operator must 'specify which additional documents are required'. The current LLG 'Update Application Status' is too generic and does not explicitly cover the capability to specify required documents for suspended applications, which is a distinct and essential part of the evaluation workflow described. Without this specific capability, the staff cannot effectively manage the suspension process as defined in the documentation. Therefore, an essential capability is missing.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Streamline Application Evaluation' accurately captures the functional intention of the INPS Staff actor as described in the project description. The text explicitly states that 'authorized INPS staff' evaluate applications, which may result in acceptance, rejection, or suspension (requiring specific documentation requests), and that applicants are notified of these outcomes. The goal covers the core activities: evaluation, managing the decision (approval/rejection/suspension), and communication. It is not too generic, as it is specific to the evaluation phase handled by this actor. It is not too narrow, as it encompasses the full range of evaluation outcomes. There is no other HLG for INPS Staff that overlaps with this intention. Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Streamline Application Evaluation' explicitly requires the ability to 'manage approvals' and 'communicate outcomes'. The documentation specifies three distinct outcomes: accepted, rejected, and suspended. Crucially, when an application is suspended, the INPS operator must 'specify which additional documents are required'. The current LLG 'Update Application Status' is too generic and does not explicitly cover the capability to specify required documents for suspended applications, which is a distinct and essential part of the evaluation workflow described. Without this specific capability, the staff cannot effectively manage the suspension process as defined in the documentation. Therefore, an essential capability is missing.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "The current LLGs do not explicitly cover the capability for INPS staff to specify required additional documents when suspending an application. This is a key part of the 'manage approvals' and 'communicate outcomes' requirement in the parent HLG and is explicitly described in the documentation ('When an application is suspended, the INPS operator specifies which additional documents are required'). Please add a low-level goal that allows staff to specify required documents for suspended applications.",
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [
+          "Specify required additional documents for suspended applications"
+        ],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_008": {
+      "branch_id": "branch_008",
+      "rationale": "The original High-Level Goal 'Enable Draft Management' is directly supported by the project description, which explicitly states: 'An application may be interrupted without saving or saved as a draft before submission. A saved draft can later be consulted and completed.' The goal accurately captures the functional intention of allowing applicants to save, retrieve, and resume applications. It is distinct from other goals like 'Facilitate Application Submission' (which focuses on the act of submitting) and 'Resume Suspended Application' (which deals with post-submission administrative suspensions). The scope is appropriate, neither too generic nor too narrow, and faithfully represents the stakeholder's need for flexibility during the application process. The parent HLG 'Enable Draft Management' explicitly requires the ability to save drafts and resume/complete them later. The documentation states: 'A saved draft can later be consulted and completed. When resuming a draft, the applicant may either continue from the previously saved information or discard it and restart the application from the beginning.' The current LLGs cover 'Save Application as Draft' and 'Load Draft Application'. While 'Load' implies retrieval, the specific capability to 'discard' or 'restart' the application from the beginning upon resuming a draft is a distinct functional option provided by the system for draft management. However, 'Load Draft Application' generally encompasses the act of retrieving the draft to view or edit. The option to discard is a specific action *after* loading or during the resume process. Is it a *missing essential capability*? The HLG description says 'resume and complete'. The documentation adds the nuance of 'discard and restart'. If 'Load' is interpreted strictly as 'open for editing', the 'discard' function might be missing. However, 'Load' is often a broad term for accessing the draft state. Let's look closer. The HLG is 'Enable Draft Management'. The core capabilities are Save and Retrieve/Resume. The 'discard' option is a specific behavior of the resume flow. Is it essential to the *definition* of Draft Management? The HLG description says 'resume and complete'. It does not explicitly mandate the 'discard' option in the HLG description itself, though the documentation supports it. The prompt says 'Regenerate only when at least one essential capability explicitly required by the parent HLG is absent'. The parent HLG description is 'Allow applicants to save their applications as drafts, enabling them to resume and complete the application process at a later time'. It does not explicitly require the 'discard' functionality in the HLG text. The documentation supports it, but is it *essential* to the HLG's stated goal? The goal is flexibility. Discarding is a form of flexibility. However, usually, 'Load' or 'Resume' covers the entry point. The specific UI action of 'Discard' might be considered a detail of the 'Resume' flow. Given the conservative instruction 'If the evidence is debatable, choose KEEP_LOW_LEVEL_GOALS', and the fact that 'Load Draft' covers the retrieval aspect which is the primary counterpart to 'Save', I will lean towards KEEP. The 'discard' option is a specific interaction within the resume flow, not necessarily a separate top-level capability distinct from 'Resume/Load' in a high-level decomposition. The current LLGs 'Save' and 'Load' cover the fundamental CRUD operations for drafts (Create/Read). The 'Update' is implied by 'Load... for further editing'. The 'Delete' (discard) is a specific action. Is it missing? Yes, explicitly. Is it essential? The HLG says 'resume and complete'. It doesn't say 'or discard'. The documentation says 'may either continue... or discard'. Since the HLG description does not explicitly mandate the discard option, and 'Load' covers the access, this is likely not a material defect requiring regeneration under the strict 'explicitly required by parent HLG' rule. The parent HLG focuses on 'resume and complete'.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Enable Draft Management' is directly supported by the project description, which explicitly states: 'An application may be interrupted without saving or saved as a draft before submission. A saved draft can later be consulted and completed.' The goal accurately captures the functional intention of allowing applicants to save, retrieve, and resume applications. It is distinct from other goals like 'Facilitate Application Submission' (which focuses on the act of submitting) and 'Resume Suspended Application' (which deals with post-submission administrative suspensions). The scope is appropriate, neither too generic nor too narrow, and faithfully represents the stakeholder's need for flexibility during the application process.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Enable Draft Management' explicitly requires the ability to save drafts and resume/complete them later. The documentation states: 'A saved draft can later be consulted and completed. When resuming a draft, the applicant may either continue from the previously saved information or discard it and restart the application from the beginning.' The current LLGs cover 'Save Application as Draft' and 'Load Draft Application'. While 'Load' implies retrieval, the specific capability to 'discard' or 'restart' the application from the beginning upon resuming a draft is a distinct functional option provided by the system for draft management. However, 'Load Draft Application' generally encompasses the act of retrieving the draft to view or edit. The option to discard is a specific action *after* loading or during the resume process. Is it a *missing essential capability*? The HLG description says 'resume and complete'. The documentation adds the nuance of 'discard and restart'. If 'Load' is interpreted strictly as 'open for editing', the 'discard' function might be missing. However, 'Load' is often a broad term for accessing the draft state. Let's look closer. The HLG is 'Enable Draft Management'. The core capabilities are Save and Retrieve/Resume. The 'discard' option is a specific behavior of the resume flow. Is it essential to the *definition* of Draft Management? The HLG description says 'resume and complete'. It does not explicitly mandate the 'discard' option in the HLG description itself, though the documentation supports it. The prompt says 'Regenerate only when at least one essential capability explicitly required by the parent HLG is absent'. The parent HLG description is 'Allow applicants to save their applications as drafts, enabling them to resume and complete the application process at a later time'. It does not explicitly require the 'discard' functionality in the HLG text. The documentation supports it, but is it *essential* to the HLG's stated goal? The goal is flexibility. Discarding is a form of flexibility. However, usually, 'Load' or 'Resume' covers the entry point. The specific UI action of 'Discard' might be considered a detail of the 'Resume' flow. Given the conservative instruction 'If the evidence is debatable, choose KEEP_LOW_LEVEL_GOALS', and the fact that 'Load Draft' covers the retrieval aspect which is the primary counterpart to 'Save', I will lean towards KEEP. The 'discard' option is a specific interaction within the resume flow, not necessarily a separate top-level capability distinct from 'Resume/Load' in a high-level decomposition. The current LLGs 'Save' and 'Load' cover the fundamental CRUD operations for drafts (Create/Read). The 'Update' is implied by 'Load... for further editing'. The 'Delete' (discard) is a specific action. Is it missing? Yes, explicitly. Is it essential? The HLG says 'resume and complete'. It doesn't say 'or discard'. The documentation says 'may either continue... or discard'. Since the HLG description does not explicitly mandate the discard option, and 'Load' covers the access, this is likely not a material defect requiring regeneration under the strict 'explicitly required by parent HLG' rule. The parent HLG focuses on 'resume and complete'.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Facilitate Application Submission",
+        "description": "Enable applicants to easily submit applications for the Assegno Unico Universale benefit, ensuring a user-friendly interface and clear guidance throughout the process.",
+        "actor": {
+          "name": "Applicants",
+          "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+        }
+      },
+      {
+        "name": "Streamline Application Evaluation",
+        "description": "Provide INPS staff with efficient tools to evaluate applications, manage approvals, and communicate outcomes to applicants in a timely manner.",
+        "actor": {
+          "name": "INPS Staff",
+          "description": "Authorized personnel who evaluate applications and manage the approval process."
+        }
+      },
+      {
+        "name": "Resume Suspended Application",
+        "description": "Enable applicants to effectively resume their suspended applications by consulting the application details, uploading required documents, reconfirming their data, and accepting necessary declarations.",
+        "actor": {
+          "name": "Applicants",
+          "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+        }
+      },
+      {
+        "name": "Enable Shared Application Management",
+        "description": "Facilitate the ability for other parents to confirm or modify allowance distribution for shared applications, ensuring clear communication and agreement between parents.",
+        "actor": {
+          "name": "Other Parents",
+          "description": "Parents who may need to confirm or modify allowance distribution for shared applications."
+        }
+      },
+      {
+        "name": "Provide Application History Access",
+        "description": "Allow citizens to consult their previously submitted applications and track the status of their requests, enhancing transparency and user engagement.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Individuals seeking information about the Assegno Unico Universale or consulting their application history."
+        }
+      },
+      {
+        "name": "Offer Information and Simulation Tools",
+        "description": "Provide citizens with access to general information about the Assegno Unico Universale and tools to simulate expected monthly allowance amounts, promoting informed decision-making.",
+        "actor": {
+          "name": "Citizens",
+          "description": "Individuals seeking information about the Assegno Unico Universale or consulting their application history."
+        }
+      },
+      {
+        "name": "Enable Draft Management",
+        "description": "Allow applicants to save their applications as drafts, enabling them to resume and complete the application process at a later time, ensuring flexibility and convenience.",
+        "actor": {
+          "name": "Applicants",
+          "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+        }
+      },
+      {
+        "name": "Manage Payment Information",
+        "description": "Allow applicants to specify and manage payment methods for the allowance, ensuring accurate and timely disbursement of funds.",
+        "actor": {
+          "name": "Applicants",
+          "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Display Application Submission Form",
+        "description": "Render the application submission form for the Assegno Unico Universale benefit on the user interface.",
+        "high_level_associated": {
+          "name": "Facilitate Application Submission",
+          "description": "Enable applicants to easily submit applications for the Assegno Unico Universale benefit, ensuring a user-friendly interface and clear guidance throughout the process.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Submit Application Data",
+        "description": "Send the completed application data to the server for processing.",
+        "high_level_associated": {
+          "name": "Facilitate Application Submission",
+          "description": "Enable applicants to easily submit applications for the Assegno Unico Universale benefit, ensuring a user-friendly interface and clear guidance throughout the process.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Fetch Application Evaluation Tools",
+        "description": "Retrieve tools and resources for INPS staff to evaluate submitted applications efficiently.",
+        "high_level_associated": {
+          "name": "Streamline Application Evaluation",
+          "description": "Provide INPS staff with efficient tools to evaluate applications, manage approvals, and communicate outcomes to applicants in a timely manner.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel who evaluate applications and manage the approval process."
+          }
+        }
+      },
+      {
+        "name": "Update Application Status",
+        "description": "Allow INPS staff to update the status of an application (e.g., approved, rejected) and communicate this to the applicant.",
+        "high_level_associated": {
+          "name": "Streamline Application Evaluation",
+          "description": "Provide INPS staff with efficient tools to evaluate applications, manage approvals, and communicate outcomes to applicants in a timely manner.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel who evaluate applications and manage the approval process."
+          }
+        }
+      },
+      {
+        "name": "Confirm Allowance Distribution",
+        "description": "Allow other parents to confirm the distribution of allowances for shared applications.",
+        "high_level_associated": {
+          "name": "Enable Shared Application Management",
+          "description": "Facilitate the ability for other parents to confirm or modify allowance distribution for shared applications, ensuring clear communication and agreement between parents.",
+          "actor": {
+            "name": "Other Parents",
+            "description": "Parents who may need to confirm or modify allowance distribution for shared applications."
+          }
+        }
+      },
+      {
+        "name": "Modify Allowance Distribution",
+        "description": "Allow other parents to modify the distribution of allowances for shared applications as needed.",
+        "high_level_associated": {
+          "name": "Enable Shared Application Management",
+          "description": "Facilitate the ability for other parents to confirm or modify allowance distribution for shared applications, ensuring clear communication and agreement between parents.",
+          "actor": {
+            "name": "Other Parents",
+            "description": "Parents who may need to confirm or modify allowance distribution for shared applications."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Application History",
+        "description": "Fetch the list of previously submitted applications for a citizen to review.",
+        "high_level_associated": {
+          "name": "Provide Application History Access",
+          "description": "Allow citizens to consult their previously submitted applications and track the status of their requests, enhancing transparency and user engagement.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Individuals seeking information about the Assegno Unico Universale or consulting their application history."
+          }
+        }
+      },
+      {
+        "name": "Check Application Status",
+        "description": "Allow citizens to check the current status of their submitted applications.",
+        "high_level_associated": {
+          "name": "Provide Application History Access",
+          "description": "Allow citizens to consult their previously submitted applications and track the status of their requests, enhancing transparency and user engagement.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Individuals seeking information about the Assegno Unico Universale or consulting their application history."
+          }
+        }
+      },
+      {
+        "name": "Access Information Resources",
+        "description": "Provide citizens with access to general information about the Assegno Unico Universale benefit.",
+        "high_level_associated": {
+          "name": "Offer Information and Simulation Tools",
+          "description": "Provide citizens with access to general information about the Assegno Unico Universale and tools to simulate expected monthly allowance amounts, promoting informed decision-making.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Individuals seeking information about the Assegno Unico Universale or consulting their application history."
+          }
+        }
+      },
+      {
+        "name": "Simulate Allowance Amounts",
+        "description": "Allow citizens to input their data and simulate expected monthly allowance amounts based on the Assegno Unico Universale criteria.",
+        "high_level_associated": {
+          "name": "Offer Information and Simulation Tools",
+          "description": "Provide citizens with access to general information about the Assegno Unico Universale and tools to simulate expected monthly allowance amounts, promoting informed decision-making.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Individuals seeking information about the Assegno Unico Universale or consulting their application history."
+          }
+        }
+      },
+      {
+        "name": "Save Application as Draft",
+        "description": "Enable applicants to save their current application progress as a draft for later completion.",
+        "high_level_associated": {
+          "name": "Enable Draft Management",
+          "description": "Allow applicants to save their applications as drafts, enabling them to resume and complete the application process at a later time, ensuring flexibility and convenience.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Load Draft Application",
+        "description": "Allow applicants to load a previously saved draft application for further editing.",
+        "high_level_associated": {
+          "name": "Enable Draft Management",
+          "description": "Allow applicants to save their applications as drafts, enabling them to resume and complete the application process at a later time, ensuring flexibility and convenience.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Specify Payment Method",
+        "description": "Allow applicants to select and specify their preferred payment method for the allowance.",
+        "high_level_associated": {
+          "name": "Manage Payment Information",
+          "description": "Allow applicants to specify and manage payment methods for the allowance, ensuring accurate and timely disbursement of funds.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Update Payment Information",
+        "description": "Enable applicants to update their payment method details as necessary.",
+        "high_level_associated": {
+          "name": "Manage Payment Information",
+          "description": "Allow applicants to specify and manage payment methods for the allowance, ensuring accurate and timely disbursement of funds.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Consult Application Details",
+        "description": "Retrieve and display the details of the suspended application for the applicant to review.",
+        "high_level_associated": {
+          "name": "Resume Suspended Application",
+          "description": "Enable applicants to effectively resume their suspended applications by consulting the application details, uploading required documents, reconfirming their data, and accepting necessary declarations.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Upload Required Documents",
+        "description": "Allow the applicant to upload necessary documents that are required to resume the application process.",
+        "high_level_associated": {
+          "name": "Resume Suspended Application",
+          "description": "Enable applicants to effectively resume their suspended applications by consulting the application details, uploading required documents, reconfirming their data, and accepting necessary declarations.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Reconfirm Application Data",
+        "description": "Provide a mechanism for the applicant to review and confirm the accuracy of their application data before resuming.",
+        "high_level_associated": {
+          "name": "Resume Suspended Application",
+          "description": "Enable applicants to effectively resume their suspended applications by consulting the application details, uploading required documents, reconfirming their data, and accepting necessary declarations.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Accept Declarations",
+        "description": "Facilitate the acceptance of necessary declarations by the applicant to proceed with the application resumption.",
+        "high_level_associated": {
+          "name": "Resume Suspended Application",
+          "description": "Enable applicants to effectively resume their suspended applications by consulting the application details, uploading required documents, reconfirming their data, and accepting necessary declarations.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      },
+      {
+        "name": "Submit Resumed Application",
+        "description": "Submit the application after all required steps have been completed to transition it from suspended to active status.",
+        "high_level_associated": {
+          "name": "Resume Suspended Application",
+          "description": "Enable applicants to effectively resume their suspended applications by consulting the application details, uploading required documents, reconfirming their data, and accepting necessary declarations.",
+          "actor": {
+            "name": "Applicants",
+            "description": "Individuals applying for the Assegno Unico Universale benefit as parents, foster parents, or legal guardians."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "The current High-Level Goals comprehensively cover all distinct functional intentions described in the project text. 'Facilitate Application Submission' covers the core workflow of submitting new applications, including the provision of child and family data. 'Ensure Application Validation' covers the real-time fiscal code checks and error handling. 'Manage Payment Information' covers the specification of payment methods. 'Enable Draft Management' covers saving and resuming drafts. 'Resume Suspended Application' covers the specific workflow for suspended applications requiring additional documents. 'Enable Shared Application Management' covers the interaction where the other parent confirms or modifies allowance distribution. 'Provide Application History Access' and 'Offer Information and Simulation Tools' cover the citizen-facing support functions. 'Streamline Application Evaluation' covers the INPS staff's role in evaluating and deciding on applications. No distinct, high-level functional intention remains uncovered.",
+    "missing_goal_requests": []
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "applicants::ensure application validation": 1
+  },
+  "warnings": []
+}

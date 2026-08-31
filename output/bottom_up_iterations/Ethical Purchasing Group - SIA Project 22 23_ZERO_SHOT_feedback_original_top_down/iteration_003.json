@@ -1,0 +1,412 @@
+{
+  "iteration": 3,
+  "reconstructions": {
+    "branch_003": {
+      "reconstructed_high_level_goal": "Facilitate the complete process of customer order management.",
+      "rationale": "All the low-level goals are steps involved in managing a customer order, from initiation to final submission, ensuring that the order is correctly processed.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "Initiate Order Entry",
+        "Add Product to Order",
+        "Specify Customer Details",
+        "Review Order Summary",
+        "Validate Minimum Quantity Constraints",
+        "Submit Order"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Ensure secure and efficient payment processing for customers while providing real-time notifications about payment issues.",
+      "rationale": "Both low-level goals focus on enhancing the payment processing experience for customers by ensuring security and efficiency, as well as maintaining transparency through notifications about payment status.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Process Payment",
+        "Handle Insufficient Funds"
+      ]
+    },
+    "branch_006": {
+      "reconstructed_high_level_goal": "Optimize the delivery process to ensure timely product availability for customers.",
+      "rationale": "Both low-level goals focus on improving the delivery system: scheduling deliveries based on availability ensures that products are delivered when needed, while notifying customers of delays keeps them informed, enhancing overall customer satisfaction.",
+      "branch_id": "branch_006",
+      "source_low_level_goal_ids": [
+        "Schedule Delivery",
+        "Notify Late Delivery"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
+      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "high_level_evaluation": {
+        "rationale": "Malformed evaluator response; keeping the current HLG.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "LOW"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "The original High-Level Goal 'Ensure Reliable Transaction Completion' accurately captures the System's responsibility regarding the payment lifecycle described in the project description. The description details specific mechanisms for handling payments via virtual wallets, managing insufficient funds (warnings, deadlines, cancellations), and ensuring the transaction is completed or appropriately cancelled. The bottom-up reconstruction focuses on 'secure and efficient payment processing' and 'notifications', which are aspects of the original goal. The original goal is not too generic (it specifies transaction completion), not too narrow (it covers the whole payment flow including error handling), and is supported by the text. It does not overlap with other HLGs which focus on purchasing decisions, supply estimates, order placement assistance, pickup logistics, delivery workflow, or fair-play scoring. Therefore, the original goal should be kept. The parent HLG 'Ensure Reliable Transaction Completion' explicitly includes 'handling insufficient funds and cancellations'. The current LLGs cover 'Process Payment' and 'Handle Insufficient Funds' (notification). However, the documentation specifies a critical workflow for insufficient funds: if the balance is still unavailable after the grace period, 'the order is cancelled'. The current LLGs do not include a goal for cancelling orders due to payment failure. This is an essential capability explicitly required by the parent HLG's description ('including handling ... cancellations') and the system documentation. Therefore, the decomposition is incomplete.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Ensure Reliable Transaction Completion' accurately captures the System's responsibility regarding the payment lifecycle described in the project description. The description details specific mechanisms for handling payments via virtual wallets, managing insufficient funds (warnings, deadlines, cancellations), and ensuring the transaction is completed or appropriately cancelled. The bottom-up reconstruction focuses on 'secure and efficient payment processing' and 'notifications', which are aspects of the original goal. The original goal is not too generic (it specifies transaction completion), not too narrow (it covers the whole payment flow including error handling), and is supported by the text. It does not overlap with other HLGs which focus on purchasing decisions, supply estimates, order placement assistance, pickup logistics, delivery workflow, or fair-play scoring. Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Ensure Reliable Transaction Completion' explicitly includes 'handling insufficient funds and cancellations'. The current LLGs cover 'Process Payment' and 'Handle Insufficient Funds' (notification). However, the documentation specifies a critical workflow for insufficient funds: if the balance is still unavailable after the grace period, 'the order is cancelled'. The current LLGs do not include a goal for cancelling orders due to payment failure. This is an essential capability explicitly required by the parent HLG's description ('including handling ... cancellations') and the system documentation. Therefore, the decomposition is incomplete.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "Add a low-level goal to handle the cancellation of orders when payment cannot be completed after the grace period for recharging the wallet.",
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [
+          "Cancel orders when wallet balance remains insufficient after the recharge deadline"
+        ],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_006": {
+      "branch_id": "branch_006",
+      "rationale": "The original High-Level Goal 'Manage Delivery Workflow' accurately captures the system's responsibilities regarding the physical delivery of goods from farmers to the store, including the handling of late deliveries and customer notifications as described in the project text. The bottom-up reconstruction 'Optimize the delivery process...' is a valid interpretation but does not offer a significantly better scope or clarity than the original. The original goal is specific, supported by the documentation (specifically the section on farmer deliveries, SMS reminders, and order updates for missing goods), and distinct from other goals like 'Coordinate Pickup Logistics' (which focuses on customer collection) and 'Ensure Reliable Transaction Completion' (which focuses on payment). Therefore, the original goal should be kept. The parent HLG 'Manage Delivery Workflow' explicitly requires handling late deliveries and notifying customers of issues. The documentation specifies a concrete workflow for late deliveries: if goods are not delivered by 8 p.m. on Tuesday, the system must update orders, credit customers with a 20% bonus, and inform them. The current LLG 'Notify Late Delivery' is too generic and does not capture the essential capability of processing the financial compensation (credit + bonus) and order updates associated with late deliveries. This specific handling of late delivery consequences is a material capability explicitly required by the parent HLG's description ('handling late deliveries') and the documentation, but it is absent from the current LLGs. Therefore, regeneration is required to include the capability to process late delivery penalties/compensations.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Manage Delivery Workflow' accurately captures the system's responsibilities regarding the physical delivery of goods from farmers to the store, including the handling of late deliveries and customer notifications as described in the project text. The bottom-up reconstruction 'Optimize the delivery process...' is a valid interpretation but does not offer a significantly better scope or clarity than the original. The original goal is specific, supported by the documentation (specifically the section on farmer deliveries, SMS reminders, and order updates for missing goods), and distinct from other goals like 'Coordinate Pickup Logistics' (which focuses on customer collection) and 'Ensure Reliable Transaction Completion' (which focuses on payment). Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Manage Delivery Workflow' explicitly requires handling late deliveries and notifying customers of issues. The documentation specifies a concrete workflow for late deliveries: if goods are not delivered by 8 p.m. on Tuesday, the system must update orders, credit customers with a 20% bonus, and inform them. The current LLG 'Notify Late Delivery' is too generic and does not capture the essential capability of processing the financial compensation (credit + bonus) and order updates associated with late deliveries. This specific handling of late delivery consequences is a material capability explicitly required by the parent HLG's description ('handling late deliveries') and the documentation, but it is absent from the current LLGs. Therefore, regeneration is required to include the capability to process late delivery penalties/compensations.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "The current LLGs miss the essential capability of processing the consequences of late deliveries. Specifically, the documentation states that if goods are not delivered by 8 p.m. on Tuesday, the system must update orders, credit the missing amount plus a 20% bonus to customers, and inform them. The current 'Notify Late Delivery' LLG only covers notification, missing the critical financial and order-state update logic required to 'handle' the late delivery as specified in the parent HLG.",
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [
+          "Process late delivery compensation by crediting customers with the missing amount plus a 20% bonus and updating order status when deliveries are not received by the deadline."
+        ],
+        "confidence": "HIGH"
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Facilitate Conscious Purchasing",
+        "description": "Enable customers to make informed purchasing decisions based on product origin, quality, and availability.",
+        "actor": {
+          "name": "Customers",
+          "description": "Individuals or representatives of purchasing groups who place orders for products."
+        }
+      },
+      {
+        "name": "Manage Product Supply Estimates",
+        "description": "Allow farmers to provide accurate estimates of product availability to meet customer demand and manage their supply effectively.",
+        "actor": {
+          "name": "Farmers",
+          "description": "Local producers who supply products and provide estimates of availability."
+        }
+      },
+      {
+        "name": "Assist Customers with Order Placement",
+        "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Staff members who assist customers with orders and manage product pickups."
+        }
+      },
+      {
+        "name": "Ensure Reliable Transaction Completion",
+        "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+        "actor": {
+          "name": "System",
+          "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+        }
+      },
+      {
+        "name": "Coordinate Pickup Logistics",
+        "description": "Enable customers to reserve time slots for product collection and assist store employees in preparing orders for pickup.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Staff members who assist customers with orders and manage product pickups."
+        }
+      },
+      {
+        "name": "Manage Delivery Workflow",
+        "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+        "actor": {
+          "name": "System",
+          "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+        }
+      },
+      {
+        "name": "Maintain Fair-Play Scoring System",
+        "description": "Track and update customer fair-play scores based on order reliability to prioritize order fulfillment during product shortages.",
+        "actor": {
+          "name": "Customers",
+          "description": "Individuals or representatives of purchasing groups who place orders for products."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Retrieve Product Information",
+        "description": "Allow customers to view detailed information about products including origin, quality, and availability.",
+        "high_level_associated": {
+          "name": "Facilitate Conscious Purchasing",
+          "description": "Enable customers to make informed purchasing decisions based on product origin, quality, and availability.",
+          "actor": {
+            "name": "Customers",
+            "description": "Individuals or representatives of purchasing groups who place orders for products."
+          }
+        }
+      },
+      {
+        "name": "Submit Purchase Decision",
+        "description": "Enable customers to confirm their choice of product for purchase based on the retrieved information.",
+        "high_level_associated": {
+          "name": "Facilitate Conscious Purchasing",
+          "description": "Enable customers to make informed purchasing decisions based on product origin, quality, and availability.",
+          "actor": {
+            "name": "Customers",
+            "description": "Individuals or representatives of purchasing groups who place orders for products."
+          }
+        }
+      },
+      {
+        "name": "Input Supply Estimate",
+        "description": "Allow farmers to enter their estimates of product availability into the system.",
+        "high_level_associated": {
+          "name": "Manage Product Supply Estimates",
+          "description": "Allow farmers to provide accurate estimates of product availability to meet customer demand and manage their supply effectively.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Local producers who supply products and provide estimates of availability."
+          }
+        }
+      },
+      {
+        "name": "Update Supply Status",
+        "description": "Enable farmers to update the status of their product supply in real-time as conditions change.",
+        "high_level_associated": {
+          "name": "Manage Product Supply Estimates",
+          "description": "Allow farmers to provide accurate estimates of product availability to meet customer demand and manage their supply effectively.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Local producers who supply products and provide estimates of availability."
+          }
+        }
+      },
+      {
+        "name": "Reserve Pickup Time Slot",
+        "description": "Enable customers to select and reserve a time slot for product pickup.",
+        "high_level_associated": {
+          "name": "Coordinate Pickup Logistics",
+          "description": "Enable customers to reserve time slots for product collection and assist store employees in preparing orders for pickup.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Prepare Order for Pickup",
+        "description": "Allow store employees to prepare customer orders for pickup based on reserved time slots.",
+        "high_level_associated": {
+          "name": "Coordinate Pickup Logistics",
+          "description": "Enable customers to reserve time slots for product collection and assist store employees in preparing orders for pickup.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Schedule Delivery",
+        "description": "Enable the system to schedule deliveries from farmers to the store based on product availability.",
+        "high_level_associated": {
+          "name": "Manage Delivery Workflow",
+          "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+          "actor": {
+            "name": "System",
+            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+          }
+        }
+      },
+      {
+        "name": "Notify Late Delivery",
+        "description": "Allow the system to notify customers of any delays in product delivery.",
+        "high_level_associated": {
+          "name": "Manage Delivery Workflow",
+          "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+          "actor": {
+            "name": "System",
+            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+          }
+        }
+      },
+      {
+        "name": "Track Fair-Play Score",
+        "description": "Enable the system to track and update customer fair-play scores based on their order history.",
+        "high_level_associated": {
+          "name": "Maintain Fair-Play Scoring System",
+          "description": "Track and update customer fair-play scores based on order reliability to prioritize order fulfillment during product shortages.",
+          "actor": {
+            "name": "Customers",
+            "description": "Individuals or representatives of purchasing groups who place orders for products."
+          }
+        }
+      },
+      {
+        "name": "Update Fair-Play Score",
+        "description": "Allow the system to update a customer's fair-play score after each order completion.",
+        "high_level_associated": {
+          "name": "Maintain Fair-Play Scoring System",
+          "description": "Track and update customer fair-play scores based on order reliability to prioritize order fulfillment during product shortages.",
+          "actor": {
+            "name": "Customers",
+            "description": "Individuals or representatives of purchasing groups who place orders for products."
+          }
+        }
+      },
+      {
+        "name": "Initiate Order Entry",
+        "description": "Start the process of entering a new customer order in the system.",
+        "high_level_associated": {
+          "name": "Assist Customers with Order Placement",
+          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Add Product to Order",
+        "description": "Select and add a specific product to the customer's order.",
+        "high_level_associated": {
+          "name": "Assist Customers with Order Placement",
+          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Specify Customer Details",
+        "description": "Input the necessary customer information required for the order.",
+        "high_level_associated": {
+          "name": "Assist Customers with Order Placement",
+          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Review Order Summary",
+        "description": "Display and review the complete order details before final submission.",
+        "high_level_associated": {
+          "name": "Assist Customers with Order Placement",
+          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Validate Minimum Quantity Constraints",
+        "description": "Check if the order meets the minimum quantity requirements for each product before submission.",
+        "high_level_associated": {
+          "name": "Assist Customers with Order Placement",
+          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Submit Order",
+        "description": "Finalize and submit the completed order for processing.",
+        "high_level_associated": {
+          "name": "Assist Customers with Order Placement",
+          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Staff members who assist customers with orders and manage product pickups."
+          }
+        }
+      },
+      {
+        "name": "Process Payment",
+        "description": "Initiate the payment processing for a customer transaction using the provided payment method and amount.",
+        "high_level_associated": {
+          "name": "Ensure Reliable Transaction Completion",
+          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "actor": {
+            "name": "System",
+            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+          }
+        }
+      },
+      {
+        "name": "Handle Insufficient Funds",
+        "description": "Check the customer's wallet balance and determine if the payment can be completed; if not, trigger the insufficient funds handling process.",
+        "high_level_associated": {
+          "name": "Ensure Reliable Transaction Completion",
+          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "actor": {
+            "name": "System",
+            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+          }
+        }
+      },
+      {
+        "name": "Cancel Order After Grace Period",
+        "description": "Automatically cancel the order if the payment cannot be completed after the defined grace period for recharging the wallet.",
+        "high_level_associated": {
+          "name": "Ensure Reliable Transaction Completion",
+          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "actor": {
+            "name": "System",
+            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+          }
+        }
+      },
+      {
+        "name": "Recharge Wallet",
+        "description": "Allow the customer to recharge their wallet with a specified amount to enable payment processing.",
+        "high_level_associated": {
+          "name": "Ensure Reliable Transaction Completion",
+          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "actor": {
+            "name": "System",
+            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "The current High-Level Goals comprehensively cover the functional intentions described in the project text. 'Facilitate Conscious Purchasing' covers browsing and ordering. 'Manage Product Supply Estimates' covers farmer inputs. 'Assist Customers with Order Placement' and 'Coordinate Pickup Logistics' cover store employee interactions. 'Ensure Reliable Transaction Completion' covers the payment, wallet, and cancellation logic. 'Manage Delivery Workflow' covers the farmer-to-store delivery and late delivery handling. 'Maintain Fair-Play Scoring System' covers the scoring and precedence logic. No distinct, high-level functional intention remains uncovered.",
+    "missing_goal_requests": []
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "store employees::assist customers with order placement": 1,
+    "system::ensure reliable transaction completion": 1
+  },
+  "warnings": [
+    "UNRESOLVED_EVALUATION_INCONCLUSIVE"
+  ]
+}

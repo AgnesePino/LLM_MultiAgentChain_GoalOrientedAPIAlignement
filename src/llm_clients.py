@@ -44,12 +44,25 @@ GROQ_FALLBACK_MAX_TOKENS = int(
 )
 
 
-client = OpenAI(api_key=get_key_openai())
+client = None
+llama = None
 
-llama = OpenAI(
-    api_key=get_key_llama(),
-    base_url="https://api.groq.com/openai/v1",
-)
+
+def _openai_client() -> OpenAI:
+    global client
+    if client is None:
+        client = OpenAI(api_key=get_key_openai())
+    return client
+
+
+def _groq_client() -> OpenAI:
+    global llama
+    if llama is None:
+        llama = OpenAI(
+            api_key=get_key_llama(),
+            base_url="https://api.groq.com/openai/v1",
+        )
+    return llama
 
 
 def _rotate_groq_key() -> None:
@@ -68,7 +81,7 @@ def generate_response(prompt, sys_prompt, response_format=None):
     ]
 
     if response_format is not None:
-        response = client.beta.chat.completions.parse(
+        response = _openai_client().beta.chat.completions.parse(
             messages=messages,
             model=OPENAI_STRUCTURED_MODEL,
             max_tokens=6000,
@@ -77,7 +90,7 @@ def generate_response(prompt, sys_prompt, response_format=None):
         )
         return response.choices[0].message.parsed
 
-    response = client.chat.completions.create(
+    response = _openai_client().chat.completions.create(
         messages=messages,
         model=OPENAI_TEXT_MODEL,
         max_tokens=6000,
@@ -94,12 +107,16 @@ def generate_response_llama(prompt, sys_prompt):
     fallback_attempted = (
         GROQ_EVALUATOR_MODEL == GROQ_EVALUATOR_FALLBACK_MODEL
     )
-    attempts = max(2, count_Llama_keys() * 2)
+    # Try each configured key at most once per evaluator request. Retrying
+    # every key twice can block one dataset for many minutes when the whole
+    # account is rate-limited, preventing the outer dataset loop from moving on.
+    attempts = max(1, count_Llama_keys())
 
     for _ in range(attempts):
         model = GROQ_EVALUATOR_MODEL
 
         try:
+            groq_client = _groq_client()
             request = {
                 "messages": [
                     {"role": "system", "content": sys_prompt},
@@ -118,7 +135,7 @@ def generate_response_llama(prompt, sys_prompt):
             else:
                 request["max_completion_tokens"] = GROQ_LLAMA_MAX_TOKENS
 
-            response = llama.chat.completions.create(**request)
+            response = groq_client.chat.completions.create(**request)
             content = response.choices[0].message.content
 
             if not content:

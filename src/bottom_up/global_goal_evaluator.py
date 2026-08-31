@@ -1,4 +1,4 @@
-"""Four small Llama evaluations followed by deterministic aggregation."""
+"""Sequential branch and global bottom-up evaluations with deterministic aggregation."""
 
 import json
 import re
@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from src.data_model import (
     BottomUpHighLevelGoal,
+    ConfidenceLevel,
     GlobalGoalEvaluationDecision,
     GlobalGoalEvaluationResult,
     GoalBranch,
@@ -27,6 +28,17 @@ SYSTEM_PROMPT = (
     "and Goal-Oriented Requirements Engineering. Return only valid JSON."
 )
 
+
+def _key(value: str) -> str:
+    return " ".join(value.casefold().split())
+
+
+def _stable_hlg_key(branch: GoalBranch) -> str:
+    return (
+        f"{_key(branch.high_level_goal.actor.name)}::"
+        f"{_key(branch.high_level_goal.name)}"
+    )
+
 HLG_EVALUATOR_EXAMPLES = """Evaluation examples:
 - Supported actor intention at WHY level -> KEEP_ORIGINAL_HIGH_LEVEL_GOAL.
 - Generic, narrow, UI/API-oriented, or incorrectly scoped intention -> REWRITE_ORIGINAL_HIGH_LEVEL_GOAL.
@@ -34,13 +46,19 @@ HLG_EVALUATOR_EXAMPLES = """Evaluation examples:
 """
 LLG_EVALUATOR_EXAMPLES = """Evaluation examples:
 - Atomic API-mappable LLGs covering the parent intention -> KEEP_LOW_LEVEL_GOALS.
-- Missing, contradictory, or unrelated LLGs -> REGENERATE_LOW_LEVEL_GOALS.
+- A material capability explicitly required by the parent HLG is absent -> REGENERATE_LOW_LEVEL_GOALS.
+- A current LLG is contradicted by or unsupported in the documentation -> REGENERATE_LOW_LEVEL_GOALS.
 - Technical/API wording alone is not an error when the decomposition is complete.
+- Different granularity, optional CRUD operations, UI steps, and merely possible
+  improvements are not material defects -> KEEP_LOW_LEVEL_GOALS.
+- Capabilities owned by sibling HLGs must not be copied into this branch.
 """
 COVERAGE_EVALUATOR_EXAMPLES = """Evaluation examples:
 - Existing HLG with the same actor covers the intention -> NO_MISSING_HIGH_LEVEL_GOALS.
 - Only a distinct, documented functional intention absent from current HLGs -> MISSING_HIGH_LEVEL_GOALS_FOUND.
 - Do not split one intention into variants or propose technical/API goals.
+- A workflow step, CRUD operation, UI action, notification, or narrower variant
+  of a current goal is already covered -> NO_MISSING_HIGH_LEVEL_GOALS.
 """
 
 
@@ -73,6 +91,19 @@ def _evaluate(prompt: str, model: type[BaseModel]):
                 "decision": "KEEP_LOW_LEVEL_GOALS",
                 "confidence": "LOW",
             })
+        if name == "HighLevelGoalReplacementRequest":
+            raise ValueError("Malformed HighLevelGoalReplacementRequest response.")
+        if name == "MissingHighLevelGoalEvaluation":
+            # A malformed project-wide coverage response must not abort the
+            # dataset.  Conservatively retain the current HLG set and retry
+            # coverage on the next iteration.
+            return model.model_validate({
+                "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+                "rationale": (
+                    "Malformed evaluator response; retaining the current HLG coverage."
+                ),
+                "missing_goal_requests": [],
+            })
         return model.model_validate({
             "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
             "rationale": "Malformed evaluator response; retaining the current HLG coverage.",
@@ -84,7 +115,19 @@ def evaluate_original_hlg(
     project_description: str,
     branch: GoalBranch,
     reconstruction: BottomUpHighLevelGoal,
+    current_hlgs: HighLevelGoals | None = None,
 ) -> HighLevelGoalEvaluation:
+    current_hlgs = current_hlgs or HighLevelGoals(goals=[branch.high_level_goal])
+    branch_key = (
+        _key(branch.high_level_goal.actor.name),
+        _key(branch.high_level_goal.name),
+    )
+    sibling_hlgs = [
+        goal.model_dump(mode="json")
+        for goal in current_hlgs.goals
+        if (_key(goal.actor.name), _key(goal.name))
+        != branch_key
+    ]
     prompt = f"""Evaluator rationale from the bottom-up reconstruction:
 {reconstruction.rationale}
 
@@ -95,7 +138,10 @@ Decide whether the original High-Level Goal should be kept,
 rewritten, or removed. The project description is the source of truth. Keep a
 supported and reasonably scoped functional intention. Rewrite it only when it
 is too generic, narrow, ambiguous, incorrectly scoped, or less faithful than
-the reconstruction. Remove it only when documentation does not support it.
+the reconstruction. Remove it when documentation does not support it or when
+another HLG for the same actor already covers the same functional intention.
+Judge semantic overlap, not only equal names. Do not keep several HLGs that
+merely split one stakeholder intention into wording variants.
 
 Complete project description:
 {project_description}
@@ -108,6 +154,9 @@ Original High-Level Goal:
 
 Bottom-up reconstructed High-Level Goal:
 {reconstruction.reconstructed_high_level_goal}
+
+Other current High-Level Goals:
+{json.dumps(sibling_hlgs, ensure_ascii=False)}
 
 Do not rewrite a supported HLG merely because its LLGs use API-like wording.
 
@@ -155,15 +204,39 @@ def evaluate_llg_decomposition(
     project_description: str,
     branch: GoalBranch,
     reconstruction: BottomUpHighLevelGoal,
+    current_hlgs: HighLevelGoals | None = None,
 ) -> LowLevelGoalEvaluation:
-    llgs = [goal.model_dump(mode="json") for goal in branch.low_level_goals]
+    current_hlgs = current_hlgs or HighLevelGoals(goals=[branch.high_level_goal])
+    llgs = [
+        {"id": f"llg_{index:03d}", **goal.model_dump(mode="json")}
+        for index, goal in enumerate(branch.low_level_goals, start=1)
+    ]
+    sibling_hlgs = [
+        goal.model_dump(mode="json")
+        for goal in current_hlgs.goals
+        if (
+            _key(goal.actor.name),
+            _key(goal.name),
+        ) != (
+            _key(branch.high_level_goal.actor.name),
+            _key(branch.high_level_goal.name),
+        )
+    ]
     prompt = f"""Evaluator rationale and calibration:
 {reconstruction.rationale}
 {LLG_EVALUATOR_EXAMPLES}
 
-Decide whether the current LLGs correctly and completely
-decompose their valid parent HLG. Regenerate them if they are incomplete, too
-narrow, too operational, inconsistent, or unsupported. Do not change the HLG.
+Decide conservatively whether the current LLGs contain a material defect in
+their decomposition of the valid parent HLG. Regenerate only when at least one
+essential capability explicitly required by the parent HLG is absent, or a
+current LLG is contradicted by or unsupported in the documentation. Do not
+regenerate for naming, style, API/CRUD wording, UI granularity, optional
+lifecycle operations, or merely possible improvements. Do not change the HLG.
+
+Each missing capability must be essential to this parent, explicitly grounded
+in its wording and documentation, and absent from every current LLG. Do not
+import capabilities owned by another HLG. If the evidence is debatable, choose
+KEEP_LOW_LEVEL_GOALS. Use REGENERATE only with HIGH confidence.
 
 Complete project description:
 {project_description}
@@ -174,14 +247,54 @@ Parent HLG:
 Current LLGs:
 {json.dumps(llgs, ensure_ascii=False)}
 
+Sibling HLGs whose responsibilities must not be duplicated:
+{json.dumps(sibling_hlgs, ensure_ascii=False)}
+
 Reconstructed HLG:
 {reconstruction.reconstructed_high_level_goal}
 
-Use strings (not numbers) for every item in unsupported_or_misleading_llg_ids.
+Use only the supplied llg_NNN identifiers in
+unsupported_or_misleading_llg_ids. List concise, explicitly documented parent
+capabilities in missing_essential_capabilities. A REGENERATE decision must
+contain at least one valid unsupported ID or one missing essential capability.
 
 Output JSON:
-{{"rationale":"...","decision":"KEEP_LOW_LEVEL_GOALS | REGENERATE_LOW_LEVEL_GOALS","regeneration_feedback":null,"unsupported_or_misleading_llg_ids":[],"confidence":"HIGH | MEDIUM | LOW"}}"""
-    return _evaluate(prompt, LowLevelGoalEvaluation)
+{{"rationale":"...","decision":"KEEP_LOW_LEVEL_GOALS | REGENERATE_LOW_LEVEL_GOALS","regeneration_feedback":null,"unsupported_or_misleading_llg_ids":[],"missing_essential_capabilities":[],"confidence":"HIGH | MEDIUM | LOW"}}"""
+    evaluation = _evaluate(prompt, LowLevelGoalEvaluation)
+
+    valid_ids = {item["id"] for item in llgs}
+    supported_ids = [
+        item for item in evaluation.unsupported_or_misleading_llg_ids
+        if item in valid_ids
+    ]
+    missing = [
+        item.strip()
+        for item in evaluation.missing_essential_capabilities
+        if item.strip()
+    ]
+    material_issue = bool(supported_ids or missing)
+    if (
+        evaluation.decision == LowLevelGoalDecision.REGENERATE
+        and (
+            evaluation.confidence != ConfidenceLevel.HIGH
+            or not material_issue
+        )
+    ):
+        return evaluation.model_copy(update={
+            "rationale": (
+                f"{evaluation.rationale} Conservative gate: regeneration was "
+                "rejected because it lacked HIGH-confidence structured "
+                "evidence of a material defect."
+            ),
+            "decision": LowLevelGoalDecision.KEEP,
+            "regeneration_feedback": None,
+            "unsupported_or_misleading_llg_ids": supported_ids,
+            "missing_essential_capabilities": missing,
+        })
+    return evaluation.model_copy(update={
+        "unsupported_or_misleading_llg_ids": supported_ids,
+        "missing_essential_capabilities": missing,
+    })
 
 
 def evaluate_missing_high_level_goals(
@@ -199,6 +312,11 @@ actor-level High-Level Goals that are missing from the current HLG list.
 Do not generate final HLG objects. Return only focused requests for the normal
 top-down HLG generator. Do not propose goals already covered by current HLGs,
 technical/API-level operations, or intentions unsupported by the description.
+Treat each current HLG as a broad stakeholder intention that may cover several
+documented workflow steps. Report only the single strongest, clearly distinct
+gap with direct documentary support. When overlap is plausible or evidence is
+uncertain, return NO_MISSING_HIGH_LEVEL_GOALS. Known actors may be incomplete;
+use a new actor only when that actor and intention are explicit in the text.
 
 Complete project description:
 {project_description}
@@ -225,25 +343,69 @@ def evaluate_branch(
     branch: GoalBranch,
     reconstruction: BottomUpHighLevelGoal,
     current_hlgs: HighLevelGoals,
+    llg_stabilized: bool = False,
 ) -> GlobalGoalEvaluationResult:
-    hlg = evaluate_original_hlg(project_description, branch, reconstruction)
+    try:
+        hlg = evaluate_original_hlg(
+            project_description, branch, reconstruction, current_hlgs
+        )
+    except (ValueError, TypeError) as exc:
+        return _inconclusive_result(branch, f"HLG evaluation failed: {exc}")
     replacement = None
     llg = None
+
+    if hlg.confidence != ConfidenceLevel.HIGH:
+        return _inconclusive_result(
+            branch,
+            "HLG evaluator confidence was below HIGH; branch was not confirmed.",
+            hlg=hlg,
+        )
 
     if hlg.decision == HighLevelGoalDecision.REMOVE:
         decision = GlobalGoalEvaluationDecision.REMOVE_ORIGINAL_HIGH_LEVEL_GOAL
     else:
         if hlg.decision == HighLevelGoalDecision.REWRITE:
-            replacement = build_replacement_request(
-                project_description, branch, reconstruction, hlg
-            )
+            try:
+                replacement = build_replacement_request(
+                    project_description, branch, reconstruction, hlg
+                )
+            except (ValueError, TypeError) as exc:
+                return _inconclusive_result(
+                    branch,
+                    f"HLG replacement request failed: {exc}",
+                    hlg=hlg,
+                )
 
         if hlg.decision == HighLevelGoalDecision.REWRITE:
             decision = GlobalGoalEvaluationDecision.REWRITE_ORIGINAL_HIGH_LEVEL_GOAL
-        else:
-            llg = evaluate_llg_decomposition(
-                project_description, branch, reconstruction
+        elif llg_stabilized:
+            llg = LowLevelGoalEvaluation(
+                rationale=(
+                    "The branch reached its bounded LLG repair limit; its latest "
+                    "decomposition is retained without another LLG evaluator call."
+                ),
+                decision=LowLevelGoalDecision.KEEP,
+                confidence=ConfidenceLevel.HIGH,
             )
+            decision = GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED
+        else:
+            try:
+                llg = evaluate_llg_decomposition(
+                    project_description, branch, reconstruction, current_hlgs
+                )
+            except (ValueError, TypeError) as exc:
+                return _inconclusive_result(
+                    branch,
+                    f"LLG evaluation failed: {exc}",
+                    hlg=hlg,
+                )
+            if llg.confidence != ConfidenceLevel.HIGH:
+                return _inconclusive_result(
+                    branch,
+                    "LLG evaluator confidence was below HIGH; branch was not confirmed.",
+                    hlg=hlg,
+                    llg=llg,
+                )
             decision = (
                 GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS
                 if llg.decision == LowLevelGoalDecision.REGENERATE
@@ -264,18 +426,42 @@ def evaluate_branch(
     )
 
 
+def _inconclusive_result(
+    branch: GoalBranch,
+    rationale: str,
+    *,
+    hlg: HighLevelGoalEvaluation | None = None,
+    llg: LowLevelGoalEvaluation | None = None,
+) -> GlobalGoalEvaluationResult:
+    hlg = hlg or HighLevelGoalEvaluation(
+        rationale=rationale,
+        decision=HighLevelGoalDecision.KEEP,
+        confidence=ConfidenceLevel.LOW,
+    )
+    return GlobalGoalEvaluationResult(
+        branch_id=branch.branch_id,
+        rationale=rationale,
+        final_decision=GlobalGoalEvaluationDecision.EVALUATION_INCONCLUSIVE,
+        high_level_evaluation=hlg,
+        low_level_evaluation=llg,
+    )
+
+
 def evaluate_all_branches(
     project_description: str,
     branches: list[GoalBranch],
     reconstructions: dict[str, BottomUpHighLevelGoal],
     current_hlgs: HighLevelGoals,
+    stabilized_hlg_keys: set[str] | None = None,
 ):
+    stabilized_hlg_keys = stabilized_hlg_keys or set()
     return {
         branch.branch_id: evaluate_branch(
             project_description,
             branch,
             reconstructions[branch.branch_id],
             current_hlgs,
+            _stable_hlg_key(branch) in stabilized_hlg_keys,
         )
         for branch in branches
     }

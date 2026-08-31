@@ -17,27 +17,30 @@
         "Non-registered Users"
     ],
     "highLevelGoals": [
-        "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
-        "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-        "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
-        "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
-        "Allow non-registered users to access and view reports and statistics, fostering transparency and encouraging community engagement in urban management."
+        "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
+        "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+        "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
+        "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
+        "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management."
     ],
     "lowLevelGoals": [
-        "Allow citizens to create a new account by providing personal information and verifying their identity.",
-        "Allow citizens to submit a new report about an urban issue through a form interface.",
-        "Enable citizens to upload images or videos related to their report to provide additional context.",
-        "Allow citizens to view the status of their submitted reports and any updates made by municipal operators.",
-        "Enable municipal operators to access and review submitted reports for validity and urgency.",
-        "Allow municipal operators to examine the details of a report to determine its validity and urgency.",
-        "Allow municipal operators to approve a report after review, marking it as valid and ready for action.",
-        "Enable municipal operators to reject a report and provide feedback to the citizen about the rejection reason.",
-        "Allow municipal operators to assign approved reports to external maintenance personnel for resolution.",
-        "Enable external maintenance personnel to update the status of a report as they work on it, providing real-time updates to municipal operators.",
-        "Allow external maintenance personnel to mark a report as resolved once the issue has been addressed, notifying municipal operators and citizens.",
-        "Enable municipal administrators to modify system settings such as report categories and notification preferences.",
-        "Allow municipal administrators to assign specific reports to designated municipal operators for review and action.",
-        "Allow non-registered users to access and view a list of reports and relevant statistics without needing to register."
+        "Allow citizens to create a new account by providing a username, name, and email through a registration API.",
+        "Enable citizens to confirm their email address through an email confirmation API after registration.",
+        "Allow citizens to submit a new report detailing an urban issue through a form submission API.",
+        "Enable citizens to upload images or videos related to their report using a media upload API.",
+        "Allow citizens to view the status of their submitted reports through a report status retrieval API.",
+        "Allow citizens to follow specific reports to receive updates on their status through a follow report API.",
+        "Enable the system to send notifications to citizens via email or platform notifications when the status of their report changes through a notification API.",
+        "Allow municipal operators to access and review submitted reports through a report retrieval API.",
+        "Enable municipal operators to update the status of a report (e.g., in review, resolved) through a report status update API.",
+        "Allow municipal operators to assign a report to external maintenance personnel through an assignment API.",
+        "Enable external maintenance personnel to view reports assigned to them through a report assignment retrieval API.",
+        "Allow external maintenance personnel to update the resolution status of a report through a resolution status update API.",
+        "Enable external maintenance personnel to exchange comments with municipal operators through a comments API.",
+        "Enable municipal administrators to modify system configuration settings through a system configuration API.",
+        "Allow municipal administrators to access and view statistics related to reports through a statistics retrieval API.",
+        "Allow non-registered users to view public reports through a public report retrieval API.",
+        "Enable non-registered users to access statistics on community engagement through a community engagement statistics API."
     ],
     "structuredActors": {
         "actors": [
@@ -67,39 +70,39 @@
         "goals": [
             {
                 "name": "Facilitate Citizen Reporting",
-                "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+                "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
                 "actor": {
                     "name": "Citizens",
                     "description": "Individuals who report issues and malfunctions in the urban environment."
                 }
             },
             {
-                "name": "Enhance Report Review Process",
-                "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
+                "name": "Streamline Report Review Process",
+                "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
                 "actor": {
                     "name": "Municipal Operators",
                     "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
                 }
             },
             {
-                "name": "Coordinate Issue Resolution",
-                "description": "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
+                "name": "Ensure Effective Issue Resolution",
+                "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
                 "actor": {
                     "name": "External Maintenance Personnel",
                     "description": "Workers from external companies who address specific issues reported by citizens."
                 }
             },
             {
-                "name": "Manage System Configuration and Report Assignment",
-                "description": "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
+                "name": "Empower System Configuration and Report Management",
+                "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
                 "actor": {
                     "name": "Municipal Administrators",
                     "description": "Officials who configure the system and oversee the assignment of reports."
                 }
             },
             {
-                "name": "Promote Transparency and Engagement",
-                "description": "Allow non-registered users to access and view reports and statistics, fostering transparency and encouraging community engagement in urban management.",
+                "name": "Promote Transparency and Community Engagement",
+                "description": "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management.",
                 "actor": {
                     "name": "Non-registered Users",
                     "description": "Individuals who can view reports and statistics without needing to register."
@@ -110,11 +113,23 @@
     "structuredLowLevelGoals": {
         "low_level_goals": [
             {
-                "name": "Register Citizen Account",
-                "description": "Allow citizens to create a new account by providing personal information and verifying their identity.",
+                "name": "Register Citizen",
+                "description": "Allow citizens to create a new account by providing a username, name, and email through a registration API.",
                 "high_level_associated": {
                     "name": "Facilitate Citizen Reporting",
-                    "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+                    "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
+                    "actor": {
+                        "name": "Citizens",
+                        "description": "Individuals who report issues and malfunctions in the urban environment."
+                    }
+                }
+            },
+            {
+                "name": "Confirm Email",
+                "description": "Enable citizens to confirm their email address through an email confirmation API after registration.",
+                "high_level_associated": {
+                    "name": "Facilitate Citizen Reporting",
+                    "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
                     "actor": {
                         "name": "Citizens",
                         "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -123,10 +138,10 @@
             },
             {
                 "name": "Submit Report",
-                "description": "Allow citizens to submit a new report about an urban issue through a form interface.",
+                "description": "Allow citizens to submit a new report detailing an urban issue through a form submission API.",
                 "high_level_associated": {
                     "name": "Facilitate Citizen Reporting",
-                    "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+                    "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
                     "actor": {
                         "name": "Citizens",
                         "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -135,10 +150,10 @@
             },
             {
                 "name": "Attach Media to Report",
-                "description": "Enable citizens to upload images or videos related to their report to provide additional context.",
+                "description": "Enable citizens to upload images or videos related to their report using a media upload API.",
                 "high_level_associated": {
                     "name": "Facilitate Citizen Reporting",
-                    "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+                    "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
                     "actor": {
                         "name": "Citizens",
                         "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -147,10 +162,10 @@
             },
             {
                 "name": "View Submitted Reports",
-                "description": "Allow citizens to view the status of their submitted reports and any updates made by municipal operators.",
+                "description": "Allow citizens to view the status of their submitted reports through a report status retrieval API.",
                 "high_level_associated": {
                     "name": "Facilitate Citizen Reporting",
-                    "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+                    "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
                     "actor": {
                         "name": "Citizens",
                         "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -158,11 +173,23 @@
                 }
             },
             {
-                "name": "Access Submitted Reports",
-                "description": "Enable municipal operators to access and review submitted reports for validity and urgency.",
+                "name": "Follow Report",
+                "description": "Allow citizens to follow specific reports to receive updates on their status through a follow report API.",
                 "high_level_associated": {
-                    "name": "Enhance Report Review Process",
-                    "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
+                    "name": "Facilitate Citizen Reporting",
+                    "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
+                    "actor": {
+                        "name": "Citizens",
+                        "description": "Individuals who report issues and malfunctions in the urban environment."
+                    }
+                }
+            },
+            {
+                "name": "Send Notification",
+                "description": "Enable the system to send notifications to citizens via email or platform notifications when the status of their report changes through a notification API.",
+                "high_level_associated": {
+                    "name": "Streamline Report Review Process",
+                    "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
                     "actor": {
                         "name": "Municipal Operators",
                         "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
@@ -170,47 +197,11 @@
                 }
             },
             {
-                "name": "Review Report Details",
-                "description": "Allow municipal operators to examine the details of a report to determine its validity and urgency.",
+                "name": "Review Report",
+                "description": "Allow municipal operators to access and review submitted reports through a report retrieval API.",
                 "high_level_associated": {
-                    "name": "Enhance Report Review Process",
-                    "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-                    "actor": {
-                        "name": "Municipal Operators",
-                        "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-                    }
-                }
-            },
-            {
-                "name": "Approve Report",
-                "description": "Allow municipal operators to approve a report after review, marking it as valid and ready for action.",
-                "high_level_associated": {
-                    "name": "Enhance Report Review Process",
-                    "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-                    "actor": {
-                        "name": "Municipal Operators",
-                        "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-                    }
-                }
-            },
-            {
-                "name": "Reject Report",
-                "description": "Enable municipal operators to reject a report and provide feedback to the citizen about the rejection reason.",
-                "high_level_associated": {
-                    "name": "Enhance Report Review Process",
-                    "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-                    "actor": {
-                        "name": "Municipal Operators",
-                        "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-                    }
-                }
-            },
-            {
-                "name": "Assign Report to Maintenance Personnel",
-                "description": "Allow municipal operators to assign approved reports to external maintenance personnel for resolution.",
-                "high_level_associated": {
-                    "name": "Enhance Report Review Process",
-                    "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
+                    "name": "Streamline Report Review Process",
+                    "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
                     "actor": {
                         "name": "Municipal Operators",
                         "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
@@ -219,10 +210,34 @@
             },
             {
                 "name": "Update Report Status",
-                "description": "Enable external maintenance personnel to update the status of a report as they work on it, providing real-time updates to municipal operators.",
+                "description": "Enable municipal operators to update the status of a report (e.g., in review, resolved) through a report status update API.",
                 "high_level_associated": {
-                    "name": "Coordinate Issue Resolution",
-                    "description": "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
+                    "name": "Streamline Report Review Process",
+                    "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+                    "actor": {
+                        "name": "Municipal Operators",
+                        "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
+                    }
+                }
+            },
+            {
+                "name": "Assign Report to Maintenance Personnel",
+                "description": "Allow municipal operators to assign a report to external maintenance personnel through an assignment API.",
+                "high_level_associated": {
+                    "name": "Streamline Report Review Process",
+                    "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+                    "actor": {
+                        "name": "Municipal Operators",
+                        "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
+                    }
+                }
+            },
+            {
+                "name": "Access Assigned Reports",
+                "description": "Enable external maintenance personnel to view reports assigned to them through a report assignment retrieval API.",
+                "high_level_associated": {
+                    "name": "Ensure Effective Issue Resolution",
+                    "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
                     "actor": {
                         "name": "External Maintenance Personnel",
                         "description": "Workers from external companies who address specific issues reported by citizens."
@@ -230,11 +245,23 @@
                 }
             },
             {
-                "name": "Complete Report Resolution",
-                "description": "Allow external maintenance personnel to mark a report as resolved once the issue has been addressed, notifying municipal operators and citizens.",
+                "name": "Update Report Resolution Status",
+                "description": "Allow external maintenance personnel to update the resolution status of a report through a resolution status update API.",
                 "high_level_associated": {
-                    "name": "Coordinate Issue Resolution",
-                    "description": "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
+                    "name": "Ensure Effective Issue Resolution",
+                    "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
+                    "actor": {
+                        "name": "External Maintenance Personnel",
+                        "description": "Workers from external companies who address specific issues reported by citizens."
+                    }
+                }
+            },
+            {
+                "name": "Exchange Comments with Technical Staff",
+                "description": "Enable external maintenance personnel to exchange comments with municipal operators through a comments API.",
+                "high_level_associated": {
+                    "name": "Ensure Effective Issue Resolution",
+                    "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
                     "actor": {
                         "name": "External Maintenance Personnel",
                         "description": "Workers from external companies who address specific issues reported by citizens."
@@ -243,10 +270,10 @@
             },
             {
                 "name": "Configure System Settings",
-                "description": "Enable municipal administrators to modify system settings such as report categories and notification preferences.",
+                "description": "Enable municipal administrators to modify system configuration settings through a system configuration API.",
                 "high_level_associated": {
-                    "name": "Manage System Configuration and Report Assignment",
-                    "description": "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
+                    "name": "Empower System Configuration and Report Management",
+                    "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
                     "actor": {
                         "name": "Municipal Administrators",
                         "description": "Officials who configure the system and oversee the assignment of reports."
@@ -254,11 +281,11 @@
                 }
             },
             {
-                "name": "Assign Reports to Operators",
-                "description": "Allow municipal administrators to assign specific reports to designated municipal operators for review and action.",
+                "name": "View Report Statistics",
+                "description": "Allow municipal administrators to access and view statistics related to reports through a statistics retrieval API.",
                 "high_level_associated": {
-                    "name": "Manage System Configuration and Report Assignment",
-                    "description": "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
+                    "name": "Empower System Configuration and Report Management",
+                    "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
                     "actor": {
                         "name": "Municipal Administrators",
                         "description": "Officials who configure the system and oversee the assignment of reports."
@@ -266,11 +293,23 @@
                 }
             },
             {
-                "name": "View Reports and Statistics",
-                "description": "Allow non-registered users to access and view a list of reports and relevant statistics without needing to register.",
+                "name": "Access Public Reports",
+                "description": "Allow non-registered users to view public reports through a public report retrieval API.",
                 "high_level_associated": {
-                    "name": "Promote Transparency and Engagement",
-                    "description": "Allow non-registered users to access and view reports and statistics, fostering transparency and encouraging community engagement in urban management.",
+                    "name": "Promote Transparency and Community Engagement",
+                    "description": "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management.",
+                    "actor": {
+                        "name": "Non-registered Users",
+                        "description": "Individuals who can view reports and statistics without needing to register."
+                    }
+                }
+            },
+            {
+                "name": "View Community Engagement Statistics",
+                "description": "Enable non-registered users to access statistics on community engagement through a community engagement statistics API.",
+                "high_level_associated": {
+                    "name": "Promote Transparency and Community Engagement",
+                    "description": "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management.",
                     "actor": {
                         "name": "Non-registered Users",
                         "description": "Individuals who can view reports and statistics without needing to register."
@@ -287,7 +326,7 @@
     "baselineCritiques": {
         "actors": null,
         "highLevelGoals": "The provided high-level goals are well-aligned with the actors and the system description. They correctly capture the core functional aspects",
-        "lowLevelGoals": "Major omission and erroneous addition.  1. **Omission of Critical Functionalities"
+        "lowLevelGoals": "Major omission and erroneous addition.  1. **Omission of Critical Functional Requirements"
     },
     "baselineConfiguration": {
         "generatorStructuredModel": "gpt-4o-mini",

@@ -130,7 +130,12 @@ def generate_high_level_goals(project_description, actors, feedback=None, mode=S
 
 
 #------------------------------------------- Define low level goals from high level goals
-def generate_low_level_goals(highLevelGoals, feedback=None, mode=ShotPromptingMode.ZERO_SHOT):
+def generate_low_level_goals(
+    highLevelGoals,
+    feedback=None,
+    mode=ShotPromptingMode.ZERO_SHOT,
+    generation_context=None,
+):
     sys_prompt = (
         "You are a helpful assistant expert in software engineering tasks. "
         "Elicit low-level goals for a specific stakeholder in a software project. "
@@ -175,6 +180,9 @@ def generate_low_level_goals(highLevelGoals, feedback=None, mode=ShotPromptingMo
         Each low-level goal should theoretically correspond to a single action of the actor with the software.
         **High-level goals:**\n\n
         {highLevelGoals}\n
+
+        **Project and repair context:**\n\n
+        {generation_context or 'No additional project context provided.'}\n
 
         **Output:**
     """

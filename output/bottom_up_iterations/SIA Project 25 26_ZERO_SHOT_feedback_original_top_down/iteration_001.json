@@ -2,156 +2,158 @@
   "iteration": 1,
   "reconstructions": {
     "branch_001": {
-      "reconstructed_high_level_goal": "Enhance citizen engagement and participation in urban management through a comprehensive reporting system.",
-      "rationale": "The low-level goals collectively aim to empower citizens by facilitating account creation, enabling them to report urban issues, provide supporting media, and track the progress of their reports. This integration fosters a participatory approach to urban management.",
+      "reconstructed_high_level_goal": "Facilitate citizen engagement in urban issue reporting and tracking.",
+      "rationale": "The low-level goals collectively aim to create a comprehensive system that allows citizens to register, report urban issues, and track the progress of their reports, thereby enhancing civic participation and accountability.",
       "branch_id": "branch_001",
       "source_low_level_goal_ids": [
-        "Register Citizen Account",
+        "Register Citizen",
+        "Confirm Email",
         "Submit Report",
         "Attach Media to Report",
-        "View Submitted Reports"
+        "View Submitted Reports",
+        "Follow Report"
       ]
     },
     "branch_002": {
-      "reconstructed_high_level_goal": "Facilitate the effective management and resolution of municipal reports by operators.",
-      "rationale": "All the low-level goals focus on the processes involved in reviewing, approving, rejecting, and assigning municipal reports, which are essential for ensuring that issues reported by citizens are addressed efficiently and effectively.",
+      "reconstructed_high_level_goal": "Enhance the efficiency and transparency of the municipal reporting system for citizens and operators.",
+      "rationale": "All the low-level goals focus on improving communication and workflow between citizens and municipal operators regarding report management. Sending notifications keeps citizens informed, while enabling operators to access, update, and assign reports streamlines the handling process, ultimately leading to better service delivery.",
       "branch_id": "branch_002",
       "source_low_level_goal_ids": [
-        "Access Submitted Reports",
-        "Review Report Details",
-        "Approve Report",
-        "Reject Report",
+        "Send Notification",
+        "Review Report",
+        "Update Report Status",
         "Assign Report to Maintenance Personnel"
       ]
     },
     "branch_003": {
-      "reconstructed_high_level_goal": "Enhance communication and transparency between external maintenance personnel and municipal operators regarding report statuses.",
-      "rationale": "Both low-level goals focus on improving the flow of information related to maintenance reports, ensuring that updates and resolutions are communicated effectively to municipal operators and citizens, thereby fostering accountability and responsiveness in municipal services.",
+      "reconstructed_high_level_goal": "Facilitate effective communication and collaboration between external maintenance personnel and municipal operators regarding report management.",
+      "rationale": "The low-level goals focus on enabling external maintenance personnel to access, update, and communicate about reports, which collectively aim to improve the overall process of report management and resolution.",
       "branch_id": "branch_003",
       "source_low_level_goal_ids": [
-        "Update Report Status",
-        "Complete Report Resolution"
+        "Access Assigned Reports",
+        "Update Report Resolution Status",
+        "Exchange Comments with Technical Staff"
       ]
     },
     "branch_004": {
-      "reconstructed_high_level_goal": "Enhance the management and customization of municipal reporting systems for administrators.",
-      "rationale": "Both low-level goals focus on empowering municipal administrators with the ability to tailor the reporting system to their needs, ensuring that reports are relevant and actionable by assigning them to specific operators.",
+      "reconstructed_high_level_goal": "Enhance municipal administration capabilities through improved system management and data access.",
+      "rationale": "Both low-level goals focus on empowering municipal administrators by providing them with tools to manage system settings and access important data, thereby improving their operational efficiency and decision-making.",
       "branch_id": "branch_004",
       "source_low_level_goal_ids": [
         "Configure System Settings",
-        "Assign Reports to Operators"
+        "View Report Statistics"
       ]
     },
     "branch_005": {
-      "reconstructed_high_level_goal": "Enhance accessibility of reports and statistics for all users.",
-      "rationale": "This goal encompasses the intention to provide open access to information, promoting transparency and user engagement without barriers such as registration.",
+      "reconstructed_high_level_goal": "Provide public access to community-related information and reports",
+      "rationale": "Both low-level goals focus on granting non-registered users access to information related to community engagement and reports, thereby promoting transparency and encouraging public interest in community activities.",
       "branch_id": "branch_005",
       "source_low_level_goal_ids": [
-        "View Reports and Statistics"
+        "Access Public Reports",
+        "View Community Engagement Statistics"
       ]
     }
   },
   "evaluations": {
     "branch_001": {
       "branch_id": "branch_001",
-      "rationale": "The original High-Level Goal 'Facilitate Citizen Reporting' accurately captures the primary functional intention of the Citizens actor as described in the project description. The text explicitly details the registration and report submission process (Section A), which constitutes the core interaction for this actor. The goal is supported by the documentation, reasonably scoped to the actor's main contribution, and faithful to the system's purpose. The reconstructed goal is too broad and abstract ('Enhance citizen engagement...'), whereas the original goal focuses on the specific functional capability provided to the actor. Therefore, the original goal should be kept. The current LLGs are incomplete and partially misleading regarding the scope of the parent HLG 'Facilitate Citizen Reporting'. \n1. Incompleteness: The parent HLG implies the entire process of reporting. The current LLGs miss critical steps defined in the requirements, such as 'Select Location on Map' (mandatory for submission), 'Choose Anonymity Option' (explicitly required after filling the form), and 'Verify Email' (part of the registration validity). \n2. Misleading/Too Operational: 'Attach Media to Report' is listed as a separate high-level goal, but the requirements state it is a mandatory field within the submission process, not a distinct user goal parallel to submitting. Separating it suggests it's optional or a separate workflow, which is misleading. \n3. Scope Mismatch: 'View Submitted Reports' is included, but the parent HLG is specifically about *facilitating the act of reporting* (registration + submission). Viewing status is part of the 'Report Lifecycle' or 'Citizen Updates' phase, which might be better covered by a different HLG or should be clearly distinguished. However, given the HLG description mentions 'streamlined... interface... to register and submit', the focus should be on the creation flow. The current set mixes creation steps with post-creation viewing without covering the mandatory intermediate steps (location, anonymity). \n4. Missing Actor Context: The HLG actor is 'Citizens'. The LLGs correctly identify this, but the decomposition fails to capture the mandatory constraints (e.g., email confirmation) that define the 'valid' registration mentioned in the HLG description.",
-      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "rationale": "The original High-Level Goal 'Facilitate Citizen Reporting' accurately captures the primary functional intention of the Citizens actor as described in the project documentation (Sections A and C). The goal encompasses registration, submission of detailed reports (including location, description, category, and photos), and the implicit tracking of these reports. The bottom-up reconstruction 'Facilitate citizen engagement in urban issue reporting and tracking' is semantically equivalent but slightly more verbose. The original goal is specific enough to distinguish it from the 'Non-registered Users' goal (which focuses on viewing/transparency) and the 'Municipal Operators' goal (which focuses on review/resolution). It is not too generic, narrow, or incorrectly scoped. Therefore, it should be kept. The current Low-Level Goals (LLGs) adequately cover the essential capabilities required by the parent High-Level Goal 'Facilitate Citizen Reporting'. The parent goal explicitly requires citizens to 'register' and 'submit detailed reports'. \n\n1. **Registration**: Covered by 'Register Citizen' (llg_001) and 'Confirm Email' (llg_002), which aligns with the documentation stating registration requires username, name, and email confirmation.\n2. **Submission**: Covered by 'Submit Report' (llg_003) and 'Attach Media to Report' (llg_004). The documentation mandates title, description, category, location, and photos. While the specific fields (category, location) are not explicitly named in the LLG descriptions, 'Submit Report' and 'Attach Media' are sufficient atomic capabilities to encompass the submission process. The evaluator guidelines state that 'Technical/API wording alone is not an error when the decomposition is complete' and 'Different granularity... are not material defects'. The core capability of submitting the report with its details is present.\n3. **Tracking/Updates**: The parent goal mentions 'ensuring their active participation', which implies tracking. 'View Submitted Reports' (llg_005) and 'Follow Report' (llg_006) cover the citizen's ability to track their own reports and follow others, as described in section C.\n\nNo essential capability explicitly required by the parent HLG is absent. The LLGs do not contradict the documentation. Capabilities belonging to sibling HLGs (e.g., review, resolution, admin configuration) are correctly excluded.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Facilitate Citizen Reporting' accurately captures the primary functional intention of the Citizens actor as described in the project description. The text explicitly details the registration and report submission process (Section A), which constitutes the core interaction for this actor. The goal is supported by the documentation, reasonably scoped to the actor's main contribution, and faithful to the system's purpose. The reconstructed goal is too broad and abstract ('Enhance citizen engagement...'), whereas the original goal focuses on the specific functional capability provided to the actor. Therefore, the original goal should be kept.",
+        "rationale": "The original High-Level Goal 'Facilitate Citizen Reporting' accurately captures the primary functional intention of the Citizens actor as described in the project documentation (Sections A and C). The goal encompasses registration, submission of detailed reports (including location, description, category, and photos), and the implicit tracking of these reports. The bottom-up reconstruction 'Facilitate citizen engagement in urban issue reporting and tracking' is semantically equivalent but slightly more verbose. The original goal is specific enough to distinguish it from the 'Non-registered Users' goal (which focuses on viewing/transparency) and the 'Municipal Operators' goal (which focuses on review/resolution). It is not too generic, narrow, or incorrectly scoped. Therefore, it should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current LLGs are incomplete and partially misleading regarding the scope of the parent HLG 'Facilitate Citizen Reporting'. \n1. Incompleteness: The parent HLG implies the entire process of reporting. The current LLGs miss critical steps defined in the requirements, such as 'Select Location on Map' (mandatory for submission), 'Choose Anonymity Option' (explicitly required after filling the form), and 'Verify Email' (part of the registration validity). \n2. Misleading/Too Operational: 'Attach Media to Report' is listed as a separate high-level goal, but the requirements state it is a mandatory field within the submission process, not a distinct user goal parallel to submitting. Separating it suggests it's optional or a separate workflow, which is misleading. \n3. Scope Mismatch: 'View Submitted Reports' is included, but the parent HLG is specifically about *facilitating the act of reporting* (registration + submission). Viewing status is part of the 'Report Lifecycle' or 'Citizen Updates' phase, which might be better covered by a different HLG or should be clearly distinguished. However, given the HLG description mentions 'streamlined... interface... to register and submit', the focus should be on the creation flow. The current set mixes creation steps with post-creation viewing without covering the mandatory intermediate steps (location, anonymity). \n4. Missing Actor Context: The HLG actor is 'Citizens'. The LLGs correctly identify this, but the decomposition fails to capture the mandatory constraints (e.g., email confirmation) that define the 'valid' registration mentioned in the HLG description.",
-        "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "regeneration_feedback": "The decomposition is incomplete and structurally flawed. \n1. Merge 'Attach Media' into 'Submit Report' or make it a sub-step, as it is a mandatory part of the submission form, not a separate goal. \n2. Add 'Verify Email Address' as a distinct LLG under Registration, as the system requires confirmation before the user can use the system. \n3. Add 'Select Issue Location' as a distinct LLG, as selecting a point on the map is a mandatory step before filling the form. \n4. Add 'Choose Anonymity Preference' as a distinct LLG, as the system explicitly asks this after form completion. \n5. Consider removing 'View Submitted Reports' if the HLG is strictly about the *submission* process, or rename the HLG to 'Manage Citizen Reports' if viewing is intended. Given the HLG name 'Facilitate Citizen Reporting', it likely focuses on the creation. If viewing is kept, ensure the HLG description is updated or the LLG is justified as part of the 'feedback loop' of reporting. However, based on the text 'register and submit', the primary focus is creation. \n6. Ensure 'Register Citizen Account' includes the email verification step or has a child goal for it.",
-        "unsupported_or_misleading_llg_ids": [
-          "Attach Media to Report",
-          "View Submitted Reports"
-        ],
+        "rationale": "The current Low-Level Goals (LLGs) adequately cover the essential capabilities required by the parent High-Level Goal 'Facilitate Citizen Reporting'. The parent goal explicitly requires citizens to 'register' and 'submit detailed reports'. \n\n1. **Registration**: Covered by 'Register Citizen' (llg_001) and 'Confirm Email' (llg_002), which aligns with the documentation stating registration requires username, name, and email confirmation.\n2. **Submission**: Covered by 'Submit Report' (llg_003) and 'Attach Media to Report' (llg_004). The documentation mandates title, description, category, location, and photos. While the specific fields (category, location) are not explicitly named in the LLG descriptions, 'Submit Report' and 'Attach Media' are sufficient atomic capabilities to encompass the submission process. The evaluator guidelines state that 'Technical/API wording alone is not an error when the decomposition is complete' and 'Different granularity... are not material defects'. The core capability of submitting the report with its details is present.\n3. **Tracking/Updates**: The parent goal mentions 'ensuring their active participation', which implies tracking. 'View Submitted Reports' (llg_005) and 'Follow Report' (llg_006) cover the citizen's ability to track their own reports and follow others, as described in section C.\n\nNo essential capability explicitly required by the parent HLG is absent. The LLGs do not contradict the documentation. Capabilities belonging to sibling HLGs (e.g., review, resolution, admin configuration) are correctly excluded.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
         "confidence": "HIGH"
       }
     },
     "branch_002": {
       "branch_id": "branch_002",
-      "rationale": "The original High-Level Goal 'Enhance Report Review Process' is supported by the project description, specifically section B (Report Lifecycle), which details the workflow for Municipal Operators (Organization Office and Technical Office) to review, approve, reject, and manage reports. The goal accurately reflects the actor's responsibility to ensure accountability and timely responses through this workflow. It is not too generic, as it specifically targets the 'Review Process' which is a distinct and critical phase described in the text. It is not too narrow, as it encompasses the broader management aspect implied by the lifecycle states. Therefore, it should be kept. The current LLGs are incomplete and partially inconsistent with the project description. \n1. Incompleteness: The HLG mentions 'manage citizen reports', but the LLGs only cover the initial review (Access, Review, Approve, Reject) and assignment. They miss critical management steps described in Section B, such as updating the status to 'Work in Progress', 'Suspended', or 'Resolved' (especially for external companies without system access, where the operator must manually update the status). \n2. Inconsistency/Unsupported: The LLG 'Reject Report' states it provides feedback to the citizen. While Section B says a written explanation is mandatory, it does not explicitly state this feedback is sent *to the citizen* via the system in the rejection step (though Section C mentions notifications, the rejection explanation is a specific administrative requirement). More importantly, the LLG 'Assign Report to Maintenance Personnel' is too narrow; it only covers external personnel. Section B states that after approval, reports are assigned to the 'technical office responsible' based on category. This internal assignment is a key part of the workflow before any external assignment might occur. \n3. Missing Goals: The workflow includes states like 'In Progress', 'Work in Progress', 'Suspended', and 'Resolved'. The current LLGs do not cover the transitions to these states by the municipal operators (e.g., marking as Work in Progress, Suspending, or Resolving for non-connected external companies). \nTherefore, the LLGs need regeneration to fully decompose the 'Enhance Report Review Process' HLG, covering the entire lifecycle management by municipal operators.",
-      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "rationale": "The original High-Level Goal 'Streamline Report Review Process' accurately captures the functional intention of the Municipal Operators as described in the project documentation (Section B). The documentation details the workflow where operators review, approve/reject, assign, and update the status of reports. The bottom-up reconstruction mentions 'transparency' and 'citizens', which are outcomes or concerns of other actors (Citizens, Non-registered Users) rather than the primary operational goal of the Municipal Operators. The original goal is specific to the operator's workflow efficiency and management, which is supported by the text. It is not too generic, nor is it unsupported. Therefore, it should be kept. The current Low-Level Goals (LLGs) adequately cover the core responsibilities of the 'Streamline Report Review Process' High-Level Goal (HLG) for Municipal Operators. Specifically: 1) 'Review Report' (llg_002) covers the access and preliminary review phase. 2) 'Update Report Status' (llg_003) covers the state transitions (Pending, In Progress, Work in Progress, Suspended, Rejected) and the requirement for written explanations upon rejection (implied by the update capability). 3) 'Assign Report to Maintenance Personnel' (llg_004) covers the assignment to technical offices or external companies. 4) 'Send Notification' (llg_001) covers the communication aspect required to keep citizens informed, which supports the efficiency and trust aspects of the process. No essential capabilities explicitly required by the parent HLG are missing. The capabilities related to citizen submission, external maintenance execution, and system configuration are correctly excluded as they belong to sibling HLGs.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Enhance Report Review Process' is supported by the project description, specifically section B (Report Lifecycle), which details the workflow for Municipal Operators (Organization Office and Technical Office) to review, approve, reject, and manage reports. The goal accurately reflects the actor's responsibility to ensure accountability and timely responses through this workflow. It is not too generic, as it specifically targets the 'Review Process' which is a distinct and critical phase described in the text. It is not too narrow, as it encompasses the broader management aspect implied by the lifecycle states. Therefore, it should be kept.",
+        "rationale": "The original High-Level Goal 'Streamline Report Review Process' accurately captures the functional intention of the Municipal Operators as described in the project documentation (Section B). The documentation details the workflow where operators review, approve/reject, assign, and update the status of reports. The bottom-up reconstruction mentions 'transparency' and 'citizens', which are outcomes or concerns of other actors (Citizens, Non-registered Users) rather than the primary operational goal of the Municipal Operators. The original goal is specific to the operator's workflow efficiency and management, which is supported by the text. It is not too generic, nor is it unsupported. Therefore, it should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current LLGs are incomplete and partially inconsistent with the project description. \n1. Incompleteness: The HLG mentions 'manage citizen reports', but the LLGs only cover the initial review (Access, Review, Approve, Reject) and assignment. They miss critical management steps described in Section B, such as updating the status to 'Work in Progress', 'Suspended', or 'Resolved' (especially for external companies without system access, where the operator must manually update the status). \n2. Inconsistency/Unsupported: The LLG 'Reject Report' states it provides feedback to the citizen. While Section B says a written explanation is mandatory, it does not explicitly state this feedback is sent *to the citizen* via the system in the rejection step (though Section C mentions notifications, the rejection explanation is a specific administrative requirement). More importantly, the LLG 'Assign Report to Maintenance Personnel' is too narrow; it only covers external personnel. Section B states that after approval, reports are assigned to the 'technical office responsible' based on category. This internal assignment is a key part of the workflow before any external assignment might occur. \n3. Missing Goals: The workflow includes states like 'In Progress', 'Work in Progress', 'Suspended', and 'Resolved'. The current LLGs do not cover the transitions to these states by the municipal operators (e.g., marking as Work in Progress, Suspending, or Resolving for non-connected external companies). \nTherefore, the LLGs need regeneration to fully decompose the 'Enhance Report Review Process' HLG, covering the entire lifecycle management by municipal operators.",
-        "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "regeneration_feedback": "The current LLGs focus heavily on the initial approval/rejection phase but fail to cover the subsequent management of the report lifecycle by municipal operators. Specifically:\n1. Add LLGs for managing the report status after approval, such as 'Assign Report to Internal Technical Office', 'Update Report Status to Work in Progress', 'Suspend Report', and 'Resolve Report' (specifically for cases where external companies do not have system access).\n2. Refine 'Reject Report' to ensure it aligns with the requirement of providing a written explanation, but clarify if this is an internal record or a citizen notification based on Section C.\n3. Ensure the decomposition covers the full scope of 'manage' as implied by the HLG, including the handover to external entities and the final closure of reports.",
+        "rationale": "The current Low-Level Goals (LLGs) adequately cover the core responsibilities of the 'Streamline Report Review Process' High-Level Goal (HLG) for Municipal Operators. Specifically: 1) 'Review Report' (llg_002) covers the access and preliminary review phase. 2) 'Update Report Status' (llg_003) covers the state transitions (Pending, In Progress, Work in Progress, Suspended, Rejected) and the requirement for written explanations upon rejection (implied by the update capability). 3) 'Assign Report to Maintenance Personnel' (llg_004) covers the assignment to technical offices or external companies. 4) 'Send Notification' (llg_001) covers the communication aspect required to keep citizens informed, which supports the efficiency and trust aspects of the process. No essential capabilities explicitly required by the parent HLG are missing. The capabilities related to citizen submission, external maintenance execution, and system configuration are correctly excluded as they belong to sibling HLGs.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
         "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
         "confidence": "HIGH"
       }
     },
     "branch_003": {
       "branch_id": "branch_003",
-      "rationale": "The original High-Level Goal 'Coordinate Issue Resolution' accurately captures the functional intention of the External Maintenance Personnel actor as described in Section B (Case 1). The text explicitly states that these personnel can move reports from 'Assigned' to 'In Progress', exchange information/comments with the technical office, and mark reports as 'resolved'. This constitutes coordinating the resolution of the issue. The goal is supported by the documentation, reasonably scoped to the actor's responsibilities, and faithful to the project description. The reconstructed goal focuses heavily on 'transparency' and 'communication' which are means to an end, whereas the original goal correctly identifies the primary business outcome (resolving the issue) facilitated by that coordination. Therefore, the original goal should be kept. The current LLGs are incomplete and partially inconsistent with the project description. \n1. Incompleteness: The parent HLG 'Coordinate Issue Resolution' implies a two-way collaboration. The current LLGs only cover the external personnel's actions (updating status, marking resolved) but miss the critical communication aspect mentioned in the description: 'Staff from the technical office and external maintenance workers can exchange information and comments through the report'. This exchange is a key part of 'coordinating' and 'maintaining communication'.\n2. Inconsistency/Misleading: The LLG 'Complete Report Resolution' states it notifies 'citizens'. However, the description explicitly states that comments and internal exchanges are 'not visible to the reporting citizen (nor to other citizens)'. While the citizen receives a notification of the state change (via email/platform notification as per section C), the LLG description implies a direct notification from the resolution action itself which might be misleading regarding the content visibility. More importantly, the 'Coordinate' aspect is missing the municipal operator's side of the interaction (assigning, commenting).\n3. Scope: The parent HLG is about 'collaboration'. The current LLGs are purely operational steps for the external actor. They do not fully decompose the 'collaboration' goal, which involves both parties. Therefore, they are too narrow and incomplete.",
-      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "rationale": "The original High-Level Goal 'Ensure Effective Issue Resolution' accurately captures the primary functional intention of the External Maintenance Personnel actor as described in the project documentation (Section B, Case 1). The documentation explicitly states that these personnel are assigned reports, move them to 'In Progress', exchange information with municipal operators, and mark reports as 'resolved'. The original goal covers both the resolution aspect (marking as resolved) and the communication aspect (exchanging information), which are the core responsibilities defined for this actor. The bottom-up reconstruction focuses heavily on communication, but the ultimate goal of the actor is the resolution of the issue. The original goal is not too generic, nor is it unsupported. It is distinct from the Municipal Operators' goal (which focuses on review and assignment) and the Citizens' goal (reporting). Therefore, the original goal should be kept. The current Low-Level Goals (LLGs) adequately cover the essential capabilities required by the parent High-Level Goal (HLG) 'Ensure Effective Issue Resolution' for External Maintenance Personnel. Specifically: 1) 'Access Assigned Reports' (llg_001) covers the need to view assigned reports. 2) 'Update Report Resolution Status' (llg_002) covers the ability to move reports from 'Assigned' to 'In Progress' and mark them as 'Resolved', which is the core resolution action. 3) 'Exchange Comments with Technical Staff' (llg_003) covers the communication requirement. The documentation explicitly states that external personnel can move reports from Assigned to In Progress and mark them as resolved, and exchange comments. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs. The distinction between 'In Progress' and 'Work in Progress' is a state detail, but the capability to update status is present. No capabilities from sibling HLGs are incorrectly included.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Coordinate Issue Resolution' accurately captures the functional intention of the External Maintenance Personnel actor as described in Section B (Case 1). The text explicitly states that these personnel can move reports from 'Assigned' to 'In Progress', exchange information/comments with the technical office, and mark reports as 'resolved'. This constitutes coordinating the resolution of the issue. The goal is supported by the documentation, reasonably scoped to the actor's responsibilities, and faithful to the project description. The reconstructed goal focuses heavily on 'transparency' and 'communication' which are means to an end, whereas the original goal correctly identifies the primary business outcome (resolving the issue) facilitated by that coordination. Therefore, the original goal should be kept.",
+        "rationale": "The original High-Level Goal 'Ensure Effective Issue Resolution' accurately captures the primary functional intention of the External Maintenance Personnel actor as described in the project documentation (Section B, Case 1). The documentation explicitly states that these personnel are assigned reports, move them to 'In Progress', exchange information with municipal operators, and mark reports as 'resolved'. The original goal covers both the resolution aspect (marking as resolved) and the communication aspect (exchanging information), which are the core responsibilities defined for this actor. The bottom-up reconstruction focuses heavily on communication, but the ultimate goal of the actor is the resolution of the issue. The original goal is not too generic, nor is it unsupported. It is distinct from the Municipal Operators' goal (which focuses on review and assignment) and the Citizens' goal (reporting). Therefore, the original goal should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current LLGs are incomplete and partially inconsistent with the project description. \n1. Incompleteness: The parent HLG 'Coordinate Issue Resolution' implies a two-way collaboration. The current LLGs only cover the external personnel's actions (updating status, marking resolved) but miss the critical communication aspect mentioned in the description: 'Staff from the technical office and external maintenance workers can exchange information and comments through the report'. This exchange is a key part of 'coordinating' and 'maintaining communication'.\n2. Inconsistency/Misleading: The LLG 'Complete Report Resolution' states it notifies 'citizens'. However, the description explicitly states that comments and internal exchanges are 'not visible to the reporting citizen (nor to other citizens)'. While the citizen receives a notification of the state change (via email/platform notification as per section C), the LLG description implies a direct notification from the resolution action itself which might be misleading regarding the content visibility. More importantly, the 'Coordinate' aspect is missing the municipal operator's side of the interaction (assigning, commenting).\n3. Scope: The parent HLG is about 'collaboration'. The current LLGs are purely operational steps for the external actor. They do not fully decompose the 'collaboration' goal, which involves both parties. Therefore, they are too narrow and incomplete.",
-        "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "regeneration_feedback": "The current LLGs focus only on the external personnel's unilateral actions. To correctly decompose 'Coordinate Issue Resolution', you must include goals that reflect the bidirectional nature of the collaboration described in Case 1. Specifically, add an LLG for 'Exchange Comments/Information' between external personnel and municipal operators, as this is explicitly stated as a way to maintain communication. Also, ensure the 'Update Status' LLG clarifies that this is part of the workflow coordination. The 'Complete Report Resolution' LLG should be refined to ensure it doesn't imply direct citizen communication of internal details, but rather the finalization of the task which triggers the system's standard notification process.",
-        "unsupported_or_misleading_llg_ids": [
-          "Complete Report Resolution"
-        ],
+        "rationale": "The current Low-Level Goals (LLGs) adequately cover the essential capabilities required by the parent High-Level Goal (HLG) 'Ensure Effective Issue Resolution' for External Maintenance Personnel. Specifically: 1) 'Access Assigned Reports' (llg_001) covers the need to view assigned reports. 2) 'Update Report Resolution Status' (llg_002) covers the ability to move reports from 'Assigned' to 'In Progress' and mark them as 'Resolved', which is the core resolution action. 3) 'Exchange Comments with Technical Staff' (llg_003) covers the communication requirement. The documentation explicitly states that external personnel can move reports from Assigned to In Progress and mark them as resolved, and exchange comments. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs. The distinction between 'In Progress' and 'Work in Progress' is a state detail, but the capability to update status is present. No capabilities from sibling HLGs are incorrectly included.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
         "confidence": "HIGH"
       }
     },
     "branch_004": {
       "branch_id": "branch_004",
-      "rationale": "The original High-Level Goal 'Manage System Configuration and Report Assignment' is well-supported by the project description. Section B explicitly mentions that automatic assignment to external companies is 'possible only if previously configured by the municipal administrator,' supporting the 'System Configuration' aspect. The actor description explicitly states they 'oversee the assignment of reports,' and Section B details the workflow where technical offices (under administrative oversight) assign reports to personnel or external companies, supporting the 'Report Assignment' aspect. The goal is reasonably scoped for the actor and faithful to the text. The bottom-up reconstruction is too generic and loses the specific functional intent of configuration and assignment. The current LLGs are incomplete and partially misleading regarding the scope of the Parent HLG. \n1. Incompleteness: The Parent HLG explicitly mentions 'Report Assignment'. The current LLG 'Assign Reports to Operators' only covers assignment to municipal operators. The project description specifies that reports can also be assigned to external companies (Case 1) and that automatic assignment rules can be configured by administrators. The current LLGs do not cover the configuration of these assignment rules or the assignment to external entities.\n2. Misleading/Too Narrow: The LLG 'Configure System Settings' is too vague. The project description highlights specific configuration needs, such as enabling automatic assignment for external companies and managing notification preferences. The current description does not reflect the specific operational impact of these configurations on the report lifecycle.\n3. Missing Goal: There is no LLG for managing the configuration of external company access or automatic assignment rules, which is a key part of 'optimizing operational efficiency' mentioned in the HLG description.",
+      "rationale": "The original High-Level Goal 'Empower System Configuration and Report Management' is supported by the project description. Section B explicitly mentions that automatic assignment to external companies is possible 'only if previously configured by the municipal administrator,' and Section D mentions a private statistics section accessible only to administrators. The actor description also defines them as officials who 'configure the system and oversee the assignment of reports.' The goal accurately captures these functional intentions (configuration and oversight/management) without being overly generic or narrow. It does not overlap significantly with the 'Municipal Operators' goal, which focuses on the review and resolution workflow rather than system configuration and high-level oversight. The parent HLG explicitly requires the ability to 'oversee the assignment of reports'. The current LLGs only cover 'Configure System Settings' and 'View Report Statistics'. While the documentation mentions that automatic assignment can be configured (covered by LLG_001), the HLG's phrasing 'oversee the assignment' implies a broader capability to monitor, manage, or intervene in the assignment process (e.g., viewing assignment queues, reassigning reports, or tracking assignment status), which is distinct from mere configuration or statistical viewing. The current LLGs lack a specific goal for overseeing/managing the assignment workflow itself, which is a core part of the parent HLG's description. Therefore, an essential capability is missing.",
       "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Manage System Configuration and Report Assignment' is well-supported by the project description. Section B explicitly mentions that automatic assignment to external companies is 'possible only if previously configured by the municipal administrator,' supporting the 'System Configuration' aspect. The actor description explicitly states they 'oversee the assignment of reports,' and Section B details the workflow where technical offices (under administrative oversight) assign reports to personnel or external companies, supporting the 'Report Assignment' aspect. The goal is reasonably scoped for the actor and faithful to the text. The bottom-up reconstruction is too generic and loses the specific functional intent of configuration and assignment.",
+        "rationale": "The original High-Level Goal 'Empower System Configuration and Report Management' is supported by the project description. Section B explicitly mentions that automatic assignment to external companies is possible 'only if previously configured by the municipal administrator,' and Section D mentions a private statistics section accessible only to administrators. The actor description also defines them as officials who 'configure the system and oversee the assignment of reports.' The goal accurately captures these functional intentions (configuration and oversight/management) without being overly generic or narrow. It does not overlap significantly with the 'Municipal Operators' goal, which focuses on the review and resolution workflow rather than system configuration and high-level oversight.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current LLGs are incomplete and partially misleading regarding the scope of the Parent HLG. \n1. Incompleteness: The Parent HLG explicitly mentions 'Report Assignment'. The current LLG 'Assign Reports to Operators' only covers assignment to municipal operators. The project description specifies that reports can also be assigned to external companies (Case 1) and that automatic assignment rules can be configured by administrators. The current LLGs do not cover the configuration of these assignment rules or the assignment to external entities.\n2. Misleading/Too Narrow: The LLG 'Configure System Settings' is too vague. The project description highlights specific configuration needs, such as enabling automatic assignment for external companies and managing notification preferences. The current description does not reflect the specific operational impact of these configurations on the report lifecycle.\n3. Missing Goal: There is no LLG for managing the configuration of external company access or automatic assignment rules, which is a key part of 'optimizing operational efficiency' mentioned in the HLG description.",
+        "rationale": "The parent HLG explicitly requires the ability to 'oversee the assignment of reports'. The current LLGs only cover 'Configure System Settings' and 'View Report Statistics'. While the documentation mentions that automatic assignment can be configured (covered by LLG_001), the HLG's phrasing 'oversee the assignment' implies a broader capability to monitor, manage, or intervene in the assignment process (e.g., viewing assignment queues, reassigning reports, or tracking assignment status), which is distinct from mere configuration or statistical viewing. The current LLGs lack a specific goal for overseeing/managing the assignment workflow itself, which is a core part of the parent HLG's description. Therefore, an essential capability is missing.",
         "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "regeneration_feedback": "The current LLGs fail to fully decompose the HLG. Specifically:\n1. 'Assign Reports to Operators' is too narrow; it should encompass assigning reports to both municipal staff and external companies, or be split to reflect the different assignment mechanisms (manual vs. automatic).\n2. 'Configure System Settings' is too generic. It should be refined to specifically address the configuration of report categories, notification channels, and crucially, the automatic assignment rules for external companies as described in section B.\n3. A new LLG or refinement is needed to explicitly handle the configuration of external company integrations and automatic routing rules, which are central to the 'optimizing operational efficiency' goal of the HLG.",
-        "unsupported_or_misleading_llg_ids": [
-          "Configure System Settings",
-          "Assign Reports to Operators"
+        "regeneration_feedback": "The current LLGs miss the capability to 'oversee the assignment of reports'. While configuration is covered, the active oversight/management of report assignments (e.g., viewing assigned reports, managing assignment queues, or handling exceptions in assignment) is not explicitly represented in the current LLGs. Please add a LLG that addresses the oversight/management aspect of report assignments.",
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [
+          "Oversee the assignment of reports"
         ],
         "confidence": "HIGH"
       }
     },
     "branch_005": {
       "branch_id": "branch_005",
-      "rationale": "The original High-Level Goal 'Promote Transparency and Engagement' is supported by the project description, which explicitly states that allowing non-registered users to view reports and statistics is intended to 'strengthen trust between citizens and institutions' (Section C) and provides public statistics (Section D). The goal correctly captures the functional intention (viewing reports/stats) and the underlying value (transparency/engagement) for the specified actor. It is not too generic, as it is tied to specific features available to non-registered users. It is not too narrow, as it covers both reports and statistics. Therefore, it should be kept. The current LLG 'View Reports and Statistics' is too broad and operational. It lumps together two distinct functionalities described in the requirements: viewing the interactive map/summary table of reports (Section C) and viewing public statistics (Section D). Furthermore, the HLG 'Promote Transparency and Engagement' implies a goal-oriented decomposition. A proper decomposition should separate the act of viewing specific citizen contributions (reports) from viewing aggregated data (statistics), as these serve slightly different engagement purposes (tracking specific issues vs. understanding general trends). Additionally, the current LLG description is a restatement of the HLG rather than a distinct, lower-level functional goal. To correctly decompose the HLG, we should split it into 'View Public Reports' and 'View Public Statistics'.",
-      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "rationale": "The original High-Level Goal (HLG) 'Promote Transparency and Community Engagement' accurately captures the functional intention of the 'Non-registered Users' actor as described in the project documentation. Section C explicitly states that non-registered users can view maps and summary tables of reports, and Section D states they can view public statistics. The description of the HLG correctly links these functional capabilities (viewing reports and statistics) to the strategic goals of fostering transparency and encouraging engagement. The bottom-up reconstruction ('Provide public access...') is a valid functional summary, but the original HLG is not too generic, narrow, or incorrectly scoped; it appropriately frames the functional requirement within the system's broader purpose. There is no semantic overlap with other HLGs that would necessitate removal, as the other HLGs focus on registered citizens, municipal operators, external personnel, and administrators. The parent HLG explicitly requires allowing non-registered users to access and view 'reports' and 'statistics'. The current LLGs cover 'Access Public Reports' (llg_001) and 'View Community Engagement Statistics' (llg_002). According to the documentation (Section C and D), non-registered users can view the public reports (map/table) and public statistics. The current LLGs accurately decompose these two distinct capabilities. There are no missing essential capabilities, and no LLGs contradict the documentation or duplicate sibling responsibilities. The use of API terminology is acceptable per the evaluation guidelines.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Promote Transparency and Engagement' is supported by the project description, which explicitly states that allowing non-registered users to view reports and statistics is intended to 'strengthen trust between citizens and institutions' (Section C) and provides public statistics (Section D). The goal correctly captures the functional intention (viewing reports/stats) and the underlying value (transparency/engagement) for the specified actor. It is not too generic, as it is tied to specific features available to non-registered users. It is not too narrow, as it covers both reports and statistics. Therefore, it should be kept.",
+        "rationale": "The original High-Level Goal (HLG) 'Promote Transparency and Community Engagement' accurately captures the functional intention of the 'Non-registered Users' actor as described in the project documentation. Section C explicitly states that non-registered users can view maps and summary tables of reports, and Section D states they can view public statistics. The description of the HLG correctly links these functional capabilities (viewing reports and statistics) to the strategic goals of fostering transparency and encouraging engagement. The bottom-up reconstruction ('Provide public access...') is a valid functional summary, but the original HLG is not too generic, narrow, or incorrectly scoped; it appropriately frames the functional requirement within the system's broader purpose. There is no semantic overlap with other HLGs that would necessitate removal, as the other HLGs focus on registered citizens, municipal operators, external personnel, and administrators.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current LLG 'View Reports and Statistics' is too broad and operational. It lumps together two distinct functionalities described in the requirements: viewing the interactive map/summary table of reports (Section C) and viewing public statistics (Section D). Furthermore, the HLG 'Promote Transparency and Engagement' implies a goal-oriented decomposition. A proper decomposition should separate the act of viewing specific citizen contributions (reports) from viewing aggregated data (statistics), as these serve slightly different engagement purposes (tracking specific issues vs. understanding general trends). Additionally, the current LLG description is a restatement of the HLG rather than a distinct, lower-level functional goal. To correctly decompose the HLG, we should split it into 'View Public Reports' and 'View Public Statistics'.",
-        "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "regeneration_feedback": "The current LLG is too coarse-grained. It combines two separate features mentioned in the requirements: viewing the list/map of reports (Section C) and viewing public statistics (Section D). Please regenerate the LLGs to separate these into distinct goals: 1) 'View Public Reports' (allowing non-registered users to see the map and summary table of accepted reports) and 2) 'View Public Statistics' (allowing non-registered users to see trends and counts per category). This provides a more precise decomposition of the transparency goal.",
+        "rationale": "The parent HLG explicitly requires allowing non-registered users to access and view 'reports' and 'statistics'. The current LLGs cover 'Access Public Reports' (llg_001) and 'View Community Engagement Statistics' (llg_002). According to the documentation (Section C and D), non-registered users can view the public reports (map/table) and public statistics. The current LLGs accurately decompose these two distinct capabilities. There are no missing essential capabilities, and no LLGs contradict the documentation or duplicate sibling responsibilities. The use of API terminology is acceptable per the evaluation guidelines.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
         "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
         "confidence": "HIGH"
       }
     }
@@ -160,39 +162,39 @@
     "goals": [
       {
         "name": "Facilitate Citizen Reporting",
-        "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+        "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
         "actor": {
           "name": "Citizens",
           "description": "Individuals who report issues and malfunctions in the urban environment."
         }
       },
       {
-        "name": "Enhance Report Review Process",
-        "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
+        "name": "Streamline Report Review Process",
+        "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
         "actor": {
           "name": "Municipal Operators",
           "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
         }
       },
       {
-        "name": "Coordinate Issue Resolution",
-        "description": "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
+        "name": "Ensure Effective Issue Resolution",
+        "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
         "actor": {
           "name": "External Maintenance Personnel",
           "description": "Workers from external companies who address specific issues reported by citizens."
         }
       },
       {
-        "name": "Manage System Configuration and Report Assignment",
-        "description": "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
+        "name": "Empower System Configuration and Report Management",
+        "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
         "actor": {
           "name": "Municipal Administrators",
           "description": "Officials who configure the system and oversee the assignment of reports."
         }
       },
       {
-        "name": "Promote Transparency and Engagement",
-        "description": "Allow non-registered users to access and view reports and statistics, fostering transparency and encouraging community engagement in urban management.",
+        "name": "Promote Transparency and Community Engagement",
+        "description": "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management.",
         "actor": {
           "name": "Non-registered Users",
           "description": "Individuals who can view reports and statistics without needing to register."
@@ -203,131 +205,11 @@
   "low_level_goals": {
     "low_level_goals": [
       {
-        "name": "Access Submitted Reports",
-        "description": "Enable municipal operators to access and review submitted reports for validity and urgency.",
-        "high_level_associated": {
-          "name": "Enhance Report Review Process",
-          "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-          "actor": {
-            "name": "Municipal Operators",
-            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-          }
-        }
-      },
-      {
-        "name": "Review Report Details",
-        "description": "Allow municipal operators to examine the details of a report to determine its validity and urgency.",
-        "high_level_associated": {
-          "name": "Enhance Report Review Process",
-          "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-          "actor": {
-            "name": "Municipal Operators",
-            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-          }
-        }
-      },
-      {
-        "name": "Approve Report",
-        "description": "Allow municipal operators to approve a report after review, marking it as valid and ready for action.",
-        "high_level_associated": {
-          "name": "Enhance Report Review Process",
-          "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-          "actor": {
-            "name": "Municipal Operators",
-            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-          }
-        }
-      },
-      {
-        "name": "Reject Report",
-        "description": "Enable municipal operators to reject a report and provide feedback to the citizen about the rejection reason.",
-        "high_level_associated": {
-          "name": "Enhance Report Review Process",
-          "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-          "actor": {
-            "name": "Municipal Operators",
-            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-          }
-        }
-      },
-      {
-        "name": "Assign Report to Maintenance Personnel",
-        "description": "Allow municipal operators to assign approved reports to external maintenance personnel for resolution.",
-        "high_level_associated": {
-          "name": "Enhance Report Review Process",
-          "description": "Establish a clear and efficient workflow for municipal operators to review, approve, and manage citizen reports, ensuring timely responses and accountability.",
-          "actor": {
-            "name": "Municipal Operators",
-            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
-          }
-        }
-      },
-      {
-        "name": "Update Report Status",
-        "description": "Enable external maintenance personnel to update the status of a report as they work on it, providing real-time updates to municipal operators.",
-        "high_level_associated": {
-          "name": "Coordinate Issue Resolution",
-          "description": "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
-          "actor": {
-            "name": "External Maintenance Personnel",
-            "description": "Workers from external companies who address specific issues reported by citizens."
-          }
-        }
-      },
-      {
-        "name": "Complete Report Resolution",
-        "description": "Allow external maintenance personnel to mark a report as resolved once the issue has been addressed, notifying municipal operators and citizens.",
-        "high_level_associated": {
-          "name": "Coordinate Issue Resolution",
-          "description": "Ensure effective collaboration with external maintenance personnel to address reported issues promptly and efficiently, maintaining communication throughout the resolution process.",
-          "actor": {
-            "name": "External Maintenance Personnel",
-            "description": "Workers from external companies who address specific issues reported by citizens."
-          }
-        }
-      },
-      {
-        "name": "Configure System Settings",
-        "description": "Enable municipal administrators to modify system settings such as report categories and notification preferences.",
-        "high_level_associated": {
-          "name": "Manage System Configuration and Report Assignment",
-          "description": "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
-          "actor": {
-            "name": "Municipal Administrators",
-            "description": "Officials who configure the system and oversee the assignment of reports."
-          }
-        }
-      },
-      {
-        "name": "Assign Reports to Operators",
-        "description": "Allow municipal administrators to assign specific reports to designated municipal operators for review and action.",
-        "high_level_associated": {
-          "name": "Manage System Configuration and Report Assignment",
-          "description": "Equip municipal administrators with tools to configure system settings and manage the assignment of reports to appropriate personnel, optimizing operational efficiency.",
-          "actor": {
-            "name": "Municipal Administrators",
-            "description": "Officials who configure the system and oversee the assignment of reports."
-          }
-        }
-      },
-      {
-        "name": "View Reports and Statistics",
-        "description": "Allow non-registered users to access and view a list of reports and relevant statistics without needing to register.",
-        "high_level_associated": {
-          "name": "Promote Transparency and Engagement",
-          "description": "Allow non-registered users to access and view reports and statistics, fostering transparency and encouraging community engagement in urban management.",
-          "actor": {
-            "name": "Non-registered Users",
-            "description": "Individuals who can view reports and statistics without needing to register."
-          }
-        }
-      },
-      {
-        "name": "Register Citizen Account",
-        "description": "Allow citizens to create a new account by providing their personal information and setting a password.",
+        "name": "Register Citizen",
+        "description": "Allow citizens to create a new account by providing a username, name, and email through a registration API.",
         "high_level_associated": {
           "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+          "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
           "actor": {
             "name": "Citizens",
             "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -335,11 +217,11 @@
         }
       },
       {
-        "name": "Verify Email Address",
-        "description": "Send a verification email to the citizen's provided email address and allow them to confirm their account.",
+        "name": "Confirm Email",
+        "description": "Enable citizens to confirm their email address through an email confirmation API after registration.",
         "high_level_associated": {
           "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+          "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
           "actor": {
             "name": "Citizens",
             "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -347,47 +229,11 @@
         }
       },
       {
-        "name": "Login to Citizen Account",
-        "description": "Enable citizens to log in to their account using their email and password.",
+        "name": "Submit Report",
+        "description": "Allow citizens to submit a new report detailing an urban issue through a form submission API.",
         "high_level_associated": {
           "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
-          "actor": {
-            "name": "Citizens",
-            "description": "Individuals who report issues and malfunctions in the urban environment."
-          }
-        }
-      },
-      {
-        "name": "Select Issue Location",
-        "description": "Allow citizens to specify the location of the urban issue they are reporting on a map or by entering an address.",
-        "high_level_associated": {
-          "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
-          "actor": {
-            "name": "Citizens",
-            "description": "Individuals who report issues and malfunctions in the urban environment."
-          }
-        }
-      },
-      {
-        "name": "Submit New Report",
-        "description": "Enable citizens to submit a new report by filling out a form with details about the urban issue, including description and location.",
-        "high_level_associated": {
-          "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
-          "actor": {
-            "name": "Citizens",
-            "description": "Individuals who report issues and malfunctions in the urban environment."
-          }
-        }
-      },
-      {
-        "name": "Choose Anonymity Preference",
-        "description": "Allow citizens to select whether they want their report to be submitted anonymously or with their identity attached.",
-        "high_level_associated": {
-          "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+          "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
           "actor": {
             "name": "Citizens",
             "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -396,10 +242,10 @@
       },
       {
         "name": "Attach Media to Report",
-        "description": "Allow citizens to upload images or videos related to the urban issue they are reporting as part of the submission process.",
+        "description": "Enable citizens to upload images or videos related to their report using a media upload API.",
         "high_level_associated": {
           "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+          "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
           "actor": {
             "name": "Citizens",
             "description": "Individuals who report issues and malfunctions in the urban environment."
@@ -407,14 +253,182 @@
         }
       },
       {
-        "name": "View Submission Confirmation",
-        "description": "Provide citizens with a confirmation message or receipt after successfully submitting a report.",
+        "name": "View Submitted Reports",
+        "description": "Allow citizens to view the status of their submitted reports through a report status retrieval API.",
         "high_level_associated": {
           "name": "Facilitate Citizen Reporting",
-          "description": "Provide a streamlined and user-friendly interface for citizens to register and submit reports about urban issues, ensuring accessibility and ease of use.",
+          "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
           "actor": {
             "name": "Citizens",
             "description": "Individuals who report issues and malfunctions in the urban environment."
+          }
+        }
+      },
+      {
+        "name": "Follow Report",
+        "description": "Allow citizens to follow specific reports to receive updates on their status through a follow report API.",
+        "high_level_associated": {
+          "name": "Facilitate Citizen Reporting",
+          "description": "Enable citizens to register and submit detailed reports about urban issues through a user-friendly interface, ensuring their active participation in urban management.",
+          "actor": {
+            "name": "Citizens",
+            "description": "Individuals who report issues and malfunctions in the urban environment."
+          }
+        }
+      },
+      {
+        "name": "Send Notification",
+        "description": "Enable the system to send notifications to citizens via email or platform notifications when the status of their report changes through a notification API.",
+        "high_level_associated": {
+          "name": "Streamline Report Review Process",
+          "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
+          }
+        }
+      },
+      {
+        "name": "Review Report",
+        "description": "Allow municipal operators to access and review submitted reports through a report retrieval API.",
+        "high_level_associated": {
+          "name": "Streamline Report Review Process",
+          "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
+          }
+        }
+      },
+      {
+        "name": "Update Report Status",
+        "description": "Enable municipal operators to update the status of a report (e.g., in review, resolved) through a report status update API.",
+        "high_level_associated": {
+          "name": "Streamline Report Review Process",
+          "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
+          }
+        }
+      },
+      {
+        "name": "Assign Report to Maintenance Personnel",
+        "description": "Allow municipal operators to assign a report to external maintenance personnel through an assignment API.",
+        "high_level_associated": {
+          "name": "Streamline Report Review Process",
+          "description": "Enhance the efficiency of the review and management of citizen reports by municipal operators to ensure timely approvals and effective resolutions of urban issues.",
+          "actor": {
+            "name": "Municipal Operators",
+            "description": "Staff members of the Municipality of Turin who review and manage citizen reports."
+          }
+        }
+      },
+      {
+        "name": "Access Assigned Reports",
+        "description": "Enable external maintenance personnel to view reports assigned to them through a report assignment retrieval API.",
+        "high_level_associated": {
+          "name": "Ensure Effective Issue Resolution",
+          "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
+          "actor": {
+            "name": "External Maintenance Personnel",
+            "description": "Workers from external companies who address specific issues reported by citizens."
+          }
+        }
+      },
+      {
+        "name": "Update Report Resolution Status",
+        "description": "Allow external maintenance personnel to update the resolution status of a report through a resolution status update API.",
+        "high_level_associated": {
+          "name": "Ensure Effective Issue Resolution",
+          "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
+          "actor": {
+            "name": "External Maintenance Personnel",
+            "description": "Workers from external companies who address specific issues reported by citizens."
+          }
+        }
+      },
+      {
+        "name": "Exchange Comments with Technical Staff",
+        "description": "Enable external maintenance personnel to exchange comments with municipal operators through a comments API.",
+        "high_level_associated": {
+          "name": "Ensure Effective Issue Resolution",
+          "description": "Provide external maintenance personnel with the necessary tools and access to manage and resolve reported issues effectively, ensuring accountability and communication with municipal operators.",
+          "actor": {
+            "name": "External Maintenance Personnel",
+            "description": "Workers from external companies who address specific issues reported by citizens."
+          }
+        }
+      },
+      {
+        "name": "Access Public Reports",
+        "description": "Allow non-registered users to view public reports through a public report retrieval API.",
+        "high_level_associated": {
+          "name": "Promote Transparency and Community Engagement",
+          "description": "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management.",
+          "actor": {
+            "name": "Non-registered Users",
+            "description": "Individuals who can view reports and statistics without needing to register."
+          }
+        }
+      },
+      {
+        "name": "View Community Engagement Statistics",
+        "description": "Enable non-registered users to access statistics on community engagement through a community engagement statistics API.",
+        "high_level_associated": {
+          "name": "Promote Transparency and Community Engagement",
+          "description": "Allow non-registered users to access and view reports and statistics to foster transparency and encourage community engagement in urban management.",
+          "actor": {
+            "name": "Non-registered Users",
+            "description": "Individuals who can view reports and statistics without needing to register."
+          }
+        }
+      },
+      {
+        "name": "Configure System Settings",
+        "description": "Allow municipal administrators to set parameters for system operation, including user roles, permissions, and notification settings.",
+        "high_level_associated": {
+          "name": "Empower System Configuration and Report Management",
+          "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
+          "actor": {
+            "name": "Municipal Administrators",
+            "description": "Officials who configure the system and oversee the assignment of reports."
+          }
+        }
+      },
+      {
+        "name": "View Assigned Reports",
+        "description": "Enable municipal administrators to view a list of reports currently assigned to various personnel for resolution.",
+        "high_level_associated": {
+          "name": "Empower System Configuration and Report Management",
+          "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
+          "actor": {
+            "name": "Municipal Administrators",
+            "description": "Officials who configure the system and oversee the assignment of reports."
+          }
+        }
+      },
+      {
+        "name": "Manage Report Assignment Queues",
+        "description": "Allow municipal administrators to adjust the assignment of reports, including reassigning reports to different personnel or changing priority levels.",
+        "high_level_associated": {
+          "name": "Empower System Configuration and Report Management",
+          "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
+          "actor": {
+            "name": "Municipal Administrators",
+            "description": "Officials who configure the system and oversee the assignment of reports."
+          }
+        }
+      },
+      {
+        "name": "Handle Assignment Exceptions",
+        "description": "Provide municipal administrators with the ability to review and resolve exceptions in report assignments, such as unassigned reports or overdue resolutions.",
+        "high_level_associated": {
+          "name": "Empower System Configuration and Report Management",
+          "description": "Enable municipal administrators to configure system settings and oversee the assignment of reports to ensure proper management and accountability in urban issue resolution.",
+          "actor": {
+            "name": "Municipal Administrators",
+            "description": "Officials who configure the system and oversee the assignment of reports."
           }
         }
       }
@@ -422,12 +436,12 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "Global coverage check deferred until all current branches are confirmed or stabilized.",
+    "rationale": "The current High-Level Goals (HLGs) comprehensively cover the functional intentions described in the project text. 'Facilitate Citizen Reporting' covers registration, submission, and anonymity settings. 'Streamline Report Review Process' covers the lifecycle management, state transitions, and assignment by Municipal Operators. 'Ensure Effective Issue Resolution' covers the actions of External Maintenance Personnel, including communication and status updates. 'Empower System Configuration and Report Management' covers the administrative configuration of automatic assignments. 'Promote Transparency and Community Engagement' covers the visibility of reports and statistics for both registered and non-registered users, as well as the notification and follow-up mechanisms which are part of the engagement/transparency loop. No distinct, high-level functional intention remains uncovered.",
     "missing_goal_requests": []
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
   "llg_regeneration_counts": {
-    "branch_001": 1
+    "municipal administrators::empower system configuration and report management": 1
   },
   "warnings": []
 }

@@ -10,6 +10,10 @@ def _key(value: str) -> str:
     return " ".join(value.casefold().split())
 
 
+def _parent_key(actor_name: str, goal_name: str) -> tuple[str, str]:
+    return _key(actor_name), _key(goal_name)
+
+
 def group_low_level_goals(
     high_level_goals: HighLevelGoals,
     low_level_goals: LowLevelGoals,
@@ -22,15 +26,38 @@ def group_low_level_goals(
         )
         for index, goal in enumerate(high_level_goals.goals, start=1)
     ]
-    by_name = {_key(branch.high_level_goal.name): branch for branch in branches}
+    by_parent = {
+        _parent_key(branch.high_level_goal.actor.name, branch.high_level_goal.name): branch
+        for branch in branches
+    }
+    # Some top-down LLM outputs preserve the HLG name but paraphrase the
+    # actor in the nested parent reference.  A name-only fallback is safe when
+    # that HLG name is unique; the LLG is then canonicalized to the actual
+    # baseline HLG object before being attached to the branch.
+    by_name: dict[str, list[GoalBranch]] = {}
+    for branch in branches:
+        by_name.setdefault(_key(branch.high_level_goal.name), []).append(branch)
 
     for llg in low_level_goals.low_level_goals:
-        branch = by_name.get(_key(llg.high_level_associated.name))
-        if branch is None:
-            raise ValueError(
-                f"LLG '{llg.name}' refers to unknown HLG "
-                f"'{llg.high_level_associated.name}'."
+        branch = by_parent.get(
+            _parent_key(
+                llg.high_level_associated.actor.name,
+                llg.high_level_associated.name,
             )
+        )
+        if branch is None:
+            name_matches = by_name.get(_key(llg.high_level_associated.name), [])
+            if len(name_matches) == 1:
+                branch = name_matches[0]
+                llg = llg.model_copy(
+                    update={"high_level_associated": branch.high_level_goal}
+                )
+            else:
+                raise ValueError(
+                    f"LLG '{llg.name}' refers to unknown HLG "
+                    f"'{llg.high_level_associated.name}' for actor "
+                    f"'{llg.high_level_associated.actor.name}'."
+                )
         branch.low_level_goals.append(llg)
 
     return branches

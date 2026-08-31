@@ -40,11 +40,40 @@ from src.self_critique.refine_response import (
 
 DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS = 5
 MAX_LLG_REGENERATIONS_PER_BRANCH = 2
+MAX_HLG_REWRITES_PER_BRANCH = 2
 MAX_NEW_HLGS_PER_ITERATION = 1
+MAX_LLG_GROWTH_PER_REPAIR = 2
+MAX_LLGS_FOR_NEW_HLG = 6
 
 
 def _key(value: str) -> str:
     return " ".join(value.casefold().split())
+
+
+def _stable_hlg_key(goal: HighLevelGoal) -> str:
+    """Identify a branch independently from its position in the HLG list."""
+    return f"{_key(goal.actor.name)}::{_key(goal.name)}"
+
+
+def _resolve_generated_parent(
+    generated_parent: HighLevelGoal,
+    parents: dict[str, HighLevelGoal],
+) -> HighLevelGoal | None:
+    """Resolve an LLM parent reference, tolerating actor wording drift.
+
+    Generated LLGs sometimes preserve the HLG name but paraphrase its actor.
+    An exact actor/name match wins; a name-only fallback is safe only when the
+    requested parent name is unique.
+    """
+    exact = parents.get(_stable_hlg_key(generated_parent))
+    if exact is not None:
+        return exact
+    matches = [
+        parent
+        for parent in parents.values()
+        if _key(parent.name) == _key(generated_parent.name)
+    ]
+    return matches[0] if len(matches) == 1 else None
 
 
 def _generation_request(
@@ -94,15 +123,33 @@ def _merge_actors(*actor_sets: Actors) -> Actors:
     return Actors(actors=actors)
 
 
-def _actor_for_request(request_actor: str, actors: Actors) -> Actor:
+def _actor_for_request(request_actor: str, actors: Actors) -> Actor | None:
     wanted = _key(request_actor)
     for actor in actors.actors:
         if _key(actor.name) == wanted:
             return actor
-    return Actor(
-        name=request_actor,
-        description="Actor identified in the project documentation.",
-    )
+    return None
+
+
+def _should_add_missing_hlg(
+    *,
+    missing_hlg_evaluation: MissingHighLevelGoalEvaluation,
+    llg_regenerations: dict[str, tuple[HighLevelGoal, str, list[LowLevelGoal], int]],
+    replacements: dict[str, list[HighLevelGoal]],
+    removed_names: set[str],
+) -> bool:
+    """Missing HLGs must be discovered even when LLG repairs are underway.
+
+    LLG improvements are useful, but they must not suppress the explicit project-
+    wide signal that an actor-level HLG is absent from the current set. Branch-level
+    rewrite/remove actions still take precedence because they can restructure the
+    current HLGs before a project-level addition is proposed.
+    """
+    if missing_hlg_evaluation.decision != MissingHighLevelGoalDecision.FOUND:
+        return False
+    if replacements or removed_names:
+        return False
+    return True
 
 
 def _deduplicate_high_level_goals(
@@ -114,7 +161,7 @@ def _deduplicate_high_level_goals(
     kept: list[HighLevelGoal] = []
     aliases: dict[str, HighLevelGoal] = {}
     for goal in goals.goals:
-        key = _key(goal.name)
+        key = _stable_hlg_key(goal)
         duplicate = next(
             (item for item in kept
              if _key(item.actor.name) == _key(goal.actor.name)
@@ -130,7 +177,7 @@ def _deduplicate_high_level_goals(
 
     remapped: list[LowLevelGoal] = []
     for llg in llgs.low_level_goals:
-        parent = aliases.get(_key(llg.high_level_associated.name))
+        parent = aliases.get(_stable_hlg_key(llg.high_level_associated))
         if parent is not None:
             remapped.append(_replace_parent(llg, parent))
     return HighLevelGoals(goals=kept), LowLevelGoals(low_level_goals=remapped)
@@ -163,7 +210,24 @@ def _generate_hlgs_with_top_down(
     )
     if not isinstance(result, HighLevelGoals) or not result.goals:
         raise ValueError("The top-down pipeline generated no High-Level Goals.")
-    return result
+    allowed_actors = {
+        _key(actor.name): actor
+        for actor in request.generator_input.actors.actors
+    }
+    if not allowed_actors:
+        raise ValueError("HLG generation requires at least one known actor.")
+    normalized_goals = []
+    for goal in result.goals:
+        actor = allowed_actors.get(_key(goal.actor.name))
+        if actor is None:
+            if len(allowed_actors) != 1:
+                raise ValueError(
+                    f"Generated HLG '{goal.name}' uses unknown actor "
+                    f"'{goal.actor.name}'."
+                )
+            actor = next(iter(allowed_actors.values()))
+        normalized_goals.append(goal.model_copy(update={"actor": actor}))
+    return HighLevelGoals(goals=normalized_goals)
 
 
 def _regenerate_llgs_with_top_down(
@@ -177,16 +241,49 @@ def _regenerate_llgs_with_top_down(
         for goal in request.high_level_goals.goals
     )
     feedback = "\n".join(request.guidance_by_parent_name.values())
+    existing_by_parent: dict[str, list[LowLevelGoal]] = {}
+    for llg in request.existing_low_level_goals.low_level_goals:
+        existing_by_parent.setdefault(
+            _stable_hlg_key(llg.high_level_associated), []
+        ).append(llg)
+    constraints = []
+    for goal in request.high_level_goals.goals:
+        parent_key = _stable_hlg_key(goal)
+        existing = existing_by_parent.get(parent_key, [])
+        maximum = request.max_goals_by_parent_name.get(
+            parent_key, request.max_goals_by_parent_name.get(
+                goal.name, MAX_LLGS_FOR_NEW_HLG
+            )
+        )
+        constraints.append(
+            f"- {goal.name}: keep valid existing goals; return at most "
+            f"{maximum} LLGs total. Existing LLGs: "
+            f"{[item.name for item in existing]}"
+        )
     focused_description = (
         "Evaluator rationale (use this as the primary correction guidance):\n"
         f"{feedback or 'No additional rationale provided.'}\n\n"
         "Generate only the decomposition of these documented stakeholder "
-        f"intentions:\n{scope}"
+        f"intentions:\n{scope}\n\n"
+        "Repair constraints:\n"
+        f"{chr(10).join(constraints)}\n"
+        "Preserve already valid LLGs. Do not add generic CRUD variants, UI "
+        "steps, notifications, confirmations, or sibling-HLG responsibilities "
+        "unless the evaluator explicitly identifies them as essential. Prefer "
+        "the smallest complete decomposition."
     )
+
+    def generate_with_context(high_level_goals, feedback=None, mode=mode):
+        return top_down_generate_low_level_goals(
+            high_level_goals,
+            feedback=feedback,
+            mode=mode,
+            generation_context=focused_description,
+        )
 
     result, _, _ = generate_response_with_reflection(
         target_type="Low Level Goals",
-        call_function=top_down_generate_low_level_goals,
+        call_function=generate_with_context,
         define_args=(request.high_level_goals,),
         eval_mode=EvalMode.LOW_LEVEL,
         eval_args=(focused_description, actors, request.high_level_goals),
@@ -196,6 +293,49 @@ def _regenerate_llgs_with_top_down(
     if not isinstance(result, LowLevelGoals):
         raise TypeError("The top-down pipeline did not return LowLevelGoals.")
     return result
+
+
+def _deduplicate_llg_candidates(goals: list[LowLevelGoal]) -> list[LowLevelGoal]:
+    """Remove exact semantic labels emitted more than once for one parent."""
+    kept = []
+    seen = set()
+    for goal in goals:
+        identity = (
+            _stable_hlg_key(goal.high_level_associated),
+            _key(goal.name),
+            _key(goal.description),
+        )
+        if identity in seen:
+            continue
+        seen.add(identity)
+        kept.append(goal)
+    return kept
+
+
+def _accept_regenerated_llgs(
+    *,
+    parent: HighLevelGoal,
+    existing: list[LowLevelGoal],
+    generated: list[LowLevelGoal],
+    maximum: int,
+) -> tuple[list[LowLevelGoal], str | None]:
+    """Reject empty or proliferating replacements and preserve the old branch."""
+    candidates = _deduplicate_llg_candidates(generated)
+    preserved = [_replace_parent(item, parent) for item in existing]
+    if not candidates:
+        return preserved, "LLG_REGENERATION_REJECTED_EMPTY"
+    if len(candidates) > maximum:
+        if not existing:
+            return (
+                [_replace_parent(item, parent) for item in candidates[:maximum]],
+                "LLG_REGENERATION_TRUNCATED_GOAL_GROWTH "
+                f"({len(candidates)} generated, maximum {maximum})",
+            )
+        return preserved, (
+            "LLG_REGENERATION_REJECTED_GOAL_GROWTH "
+            f"({len(candidates)} generated, maximum {maximum})"
+        )
+    return [_replace_parent(item, parent) for item in candidates], None
 
 
 def _save_iteration(directory: str | Path | None, trace: GlobalGoalCycleIteration):
@@ -234,11 +374,19 @@ def run_global_goal_cycle(
     current_hlgs = initial_high_level_goals.model_copy(deep=True)
     current_llgs = initial_low_level_goals.model_copy(deep=True)
     llg_regeneration_counts: dict[str, int] = {}
+    stabilized_llg_keys: set[str] = set()
+    confirmed_branch_keys: set[str] = set()
+    hlg_rewrite_counts: dict[str, int] = {}
+    excluded_hlg_keys: set[str] = set()
     traces: list[GlobalGoalCycleIteration] = []
     warnings: list[str] = []
     known_actors = _actors_from_goals(initial_high_level_goals)
 
     for iteration in range(1, max_iterations + 1):
+        print(
+            f"[bottom-up] iteration {iteration}/{max_iterations} starting",
+            flush=True,
+        )
         branches = group_low_level_goals(current_hlgs, current_llgs)
         iteration_warnings: list[str] = []
 
@@ -247,14 +395,14 @@ def run_global_goal_cycle(
         ]
         if empty_branches:
             empty_names = {
-                _key(branch.high_level_goal.name)
+                _stable_hlg_key(branch.high_level_goal)
                 for branch in empty_branches
             }
             current_hlgs = HighLevelGoals(
                 goals=[
                     goal
                     for goal in current_hlgs.goals
-                    if _key(goal.name) not in empty_names
+                    if _stable_hlg_key(goal) not in empty_names
                 ]
             )
             branches = [
@@ -275,17 +423,49 @@ def run_global_goal_cycle(
         )
         branches = group_low_level_goals(current_hlgs, current_llgs)
 
-        reconstructions = reconstruct_all_branches(branches)
+        # A confirmed branch is immutable for the remainder of the cycle. Use
+        # the stable actor/name identity rather than the positional branch ID,
+        # because removing or adding another HLG can renumber later branches.
+        active_branches = [
+            branch
+            for branch in branches
+            if _stable_hlg_key(branch.high_level_goal)
+            not in confirmed_branch_keys
+        ]
+
+        reconstructions = reconstruct_all_branches(active_branches)
         raw_evaluations = evaluate_all_branches(
-            project_description, branches, reconstructions, current_hlgs
+            project_description,
+            active_branches,
+            reconstructions,
+            current_hlgs,
+            stabilized_llg_keys,
         )
         evaluations = dict(raw_evaluations)
+        confirmed_branch_keys.update(
+            _stable_hlg_key(branch.high_level_goal)
+            for branch in active_branches
+            if evaluations[branch.branch_id].final_decision
+            == GlobalGoalEvaluationDecision.CONFIRM_BRANCH
+        )
+
+        known_actors = _merge_actors(
+            known_actors, _actors_from_goals(current_hlgs)
+        )
+        missing_hlg_evaluation = evaluate_missing_high_level_goals(
+            project_description, current_hlgs, known_actors
+        )
 
         removed_names: set[str] = set()
-        llg_regenerations: dict[str, tuple[HighLevelGoal, str]] = {}
+        llg_regenerations: dict[
+            str, tuple[HighLevelGoal, str, list[LowLevelGoal], int]
+        ] = {}
         replacements: dict[str, list[HighLevelGoal]] = {}
         additions: list[HighLevelGoal] = []
-        reserved_names = {_key(goal.name) for goal in current_hlgs.goals}
+        reserved_names = {
+            *(_stable_hlg_key(goal) for goal in current_hlgs.goals),
+            *excluded_hlg_keys,
+        }
         # Deterministic action order: rewrite, remove, then LLG regeneration.
         # Only the first applicable action is applied in this iteration.
         priority = {
@@ -294,7 +474,7 @@ def run_global_goal_cycle(
             GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS: 2,
         }
         ordered_branches = sorted(
-            branches,
+            active_branches,
             key=lambda branch: priority.get(
                 evaluations[branch.branch_id].final_decision, 99
             ),
@@ -304,8 +484,17 @@ def run_global_goal_cycle(
             decision = evaluation.final_decision
 
             if decision == GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS:
-                count = llg_regeneration_counts.get(branch.branch_id, 0)
+                # Missing/redundant HLGs are repaired before decompositions so
+                # LLG churn cannot starve the project-wide HLG pass.
+                if (
+                    missing_hlg_evaluation.decision
+                    == MissingHighLevelGoalDecision.FOUND
+                ):
+                    continue
+                stable_key = _stable_hlg_key(branch.high_level_goal)
+                count = llg_regeneration_counts.get(stable_key, 0)
                 if count >= MAX_LLG_REGENERATIONS_PER_BRANCH:
+                    stabilized_llg_keys.add(stable_key)
                     evaluations[branch.branch_id] = _with_decision(
                         evaluation,
                         GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED,
@@ -315,19 +504,38 @@ def run_global_goal_cycle(
                         f"{branch.branch_id}: LLG_REGENERATION_LIMIT_REACHED"
                     )
                 else:
-                    llg_regeneration_counts[branch.branch_id] = count + 1
-                    llg_regenerations[_key(branch.high_level_goal.name)] = (
+                    llg_regeneration_counts[stable_key] = count + 1
+                    if count + 1 >= MAX_LLG_REGENERATIONS_PER_BRANCH:
+                        stabilized_llg_keys.add(stable_key)
+                    llg_regenerations[_stable_hlg_key(branch.high_level_goal)] = (
                         branch.high_level_goal,
                         evaluation.low_level_evaluation.regeneration_feedback
                         or evaluation.rationale,
+                        list(branch.low_level_goals),
+                        len(branch.low_level_goals)
+                        + MAX_LLG_GROWTH_PER_REPAIR,
                     )
                     break
 
             elif decision == GlobalGoalEvaluationDecision.REMOVE_ORIGINAL_HIGH_LEVEL_GOAL:
-                removed_names.add(_key(branch.high_level_goal.name))
+                removed_key = _stable_hlg_key(branch.high_level_goal)
+                removed_names.add(removed_key)
+                excluded_hlg_keys.add(removed_key)
                 break
 
             elif decision == GlobalGoalEvaluationDecision.REWRITE_ORIGINAL_HIGH_LEVEL_GOAL:
+                original_key = _stable_hlg_key(branch.high_level_goal)
+                rewrite_count = hlg_rewrite_counts.get(original_key, 0)
+                if rewrite_count >= MAX_HLG_REWRITES_PER_BRANCH:
+                    evaluations[branch.branch_id] = _with_decision(
+                        evaluation,
+                        GlobalGoalEvaluationDecision.EVALUATION_INCONCLUSIVE,
+                        "HLG rewrite limit reached; retaining the current HLG.",
+                    )
+                    iteration_warnings.append(
+                        f"{branch.branch_id}: HLG_REWRITE_LIMIT_REACHED"
+                    )
+                    continue
                 request = evaluation.replacement_request
                 generated = _generate_hlgs_with_top_down(
                     _generation_request(
@@ -341,19 +549,25 @@ def run_global_goal_cycle(
                     mode,
                     evaluator_ablation,
                 )
-                original_key = _key(branch.high_level_goal.name)
                 reserved_names.discard(original_key)
                 replacement_goals = []
                 # A focused rewrite request yields one candidate at most;
                 # accepting every candidate here caused HLG proliferation.
                 for goal in generated.goals[:MAX_NEW_HLGS_PER_ITERATION]:
-                    goal_key = _key(goal.name)
+                    goal_key = _stable_hlg_key(goal)
                     if goal_key in reserved_names:
                         continue
                     reserved_names.add(goal_key)
                     replacement_goals.append(goal)
-                    llg_regenerations[goal_key] = (goal, request.rationale)
+                    llg_regenerations[goal_key] = (
+                        goal,
+                        request.rationale,
+                        list(branch.low_level_goals),
+                        len(branch.low_level_goals)
+                        + MAX_LLG_GROWTH_PER_REPAIR,
+                    )
                 if replacement_goals:
+                    hlg_rewrite_counts[original_key] = rewrite_count + 1
                     replacements[original_key] = replacement_goals
                 else:
                     # A top-down retry may return only the unchanged HLG. Keep
@@ -363,50 +577,103 @@ def run_global_goal_cycle(
                     )
                 break
 
+        unresolved_decisions = {
+            evaluation.final_decision
+            for evaluation in evaluations.values()
+            if evaluation.final_decision
+            in {
+                GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED,
+                GlobalGoalEvaluationDecision.EVALUATION_INCONCLUSIVE,
+            }
+        }
+        if GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED in unresolved_decisions:
+            iteration_warnings.append(
+                "UNRESOLVED_LLG_REGENERATION_LIMIT_REACHED"
+            )
+        if GlobalGoalEvaluationDecision.EVALUATION_INCONCLUSIVE in unresolved_decisions:
+            iteration_warnings.append("UNRESOLVED_EVALUATION_INCONCLUSIVE")
+
         # Apply branch-level HLG changes before the one global coverage check.
         next_goals: list[HighLevelGoal] = []
         for goal in current_hlgs.goals:
-            key = _key(goal.name)
+            key = _stable_hlg_key(goal)
             if key in removed_names:
                 continue
             next_goals.extend(replacements.get(key, [goal]))
-        known_names = {_key(goal.name) for goal in next_goals}
+        known_names = {_stable_hlg_key(goal) for goal in next_goals}
         for goal in additions:
-            if _key(goal.name) not in known_names:
+            if _stable_hlg_key(goal) not in known_names:
                 next_goals.append(goal)
-                known_names.add(_key(goal.name))
+                known_names.add(_stable_hlg_key(goal))
 
         changed_parent_names = removed_names | set(replacements) | set(llg_regenerations)
         next_llgs = [
             llg
             for llg in current_llgs.low_level_goals
-            if _key(llg.high_level_associated.name) not in changed_parent_names
+            if _stable_hlg_key(llg.high_level_associated) not in changed_parent_names
         ]
 
         # The branch evaluator can request LLG repair, but the global HLG
         # coverage check is deliberately a separate, single project-wide call.
         if llg_regenerations:
-            target_goals = [goal for goal, _ in llg_regenerations.values()]
+            target_goals = [item[0] for item in llg_regenerations.values()]
             guidance = {
-                goal.name: feedback
-                for goal, feedback in llg_regenerations.values()
+                _stable_hlg_key(item[0]): item[1]
+                for item in llg_regenerations.values()
+            }
+            existing_llgs = [
+                llg
+                for item in llg_regenerations.values()
+                for llg in item[2]
+            ]
+            maxima = {
+                _stable_hlg_key(item[0]): item[3]
+                for item in llg_regenerations.values()
             }
             generated_llgs = _regenerate_llgs_with_top_down(
                 LowLevelGoalRegenerationRequest(
                     high_level_goals=HighLevelGoals(goals=target_goals),
                     guidance_by_parent_name=guidance,
+                    existing_low_level_goals=LowLevelGoals(
+                        low_level_goals=existing_llgs
+                    ),
+                    max_goals_by_parent_name=maxima,
                 ),
                 mode,
                 evaluator_ablation,
             )
-            parents = {_key(goal.name): goal for goal in target_goals}
+            parents = {_stable_hlg_key(goal): goal for goal in target_goals}
+            generated_by_parent: dict[str, list[LowLevelGoal]] = {
+                key: [] for key in parents
+            }
             for llg in generated_llgs.low_level_goals:
-                parent = parents.get(_key(llg.high_level_associated.name))
+                parent = _resolve_generated_parent(
+                    llg.high_level_associated, parents
+                )
                 if parent is None:
-                    raise ValueError(
-                        f"Generated LLG '{llg.name}' refers to an unexpected HLG."
+                    # A generator can occasionally return a stale or
+                    # paraphrased parent reference.  Do not abort the whole
+                    # dataset: discard only this malformed LLG and let the
+                    # remaining branches continue through the cycle.
+                    iteration_warnings.append(
+                        f"LLG '{llg.name}' refers to an unexpected HLG; skipped."
                     )
-                next_llgs.append(_replace_parent(llg, parent))
+                    continue
+                generated_by_parent[_stable_hlg_key(parent)].append(llg)
+
+            for parent_key, item in llg_regenerations.items():
+                parent, _, existing, maximum = item
+                accepted, rejection = _accept_regenerated_llgs(
+                    parent=parent,
+                    existing=existing,
+                    generated=generated_by_parent.get(parent_key, []),
+                    maximum=maximum,
+                )
+                next_llgs.extend(accepted)
+                if rejection:
+                    iteration_warnings.append(
+                        f"{parent.name}: {rejection}"
+                    )
 
         current_hlgs = HighLevelGoals(goals=next_goals)
         current_llgs = LowLevelGoals(low_level_goals=next_llgs)
@@ -415,40 +682,30 @@ def run_global_goal_cycle(
             current_hlgs, current_llgs, iteration_warnings
         )
 
-        known_actors = _merge_actors(known_actors, _actors_from_goals(current_hlgs))
-        actors = known_actors
-        branches_ready = all(
-            evaluation.final_decision
-            in {
-                GlobalGoalEvaluationDecision.CONFIRM_BRANCH,
-                GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED,
-            }
-            for evaluation in evaluations.values()
+        known_actors = _merge_actors(
+            known_actors, _actors_from_goals(current_hlgs)
         )
-        if branches_ready:
-            missing_hlg_evaluation = evaluate_missing_high_level_goals(
-                project_description, current_hlgs, actors
-            )
-        else:
-            missing_hlg_evaluation = MissingHighLevelGoalEvaluation(
-                decision=MissingHighLevelGoalDecision.NO_MISSING,
-                rationale=(
-                    "Global coverage check deferred until all current branches "
-                    "are confirmed or stabilized."
-                ),
-            )
+        actors = known_actors
 
-        if (
-            not llg_regenerations
-            and not replacements
-            and not removed_names
-            and missing_hlg_evaluation.decision == MissingHighLevelGoalDecision.FOUND
+        if _should_add_missing_hlg(
+            missing_hlg_evaluation=missing_hlg_evaluation,
+            llg_regenerations=llg_regenerations,
+            replacements=replacements,
+            removed_names=removed_names,
         ):
-            reserved_names = {_key(goal.name) for goal in current_hlgs.goals}
+            reserved_names = {
+                *(_stable_hlg_key(goal) for goal in current_hlgs.goals),
+                *excluded_hlg_keys,
+            }
             for request_index, request in enumerate(
                 missing_hlg_evaluation.missing_goal_requests[:1], start=1
             ):
                 actor = _actor_for_request(request.actor, actors)
+                if actor is None:
+                    iteration_warnings.append(
+                        f"{request.actor}: UNKNOWN_ACTOR_REQUEST_IGNORED"
+                    )
+                    continue
                 generated = _generate_hlgs_with_top_down(
                     _generation_request(
                         f"iteration_{iteration}_missing_{request_index}",
@@ -462,16 +719,12 @@ def run_global_goal_cycle(
                 )
                 new_goals = []
                 for goal in generated.goals[:1]:
-                    goal_key = _key(goal.name)
+                    goal_key = _stable_hlg_key(goal)
                     if not goal.name.strip() or goal_key in reserved_names:
                         continue
                     reserved_names.add(goal_key)
                     new_goals.append(goal)
                     additions.append(goal)
-                    llg_regenerations[goal_key] = (
-                        goal,
-                        missing_hlg_evaluation.rationale,
-                    )
                 break
 
             if additions:
@@ -482,35 +735,60 @@ def run_global_goal_cycle(
                     LowLevelGoalRegenerationRequest(
                         high_level_goals=HighLevelGoals(goals=additions),
                         guidance_by_parent_name={
-                            goal.name: missing_hlg_evaluation.rationale
+                            _stable_hlg_key(goal): missing_hlg_evaluation.rationale
+                            for goal in additions
+                        },
+                        max_goals_by_parent_name={
+                            _stable_hlg_key(goal): MAX_LLGS_FOR_NEW_HLG
                             for goal in additions
                         },
                     ),
                     mode,
                     evaluator_ablation,
                 )
-                parents = {_key(goal.name): goal for goal in additions}
+                parents = {_stable_hlg_key(goal): goal for goal in additions}
+                generated_by_parent = {
+                    _stable_hlg_key(goal): [] for goal in additions
+                }
                 for llg in generated_llgs.low_level_goals:
-                    parent = parents.get(_key(llg.high_level_associated.name))
+                    parent = _resolve_generated_parent(
+                        llg.high_level_associated, parents
+                    )
                     if parent is not None:
-                        current_llgs.low_level_goals.append(
-                            _replace_parent(llg, parent)
+                        generated_by_parent[_stable_hlg_key(parent)].append(llg)
+                valid_additions = []
+                for parent in additions:
+                    accepted, rejection = _accept_regenerated_llgs(
+                        parent=parent,
+                        existing=[],
+                        generated=generated_by_parent.get(_stable_hlg_key(parent), []),
+                        maximum=MAX_LLGS_FOR_NEW_HLG,
+                    )
+                    if accepted:
+                        valid_additions.append(parent)
+                        current_llgs.low_level_goals.extend(accepted)
+                    if rejection:
+                        iteration_warnings.append(
+                            f"{parent.name}: {rejection}"
                         )
+                if len(valid_additions) != len(additions):
+                    valid_keys = {_stable_hlg_key(goal) for goal in valid_additions}
+                    current_hlgs = HighLevelGoals(goals=[
+                        goal for goal in current_hlgs.goals
+                        if goal not in additions or _stable_hlg_key(goal) in valid_keys
+                    ])
 
         current_hlgs, current_llgs = _deduplicate_high_level_goals(
             current_hlgs, current_llgs, iteration_warnings
         )
 
-        # A branch that exhausted its bounded LLG repairs is considered
-        # stabilized for the final project-wide coverage check.  Its warning
-        # is preserved, but it must not prevent convergence when no HLG is
-        # missing. Other warnings (for example an empty branch removed) still
-        # block the normal confirmed stop.
+        # Only real confirmations permit convergence. Branches that exhausted
+        # their repair budget and inconclusive evaluations remain unresolved;
+        # their warnings prevent a false confirmed stop.
         all_confirmed = all(
             evaluation.final_decision
             in {
                 GlobalGoalEvaluationDecision.CONFIRM_BRANCH,
-                GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED,
             }
             for evaluation in evaluations.values()
         ) and not any(
