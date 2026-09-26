@@ -1,67 +1,69 @@
 {
   "iteration": 4,
   "reconstructions": {
-    "branch_003": {
-      "reconstructed_high_level_goal": "Facilitate the complete process of customer order management.",
-      "rationale": "All the low-level goals are steps involved in managing a customer order, from initiation to final submission, ensuring that the order is correctly processed.",
-      "branch_id": "branch_003",
+    "branch_002": {
+      "reconstructed_high_level_goal": "Enable Farmers to Monitor and Track Product Delivery Confirmation Status",
+      "rationale": "All low-level goals collectively aim to provide the farmer with comprehensive capabilities to view, filter, and retrieve detailed information about the confirmation status of their initiated product deliveries. They ensure the farmer has full visibility into the progress and details of their deliveries from initiation through confirmation.",
+      "branch_id": "branch_002",
       "source_low_level_goal_ids": [
-        "Initiate Order Entry",
-        "Add Product to Order",
-        "Specify Customer Details",
-        "Review Order Summary",
-        "Validate Minimum Quantity Constraints",
-        "Submit Order"
+        "RetrieveFarmerDeliveryList",
+        "RetrieveDeliveryConfirmationStatus",
+        "RetrieveDetailedDeliveryConfirmationInfo",
+        "FilterDeliveriesByConfirmationStatus"
       ]
     },
-    "branch_004": {
-      "reconstructed_high_level_goal": "Facilitate seamless payment transactions for customers by managing wallet balances and processing payments efficiently.",
-      "rationale": "All the low-level goals are focused on ensuring that customer transactions are processed smoothly, which includes checking balances, handling insufficient funds, and allowing wallet recharges. They collectively aim to create a streamlined payment experience.",
-      "branch_id": "branch_004",
+    "branch_012": {
+      "reconstructed_high_level_goal": "Manage Customer Order Lifecycle and Financial Transactions",
+      "rationale": "The low-level goals collectively describe the essential functions for store employees to oversee the entire lifecycle of a customer order, from supplier delivery confirmation and order status updates to customer pickup and delivery failure handling. Concurrently, they cover all critical financial operations related to customers, including processing payments, issuing refunds, managing digital wallets, and viewing transaction histories. These two sets of operations are intrinsically linked as order fulfillment necessitates corresponding financial management, ensuring a complete and accurate customer service experience.",
+      "branch_id": "branch_012",
       "source_low_level_goal_ids": [
-        "Process Payment",
-        "Handle Insufficient Funds",
-        "Cancel Order After Grace Period",
-        "Recharge Wallet"
+        "ConfirmIncomingProductDelivery",
+        "SetOrderReadyForPickup",
+        "ConfirmCustomerOrderPickup",
+        "RetrieveCustomerOrderDetails",
+        "UpdateOrderStatusToDeliveryFailure",
+        "InitiateCustomerWalletRecharge",
+        "ProcessCustomerOrderPayment",
+        "IssueCustomerOrderRefund",
+        "ApplyCustomerBonus",
+        "RetrieveCustomerWalletBalance",
+        "RetrieveCustomerTransactionHistory"
       ]
     },
-    "branch_006": {
-      "reconstructed_high_level_goal": "Optimize the delivery process to ensure timely product availability for customers.",
-      "rationale": "Both low-level goals focus on improving the delivery system: scheduling deliveries based on availability ensures that products are delivered when needed, while notifying customers of delays keeps them informed, enhancing overall customer satisfaction.",
-      "branch_id": "branch_006",
+    "branch_013": {
+      "reconstructed_high_level_goal": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+      "rationale": "The low-level goals collectively describe a comprehensive operational workflow for a store. This workflow encompasses understanding farmer availability and product offerings, managing customer orders (creation, viewing, updating), aggregating these orders for farmers, confirming farmer commitments, recording product deliveries from farmers, and finally, preparing and facilitating the pickup of customer orders. All these operations are interconnected and essential for the successful execution of a weekly purchasing cycle, ensuring products are efficiently sourced from farmers and delivered to customers.",
+      "branch_id": "branch_013",
       "source_low_level_goal_ids": [
-        "Schedule Delivery",
-        "Notify Late Delivery"
+        "Retrieve current week's farmer availability list",
+        "View detailed product offerings of a specific farmer",
+        "Retrieve all customer orders for the current purchasing cycle",
+        "View details of a specific customer order",
+        "Create a new customer order",
+        "Modify an existing customer order",
+        "Retrieve aggregated order summary for a specific farmer",
+        "Check farmer order confirmation status",
+        "Confirm receipt of delivered quantities from a farmer",
+        "Generate package preparation list for customer orders",
+        "Retrieve daily customer pickup schedule",
+        "Mark a customer order as collected"
       ]
     }
   },
   "evaluations": {
-    "branch_003": {
-      "branch_id": "branch_003",
-      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
-      "final_decision": "EVALUATION_INCONCLUSIVE",
-      "high_level_evaluation": {
-        "rationale": "Malformed evaluator response; keeping the current HLG.",
-        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "rewriting_focus": null,
-        "confidence": "LOW"
-      },
-      "replacement_request": null,
-      "low_level_evaluation": null
-    },
-    "branch_004": {
-      "branch_id": "branch_004",
-      "rationale": "The original High-Level Goal 'Ensure Reliable Transaction Completion' accurately captures the functional intention of the System actor regarding payments. The project description explicitly details the system's role in automatically performing payments, checking wallet balances, handling insufficient funds (via warnings and deadlines), and cancelling orders if payment fails. The bottom-up reconstruction confirms that the low-level goals focus on wallet management and payment processing. The original goal is not too generic, as it specifically targets the reliability and completion of the transaction process, which is a distinct responsibility of the System actor separate from order placement or logistics. It is supported by the documentation and does not overlap with other HLGs. The current Low-Level Goals (LLGs) comprehensively cover the essential capabilities required by the parent High-Level Goal (HLG) 'Ensure Reliable Transaction Completion'. The HLG explicitly mentions processing payments, handling insufficient funds, and cancellations. \n\n1. 'Process Payment' (llg_001) covers the core transaction execution.\n2. 'Handle Insufficient Funds' (llg_002) covers the balance check and initial warning/notification logic described in the documentation.\n3. 'Cancel Order After Grace Period' (llg_003) covers the cancellation aspect when funds are not replenished in time.\n4. 'Recharge Wallet' (llg_004) covers the mechanism for customers to resolve insufficient funds.\n\nThe documentation states that if the balance is insufficient, the customer receives an email warning (covered by llg_002's handling process) and later an SMS if payment fails at execution (also part of the insufficient funds handling workflow). The cancellation after the grace period is explicitly covered by llg_003. There are no missing essential capabilities explicitly required by the parent HLG. The sibling HLGs do not overlap with these specific transactional mechanics. Therefore, the decomposition is complete and valid.",
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "The project description explicitly states that 'Store employees confirm the receipt of the delivered quantities' and that if goods are not delivered, customers are informed. While the text does not explicitly state that farmers *view* this status in a dashboard, the functional intention of the system is to close the loop on the delivery process. The original High-Level Goal 'Enable Farmers to Track Delivery Confirmation Status' is a reasonable and supported functional requirement for the farmer actor to know if their delivery has been accepted, especially given the consequences of non-delivery (refunds/bonuses to customers). The bottom-up reconstruction 'Enable Farmers to Monitor and Track Product Delivery Confirmation Status' is semantically identical to the original but slightly more verbose. The original is concise, correctly scoped to the farmer's need for visibility on the delivery confirmation event, and does not overlap with the 'Manage product availability information' goal (which focuses on the *input* of availability, not the *output* of delivery confirmation). Therefore, the original goal is supported and appropriately scoped. The parent HLG requires farmers to monitor the status of their product deliveries, specifically to confirm if store employees have acknowledged and confirmed receipt. The current LLGs cover: 1) retrieving a list of deliveries with status (llg_001), 2) retrieving specific confirmation status (llg_002), 3) retrieving detailed confirmation info including quantities, timestamp, and employee identity (llg_003), and 4) filtering by status (llg_004). These capabilities collectively provide the necessary visibility into the delivery confirmation process as described in the documentation ('Store employees confirm the receipt of the delivered quantities'). The decomposition is complete, atomic, and aligned with the parent goal. No essential capabilities are missing, and no LLGs are contradicted by the documentation.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Ensure Reliable Transaction Completion' accurately captures the functional intention of the System actor regarding payments. The project description explicitly details the system's role in automatically performing payments, checking wallet balances, handling insufficient funds (via warnings and deadlines), and cancelling orders if payment fails. The bottom-up reconstruction confirms that the low-level goals focus on wallet management and payment processing. The original goal is not too generic, as it specifically targets the reliability and completion of the transaction process, which is a distinct responsibility of the System actor separate from order placement or logistics. It is supported by the documentation and does not overlap with other HLGs.",
+        "rationale": "The project description explicitly states that 'Store employees confirm the receipt of the delivered quantities' and that if goods are not delivered, customers are informed. While the text does not explicitly state that farmers *view* this status in a dashboard, the functional intention of the system is to close the loop on the delivery process. The original High-Level Goal 'Enable Farmers to Track Delivery Confirmation Status' is a reasonable and supported functional requirement for the farmer actor to know if their delivery has been accepted, especially given the consequences of non-delivery (refunds/bonuses to customers). The bottom-up reconstruction 'Enable Farmers to Monitor and Track Product Delivery Confirmation Status' is semantically identical to the original but slightly more verbose. The original is concise, correctly scoped to the farmer's need for visibility on the delivery confirmation event, and does not overlap with the 'Manage product availability information' goal (which focuses on the *input* of availability, not the *output* of delivery confirmation). Therefore, the original goal is supported and appropriately scoped.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current Low-Level Goals (LLGs) comprehensively cover the essential capabilities required by the parent High-Level Goal (HLG) 'Ensure Reliable Transaction Completion'. The HLG explicitly mentions processing payments, handling insufficient funds, and cancellations. \n\n1. 'Process Payment' (llg_001) covers the core transaction execution.\n2. 'Handle Insufficient Funds' (llg_002) covers the balance check and initial warning/notification logic described in the documentation.\n3. 'Cancel Order After Grace Period' (llg_003) covers the cancellation aspect when funds are not replenished in time.\n4. 'Recharge Wallet' (llg_004) covers the mechanism for customers to resolve insufficient funds.\n\nThe documentation states that if the balance is insufficient, the customer receives an email warning (covered by llg_002's handling process) and later an SMS if payment fails at execution (also part of the insufficient funds handling workflow). The cancellation after the grace period is explicitly covered by llg_003. There are no missing essential capabilities explicitly required by the parent HLG. The sibling HLGs do not overlap with these specific transactional mechanics. Therefore, the decomposition is complete and valid.",
+        "rationale": "The parent HLG requires farmers to monitor the status of their product deliveries, specifically to confirm if store employees have acknowledged and confirmed receipt. The current LLGs cover: 1) retrieving a list of deliveries with status (llg_001), 2) retrieving specific confirmation status (llg_002), 3) retrieving detailed confirmation info including quantities, timestamp, and employee identity (llg_003), and 4) filtering by status (llg_004). These capabilities collectively provide the necessary visibility into the delivery confirmation process as described in the documentation ('Store employees confirm the receipt of the delivered quantities'). The decomposition is complete, atomic, and aligned with the parent goal. No essential capabilities are missing, and no LLGs are contradicted by the documentation.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "regeneration_feedback": null,
         "unsupported_or_misleading_llg_ids": [],
@@ -69,85 +71,144 @@
         "confidence": "HIGH"
       }
     },
-    "branch_006": {
-      "branch_id": "branch_006",
-      "rationale": "The original High-Level Goal 'Manage Delivery Workflow' accurately captures the system's responsibilities regarding the physical delivery of goods from farmers to the store, including the handling of late deliveries and customer notifications as described in the project text. The bottom-up reconstruction 'Optimize the delivery process...' is a valid interpretation but does not offer a significantly better scope or clarity than the original. The original goal is specific, supported by the documentation (specifically the section on farmer deliveries, SMS reminders, and credit bonuses for late deliveries), and distinct from other goals like 'Coordinate Pickup Logistics' (which focuses on customer collection) or 'Ensure Reliable Transaction Completion' (which focuses on payment). Therefore, the original goal should be kept. The parent HLG 'Manage Delivery Workflow' explicitly requires handling late deliveries and notifying customers of issues. The documentation specifies a concrete workflow for late deliveries: if goods are not delivered by 8 p.m. on Tuesday, the system must update orders, credit customers with a 20% bonus, and inform them. The current LLG 'Notify Late Delivery' is too generic and does not capture the essential capability of processing the financial compensation (credit + bonus) and order updates associated with late deliveries. This specific handling of late delivery consequences is a material capability explicitly required by the parent HLG's description ('handling late deliveries') and the documentation, but it is absent from the current LLGs. Therefore, regeneration is required to include the capability to process late delivery penalties/compensations.",
-      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+    "branch_012": {
+      "branch_id": "branch_012",
+      "rationale": "The original High-Level Goal 'Manage Customer Orders and Financial Accounts' is too broad and overlaps significantly with other existing High-Level Goals for Store Employees. Specifically, 'Verify and confirm farmer deliveries' covers the delivery confirmation aspect, and 'Efficiently manage product pickup operations' covers the customer pickup aspect. Furthermore, the description mentions 'refunds' and 'bonuses', but the project description states that the system automatically handles payments and credits (bonuses) to customers; store employees do not manually process refunds or bonuses, they only confirm deliveries and pickups. The financial management (wallet recharges) is primarily a customer action, though employees might assist, it is not the core 'financial account management' described. The core operational tasks of the employee (delivery confirmation, pickup management, order entry) are already covered by specific, well-scoped HLGs. Therefore, this generic HLG should be removed to avoid redundancy and incorrect scoping of financial responsibilities.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Manage Delivery Workflow' accurately captures the system's responsibilities regarding the physical delivery of goods from farmers to the store, including the handling of late deliveries and customer notifications as described in the project text. The bottom-up reconstruction 'Optimize the delivery process...' is a valid interpretation but does not offer a significantly better scope or clarity than the original. The original goal is specific, supported by the documentation (specifically the section on farmer deliveries, SMS reminders, and credit bonuses for late deliveries), and distinct from other goals like 'Coordinate Pickup Logistics' (which focuses on customer collection) or 'Ensure Reliable Transaction Completion' (which focuses on payment). Therefore, the original goal should be kept.",
-        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rationale": "The original High-Level Goal 'Manage Customer Orders and Financial Accounts' is too broad and overlaps significantly with other existing High-Level Goals for Store Employees. Specifically, 'Verify and confirm farmer deliveries' covers the delivery confirmation aspect, and 'Efficiently manage product pickup operations' covers the customer pickup aspect. Furthermore, the description mentions 'refunds' and 'bonuses', but the project description states that the system automatically handles payments and credits (bonuses) to customers; store employees do not manually process refunds or bonuses, they only confirm deliveries and pickups. The financial management (wallet recharges) is primarily a customer action, though employees might assist, it is not the core 'financial account management' described. The core operational tasks of the employee (delivery confirmation, pickup management, order entry) are already covered by specific, well-scoped HLGs. Therefore, this generic HLG should be removed to avoid redundancy and incorrect scoping of financial responsibilities.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
-      "low_level_evaluation": {
-        "rationale": "The parent HLG 'Manage Delivery Workflow' explicitly requires handling late deliveries and notifying customers of issues. The documentation specifies a concrete workflow for late deliveries: if goods are not delivered by 8 p.m. on Tuesday, the system must update orders, credit customers with a 20% bonus, and inform them. The current LLG 'Notify Late Delivery' is too generic and does not capture the essential capability of processing the financial compensation (credit + bonus) and order updates associated with late deliveries. This specific handling of late delivery consequences is a material capability explicitly required by the parent HLG's description ('handling late deliveries') and the documentation, but it is absent from the current LLGs. Therefore, regeneration is required to include the capability to process late delivery penalties/compensations.",
-        "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "regeneration_feedback": "The current LLGs miss the essential capability of processing the consequences of late deliveries. Specifically, the documentation states that if goods are not delivered by 8 p.m. on Tuesday, the system must update orders, credit the missing amount plus a 20% bonus to customers, and inform them. The current 'Notify Late Delivery' LLG only covers notification, missing the critical financial and order-state update logic required to 'handle' the late delivery as specified in the parent HLG.",
-        "unsupported_or_misleading_llg_ids": [],
-        "missing_essential_capabilities": [
-          "Process late delivery compensation by crediting customers with the missing amount plus a 20% bonus and updating order status when deliveries are not received by the deadline."
-        ],
+      "low_level_evaluation": null
+    },
+    "branch_013": {
+      "branch_id": "branch_013",
+      "rationale": "The original High-Level Goal 'Oversee the weekly purchasing cycle' is too generic and passive ('oversee', 'monitor') compared to the active operational responsibilities of Store Employees described in the project description and supported by the bottom-up reconstruction. The reconstruction 'Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders' accurately captures the active management role. Furthermore, the existing HLGs for Store Employees ('Facilitate customer order placement', 'Efficiently manage product pickup operations', 'Verify and confirm farmer deliveries', 'Manage Customer Orders and Financial Accounts') already cover the specific functional aspects of this cycle. Keeping a broad, generic 'Oversee' goal alongside these specific goals creates redundancy and lacks the precision of the reconstructed goal. Therefore, the original goal should be rewritten to align with the more precise and active nature of the reconstructed goal, or potentially removed if the specific goals are deemed sufficient. However, given the instruction to rewrite if the original is 'too generic' or 'less faithful', and the reconstruction provides a better, more comprehensive summary of the employee's primary operational duty that ties the specific tasks together, a rewrite is the most appropriate action to ensure the goal hierarchy is precise and non-redundant in its top-level abstraction.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Oversee the weekly purchasing cycle' is too generic and passive ('oversee', 'monitor') compared to the active operational responsibilities of Store Employees described in the project description and supported by the bottom-up reconstruction. The reconstruction 'Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders' accurately captures the active management role. Furthermore, the existing HLGs for Store Employees ('Facilitate customer order placement', 'Efficiently manage product pickup operations', 'Verify and confirm farmer deliveries', 'Manage Customer Orders and Financial Accounts') already cover the specific functional aspects of this cycle. Keeping a broad, generic 'Oversee' goal alongside these specific goals creates redundancy and lacks the precision of the reconstructed goal. Therefore, the original goal should be rewritten to align with the more precise and active nature of the reconstructed goal, or potentially removed if the specific goals are deemed sufficient. However, given the instruction to rewrite if the original is 'too generic' or 'less faithful', and the reconstruction provides a better, more comprehensive summary of the employee's primary operational duty that ties the specific tasks together, a rewrite is the most appropriate action to ensure the goal hierarchy is precise and non-redundant in its top-level abstraction.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": "Refine the goal to reflect the active management of the weekly cycle, specifically focusing on coordinating the flow from farmer sourcing to customer fulfillment, ensuring it is distinct from the specific sub-tasks already listed but serves as the overarching operational objective.",
         "confidence": "HIGH"
-      }
+      },
+      "replacement_request": {
+        "rationale": "The original goal 'Oversee the weekly purchasing cycle' is too passive and generic. The evaluator requires a focus on the *active management* of the flow from farmer sourcing to customer fulfillment. The reconstructed goal 'Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders' better captures the operational objective of coordinating the entire pipeline, distinguishing it from specific sub-tasks like confirming deliveries or preparing packages, while retaining the Store Employees as the actor responsible for this coordination.",
+        "generation_project_description": "The system supports the management of an Ethical Purchasing Group (EPS) associated with a km-zero fruit and vegetable store. The operating cycle is weekly. Farmers provide product estimates (type, quantity, price, characteristics) between Friday noon and Saturday morning. Customers (group representatives) browse offers and place orders, which are validated against minimum quantity constraints. Orders remain in an 'entered' state until farmers confirm actual availability by Monday morning. If availability is insufficient, precedence rules based on customer fair-play scores are applied to modify or cancel orders. Modified orders require customer acceptance. Upon confirmation, automatic payment is processed via customer virtual wallets; insufficient balances trigger warnings and potential cancellation if not resolved by Monday evening. After payment, customers reserve pickup slots. Store employees view the pickup schedule, prepare packages, and confirm collection. If customers fail to collect, reminders are sent, and orders may be forfeited, affecting the fair-play score. Farmers deliver products to the store by Tuesday evening. Store employees confirm receipt. If delivery is late (after 4 p.m.), reminders are sent; if not delivered by 8 p.m., orders are updated, customers are refunded with a 20% bonus, and informed. The system maintains a fair-play score for each customer, calculated from order history, reminders, forfeitures, and modifications, which serves as the precedence criterion for allocation.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+        }
+      },
+      "low_level_evaluation": null
     }
   },
   "high_level_goals": {
     "goals": [
       {
-        "name": "Facilitate Conscious Purchasing",
-        "description": "Enable customers to make informed purchasing decisions based on product origin, quality, and availability.",
-        "actor": {
-          "name": "Customers",
-          "description": "Individuals or representatives of purchasing groups who place orders for products."
-        }
-      },
-      {
-        "name": "Manage Product Supply Estimates",
-        "description": "Allow farmers to provide accurate estimates of product availability to meet customer demand and manage their supply effectively.",
+        "name": "Manage product availability information",
+        "description": "Farmers need to effectively communicate their estimated and actual product availability to the system to facilitate order processing and ensure accurate supply chain information. This includes submitting initial estimates and confirming final quantities.",
         "actor": {
           "name": "Farmers",
-          "description": "Local producers who supply products and provide estimates of availability."
+          "description": "Individuals who supply products and provide availability information."
         }
       },
       {
-        "name": "Assist Customers with Order Placement",
-        "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+        "name": "Enable Farmers to Track Delivery Confirmation Status",
+        "description": "Farmers need to be able to monitor the status of their product deliveries to the store, specifically to confirm if the store employees have acknowledged and confirmed the receipt of the delivered quantities. This visibility is crucial for their operational planning and understanding the status of their supply chain.",
         "actor": {
-          "name": "Store Employees",
-          "description": "Staff members who assist customers with orders and manage product pickups."
+          "name": "Farmers",
+          "description": "Individuals who supply products and provide availability information."
         }
       },
       {
-        "name": "Ensure Reliable Transaction Completion",
-        "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
-        "actor": {
-          "name": "System",
-          "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
-        }
-      },
-      {
-        "name": "Coordinate Pickup Logistics",
-        "description": "Enable customers to reserve time slots for product collection and assist store employees in preparing orders for pickup.",
-        "actor": {
-          "name": "Store Employees",
-          "description": "Staff members who assist customers with orders and manage product pickups."
-        }
-      },
-      {
-        "name": "Manage Delivery Workflow",
-        "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
-        "actor": {
-          "name": "System",
-          "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
-        }
-      },
-      {
-        "name": "Maintain Fair-Play Scoring System",
-        "description": "Track and update customer fair-play scores based on order reliability to prioritize order fulfillment during product shortages.",
+        "name": "Access and browse product offers",
+        "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
         "actor": {
           "name": "Customers",
-          "description": "Individuals or representatives of purchasing groups who place orders for products."
+          "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+        }
+      },
+      {
+        "name": "Place and manage product orders",
+        "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+        "actor": {
+          "name": "Customers",
+          "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+        }
+      },
+      {
+        "name": "Securely manage payments for orders",
+        "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+        "actor": {
+          "name": "Customers",
+          "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+        }
+      },
+      {
+        "name": "Conveniently collect ordered products",
+        "description": "Customers want to reserve a suitable time slot for picking up their products from the store and have their collection confirmed.",
+        "actor": {
+          "name": "Customers",
+          "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+        }
+      },
+      {
+        "name": "Ensure fair allocation of limited products",
+        "description": "Customers aim for a transparent and fair process for allocating products when supply is limited, based on their reliability (fair-play score).",
+        "actor": {
+          "name": "Customers",
+          "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+        }
+      },
+      {
+        "name": "Stay informed about order status and changes",
+        "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+        "actor": {
+          "name": "Customers",
+          "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+        }
+      },
+      {
+        "name": "Facilitate customer order placement",
+        "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+        }
+      },
+      {
+        "name": "Efficiently manage product pickup operations",
+        "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+        }
+      },
+      {
+        "name": "Verify and confirm farmer deliveries",
+        "description": "Store employees aim to confirm the receipt of products delivered by farmers, ensuring that expected quantities match actual deliveries.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+        }
+      },
+      {
+        "name": "Manage Customer Orders and Financial Accounts",
+        "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+        }
+      },
+      {
+        "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+        "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+        "actor": {
+          "name": "Store Employees",
+          "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
         }
       }
     ]
@@ -155,266 +216,1334 @@
   "low_level_goals": {
     "low_level_goals": [
       {
-        "name": "Retrieve Product Information",
-        "description": "Allow customers to view detailed information about products including origin, quality, and availability.",
+        "name": "Retrieve a paginated list of all active product offers",
+        "description": "The system shall allow customers to request and receive a paginated list of all currently available product offers, including basic information like product name, farmer, and a summary price.",
         "high_level_associated": {
-          "name": "Facilitate Conscious Purchasing",
-          "description": "Enable customers to make informed purchasing decisions based on product origin, quality, and availability.",
+          "name": "Access and browse product offers",
+          "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
           "actor": {
             "name": "Customers",
-            "description": "Individuals or representatives of purchasing groups who place orders for products."
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
           }
         }
       },
       {
-        "name": "Submit Purchase Decision",
-        "description": "Enable customers to confirm their choice of product for purchase based on the retrieved information.",
+        "name": "Retrieve detailed information for a specific product offer",
+        "description": "The system shall allow customers to request and receive comprehensive details for a selected product offer, including its full description, specific characteristics (e.g., weight, origin), and exact pricing.",
         "high_level_associated": {
-          "name": "Facilitate Conscious Purchasing",
-          "description": "Enable customers to make informed purchasing decisions based on product origin, quality, and availability.",
+          "name": "Access and browse product offers",
+          "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
           "actor": {
             "name": "Customers",
-            "description": "Individuals or representatives of purchasing groups who place orders for products."
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
           }
         }
       },
       {
-        "name": "Input Supply Estimate",
-        "description": "Allow farmers to enter their estimates of product availability into the system.",
+        "name": "Filter product offers by product category",
+        "description": "The system shall allow customers to apply a filter to the list of product offers based on predefined product categories (e.g., 'Vegetables', 'Fruits', 'Dairy'), returning only matching offers.",
         "high_level_associated": {
-          "name": "Manage Product Supply Estimates",
-          "description": "Allow farmers to provide accurate estimates of product availability to meet customer demand and manage their supply effectively.",
+          "name": "Access and browse product offers",
+          "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
           "actor": {
-            "name": "Farmers",
-            "description": "Local producers who supply products and provide estimates of availability."
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
           }
         }
       },
       {
-        "name": "Update Supply Status",
-        "description": "Enable farmers to update the status of their product supply in real-time as conditions change.",
+        "name": "Filter product offers by farmer ID",
+        "description": "The system shall allow customers to apply a filter to the list of product offers to view only those provided by a specific farmer, identified by their unique ID.",
         "high_level_associated": {
-          "name": "Manage Product Supply Estimates",
-          "description": "Allow farmers to provide accurate estimates of product availability to meet customer demand and manage their supply effectively.",
+          "name": "Access and browse product offers",
+          "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
           "actor": {
-            "name": "Farmers",
-            "description": "Local producers who supply products and provide estimates of availability."
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
           }
         }
       },
       {
-        "name": "Reserve Pickup Time Slot",
-        "description": "Enable customers to select and reserve a time slot for product pickup.",
+        "name": "Search for product offers by keyword",
+        "description": "The system shall allow customers to submit a keyword or phrase to search for relevant product offers, returning a list of offers whose names or descriptions contain the specified keyword.",
         "high_level_associated": {
-          "name": "Coordinate Pickup Logistics",
-          "description": "Enable customers to reserve time slots for product collection and assist store employees in preparing orders for pickup.",
+          "name": "Access and browse product offers",
+          "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Sort product offers by price",
+        "description": "The system shall allow customers to sort the displayed list of product offers by their price, either in ascending or descending order.",
+        "high_level_associated": {
+          "name": "Access and browse product offers",
+          "description": "Customers aim to easily view and explore the available products, their descriptions, characteristics, and prices from various farmers.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveAvailableProducts",
+        "description": "Allow the customer to retrieve a paginated list of all products currently available for purchase.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveProductDetails",
+        "description": "Enable the customer to retrieve comprehensive details (e.g., description, price, stock level, images) for a specific product using its unique identifier.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "BrowseProductsByFarmer",
+        "description": "Allow the customer to filter and view products offered by a specific farmer.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "AddItemToCart",
+        "description": "Permit the customer to add a specified quantity of a particular product to their active shopping cart.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "UpdateCartItemQuantity",
+        "description": "Allow the customer to modify the quantity of an existing product within their active shopping cart.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RemoveItemFromCart",
+        "description": "Enable the customer to remove a specific product entirely from their active shopping cart.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveShoppingCartContents",
+        "description": "Allow the customer to retrieve a detailed list of all products and their quantities currently in their active shopping cart.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "SubmitOrder",
+        "description": "Allow the customer to finalize and submit their shopping cart as a new order, transitioning it from a cart to an entered order state, awaiting farmer confirmation and minimum quantity validation.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ModifyEnteredOrder",
+        "description": "Permit the customer to modify quantities or items within an order that is currently in an 'entered' state, before it is confirmed by farmers.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCustomerOrders",
+        "description": "Enable the customer to retrieve a list of all orders they have previously placed, including basic status information.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSpecificOrderDetails",
+        "description": "Permit the customer to retrieve comprehensive details for a specific order, including items, quantities, total cost, collection information, and current status, using its unique order ID.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RequestOrderCancellation",
+        "description": "Allow the customer to initiate a request to cancel a specific order, provided it is within an eligible status for cancellation.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "AddFundsToVirtualWallet",
+        "description": "Enable the customer to add funds to their personal virtual wallet, initiating the payment process.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveWalletBalance",
+        "description": "Allow the customer to view their current virtual wallet balance.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReviewAndAcceptModifiedOrder",
+        "description": "Permit the customer to review and explicitly accept system-proposed modifications to an order (e.g., due to product unavailability leading to quantity reduction).",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ViewOrderCancellationStatus",
+        "description": "Enable the customer to view the status of their orders, including any system-initiated cancellations (e.g., due to insufficient balance or product unavailability).",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReserveCollectionTimeSlot",
+        "description": "Allow the customer to select and reserve an available time slot for collecting a placed order from the store.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveFairPlayScore",
+        "description": "Enable the customer to view their current fair-play reliability score.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ViewInsufficientBalanceWarning",
+        "description": "Allow the customer to view warnings or notifications related to insufficient virtual wallet balance before or during order processing.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ViewNonCollectionReminder",
+        "description": "Enable the customer to view notifications or reminders regarding uncollected orders.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ConfirmProductDeliveryToStore",
+        "description": "Allow a store employee to record the successful delivery of products from a farmer to the store's inventory, updating stock levels.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "MarkOrderAsPrepared",
+        "description": "Enable a store employee to update the status of a specific customer order to 'prepared', indicating it is ready for collection.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ConfirmOrderCollection",
+        "description": "Allow a store employee to confirm the successful collection of an order by a customer, updating the order status to 'collected'.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ProcessInStoreWalletRecharge",
+        "description": "Enable a store employee to process and confirm an in-store request to add funds to a customer's virtual wallet, updating their balance.",
+        "high_level_associated": {
+          "name": "Place and manage product orders",
+          "description": "Customers want to be able to select desired products, specify quantities, submit orders, and review their order status and details.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Retrieve virtual wallet balance",
+        "description": "The customer wants to query the system to get their current virtual wallet balance.",
+        "high_level_associated": {
+          "name": "Securely manage payments for orders",
+          "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Retrieve virtual wallet transaction history",
+        "description": "The customer wants to query the system to get a list of all past transactions (deposits, deductions) associated with their virtual wallet.",
+        "high_level_associated": {
+          "name": "Securely manage payments for orders",
+          "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Initiate virtual wallet recharge request",
+        "description": "The customer wants to send a request to the system to add a specified amount of funds to their virtual wallet, indicating an upcoming in-store payment.",
+        "high_level_associated": {
+          "name": "Securely manage payments for orders",
+          "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Query virtual wallet recharge status",
+        "description": "The customer wants to query the system to check the processing status of a specific virtual wallet recharge request, typically after an in-store payment.",
+        "high_level_associated": {
+          "name": "Securely manage payments for orders",
+          "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Retrieve successful order payment notifications",
+        "description": "The customer wants to query the system for notifications confirming that funds were successfully deducted from their virtual wallet for a confirmed order.",
+        "high_level_associated": {
+          "name": "Securely manage payments for orders",
+          "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Retrieve failed order payment notifications",
+        "description": "The customer wants to query the system for notifications indicating that an attempt to deduct funds from their virtual wallet for a confirmed order failed.",
+        "high_level_associated": {
+          "name": "Securely manage payments for orders",
+          "description": "Customers aim to maintain and recharge their virtual wallet and ensure that payments for confirmed orders are processed automatically and accurately.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Retrieve pending orders for collection",
+        "description": "The system must allow the customer to view a list of their orders that are ready for collection.",
+        "high_level_associated": {
+          "name": "Conveniently collect ordered products",
+          "description": "Customers want to reserve a suitable time slot for picking up their products from the store and have their collection confirmed.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Query available collection time slots for a specific order",
+        "description": "The system must allow the customer to retrieve the available time slots for picking up a specific order from the store.",
+        "high_level_associated": {
+          "name": "Conveniently collect ordered products",
+          "description": "Customers want to reserve a suitable time slot for picking up their products from the store and have their collection confirmed.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Reserve a specific collection time slot for an order",
+        "description": "The system must allow the customer to select and reserve an available time slot for picking up their order.",
+        "high_level_associated": {
+          "name": "Conveniently collect ordered products",
+          "description": "Customers want to reserve a suitable time slot for picking up their products from the store and have their collection confirmed.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "View confirmation details for a reserved collection time slot",
+        "description": "The system must allow the customer to retrieve and view the details of their successfully reserved collection time slot.",
+        "high_level_associated": {
+          "name": "Conveniently collect ordered products",
+          "description": "Customers want to reserve a suitable time slot for picking up their products from the store and have their collection confirmed.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCustomerFairPlayScore",
+        "description": "Allow the customer to query and view their current fair-play score, which is a key factor in product allocation decisions.",
+        "high_level_associated": {
+          "name": "Ensure fair allocation of limited products",
+          "description": "Customers aim for a transparent and fair process for allocating products when supply is limited, based on their reliability (fair-play score).",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "CheckLimitedProductAllocationStatus",
+        "description": "Allow the customer to query the system to determine if their submitted order for a limited product has been successfully allocated or denied.",
+        "high_level_associated": {
+          "name": "Ensure fair allocation of limited products",
+          "description": "Customers aim for a transparent and fair process for allocating products when supply is limited, based on their reliability (fair-play score).",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ViewAllocationCriteria",
+        "description": "Enable the customer to access and review the specific rules and criteria, including how their fair-play score influences the allocation of limited products, to ensure transparency.",
+        "high_level_associated": {
+          "name": "Ensure fair allocation of limited products",
+          "description": "Customers aim for a transparent and fair process for allocating products when supply is limited, based on their reliability (fair-play score).",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "AcceptModifiedOrder",
+        "description": "Enable the customer to explicitly accept an order that has been modified by the system due to limited product availability.",
+        "high_level_associated": {
+          "name": "Ensure fair allocation of limited products",
+          "description": "Customers aim for a transparent and fair process for allocating products when supply is limited, based on their reliability (fair-play score).",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RejectModifiedOrder",
+        "description": "Enable the customer to explicitly reject an order that has been modified by the system due to limited product availability.",
+        "high_level_associated": {
+          "name": "Ensure fair allocation of limited products",
+          "description": "Customers aim for a transparent and fair process for allocating products when supply is limited, based on their reliability (fair-play score).",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCurrentOrderStatus",
+        "description": "The system shall allow the customer to retrieve the current status details for a specific order using its identifier.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "RetrieveOrderHistory",
+        "description": "The system shall allow the customer to retrieve a list of all their past and current orders, including their respective statuses.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceiveOrderConfirmationNotification",
+        "description": "The system shall send an order confirmation notification (e.g., email) to the customer upon successful order placement (status 'entered' or 'confirmed').",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceiveOrderStatusUpdateNotification",
+        "description": "The system shall send a notification to the customer when their order status changes (e.g., from 'entered' to 'confirmed', 'modified', 'cancelled', 'paid', 'collected', or 'forfeited').",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceivePaymentIssueNotification",
+        "description": "The system shall send a notification to the customer if there is an issue with their payment for an order (e.g., insufficient wallet balance).",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceiveOrderModificationProposalNotification",
+        "description": "The system shall send a notification to the customer if their order is proposed for modification due to product availability or other system-initiated adjustments.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceivePickupProblemNotification",
+        "description": "The system shall send a notification to the customer if a problem occurs with the availability or collection of their order at the designated pickup point.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceiveOrderSummaryEmail",
+        "description": "The system shall send an email containing a detailed summary of the order to the customer upon successful order placement.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceiveWalletLowBalanceWarningEmail",
+        "description": "The system shall send an email notification to the customer when their virtual wallet balance falls below a predefined threshold.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceivePaymentDeadlineSMS",
+        "description": "The system shall send an SMS notification to the customer reminding them of an upcoming payment deadline for an order.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "ReceiveNonCollectionSMS",
+        "description": "The system shall send an SMS notification to the customer if their order has not been collected by the designated pickup deadline.",
+        "high_level_associated": {
+          "name": "Stay informed about order status and changes",
+          "description": "Customers want to receive timely notifications and updates regarding their order status, payment issues, modifications due to availability, or delivery problems.",
+          "actor": {
+            "name": "Customers",
+            "description": "Representatives of purchasing groups who browse offers, place orders, manage payments, and collect products."
+          }
+        }
+      },
+      {
+        "name": "Search for Customer Record",
+        "description": "The system should allow a Store Employee to search for an existing customer by ID or name to associate them with an order.",
+        "high_level_associated": {
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Prepare Order for Pickup",
-        "description": "Allow store employees to prepare customer orders for pickup based on reserved time slots.",
+        "name": "Create New Customer Record",
+        "description": "The system should allow a Store Employee to create a new customer record with provided details if an existing one is not found.",
         "high_level_associated": {
-          "name": "Coordinate Pickup Logistics",
-          "description": "Enable customers to reserve time slots for product collection and assist store employees in preparing orders for pickup.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Track Fair-Play Score",
-        "description": "Enable the system to track and update customer fair-play scores based on their order history.",
+        "name": "Search for Products",
+        "description": "The system should allow a Store Employee to search for available products by name, SKU, or category.",
         "high_level_associated": {
-          "name": "Maintain Fair-Play Scoring System",
-          "description": "Track and update customer fair-play scores based on order reliability to prioritize order fulfillment during product shortages.",
-          "actor": {
-            "name": "Customers",
-            "description": "Individuals or representatives of purchasing groups who place orders for products."
-          }
-        }
-      },
-      {
-        "name": "Update Fair-Play Score",
-        "description": "Allow the system to update a customer's fair-play score after each order completion.",
-        "high_level_associated": {
-          "name": "Maintain Fair-Play Scoring System",
-          "description": "Track and update customer fair-play scores based on order reliability to prioritize order fulfillment during product shortages.",
-          "actor": {
-            "name": "Customers",
-            "description": "Individuals or representatives of purchasing groups who place orders for products."
-          }
-        }
-      },
-      {
-        "name": "Initiate Order Entry",
-        "description": "Start the process of entering a new customer order in the system.",
-        "high_level_associated": {
-          "name": "Assist Customers with Order Placement",
-          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "View Product Availability",
+        "description": "The system should allow a Store Employee to view the current stock and availability details for a specific product.",
+        "high_level_associated": {
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
         "name": "Add Product to Order",
-        "description": "Select and add a specific product to the customer's order.",
+        "description": "The system should allow a Store Employee to add a specified quantity of a particular product to a customer's order.",
         "high_level_associated": {
-          "name": "Assist Customers with Order Placement",
-          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Specify Customer Details",
-        "description": "Input the necessary customer information required for the order.",
+        "name": "Configure Product Options",
+        "description": "The system should allow a Store Employee to select specific variations (e.g., size, quality, or ripeness) for a product added to an order, adhering to product constraints.",
         "high_level_associated": {
-          "name": "Assist Customers with Order Placement",
-          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Review Order Summary",
-        "description": "Display and review the complete order details before final submission.",
+        "name": "Update Product Quantity in Order",
+        "description": "The system should allow a Store Employee to modify the quantity of an existing product in a customer's order.",
         "high_level_associated": {
-          "name": "Assist Customers with Order Placement",
-          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Validate Minimum Quantity Constraints",
-        "description": "Check if the order meets the minimum quantity requirements for each product before submission.",
+        "name": "Remove Product from Order",
+        "description": "The system should allow a Store Employee to remove a product from a customer's order.",
         "high_level_associated": {
-          "name": "Assist Customers with Order Placement",
-          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Submit Order",
-        "description": "Finalize and submit the completed order for processing.",
+        "name": "View Current Order Details",
+        "description": "The system should allow a Store Employee to retrieve and display all items, quantities, selected options, and current total for the order being placed.",
         "high_level_associated": {
-          "name": "Assist Customers with Order Placement",
-          "description": "Enable store employees to effectively assist customers in placing orders, ensuring a smooth and efficient ordering process.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
             "name": "Store Employees",
-            "description": "Staff members who assist customers with orders and manage product pickups."
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Process Payment",
-        "description": "Initiate the payment processing for a customer transaction using the provided payment method and amount.",
+        "name": "Select Order Collection Slot",
+        "description": "The system should allow a Store Employee to select an available collection time slot for a customer's order when placing it on their behalf.",
         "high_level_associated": {
-          "name": "Ensure Reliable Transaction Completion",
-          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Handle Insufficient Funds",
-        "description": "Check the customer's wallet balance and determine if the payment can be completed; if not, trigger the insufficient funds handling process.",
+        "name": "Submit Finalized Order",
+        "description": "The system should allow a Store Employee to submit the finalized order for processing after all details are confirmed.",
         "high_level_associated": {
-          "name": "Ensure Reliable Transaction Completion",
-          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "name": "Facilitate customer order placement",
+          "description": "Store employees aim to assist customers by placing orders on their behalf, ensuring accuracy and adherence to product constraints.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Cancel Order After Grace Period",
-        "description": "Automatically cancel the order if the payment cannot be completed after the defined grace period for recharging the wallet.",
+        "name": "RetrieveDailyPickupSchedule",
+        "description": "Allow store employees to fetch a list of all customer orders scheduled for pickup on a specified date.",
         "high_level_associated": {
-          "name": "Ensure Reliable Transaction Completion",
-          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Recharge Wallet",
-        "description": "Allow the customer to recharge their wallet with a specified amount to enable payment processing.",
+        "name": "ViewOrdersNeedingPreparation",
+        "description": "Enable store employees to retrieve a list of all customer orders currently requiring preparation, distinct from the full daily schedule.",
         "high_level_associated": {
-          "name": "Ensure Reliable Transaction Completion",
-          "description": "Guarantee that customer payments are processed smoothly and efficiently, including handling insufficient funds and cancellations.",
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Update Order Status for Late Delivery",
-        "description": "Change the order status to 'Late' for any delivery not received by 8 p.m. on Tuesday.",
+        "name": "ViewSpecificPickupOrderDetails",
+        "description": "Enable store employees to retrieve comprehensive details for a particular customer pickup order using its unique identifier.",
         "high_level_associated": {
-          "name": "Manage Delivery Workflow",
-          "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Credit Customer for Late Delivery",
-        "description": "Credit the customer the missing amount plus a 20% bonus for any late delivery.",
+        "name": "UpdateOrderStatusToInPreparation",
+        "description": "Allow store employees to change the status of a customer pickup order to 'In Preparation' to indicate that the order is being assembled.",
         "high_level_associated": {
-          "name": "Manage Delivery Workflow",
-          "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Notify Customer of Late Delivery",
-        "description": "Send a notification to the customer informing them of the late delivery and the actions taken.",
+        "name": "MarkOrderReadyForPickup",
+        "description": "Enable store employees to update the status of a customer pickup order to 'Ready for Pickup' once all items are prepared and staged.",
         "high_level_associated": {
-          "name": "Manage Delivery Workflow",
-          "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       },
       {
-        "name": "Schedule Delivery",
-        "description": "Arrange a new delivery time for the products that were not delivered on time.",
+        "name": "MarkOrderAsCollected",
+        "description": "Enable store employees to update the status of a customer pickup order to 'Collected' after the customer has successfully received their products.",
         "high_level_associated": {
-          "name": "Manage Delivery Workflow",
-          "description": "Ensure timely delivery of products from farmers to the store, including handling late deliveries and notifying customers of any issues.",
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
           "actor": {
-            "name": "System",
-            "description": "The software system that manages transactions and interactions among customers, farmers, and store employees."
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "GeneratePickupReceipt",
+        "description": "Allow store employees to generate and provide a digital or physical receipt confirming the successful collection of an order by the customer.",
+        "high_level_associated": {
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ViewOrdersAffectedByLateDelivery",
+        "description": "Enable store employees to view a list of customer orders that have been affected by a late or failed farmer delivery, including details of credited amounts.",
+        "high_level_associated": {
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ViewCustomerOrderHistory",
+        "description": "Allow store employees to retrieve a customer's past order history to assist with inquiries related to pickup operations.",
+        "high_level_associated": {
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ViewCustomerCurrentOrderStatus",
+        "description": "Enable store employees to view the current status of any customer order (e.g., pending, in preparation, ready for pickup, collected) to provide real-time assistance during pickup operations.",
+        "high_level_associated": {
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ViewCustomerFairPlayScore",
+        "description": "Allow store employees to view a customer's fair-play score to understand order prioritization or explain related policies during customer interactions.",
+        "high_level_associated": {
+          "name": "Efficiently manage product pickup operations",
+          "description": "Store employees want to view the pickup schedule, prepare customer orders, and confirm the collection of products by customers.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Retrieve pending farmer deliveries",
+        "description": "The system shall allow a Store Employee to query and retrieve a list of all pending farmer deliveries for a specific period or farmer.",
+        "high_level_associated": {
+          "name": "Verify and confirm farmer deliveries",
+          "description": "Store employees aim to confirm the receipt of products delivered by farmers, ensuring that expected quantities match actual deliveries.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "View details of a specific farmer delivery",
+        "description": "The system shall allow a Store Employee to select a pending delivery and view its detailed information, including expected products and quantities.",
+        "high_level_associated": {
+          "name": "Verify and confirm farmer deliveries",
+          "description": "Store employees aim to confirm the receipt of products delivered by farmers, ensuring that expected quantities match actual deliveries.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Input actual received quantity for a delivery item",
+        "description": "The system shall allow a Store Employee to enter the actual quantity received for each product item within a specific farmer delivery.",
+        "high_level_associated": {
+          "name": "Verify and confirm farmer deliveries",
+          "description": "Store employees aim to confirm the receipt of products delivered by farmers, ensuring that expected quantities match actual deliveries.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Confirm a farmer delivery",
+        "description": "The system shall allow a Store Employee to mark a farmer delivery as 'confirmed' after all actual quantities have been entered and verified.",
+        "high_level_associated": {
+          "name": "Verify and confirm farmer deliveries",
+          "description": "Store employees aim to confirm the receipt of products delivered by farmers, ensuring that expected quantities match actual deliveries.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Record a discrepancy for a delivery item",
+        "description": "The system shall allow a Store Employee to log a discrepancy (e.g., damaged goods, quantity mismatch) for a specific product item within a delivery, including a reason.",
+        "high_level_associated": {
+          "name": "Verify and confirm farmer deliveries",
+          "description": "Store employees aim to confirm the receipt of products delivered by farmers, ensuring that expected quantities match actual deliveries.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "SubmitEstimatedProductAvailability",
+        "description": "Allow the system to receive an initial estimated quantity for a specific product from a farmer for a future delivery period.",
+        "high_level_associated": {
+          "name": "Manage product availability information",
+          "description": "Farmers need to effectively communicate their estimated and actual product availability to the system to facilitate order processing and ensure accurate supply chain information. This includes submitting initial estimates and confirming final quantities.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Individuals who supply products and provide availability information."
+          }
+        }
+      },
+      {
+        "name": "UpdateProductAvailabilityToFinalQuantity",
+        "description": "Allow the system to receive an update from a farmer, changing a previously submitted estimated quantity to a final confirmed quantity for a specific product and delivery period.",
+        "high_level_associated": {
+          "name": "Manage product availability information",
+          "description": "Farmers need to effectively communicate their estimated and actual product availability to the system to facilitate order processing and ensure accurate supply chain information. This includes submitting initial estimates and confirming final quantities.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Individuals who supply products and provide availability information."
+          }
+        }
+      },
+      {
+        "name": "RetrieveFarmerDeliveryList",
+        "description": "The system shall allow the farmer to retrieve a list of all product deliveries they have initiated, including basic identifiers and their current overall status.",
+        "high_level_associated": {
+          "name": "Enable Farmers to Track Delivery Confirmation Status",
+          "description": "Farmers need to be able to monitor the status of their product deliveries to the store, specifically to confirm if the store employees have acknowledged and confirmed the receipt of the delivered quantities. This visibility is crucial for their operational planning and understanding the status of their supply chain.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Individuals who supply products and provide availability information."
+          }
+        }
+      },
+      {
+        "name": "RetrieveDeliveryConfirmationStatus",
+        "description": "The system shall allow the farmer to retrieve the current confirmation status (e.g., 'Pending', 'Confirmed', 'Rejected', 'Partially Confirmed') for a specific product delivery using its unique identifier.",
+        "high_level_associated": {
+          "name": "Enable Farmers to Track Delivery Confirmation Status",
+          "description": "Farmers need to be able to monitor the status of their product deliveries to the store, specifically to confirm if the store employees have acknowledged and confirmed the receipt of the delivered quantities. This visibility is crucial for their operational planning and understanding the status of their supply chain.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Individuals who supply products and provide availability information."
+          }
+        }
+      },
+      {
+        "name": "RetrieveDetailedDeliveryConfirmationInfo",
+        "description": "The system shall allow the farmer to retrieve detailed information regarding the confirmation of a specific delivery, including confirmed quantities, the timestamp of confirmation, and the identity of the confirming store employee.",
+        "high_level_associated": {
+          "name": "Enable Farmers to Track Delivery Confirmation Status",
+          "description": "Farmers need to be able to monitor the status of their product deliveries to the store, specifically to confirm if the store employees have acknowledged and confirmed the receipt of the delivered quantities. This visibility is crucial for their operational planning and understanding the status of their supply chain.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Individuals who supply products and provide availability information."
+          }
+        }
+      },
+      {
+        "name": "FilterDeliveriesByConfirmationStatus",
+        "description": "The system shall allow the farmer to filter their list of deliveries based on specific confirmation statuses (e.g., 'Pending Confirmation', 'Confirmed', 'Rejected') to quickly identify relevant deliveries.",
+        "high_level_associated": {
+          "name": "Enable Farmers to Track Delivery Confirmation Status",
+          "description": "Farmers need to be able to monitor the status of their product deliveries to the store, specifically to confirm if the store employees have acknowledged and confirmed the receipt of the delivered quantities. This visibility is crucial for their operational planning and understanding the status of their supply chain.",
+          "actor": {
+            "name": "Farmers",
+            "description": "Individuals who supply products and provide availability information."
+          }
+        }
+      },
+      {
+        "name": "ConfirmIncomingProductDelivery",
+        "description": "Allow store employees to confirm the successful delivery of products from a farmer for a specific order, updating the order's inventory status within the system.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "SetOrderReadyForPickup",
+        "description": "Enable store employees to update a customer order's status to 'Ready for Pickup' once all items are prepared and available for collection.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ConfirmCustomerOrderPickup",
+        "description": "Allow store employees to confirm that a customer has successfully picked up their order, finalizing the order's status in the system.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCustomerOrderDetails",
+        "description": "Enable store employees to retrieve comprehensive details for a specific customer order, including items, current status, and associated financial information.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "UpdateOrderStatusToDeliveryFailure",
+        "description": "Allow store employees to update an order's status to indicate a delivery failure, which may trigger subsequent actions like refunds or re-scheduling.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "InitiateCustomerWalletRecharge",
+        "description": "Allow store employees to initiate the process of adding funds to a customer's digital wallet.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ProcessCustomerOrderPayment",
+        "description": "Enable store employees to process a payment for a customer's order, either by deducting funds from their wallet or recording an external payment method.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "IssueCustomerOrderRefund",
+        "description": "Allow store employees to issue a refund to a customer for a specific order or part of an order, crediting their wallet or original payment method.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "ApplyCustomerBonus",
+        "description": "Enable store employees to apply a bonus amount to a customer's digital wallet or account as part of promotions or compensation.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCustomerWalletBalance",
+        "description": "Allow store employees to retrieve the current balance of a specific customer's digital wallet.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCustomerTransactionHistory",
+        "description": "Enable store employees to view a detailed history of all financial transactions associated with a customer's account, including recharges, payments, refunds, and bonuses.",
+        "high_level_associated": {
+          "name": "Manage Customer Orders and Financial Accounts",
+          "description": "To efficiently oversee the entire lifecycle of customer orders, from product delivery confirmation to customer pickup, and to accurately manage all associated financial transactions, including wallet recharges, payments, refunds, and bonuses, ensuring customer satisfaction and operational integrity.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Farmer Product Estimates",
+        "description": "Allow Store Employees to fetch and display the list of product estimates, including quantities and prices, submitted by farmers for the current or upcoming weekly cycle.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Approve Farmer Product Estimates",
+        "description": "Enable Store Employees to approve or reject specific product estimates from farmers, confirming the quantities and prices for sourcing.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Adjust Farmer Sourcing Quantities",
+        "description": "Provide functionality for Store Employees to modify the planned quantities of products to be sourced from individual farmers after initial estimates, prior to generating purchase orders.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Generate Weekly Farmer Purchase Orders",
+        "description": "Allow Store Employees to automatically or manually generate consolidated purchase orders for each farmer based on the aggregated customer orders and approved product estimates for the week.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Track Farmer Delivery Status",
+        "description": "Enable Store Employees to update and view the delivery status of products from farmers, indicating whether products have been shipped, are in transit, or have been received.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Record Received Farmer Products",
+        "description": "Provide an interface for Store Employees to accurately record the actual quantities of products received from each farmer upon delivery, updating inventory.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "View All Customer Orders",
+        "description": "Allow Store Employees to retrieve and display a complete list of all customer orders placed for the current weekly purchasing cycle, including order details and status.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Update Customer Order Fulfillment Status",
+        "description": "Enable Store Employees to change the fulfillment status of individual customer orders, such as marking them as 'ready for pickup', 'picked', or 'fulfilled'.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Generate Customer Order Picking Lists",
+        "description": "Provide functionality for Store Employees to generate optimized picking lists for customer orders, grouping items by location or farmer for efficient preparation.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Record Customer Order Collection",
+        "description": "Allow Store Employees to mark a customer order as 'collected' in the system upon successful pickup by the customer.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
+          }
+        }
+      },
+      {
+        "name": "Manage Weekly Cycle Schedule",
+        "description": "Enable Store Employees to configure and update the start and end dates, as well as key deadlines (e.g., farmer estimate submission, customer order placement, collection window), for each weekly purchasing cycle.",
+        "high_level_associated": {
+          "name": "Manage the Weekly Cycle of Sourcing Products from Farmers and Fulfilling Customer Orders",
+          "description": "To oversee and coordinate the entire operational flow, from the initial receipt of product estimates from farmers to the final collection of orders by customers, ensuring smooth execution of the weekly purchasing group cycle.",
+          "actor": {
+            "name": "Store Employees",
+            "description": "Personnel who manage orders, assist customers, handle product collection, and confirm deliveries."
           }
         }
       }
@@ -422,16 +1551,10 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "The current High-Level Goals comprehensively cover the functional intentions described in the project text. 'Facilitate Conscious Purchasing' covers browsing and ordering. 'Manage Product Supply Estimates' covers farmer inputs. 'Assist Customers with Order Placement' and 'Coordinate Pickup Logistics' cover store employee interactions. 'Ensure Reliable Transaction Completion' covers the payment, wallet, and cancellation logic. 'Manage Delivery Workflow' covers the farmer-to-store delivery and late delivery handling. 'Maintain Fair-Play Scoring System' covers the scoring and precedence logic. No distinct, high-level functional intention remains uncovered.",
+    "rationale": "The project description outlines a weekly purchasing cycle involving farmers, customers, and store employees. The current High-Level Goals (HLGs) comprehensively cover the functional intentions of all identified actors: Farmers (availability management, delivery tracking), Customers (browsing, ordering, payment/wallet management, collection, fair allocation, notifications), and Store Employees (order placement assistance, pickup management, delivery verification, financial oversight, cycle monitoring). Specific workflow steps such as product catalogue maintenance, minimum quantity validation, precedence rule application, and fair-play score calculation are operational details or sub-goals already covered by the broader stakeholder intentions (e.g., 'Place and manage product orders', 'Ensure fair allocation of limited products', 'Manage Customer Orders and Financial Accounts'). No distinct, documented functional intention at the actor level is missing from the current list.",
     "missing_goal_requests": []
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-  "llg_regeneration_counts": {
-    "store employees::assist customers with order placement": 1,
-    "system::ensure reliable transaction completion": 1,
-    "system::manage delivery workflow": 1
-  },
-  "warnings": [
-    "UNRESOLVED_EVALUATION_INCONCLUSIVE"
-  ]
+  "llg_regeneration_counts": {},
+  "warnings": []
 }

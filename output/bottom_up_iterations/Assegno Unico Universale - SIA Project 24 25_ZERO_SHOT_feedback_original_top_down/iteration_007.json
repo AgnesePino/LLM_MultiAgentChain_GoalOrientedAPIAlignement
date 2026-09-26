@@ -1,0 +1,1765 @@
+{
+  "iteration": 7,
+  "reconstructions": {
+    "branch_004": {
+      "reconstructed_high_level_goal": "Apply for AUU Benefit",
+      "rationale": "The low-level goals collectively describe the complete process an applicant undertakes to initiate, populate with various types of data (personal, household, financial), attach supporting documents, review, and finally submit an application for the AUU benefit. Each step is a necessary component leading to the successful application for this benefit.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Create New Application Instance",
+        "Populate Applicant Personal Information",
+        "Populate Household Member Information",
+        "Populate Financial and ISEE Data",
+        "Specify Preferred Payment Method",
+        "Attach Required Supporting Documents",
+        "Review and Validate Application Data",
+        "Submit Application for Processing"
+      ]
+    },
+    "branch_005": {
+      "reconstructed_high_level_goal": "Enable Applicants to Manage AUU Benefit Applications",
+      "rationale": "These low-level goals collectively cover the entire lifecycle of an AUU benefit application from the applicant's perspective, including initiation, saving, submission, status tracking, viewing, modification, and cancellation. They all contribute to the overarching goal of allowing an applicant to fully manage their applications.",
+      "branch_id": "branch_005",
+      "source_low_level_goal_ids": [
+        "createApplicationDraft",
+        "saveApplicationDraft",
+        "submitApplication",
+        "retrieveApplicationStatus",
+        "retrieveApplicationDetails",
+        "updateApplicationData",
+        "withdrawApplication"
+      ]
+    },
+    "branch_008": {
+      "reconstructed_high_level_goal": "Manage Applicant's Legal and Privacy Compliance for Application Submission",
+      "rationale": "The low-level goals collectively describe the complete process an applicant undertakes to review, accept, and confirm all mandatory legal declarations and privacy notices required for the successful submission of an application. They ensure the applicant is informed and provides explicit consent for legal and privacy terms.",
+      "branch_id": "branch_008",
+      "source_low_level_goal_ids": [
+        "Retrieve Responsibility Declarations Content",
+        "Retrieve GDPR Privacy Notice Content",
+        "Mark All Required Legal Declarations as Accepted",
+        "Display Accepted Declarations Summary",
+        "Submit Final Legal Declarations Acceptance"
+      ]
+    },
+    "branch_011": {
+      "reconstructed_high_level_goal": "Successfully Register a Dependent in an Application",
+      "rationale": "The low-level goals collectively describe the complete workflow required to add a dependent to an application. This includes initiating the process, performing various levels of validation (format, local uniqueness, global uniqueness), enriching the data with official information, persisting the validated data, and providing feedback to the user. All these steps are essential for ensuring the accurate and valid registration of a dependent within the system.",
+      "branch_id": "branch_011",
+      "source_low_level_goal_ids": [
+        "ValidateDependentFiscalCodeFormat",
+        "CheckDependentFiscalCodeUniquenessInApplication",
+        "CheckDependentFiscalCodeGlobalUniqueness",
+        "RetrieveOfficialDependentData",
+        "StoreValidatedDependentInformation",
+        "ProvideFiscalCodeValidationFeedback",
+        "AddDependentChildToApplication"
+      ]
+    },
+    "branch_014": {
+      "reconstructed_high_level_goal": "Other Parent Finalizes AUU Allowance Details",
+      "rationale": "The low-level goals collectively describe the complete process for the Other Parent to review, potentially modify, and confirm the proposed distribution of the AUU allowance, and subsequently provide their payment information to enable the reception of their share. These steps are interdependent and necessary for the Other Parent to complete their involvement in the allowance setup.",
+      "branch_id": "branch_014",
+      "source_low_level_goal_ids": [
+        "Retrieve Proposed AUU Distribution",
+        "Confirm Proposed AUU Distribution",
+        "Input Modified AUU Distribution",
+        "Submit Modified AUU Distribution",
+        "Input Personal Payment Information",
+        "Submit Personal Payment Information"
+      ]
+    },
+    "branch_017": {
+      "reconstructed_high_level_goal": "Process Monthly Allowance Disbursements for Approved Applications",
+      "rationale": "The low-level goals collectively describe a complete, automated process for handling recurring financial disbursements. They cover identifying eligible applications, validating their status, initiating payments, recording transaction details, and managing the lifecycle of the application through its disbursement period, including its expiration. This entire sequence ensures that beneficiaries receive their approved allowances on schedule and that application statuses are accurately maintained.",
+      "branch_id": "branch_017",
+      "source_low_level_goal_ids": [
+        "Identify Eligible Applications for Monthly Disbursement",
+        "Retrieve Beneficiary Payment Details",
+        "Initiate Allowance Payment Transaction",
+        "Record Monthly Disbursement Status",
+        "Check Application Validity for Disbursement",
+        "Update Application Status to Expired"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "The original High-Level Goal 'Enable Applicant to Submit New Applications' is semantically redundant with the existing High-Level Goal 'Submit Assegno Unico Universale Application'. Both goals describe the same core functional intention: the applicant initiating and completing a new application for the AUU benefit. The project description supports this intention, but maintaining two separate HLGs for the same actor and same functional scope (submitting a new application) violates the principle of avoiding semantic overlap. The existing HLG 'Submit Assegno Unico Universale Application' is more descriptive and aligns well with the bottom-up reconstruction 'Apply for AUU Benefit'. Therefore, the original HLG should be removed to consolidate the requirements under the single, clearer goal.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Enable Applicant to Submit New Applications' is semantically redundant with the existing High-Level Goal 'Submit Assegno Unico Universale Application'. Both goals describe the same core functional intention: the applicant initiating and completing a new application for the AUU benefit. The project description supports this intention, but maintaining two separate HLGs for the same actor and same functional scope (submitting a new application) violates the principle of avoiding semantic overlap. The existing HLG 'Submit Assegno Unico Universale Application' is more descriptive and aligns well with the bottom-up reconstruction 'Apply for AUU Benefit'. Therefore, the original HLG should be removed to consolidate the requirements under the single, clearer goal.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "The original High-Level Goal 'Enable Application Submission and Management' is too generic and overlaps significantly with several other specific High-Level Goals already present in the list (e.g., 'Submit Assegno Unico Universale Application', 'Manage Application Drafts', 'Modify Existing Application', 'Consult Past Applications and History'). In Goal-Oriented Requirements Engineering, high-level goals should represent distinct stakeholder intentions. 'Managing' an application is not a single atomic intention but a collection of specific actions (submitting, saving drafts, modifying, viewing history) which are already covered by more precise HLGs. Keeping a broad 'Management' goal alongside specific 'Submission' and 'Modification' goals creates redundancy and violates the principle of non-overlapping goals. Therefore, it should be removed to maintain a clean, non-redundant goal model.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Enable Application Submission and Management' is too generic and overlaps significantly with several other specific High-Level Goals already present in the list (e.g., 'Submit Assegno Unico Universale Application', 'Manage Application Drafts', 'Modify Existing Application', 'Consult Past Applications and History'). In Goal-Oriented Requirements Engineering, high-level goals should represent distinct stakeholder intentions. 'Managing' an application is not a single atomic intention but a collection of specific actions (submitting, saving drafts, modifying, viewing history) which are already covered by more precise HLGs. Keeping a broad 'Management' goal alongside specific 'Submission' and 'Modification' goals creates redundancy and violates the principle of non-overlapping goals. Therefore, it should be removed to maintain a clean, non-redundant goal model.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_008": {
+      "branch_id": "branch_008",
+      "rationale": "The original High-Level Goal 'Accept Legal Declarations' is supported by the project description, which explicitly states that the applicant must read and accept declarations of responsibility and the GDPR privacy notice before submission. However, this goal is too narrow and overlaps significantly with the existing High-Level Goal 'Submit Assegno Unico Universale Application', which already includes 'accepting declarations' as part of the submission process. Furthermore, the bottom-up reconstruction 'Manage Applicant's Legal and Privacy Compliance for Application Submission' suggests a broader scope that might include re-confirmation during suspension or modification phases, but the primary intent is still a sub-step of the main submission or modification workflows. Given that 'Submit Assegno Unico Universale Application' and 'Modify Existing Application' already cover the functional context where these declarations are accepted, keeping a separate, narrow HLG for just 'Accepting Legal Declarations' creates redundancy and splits a single stakeholder intention (submitting a valid application) into fragmented goals. Therefore, it should be removed to avoid semantic overlap with the broader submission and modification goals.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Accept Legal Declarations' is supported by the project description, which explicitly states that the applicant must read and accept declarations of responsibility and the GDPR privacy notice before submission. However, this goal is too narrow and overlaps significantly with the existing High-Level Goal 'Submit Assegno Unico Universale Application', which already includes 'accepting declarations' as part of the submission process. Furthermore, the bottom-up reconstruction 'Manage Applicant's Legal and Privacy Compliance for Application Submission' suggests a broader scope that might include re-confirmation during suspension or modification phases, but the primary intent is still a sub-step of the main submission or modification workflows. Given that 'Submit Assegno Unico Universale Application' and 'Modify Existing Application' already cover the functional context where these declarations are accepted, keeping a separate, narrow HLG for just 'Accepting Legal Declarations' creates redundancy and splits a single stakeholder intention (submitting a valid application) into fragmented goals. Therefore, it should be removed to avoid semantic overlap with the broader submission and modification goals.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_011": {
+      "branch_id": "branch_011",
+      "rationale": "The original High-Level Goal 'Ensure Valid Child Data Submission' is too narrow and technically focused. It describes a system constraint or validation mechanism rather than the user's functional intention. The project description explicitly supports the user's ability to 'add one or more children to an existing application' and to provide information about dependents during the initial application. The bottom-up reconstruction 'Successfully Register a Dependent in an Application' better captures the user's goal of adding a dependent (child or adult) to the application context, which includes the validation steps as part of the process. The existing HLG 'Modify Existing Application' covers adding children to *submitted* applications, but the act of registering dependents is also central to the initial 'Submit Assegno Unico Universale Application' flow. However, looking at the list, there isn't a specific HLG for 'Adding Dependents' distinct from the general submission or modification. The original HLG is a sub-task of submitting or modifying an application. Given the instruction to remove if another HLG covers the same intention: 'Submit Assegno Unico Universale Application' covers providing info about each dependent child. 'Modify Existing Application' covers adding new children to an active app. Therefore, a separate HLG for 'Ensuring Valid Child Data' is redundant and incorrectly scoped as a primary goal. It is a means to an end (submitting/modifying), not the end itself. Thus, it should be removed as it is subsumed by the broader goals of submitting or modifying the application.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Ensure Valid Child Data Submission' is too narrow and technically focused. It describes a system constraint or validation mechanism rather than the user's functional intention. The project description explicitly supports the user's ability to 'add one or more children to an existing application' and to provide information about dependents during the initial application. The bottom-up reconstruction 'Successfully Register a Dependent in an Application' better captures the user's goal of adding a dependent (child or adult) to the application context, which includes the validation steps as part of the process. The existing HLG 'Modify Existing Application' covers adding children to *submitted* applications, but the act of registering dependents is also central to the initial 'Submit Assegno Unico Universale Application' flow. However, looking at the list, there isn't a specific HLG for 'Adding Dependents' distinct from the general submission or modification. The original HLG is a sub-task of submitting or modifying an application. Given the instruction to remove if another HLG covers the same intention: 'Submit Assegno Unico Universale Application' covers providing info about each dependent child. 'Modify Existing Application' covers adding new children to an active app. Therefore, a separate HLG for 'Ensuring Valid Child Data' is redundant and incorrectly scoped as a primary goal. It is a means to an end (submitting/modifying), not the end itself. Thus, it should be removed as it is subsumed by the broader goals of submitting or modifying the application.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_014": {
+      "branch_id": "branch_014",
+      "rationale": "The original High-Level Goal 'Manage Shared AUU Allowance Distribution and Payment' is supported by the project description, which states that the other parent can 'confirm or modify the proposed allowance distribution' and 'provide their own payment information'. However, there is a significant semantic overlap with the existing High-Level Goal 'Complete Shared Application' for the same actor ('Other Parent'). The existing goal 'Complete Shared Application' is described as 'To access an AUU application initiated by the other parent and provide necessary information to finalize it.' The project description frames the Other Parent's role as completing the application initiated by the first parent. The specific actions of confirming/modifying distribution and providing payment info are the core components of 'finalizing' or 'completing' that shared application. Having two separate HLGs for the same actor that essentially describe the same workflow (one generic 'complete', one specific 'manage distribution/payment') violates the principle of not splitting one stakeholder intention into wording variants. The existing goal 'Complete Shared Application' is broader and encompasses the specific actions described in the original goal. Therefore, the original goal should be removed to avoid redundancy, as the functional intention is already covered by 'Complete Shared Application'. Alternatively, if 'Complete Shared Application' is considered too generic, one might argue for rewriting, but given the instruction to remove when another HLG covers the same intention, and 'Complete Shared Application' explicitly mentions 'finalize it' which implies the distribution and payment steps, removal is the most appropriate action to maintain a clean goal model.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Manage Shared AUU Allowance Distribution and Payment' is supported by the project description, which states that the other parent can 'confirm or modify the proposed allowance distribution' and 'provide their own payment information'. However, there is a significant semantic overlap with the existing High-Level Goal 'Complete Shared Application' for the same actor ('Other Parent'). The existing goal 'Complete Shared Application' is described as 'To access an AUU application initiated by the other parent and provide necessary information to finalize it.' The project description frames the Other Parent's role as completing the application initiated by the first parent. The specific actions of confirming/modifying distribution and providing payment info are the core components of 'finalizing' or 'completing' that shared application. Having two separate HLGs for the same actor that essentially describe the same workflow (one generic 'complete', one specific 'manage distribution/payment') violates the principle of not splitting one stakeholder intention into wording variants. The existing goal 'Complete Shared Application' is broader and encompasses the specific actions described in the original goal. Therefore, the original goal should be removed to avoid redundancy, as the functional intention is already covered by 'Complete Shared Application'. Alternatively, if 'Complete Shared Application' is considered too generic, one might argue for rewriting, but given the instruction to remove when another HLG covers the same intention, and 'Complete Shared Application' explicitly mentions 'finalize it' which implies the distribution and payment steps, removal is the most appropriate action to maintain a clean goal model.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_017": {
+      "branch_id": "branch_017",
+      "rationale": "The original High-Level Goal 'Ensure Timely Allowance Disbursement' is supported by the project description, which states that 'the corresponding allowance is paid automatically every month' for accepted applications. However, the bottom-up reconstruction 'Process Monthly Allowance Disbursements for Approved Applications' is more precise and faithful to the system's functional scope. The original goal uses the verb 'Ensure', which implies a broader responsibility or outcome guarantee that might extend beyond the specific system function of processing the payment transaction. The reconstruction accurately captures the system's action of processing the disbursement for the specific subset of approved applications. Additionally, the existing HLG 'Automatically Adjust Allowance Based on ISEE' covers the calculation aspect, leaving the disbursement execution as a distinct functional goal. Therefore, the original goal should be rewritten to align with the more accurate and scoped reconstruction.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Ensure Timely Allowance Disbursement' is supported by the project description, which states that 'the corresponding allowance is paid automatically every month' for accepted applications. However, the bottom-up reconstruction 'Process Monthly Allowance Disbursements for Approved Applications' is more precise and faithful to the system's functional scope. The original goal uses the verb 'Ensure', which implies a broader responsibility or outcome guarantee that might extend beyond the specific system function of processing the payment transaction. The reconstruction accurately captures the system's action of processing the disbursement for the specific subset of approved applications. Additionally, the existing HLG 'Automatically Adjust Allowance Based on ISEE' covers the calculation aspect, leaving the disbursement execution as a distinct functional goal. Therefore, the original goal should be rewritten to align with the more accurate and scoped reconstruction.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": "Refine the goal to focus on the system's function of processing and executing monthly payments for approved applications, rather than the broader outcome of ensuring timeliness.",
+        "confidence": "HIGH"
+      },
+      "replacement_request": {
+        "rationale": "The original goal focused on the outcome of 'timeliness,' which is a quality attribute rather than a core functional requirement. The refined goal shifts focus to the system's specific function of processing and executing the monthly payment transactions for applications that have already been approved. This aligns with the project description stating that 'the corresponding allowance is paid automatically every month' for accepted applications, treating the disbursement as a distinct functional process managed by the system (triggered by INPS Staff approval) rather than just a timing constraint.",
+        "generation_project_description": "The system supports the online management of applications for the Italian Assegno Unico Universale (AUU). Once an application is submitted and evaluated by authorized INPS staff, it may be accepted. An accepted application remains valid for twelve months. During this validity period, the system must process and execute the monthly allowance disbursement to the beneficiary. The payment method (SEPA IBAN, post office, or prepaid card) is specified during the application phase. The system automatically triggers the payment execution for each monthly cycle for all active, approved applications, ensuring the financial benefit is transferred according to the stored payment instructions.",
+        "actor": {
+          "name": "INPS Staff",
+          "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+        }
+      },
+      "low_level_evaluation": null
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Submit Assegno Unico Universale Application",
+        "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Manage Application Drafts",
+        "description": "To save an incomplete application as a draft and later resume or discard it, allowing for flexible completion of the application process.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Manage AUU Allowance Payment Setup",
+        "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Enable Applicant to Submit New Applications",
+        "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Enable Application Submission and Management",
+        "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Modify Existing Application",
+        "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Access Benefit Information",
+        "description": "To consult general information about the AUU benefit and simulate potential allowance amounts.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Accept Legal Declarations",
+        "description": "To acknowledge and accept the responsibility declarations and GDPR privacy notice required for application submission.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Receive Application Receipt",
+        "description": "To obtain a downloadable receipt as confirmation of successful application submission.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Be Informed of Application Outcome",
+        "description": "To receive timely notification regarding the final decision (accepted, rejected, or suspended) of a submitted AUU application.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Ensure Valid Child Data Submission",
+        "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Consult Past Applications and History",
+        "description": "To access and review all previously submitted AUU applications, including their complete history and details, beyond just current status.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+        }
+      },
+      {
+        "name": "Complete Shared Application",
+        "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+        "actor": {
+          "name": "Other Parent",
+          "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+        }
+      },
+      {
+        "name": "Manage Shared AUU Allowance Distribution and Payment",
+        "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+        "actor": {
+          "name": "Other Parent",
+          "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+        }
+      },
+      {
+        "name": "Process and Decide on AUU Applications",
+        "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+        "actor": {
+          "name": "INPS Staff",
+          "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+        }
+      },
+      {
+        "name": "Automatically Adjust Allowance Based on ISEE",
+        "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+        "actor": {
+          "name": "INPS Staff",
+          "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+        }
+      },
+      {
+        "name": "Manage Application Evaluation",
+        "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+        "actor": {
+          "name": "INPS Staff",
+          "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Create Application Draft",
+        "description": "The system shall allow an Applicant to save the current state of an incomplete application as a new draft, assigning it a unique identifier.",
+        "high_level_associated": {
+          "name": "Manage Application Drafts",
+          "description": "To save an incomplete application as a draft and later resume or discard it, allowing for flexible completion of the application process.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Update Application Draft",
+        "description": "The system shall allow an Applicant to modify and save changes to an existing application draft identified by its unique ID.",
+        "high_level_associated": {
+          "name": "Manage Application Drafts",
+          "description": "To save an incomplete application as a draft and later resume or discard it, allowing for flexible completion of the application process.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Application Draft List",
+        "description": "The system shall allow an Applicant to retrieve a list of all their saved application drafts, including key metadata like draft ID and last modified date.",
+        "high_level_associated": {
+          "name": "Manage Application Drafts",
+          "description": "To save an incomplete application as a draft and later resume or discard it, allowing for flexible completion of the application process.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Load Specific Application Draft",
+        "description": "The system shall allow an Applicant to retrieve the full details of a specific application draft using its unique ID, enabling them to resume editing.",
+        "high_level_associated": {
+          "name": "Manage Application Drafts",
+          "description": "To save an incomplete application as a draft and later resume or discard it, allowing for flexible completion of the application process.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Delete Application Draft",
+        "description": "The system shall allow an Applicant to permanently remove an application draft from the system using its unique ID.",
+        "high_level_associated": {
+          "name": "Manage Application Drafts",
+          "description": "To save an incomplete application as a draft and later resume or discard it, allowing for flexible completion of the application process.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "SetOrUpdateAUUAllowancePaymentMethodType",
+        "description": "The Applicant shall be able to select or modify their preferred payment method type (e.g., bank transfer, postal order) from a predefined list for receiving the AUU allowance.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ConfigureAUUAllowanceBankTransferDetails",
+        "description": "The Applicant shall be able to input, submit, or modify specific bank account details (e.g., IBAN, bank name, account holder name) when 'Bank Transfer' is selected as the payment method.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ConfigureAUUAllowancePostalOrderDetails",
+        "description": "The Applicant shall be able to input, submit, or modify specific postal address details (e.g., street, city, postal code) when 'Postal Order' is selected as the payment method.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCurrentAUUAllowancePaymentSetup",
+        "description": "The Applicant shall be able to request and view their currently configured payment method and associated details for the AUU allowance.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ConfigureCoParentAUUAllowancePaymentDetails",
+        "description": "The Applicant shall be able to input and submit the payment method and details (e.g., bank transfer, postal order, and associated account/address info) for the co-parent when the AUU allowance is split.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ValidateAUUAllowancePaymentDetails",
+        "description": "The Applicant shall be able to submit entered payment details for system validation and receive feedback on their correctness and completeness.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "FinalizeAUUAllowancePaymentSetup",
+        "description": "The Applicant shall be able to confirm and finalize the selected payment method and its associated details, making it active for AUU allowance disbursements.",
+        "high_level_associated": {
+          "name": "Manage AUU Allowance Payment Setup",
+          "description": "To provide and manage the preferred method and details for receiving the AUU allowance.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveApplicantApplications",
+        "description": "Allow the Applicant to fetch a list of all their previously submitted AUU applications, including their current status.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "SelectApplicationForModification",
+        "description": "Allow the Applicant to select a specific AUU application by its unique identifier to initiate the modification process.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveApplicationDetails",
+        "description": "Allow the Applicant to fetch all current details of a selected AUU application for review and modification.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "AddNewChildToApplication",
+        "description": "Allow the Applicant to add details for a new child (e.g., name, date of birth, tax code, disability status, student status for adult dependents) to a specified active AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ValidateChildFiscalCode",
+        "description": "Allow the Applicant to trigger real-time validation of a child's fiscal code, including uniqueness checks, when adding a new child to a specified AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "UpdateExistingChildInformation",
+        "description": "Allow the Applicant to modify specific details (e.g., name, date of birth, tax code, disability status, student status for adult dependents) of an already listed child within a specified active AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "UpdateApplicantPaymentDetails",
+        "description": "Allow the Applicant to modify or confirm their own payment method and associated details within a specified active AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "UpdateOtherParentPaymentDetails",
+        "description": "Allow the Applicant to modify or confirm the payment method and associated details for the other parent within a specified active AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ModifyAllowanceDistribution",
+        "description": "Allow the Applicant to change the percentage of allowance distribution between parents for a specified active AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "UploadDocument",
+        "description": "Allow the Applicant to upload a document (e.g., birth certificate, disability certificate, suspension resolution document) associated with a child or the application itself to a specified active AUU application, specifying its type.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ConfirmSuspensionDocumentProvision",
+        "description": "Allow the Applicant to confirm that all required documents for resolving a suspension have been provided for a specified AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveValidationErrors",
+        "description": "Allow the Applicant to fetch a list of validation errors associated with the current modifications to a specified AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "AcceptUpdatedDeclarationsAndPrivacyNotice",
+        "description": "Allow the Applicant to re-accept the responsibility declarations and GDPR privacy notice after making modifications to a specified AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "SaveApplicationModificationsAsDraft",
+        "description": "Allow the Applicant to save all current modifications to a specified AUU application as a draft without submitting it for final review.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "DiscardApplicationDraft",
+        "description": "Allow the Applicant to delete a saved draft of an AUU application, effectively discarding all unsaved modifications.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveApplicationSummary",
+        "description": "Allow the Applicant to fetch a comprehensive summary of all current modifications and existing data for a specified AUU application before final submission.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "SubmitModifiedApplication",
+        "description": "Allow the Applicant to finalize and submit the modified AUU application for official review and processing.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "DownloadModificationReceipt",
+        "description": "Allow the Applicant to download a confirmation receipt after successfully submitting modifications to an AUU application.",
+        "high_level_associated": {
+          "name": "Modify Existing Application",
+          "description": "To update or add information, such as new children, to an already submitted and active AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve AUU Benefit Overview",
+        "description": "The system shall allow the Applicant to fetch and display general descriptive information about the Assegno Unico Universale (AUU) benefit.",
+        "high_level_associated": {
+          "name": "Access Benefit Information",
+          "description": "To consult general information about the AUU benefit and simulate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve AUU Eligibility Criteria",
+        "description": "The system shall allow the Applicant to fetch and display the specific criteria required to be eligible for the AUU benefit.",
+        "high_level_associated": {
+          "name": "Access Benefit Information",
+          "description": "To consult general information about the AUU benefit and simulate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Submit AUU Simulation Parameters",
+        "description": "The system shall allow the Applicant to submit specific input parameters (e.g., ISEE value, number of children, age of children) to initiate an AUU allowance simulation.",
+        "high_level_associated": {
+          "name": "Access Benefit Information",
+          "description": "To consult general information about the AUU benefit and simulate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Receive AUU Simulated Allowance Result",
+        "description": "The system shall allow the Applicant to receive and display the calculated potential allowance amount based on the submitted simulation parameters.",
+        "high_level_associated": {
+          "name": "Access Benefit Information",
+          "description": "To consult general information about the AUU benefit and simulate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Responsibility Declarations Content",
+        "description": "The system should allow the Applicant to retrieve the full text content of the responsibility declarations required for application submission.",
+        "high_level_associated": {
+          "name": "Accept Legal Declarations",
+          "description": "To acknowledge and accept the responsibility declarations and GDPR privacy notice required for application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve GDPR Privacy Notice Content",
+        "description": "The system should allow the Applicant to retrieve the full text content of the GDPR privacy notice required for application submission.",
+        "high_level_associated": {
+          "name": "Accept Legal Declarations",
+          "description": "To acknowledge and accept the responsibility declarations and GDPR privacy notice required for application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Mark All Required Legal Declarations as Accepted",
+        "description": "The system should allow the Applicant to explicitly mark both the responsibility declarations and the GDPR privacy notice as accepted for their current application.",
+        "high_level_associated": {
+          "name": "Accept Legal Declarations",
+          "description": "To acknowledge and accept the responsibility declarations and GDPR privacy notice required for application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Display Accepted Declarations Summary",
+        "description": "The system should allow the Applicant to view a summary of all legal declarations and privacy notices they have marked as accepted before final submission.",
+        "high_level_associated": {
+          "name": "Accept Legal Declarations",
+          "description": "To acknowledge and accept the responsibility declarations and GDPR privacy notice required for application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Submit Final Legal Declarations Acceptance",
+        "description": "The system should allow the Applicant to submit the final confirmation of all required legal declarations and privacy notices for their application.",
+        "high_level_associated": {
+          "name": "Accept Legal Declarations",
+          "description": "To acknowledge and accept the responsibility declarations and GDPR privacy notice required for application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Generate Application Receipt",
+        "description": "The system must programmatically generate a unique digital receipt, including the application ID, submission timestamp, and key application details, upon successful processing of an application.",
+        "high_level_associated": {
+          "name": "Receive Application Receipt",
+          "description": "To obtain a downloadable receipt as confirmation of successful application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Store Application Receipt",
+        "description": "The system must persist the generated digital receipt in a secure storage, linking it to the corresponding application record and the applicant's profile for future retrieval.",
+        "high_level_associated": {
+          "name": "Receive Application Receipt",
+          "description": "To obtain a downloadable receipt as confirmation of successful application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Display Receipt Availability",
+        "description": "The system must provide an interface for the applicant to view the status of their submitted applications, clearly indicating whether a receipt is available for download for each application.",
+        "high_level_associated": {
+          "name": "Receive Application Receipt",
+          "description": "To obtain a downloadable receipt as confirmation of successful application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Specific Receipt Data",
+        "description": "The applicant must be able to send a request to the system to fetch the data of a specific application receipt using its unique identifier, prior to download.",
+        "high_level_associated": {
+          "name": "Receive Application Receipt",
+          "description": "To obtain a downloadable receipt as confirmation of successful application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Initiate Receipt Download",
+        "description": "The applicant must be able to trigger an API call to download the retrieved application receipt as a file (e.g., PDF) from the system to their local device.",
+        "high_level_associated": {
+          "name": "Receive Application Receipt",
+          "description": "To obtain a downloadable receipt as confirmation of successful application submission.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSpecificApplicationStatus",
+        "description": "The system should allow an authenticated applicant to query and receive the current decision status (e.g., 'accepted', 'rejected', 'suspended') for a specific AUU application identified by its unique ID.",
+        "high_level_associated": {
+          "name": "Be Informed of Application Outcome",
+          "description": "To receive timely notification regarding the final decision (accepted, rejected, or suspended) of a submitted AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ReceiveAutomatedStatusChangeNotification",
+        "description": "The system should automatically send a notification (e.g., email, in-app alert) to the applicant when the decision status of their submitted AUU application is updated.",
+        "high_level_associated": {
+          "name": "Be Informed of Application Outcome",
+          "description": "To receive timely notification regarding the final decision (accepted, rejected, or suspended) of a submitted AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "AccessNotificationHistory",
+        "description": "The system should allow an authenticated applicant to retrieve a chronological list of all notifications they have received regarding the status changes or outcomes of their AUU applications.",
+        "high_level_associated": {
+          "name": "Be Informed of Application Outcome",
+          "description": "To receive timely notification regarding the final decision (accepted, rejected, or suspended) of a submitted AUU application.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ValidateDependentFiscalCodeFormat",
+        "description": "The system must verify that the submitted dependent fiscal code adheres to the predefined national format rules (e.g., length, character set, checksum). This could be implemented via an API call like GET /api/fiscal-codes/validate-format?code={fiscalCode}.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "CheckDependentFiscalCodeUniquenessInApplication",
+        "description": "The system must check if a submitted dependent fiscal code already exists among other dependents within the Applicant's current application. This could be implemented via an API call like GET /api/applications/{applicationId}/dependents/check-uniqueness?code={fiscalCode}.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "CheckDependentFiscalCodeGlobalUniqueness",
+        "description": "The system must verify that a submitted dependent fiscal code is not already associated with an active, approved application by any other applicant in the entire system. This could be implemented via an API call like GET /api/dependents/check-global-uniqueness?code={fiscalCode}.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "RetrieveOfficialDependentData",
+        "description": "The system must query an external authoritative registry (e.g., national tax agency, civil registry) to fetch official demographic and status details for a validated dependent fiscal code. This could be implemented via an API call like GET /api/external-registry/dependent-details?fiscalCode={fiscalCode}.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "StoreValidatedDependentInformation",
+        "description": "The system must persist the successfully validated and enriched dependent fiscal code and associated official data into the Applicant's application record. This could be implemented via an API call like POST /api/applications/{applicationId}/dependents with the dependent data.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "ProvideFiscalCodeValidationFeedback",
+        "description": "The system must provide clear and specific feedback to the Applicant, indicating success or detailing any validation errors (e.g., invalid format, duplicate within application, globally duplicate). This feedback would be part of the response from an API call like POST /api/applications/{applicationId}/dependents.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "AddDependentChildToApplication",
+        "description": "The system must allow the Applicant to add a new dependent child record to their application, initiating the data entry and validation process for that child. This could be implemented via an API call like POST /api/applications/{applicationId}/dependents/add-child.",
+        "high_level_associated": {
+          "name": "Ensure Valid Child Data Submission",
+          "description": "To ensure that all dependent child and adult dependent fiscal codes are valid and unique, preventing duplicate entries or applications.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve all submitted AUU applications for the applicant",
+        "description": "The system shall allow the applicant to fetch a paginated list of all their previously submitted Assegno Unico Universale (AUU) applications, including basic identifying information like application ID, submission date, and current status.",
+        "high_level_associated": {
+          "name": "Consult Past Applications and History",
+          "description": "To access and review all previously submitted AUU applications, including their complete history and details, beyond just current status.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "View detailed information for a specific AUU application",
+        "description": "The system shall allow the applicant to select a specific application from their list and retrieve all its associated data, such as applicant details, beneficiary information, requested amounts, and attached documents.",
+        "high_level_associated": {
+          "name": "Consult Past Applications and History",
+          "description": "To access and review all previously submitted AUU applications, including their complete history and details, beyond just current status.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Access the complete history of status changes for an AUU application",
+        "description": "The system shall allow the applicant to view a chronological log of all status transitions and significant events related to a specific AUU application, including timestamps and descriptions of each change.",
+        "high_level_associated": {
+          "name": "Consult Past Applications and History",
+          "description": "To access and review all previously submitted AUU applications, including their complete history and details, beyond just current status.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Filter past AUU applications by specific criteria",
+        "description": "The system shall allow the applicant to filter their list of submitted AUU applications based on criteria such as application status (e.g., 'approved', 'pending', 'rejected'), submission year, or specific keywords within the application details.",
+        "high_level_associated": {
+          "name": "Consult Past Applications and History",
+          "description": "To access and review all previously submitted AUU applications, including their complete history and details, beyond just current status.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Shared Application Details",
+        "description": "Allow the Other Parent to fetch the details of a specific application initiated by the other parent using its unique identifier.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Display Initiated Application Data",
+        "description": "Present the Other Parent with all the information previously entered by the initiating parent for review.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Update Allowance Distribution Details",
+        "description": "Enable the Other Parent to modify or confirm the proposed allowance distribution amounts or recipients within the application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Provide Other Parent Payment Information",
+        "description": "Allow the Other Parent to securely enter their payment method details (e.g., bank account, credit card) for the application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Accept Responsibility Declarations and Privacy Notice",
+        "description": "Enable the Other Parent to confirm their acceptance of the responsibility declarations and the GDPR privacy notice for the application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Review Application Summary Before Submission",
+        "description": "Allow the Other Parent to view a consolidated summary of all entered and confirmed information prior to final submission.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Finalize and Submit Shared Application",
+        "description": "Enable the Other Parent to submit the completed application, including their confirmed information and payment details, for processing.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Download Submission Receipt",
+        "description": "Allow the Other Parent to download a digital receipt confirming the successful submission of the application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "View Current Application Status",
+        "description": "Enable the Other Parent to check the processing status of their submitted application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application",
+          "description": "To access an AUU application initiated by the other parent and provide necessary information to finalize it.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Proposed AUU Distribution",
+        "description": "The Other Parent requests to view the initial proposed distribution of the AUU allowance as submitted by the initiating parent.",
+        "high_level_associated": {
+          "name": "Manage Shared AUU Allowance Distribution and Payment",
+          "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Confirm Proposed AUU Distribution",
+        "description": "The Other Parent submits an explicit confirmation of the proposed AUU allowance distribution without any modifications.",
+        "high_level_associated": {
+          "name": "Manage Shared AUU Allowance Distribution and Payment",
+          "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Input Modified AUU Distribution",
+        "description": "The Other Parent enters new percentage or amount values to modify the proposed distribution of the AUU allowance.",
+        "high_level_associated": {
+          "name": "Manage Shared AUU Allowance Distribution and Payment",
+          "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Submit Modified AUU Distribution",
+        "description": "The Other Parent sends the updated AUU allowance distribution values to the system for processing.",
+        "high_level_associated": {
+          "name": "Manage Shared AUU Allowance Distribution and Payment",
+          "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Input Personal Payment Information",
+        "description": "The Other Parent enters their bank account details, routing number, or other required payment information for receiving their share of the AUU allowance.",
+        "high_level_associated": {
+          "name": "Manage Shared AUU Allowance Distribution and Payment",
+          "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "Submit Personal Payment Information",
+        "description": "The Other Parent sends their entered personal payment information to the system to be stored and used for allowance disbursements.",
+        "high_level_associated": {
+          "name": "Manage Shared AUU Allowance Distribution and Payment",
+          "description": "To review, confirm, or modify the proposed distribution of the AUU allowance between both parents and specify personal payment information for their share.",
+          "actor": {
+            "name": "Other Parent",
+            "description": "A parent who completes an application initiated by another parent, confirming or modifying allowance distribution and providing payment information."
+          }
+        }
+      },
+      {
+        "name": "RetrievePendingApplicationsList",
+        "description": "The INPS Staff can retrieve a paginated list of all AUU applications currently awaiting review.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "GetApplicationDetails",
+        "description": "The INPS Staff can retrieve all detailed information for a specific AUU application using its unique identifier.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "RetrieveApplicationDocument",
+        "description": "The INPS Staff can retrieve (view or download) a specific document attached to an AUU application, including those uploaded by the applicant in response to a request or suspension.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "AddEvaluationNote",
+        "description": "The INPS Staff can add an internal evaluation note to a specific AUU application.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "UpdateApplicationStatusToAccepted",
+        "description": "The INPS Staff can change the status of an AUU application to 'Accepted'.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "UpdateApplicationStatusToRejected",
+        "description": "The INPS Staff can change the status of an AUU application to 'Rejected' and provide a reason.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "UpdateApplicationStatusToSuspended",
+        "description": "The INPS Staff can change the status of an AUU application to 'Suspended' and provide a reason.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "RequestAdditionalDocuments",
+        "description": "The INPS Staff can initiate a request for specific additional documents for an AUU application, specifying the required document types and a deadline.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "SendApplicantNotification",
+        "description": "The INPS Staff can send a system-generated notification to an applicant regarding their application status or a request for information.",
+        "high_level_associated": {
+          "name": "Process and Decide on AUU Applications",
+          "description": "To review, evaluate, and make a decision (accept, reject, or suspend) on submitted AUU applications, including requesting additional documentation when necessary.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Review ISEE Data Ingestion Status",
+        "description": "INPS Staff retrieves the status of the latest ISEE data ingestion process for a specific applicant, confirming if new data was successfully processed.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Review Automatic Allowance Recalculation Result",
+        "description": "INPS Staff retrieves and reviews the outcome of an automatically triggered AUU allowance recalculation for a specific applicant, including the proposed new amount.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Manually Trigger Allowance Recalculation",
+        "description": "INPS Staff explicitly triggers the system to recalculate the AUU allowance for an applicant, overriding or re-running an automatic process if needed.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Approve Allowance Record Update",
+        "description": "INPS Staff reviews the proposed new AUU allowance amount (resulting from an automatic or manual recalculation) and explicitly approves its update to the applicant's official record.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "View Allowance Adjustment Audit Log",
+        "description": "INPS Staff queries and views the detailed audit trail of an AUU allowance adjustment for a specific applicant, including old/new values, triggers (automatic/manual), and timestamps.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Review Allowance Calculation Rules",
+        "description": "INPS Staff accesses and examines the current set of AUU allowance calculation rules and parameters used by the system for automatic adjustments.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Verify Applicant Notification Content",
+        "description": "INPS Staff reviews the content of an automated notification generated for an allowance adjustment for a specific applicant before or after its dispatch.",
+        "high_level_associated": {
+          "name": "Automatically Adjust Allowance Based on ISEE",
+          "description": "To ensure the AUU allowance is automatically recalculated and updated when a valid ISEE becomes available, reflecting the correct economic situation without requiring applicant intervention.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Create Application Draft",
+        "description": "The applicant initiates the process by creating a new draft application for the Assegno Unico Universale benefit.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Update Applicant Personal Data",
+        "description": "The applicant provides and updates their personal details (e.g., name, tax code, contact information) within the application.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Add Family Member Data",
+        "description": "The applicant adds details for each relevant family member to the application.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Submit Financial Information",
+        "description": "The applicant provides the required financial data (e.g., ISEE details or other income-related information) for the application.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Specify Payment Method",
+        "description": "The applicant selects their preferred payment method for receiving the benefit.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Provide Payment Account Details",
+        "description": "The applicant enters the specific bank account or postal account details where the benefit payments should be deposited.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Accept Legal Declarations",
+        "description": "The applicant confirms acceptance of all necessary legal declarations, terms, and conditions related to the application.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Application Summary for Review",
+        "description": "The applicant requests and retrieves a consolidated summary of the entire application to perform a final review for accuracy.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Submit Final Application",
+        "description": "The applicant sends the completed and reviewed application for official processing.",
+        "high_level_associated": {
+          "name": "Submit Assegno Unico Universale Application",
+          "description": "To successfully complete and send a new application for the Assegno Unico Universale benefit, including providing all necessary personal, family, and financial information, specifying payment details, accepting declarations, and reviewing the application for accuracy.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Create New Application Instance",
+        "description": "The applicant initiates a new application process, resulting in a unique application ID for subsequent data entry and management.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Populate Applicant Personal Information",
+        "description": "The applicant enters or updates their personal identification and contact details within the designated sections of the application form.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Populate Household Member Information",
+        "description": "The applicant adds or updates information for each member of their household, including personal details and relationship to the applicant, relevant to the AUU benefit calculation.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Populate Financial and ISEE Data",
+        "description": "The applicant enters or links their financial and ISEE (Equivalent Economic Situation Indicator) data to the application for benefit eligibility assessment.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Specify Preferred Payment Method",
+        "description": "The applicant selects and configures their desired method for receiving the AUU benefit payments, such as bank transfer details.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Attach Required Supporting Documents",
+        "description": "The applicant uploads digital copies of documents required to support the application, such as identity proofs or specific certifications, associating them with the application.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Review and Validate Application Data",
+        "description": "The applicant retrieves and reviews all entered application data to ensure accuracy and completeness, identifying any missing or incorrect information before final submission.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Submit Application for Processing",
+        "description": "The applicant formally submits the completed application to the system, triggering its official processing and evaluation by the relevant authorities.",
+        "high_level_associated": {
+          "name": "Enable Applicant to Submit New Applications",
+          "description": "The applicant aims to successfully initiate and submit new applications for the Assegno Unico Universale (AUU) benefit through the system.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "createApplicationDraft",
+        "description": "Allows the applicant to initiate a new AUU benefit application, generating a unique identifier for the draft.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "saveApplicationDraft",
+        "description": "Allows the applicant to persist the current state of an incomplete AUU benefit application draft, including entered data and uploaded attachments.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "submitApplication",
+        "description": "Allows the applicant to formally submit a completed AUU benefit application draft for official processing.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "retrieveApplicationStatus",
+        "description": "Allows the applicant to query and view the current processing status (e.g., 'Draft', 'Submitted', 'Under Review', 'Accepted', 'Rejected', 'Suspended') of a specific AUU benefit application.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "retrieveApplicationDetails",
+        "description": "Allows the applicant to access and review all submitted data and associated documents for a specific AUU benefit application.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "updateApplicationData",
+        "description": "Allows the applicant to modify specific fields or upload additional documents for an existing AUU benefit application, typically for drafts or when corrections are requested.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "withdrawApplication",
+        "description": "Allows the applicant to formally cancel a previously submitted AUU benefit application, changing its status to 'Withdrawn'.",
+        "high_level_associated": {
+          "name": "Enable Application Submission and Management",
+          "description": "To allow applicants to initiate, save, submit, and generally oversee their applications for the AUU benefit throughout its lifecycle.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals who submit, manage, and update applications for the Assegno Unico Universale (AUU) benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve a list of applications awaiting evaluation",
+        "description": "The INPS Staff needs to query the system to obtain a paginated list of applications that are currently in a 'pending evaluation' status, including key summary information for each.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Retrieve all submitted details and documents for a specific application",
+        "description": "The INPS Staff needs to fetch comprehensive data for a selected application, including all applicant-provided information, attached supporting documents, and current processing status.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Submit a request for additional documentation for an application",
+        "description": "The INPS Staff needs to initiate a formal request to the applicant for specific supplementary documents or information, updating the application's status to 'additional information requested'.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Record the final eligibility decision for an application",
+        "description": "The INPS Staff needs to submit the definitive eligibility determination (e.g., 'Eligible' or 'Not Eligible') for a specific application, thereby concluding the evaluation phase.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Associate specific rejection reasons with an ineligible application",
+        "description": "If an application is deemed 'Not Eligible', the INPS Staff needs to input and link one or more predefined or custom reasons explaining the rejection to the application record.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Update the processing status of an application",
+        "description": "The INPS Staff needs to change the current processing status of an application (e.g., from 'Under Review' to 'Approved' or 'Rejected') to reflect its progression through the evaluation workflow.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      },
+      {
+        "name": "Retrieve the communication history for a specific application",
+        "description": "The INPS Staff needs to access a chronological log of all system-generated and staff-initiated communications related to a particular application, including requests for documents and notifications.",
+        "high_level_associated": {
+          "name": "Manage Application Evaluation",
+          "description": "To efficiently review and assess submitted applications for the Assegno Unico Universale (AUU) to determine eligibility.",
+          "actor": {
+            "name": "INPS Staff",
+            "description": "Authorized personnel responsible for evaluating applications and requesting additional documentation."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "The project description outlines several functional areas: application submission, draft management, payment setup, legal declarations, receipt generation, outcome notification, child data validation, history consultation, shared application completion (by the other parent), allowance distribution management, staff processing/decisioning, ISEE-based recalculation, and disbursement. All these intentions are explicitly covered by the current High-Level Goals (HLGs). For instance, 'Submit Assegno Unico Universale Application' covers the core submission flow; 'Manage Application Drafts' covers saving/resuming; 'Manage AUU Allowance Payment Setup' covers payment methods; 'Accept Legal Declarations' covers GDPR/responsibility; 'Receive Application Receipt' covers the download; 'Be Informed of Application Outcome' covers notifications; 'Ensure Valid Child Data Submission' covers fiscal code checks; 'Consult Past Applications and History' covers reviewing previous applications; 'Complete Shared Application' and 'Manage Shared AUU Allowance Distribution and Payment' cover the other parent's role; 'Process and Decide on AUU Applications' covers INPS staff evaluation; 'Automatically Adjust Allowance Based on ISEE' covers the recalculation logic; and 'Ensure Timely Allowance Disbursement' covers the monthly payment. The supporting functions (consulting general info and simulating allowance) are covered by 'Access Benefit Information'. No distinct, documented functional intention remains uncovered.",
+    "missing_goal_requests": []
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {},
+  "warnings": []
+}

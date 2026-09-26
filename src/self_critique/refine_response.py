@@ -1,27 +1,65 @@
+import os
 import re
 from enum import Enum
 
 from src.examples import shot_learning
 from src.data_model import Critique
 from  src.examples.shot_learning import ShotPromptingMode
-from src.llm_clients import generate_response_llama, generate_response
+from src.llm_clients import generate_evaluator_response, generate_response
 
 
-MAX_ATTEMPTS = 3
-QUALITY_THRESHOLD = 8.5
+MAX_ATTEMPTS = 5
+QUALITY_THRESHOLD = 8.0
+EVALUATOR_FEW_SHOT_EXAMPLE_COUNT = int(
+    os.getenv("EVALUATOR_FEW_SHOT_EXAMPLE_COUNT", "2")
+)
+
+if not 1 <= EVALUATOR_FEW_SHOT_EXAMPLE_COUNT <= 4:
+    raise ValueError("EVALUATOR_FEW_SHOT_EXAMPLE_COUNT must be between 1 and 4")
 
 class EvalMode(Enum):
     ACTORS = "Actors"
     HIGH_LEVEL = "High Level Goals"
     LOW_LEVEL = "Low Level Goals"
 
+
+def _few_shot_examples(eval_mode: EvalMode) -> list[str]:
+    examples_by_mode = {
+        EvalMode.ACTORS: [
+            shot_learning.example1_actors_withFeedback1,
+            shot_learning.example1_actors_withFeedback2,
+            shot_learning.example1_actors_withFeedback3,
+            shot_learning.example1_actors_withFeedback4,
+        ],
+        EvalMode.HIGH_LEVEL: [
+            shot_learning.example1_hl_withFeedback1,
+            shot_learning.example1_hl_withFeedback2,
+            shot_learning.example1_hl_withFeedback3,
+            shot_learning.example1_hl_withFeedback4,
+        ],
+        EvalMode.LOW_LEVEL: [
+            shot_learning.example1_ll_withFeedback1,
+            shot_learning.example1_ll_withFeedback2,
+            shot_learning.example1_ll_withFeedback3,
+            shot_learning.example1_ll_withFeedback4,
+        ],
+    }
+    return examples_by_mode[eval_mode][:EVALUATOR_FEW_SHOT_EXAMPLE_COUNT]
+
 class Feedback():
     def __init__(self, previous_output, critique):
         self.previous_output = previous_output
         self.critique = critique 
 
-# evaluation by Llama
-def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=None, low_level_goals=None):
+# Evaluation by the configured Groq evaluator (Qwen 3.6 by default).
+def get_evaluation(
+    eval_mode: EvalMode,
+    description,
+    actors,
+    high_level_goals=None,
+    low_level_goals=None,
+    focused_scope: str | None = None,
+):
     if not isinstance(eval_mode, EvalMode):
         raise TypeError(f"Expected an instance of EvalMode, but got {type(eval_mode).__name__}")
     sys_prompt = (
@@ -41,62 +79,8 @@ def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=No
         "\n\n ### Examples:\n\n"
         )
 
-    if eval_mode == EvalMode.ACTORS:
-        sys_prompt += f"""
-            {shot_learning.example1_actors_withFeedback1}
-            
-            ---
-            
-            {shot_learning.example1_actors_withFeedback2}
-            
-            ---
-            
-            {shot_learning.example1_actors_withFeedback3}
-            
-            ---
-            
-            {shot_learning.example1_actors_withFeedback4}
-            
-            ---
-        """
-
-    elif eval_mode == EvalMode.HIGH_LEVEL:
-        sys_prompt += f"""
-            {shot_learning.example1_hl_withFeedback1}
-
-            ---
-
-            {shot_learning.example1_hl_withFeedback2}
-
-            ---
-
-            {shot_learning.example1_hl_withFeedback3}
-
-            ---
-
-            {shot_learning.example1_hl_withFeedback4}
-
-            ---
-        """
-
-    if eval_mode == EvalMode.LOW_LEVEL:
-        sys_prompt += f"""
-            {shot_learning.example1_ll_withFeedback1}
-
-            ---
-
-            {shot_learning.example1_ll_withFeedback2}
-
-            ---
-
-            {shot_learning.example1_ll_withFeedback3}
-
-            ---
-
-            {shot_learning.example1_ll_withFeedback4}
-
-            ---
-        """
+    sys_prompt += "\n\n---\n\n".join(_few_shot_examples(eval_mode))
+    sys_prompt += "\n\n---\n"
 
 
     assume_this_is_ok = ""
@@ -133,6 +117,23 @@ def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=No
 
         """
 
+    if focused_scope:
+        representation_requirement = f"""
+        This evaluation concerns a focused correction, not a complete extraction
+        of the software system. Evaluate exclusively the supplied actor, parent
+        goal and functional intention. Do not penalize the answer for omitting
+        other actors, sibling HLGs, or unrelated responsibilities of the same
+        actor.
+
+        Focused scope:
+        {focused_scope}
+        """
+    else:
+        representation_requirement = f"""
+        The {provided_with} needs to be COMPLETELY representative of the
+        software system described.
+        """
+
     prompt = f"""
         You are provided with {provided_with}.\n
         These informations were extracted by another assistant from the software description.\n
@@ -140,8 +141,7 @@ def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=No
         Give a score from 0 to 10 based on the critique you produced. 
         Assign a score of 0 if you see any contradiction or important omissions.
         Assign the maximum score if you don't see any error.
-        The {provided_with}
-        needs to be COMPLETELY representative of the software system described.
+        {representation_requirement}
         As in the previous examples, decrease the score if
         you think that something may be missing, or if there is something in contrast with the system's description. 
         In that case, suggest what to do to improve the {provided_with}.
@@ -169,7 +169,7 @@ def get_evaluation(eval_mode: EvalMode, description, actors, high_level_goals=No
         Feedback: 
     """
 
-    critique = generate_response_llama(prompt, sys_prompt)
+    critique = generate_evaluator_response(prompt, sys_prompt)
     return critique 
 
 def parse_evaluation(evaluation: str|Critique):
@@ -207,7 +207,17 @@ def parse_evaluation(evaluation: str|Critique):
 
 
 
-def generate_response_with_reflection(target_type, call_function, define_args, eval_mode, eval_args, shotPromptingMode=ShotPromptingMode.ZERO_SHOT, max_attempts=MAX_ATTEMPTS, llama_ablation = False):
+def generate_response_with_reflection(
+    target_type,
+    call_function,
+    define_args,
+    eval_mode,
+    eval_args,
+    shotPromptingMode=ShotPromptingMode.ZERO_SHOT,
+    max_attempts=MAX_ATTEMPTS,
+    llama_ablation=False,
+    focused_scope: str | None = None,
+):
     if max_attempts < 1:
         raise ValueError("max_attempts must be at least 1")
     feedback = None
@@ -224,7 +234,12 @@ def generate_response_with_reflection(target_type, call_function, define_args, e
             return result, 10, None
 
         print(f"Evaluation for {target_type} STARTING...")
-        evaluation = get_evaluation(eval_mode, *eval_args, result)
+        evaluation = get_evaluation(
+            eval_mode,
+            *eval_args,
+            result,
+            focused_scope=focused_scope,
+        )
         print(f"Evaluation for {target_type} DONE...")
 
         try:

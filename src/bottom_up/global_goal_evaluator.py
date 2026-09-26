@@ -20,7 +20,7 @@ from src.data_model import (
     Actors,
     MissingHighLevelGoalEvaluation,
 )
-from src.llm_clients import generate_response_llama
+from src.llm_clients import generate_evaluator_response
 
 
 SYSTEM_PROMPT = (
@@ -71,7 +71,7 @@ def _json_object(text: str) -> dict:
 
 
 def _evaluate(prompt: str, model: type[BaseModel]):
-    response = generate_response_llama(prompt, SYSTEM_PROMPT)
+    response = generate_evaluator_response(prompt, SYSTEM_PROMPT)
     try:
         return model.model_validate(_json_object(response))
     except (ValueError, TypeError, json.JSONDecodeError):
@@ -285,6 +285,87 @@ Output JSON:
                 f"{evaluation.rationale} Conservative gate: regeneration was "
                 "rejected because it lacked HIGH-confidence structured "
                 "evidence of a material defect."
+            ),
+            "decision": LowLevelGoalDecision.KEEP,
+            "regeneration_feedback": None,
+            "unsupported_or_misleading_llg_ids": supported_ids,
+            "missing_essential_capabilities": missing,
+        })
+    return evaluation.model_copy(update={
+        "unsupported_or_misleading_llg_ids": supported_ids,
+        "missing_essential_capabilities": missing,
+    })
+
+
+def evaluate_llg_cleanup(
+    project_description: str,
+    branch: GoalBranch,
+) -> LowLevelGoalEvaluation:
+    """Conservatively identify removable LLGs before the full cycle.
+
+    This deliberately avoids sibling HLGs and reconstructed goals so the
+    request stays branch-local and small.  Missing capabilities are reported,
+    but the pre-pass caller must not delete anything when additions are needed.
+    """
+    llgs = [
+        {"id": f"llg_{index:03d}", **goal.model_dump(mode="json")}
+        for index, goal in enumerate(branch.low_level_goals, start=1)
+    ]
+    prompt = f"""Run a conservative cleanup review of one existing Low-Level
+Goal decomposition before the normal bottom-up cycle.
+
+Evaluate only the supplied actor and parent HLG. Do not require coverage of the
+whole project, other actors, sibling HLGs, or unrelated responsibilities of the
+same actor.
+
+Mark an LLG as unsupported or misleading only when it is clearly duplicated by
+another listed LLG, contradicts the documentation, is unrelated to the parent
+HLG, or belongs to a different functional intention. Do not mark an LLG merely
+because it is optional, fine-grained, API/CRUD-oriented, stylistically weak, or
+could be merged. When evidence is debatable, keep it.
+
+If an essential capability is missing, report it separately. The cleanup phase
+will then defer the entire branch to the normal repair cycle instead of deleting
+anything. Use REGENERATE only with HIGH confidence and exact llg_NNN IDs.
+
+Project description:
+{project_description}
+
+Actor:
+{branch.high_level_goal.actor.model_dump_json()}
+
+Parent HLG:
+{branch.high_level_goal.model_dump_json()}
+
+Current LLGs:
+{json.dumps(llgs, ensure_ascii=False)}
+
+Output JSON:
+{{"rationale":"...","decision":"KEEP_LOW_LEVEL_GOALS | REGENERATE_LOW_LEVEL_GOALS","regeneration_feedback":null,"unsupported_or_misleading_llg_ids":[],"missing_essential_capabilities":[],"confidence":"HIGH | MEDIUM | LOW"}}"""
+    evaluation = _evaluate(prompt, LowLevelGoalEvaluation)
+    valid_ids = {item["id"] for item in llgs}
+    supported_ids = [
+        item
+        for item in evaluation.unsupported_or_misleading_llg_ids
+        if item in valid_ids
+    ]
+    missing = [
+        item.strip()
+        for item in evaluation.missing_essential_capabilities
+        if item.strip()
+    ]
+    if (
+        evaluation.decision == LowLevelGoalDecision.REGENERATE
+        and (
+            evaluation.confidence != ConfidenceLevel.HIGH
+            or not (supported_ids or missing)
+        )
+    ):
+        return evaluation.model_copy(update={
+            "rationale": (
+                f"{evaluation.rationale} Conservative cleanup gate rejected "
+                "the proposed change because it lacked HIGH-confidence, "
+                "structured evidence."
             ),
             "decision": LowLevelGoalDecision.KEEP,
             "regeneration_feedback": None,

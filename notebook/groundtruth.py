@@ -707,16 +707,219 @@ SIA_PROJECT_21_22 = {
     ]
 }
 
+SIA_PROJECT_GENOME_NEXUS = {
+    "name": "Genome Nexus",
+    "link-readme": "https://github.com/WebFuzzing/EMB/tree/master/jdk_8_maven/cs/rest-gui/genome-nexus#readme",
+    "swagger": "https://raw.githubusercontent.com/WebFuzzing/EMB/refs/heads/master/openapi-swagger/genome-nexus.json",
+    "description": """
+    Genome Nexus is a web service that supports the annotation and interpretation
+    of genetic variants. The system allows researchers and clinicians to retrieve
+    information about variants from multiple genomic and clinical resources,
+    including mutation annotations, clinical significance, disease associations,
+    mutation frequencies, and gene-related information.
+
+    The system supports the analysis of cancer-related mutations and high-throughput
+    genomic datasets. It can map variants to reference genome assemblies, convert
+    DNA-level changes into corresponding protein-level changes, and provide
+    functional predictions about the possible impact of mutations on proteins.
+
+    Genome Nexus also helps users interpret the biological and clinical relevance
+    of variants by integrating information from public databases, prediction tools,
+    and clinical knowledge sources. Its goal is to provide a fast, automated, and
+    centralized resource for variant annotation and interpretation.
+    """,
+    "actors": [
+        "Researcher",
+        "Clinician"
+    ],
+    "highLevelGoals": [
+        "Provide fast and automated annotation of genetic variants",
+        "Enable high-throughput interpretation of genetic variants",
+        "Integrate information from existing genomic resources",
+        "Convert DNA changes to protein changes",
+        "Predict functional effects of protein mutations",
+        "Provide information about mutation frequencies",
+        "Offer insights into gene function",
+        "Detail variant effects",
+        "Highlight clinical actionability of variants"
+    ],
+    "lowLevelGoals": [
+        "Retrieve genetic variant data_key from multiple databases (e.g., dbSNP, ClinVar, COSMIC)",
+        "Search and retrieve variant annotations from a user interface",
+        "Annotate variants with clinical significance, mutation types, and related diseases",
+        "Map genetic data_key to genome assemblies (e.g., GRCh38, hg19)",
+        "Update variant information regularly from authoritative sources",
+        "Analyze cancer-related mutations using automated tools",
+        "Integrate gene expression data_key for cancer variant interpretation",
+        "Identify cancer-related mutations linked to specific pathways",
+        "Interpret large-scale cancer mutation datasets automatically",
+        "Classify cancer mutations based on clinical relevance",
+        "Process large genomic datasets in parallel",
+        "Extract and transform mutation data_key from high-throughput sequencing formats (e.g., VCF, BAM)",
+        "Perform mutation quality control and filtering",
+        "Fetch and harmonize data_key from various genomic databases",
+        "Query integrated genomic databases for relevant mutation information",
+        "Integrate multiple data_key sources with compatible formats for easy retrieval",
+        "Map genetic mutations to corresponding protein-coding effects",
+        "Convert mutations to amino acid changes for protein function analysis",
+        "Predict the impact of mutations on protein structure using bioinformatics tools",
+        "Use prediction tools (e.g., PolyPhen, SIFT) to estimate mutation effects on protein function",
+        "Build and apply machine learning models for functional impact prediction",
+        "Rank mutations based on predicted severity of functional impact",
+        "Calculate mutation frequencies across various population groups",
+        "Generate visual representations of mutation frequencies (e.g., histograms, pie charts)",
+        "Provide mutation frequency data_key for specific diseases or conditions",
+        "Retrieve gene function annotations from public databases like Gene Ontology (GO)",
+        "Identify pathways and biological processes related to the mutated gene",
+        "Link genetic variants to specific diseases or phenotypes based on annotations",
+        "Predict the effects of mutations on protein folding and stability",
+        "Identify how mutations alter protein activity or structure",
+        "Evaluate the impact of mutations on protein-protein interactions",
+        "Link genetic mutations to clinical guidelines or treatment protocols",
+        "Identify mutations with known clinical drug responses or therapeutic implications",
+        "Provide actionable insights on mutations based on current clinical research"
+    ]
+}
+
+SIA_PROJECT_GESTAO_HOSPITAL = {
+    "name": "Gestao Hospital",
+    "link-readme": "https://github.com/ValchanOficial/GestaoHospital/blob/master/README.md",
+    "swagger": "https://raw.githubusercontent.com/WebFuzzing/EMB/refs/heads/master/openapi-swagger/gestaohospital-rest.json",
+    "description": """
+    Gestao Hospital is a hospital management system that supports the administration
+    of hospitals, patients, beds, products, and blood bank resources. The system
+    allows administrators and hospital managers to register, update, delete, and
+    monitor hospitals, while healthcare staff can manage operational information
+    related to patients, appointments, products, and medical resources.
+
+    Patients can use the system to search for hospitals, obtain information about
+    specific hospitals, and receive recommendations about the nearest hospital.
+    Hospital staff can register patients, consult patient information and medical
+    history, manage check-in related information, and maintain notes about
+    treatments.
+
+    The system also supports hospital logistics by allowing authorized staff to
+    manage products, quantities, requests, and blood samples. Its overall goal is
+    to centralize hospital administration and improve the coordination of clinical
+    and logistical activities.
+    """,
+    "actors": [
+        "Hospital Manager",
+        "Healthcare Staff",
+        "Administrator",
+        "Patient",
+        "Hospital Logistics Staff"
+    ],
+    "highLevelGoals": [
+        "Allow administrators and hospital managers to manage a hospital",
+        "Allow hospital managers and healthcare staff to manage hospital beds and patients",
+        "Allow healthcare staff to manage products and the blood bank",
+        "Allow patients to look for hospitals"
+    ],
+    "lowLevelGoals": [
+        "Allow Registration of a New Hospital",
+        "Allow Deletion of a Hospital",
+        "Allow Modification of a Hospital",
+        "Allow administrators to access statistics and manage indicators",
+        "Enable hospital staff to manage appointment schedules",
+        "Recommend Nearest Hospital",
+        "Return Information on a Hospital",
+        "View Products and Quantities",
+        "Allow logistic staff to Register Products",
+        "Delete Products",
+        "Allow logistic staff to change product quantities",
+        "View Info on a Single Product",
+        "Request a Product",
+        "Allow searching for blood samples",
+        "Enable healthcare staff to view patient info and their medical history",
+        "Register a Patient at a Hospital, entering personal information and contact info",
+        "Allow patients to confirm their arrival at the hospital online or in presence",
+        "Show estimated check in times for patient arriving at the hospital",
+        "Allow healthcare staff to save notes regarding patients and their treatment in the system",
+        "Change Patient Info and medical history"
+    ]
+}
+
+SIA_PROJECT_LONDON_AMBULANCE_SERVICE = {
+    "name": "London Ambulance Service",
+    "description": """
+    The London Ambulance Service dispatches ambulances in emergencies. The key
+    goal is to allocate an available ambulance for every call that can reach the
+    scene within 11 minutes. The entire dispatch process must not exceed a set
+    maximum time limit.
+
+    To make this work, the Computer Aided Despatch system analyzes incident forms
+    and assigns vehicles. It is vital to track the exact location of moving
+    ambulances. This requires ambulance staff to follow standard routes and
+    correctly communicate departure and destination information, allowing radio
+    operators and the CAD system to record data accurately.
+    """,
+    "actors": [
+        "Computer Aided Despatch (CAD)",
+        "Ambulance Staff",
+        "Radio Operator",
+        "Resource Allocator (RA)"
+    ],
+    "highLevelGoals": [
+        "Track moving ambulances continuously",
+        "Allocate an ambulance within 11 minutes of an incident"
+    ],
+    "lowLevelGoals": [
+        "Keep exact location data for parked/stationary ambulances",
+        "Ensure ambulances stick to expected standard routes",
+        "Get exact departure and destination data when leaving",
+        "Update location using the departure/destination data",
+        "Get location updates via phone",
+        "Send location/status info via email",
+        "Keep location accurate after reaching a destination",
+        "Staff communicates departure and destination upon leaving",
+        "Operator encodes the departure and destination info",
+        "System records the encoded data"
+    ]
+}
+
 
 # Canonical dataset registry shared by the execution and evaluation notebooks.
-# Add future datasets here once their dictionary has been defined above.
-ALL_GROUNDTRUTHS = [
-    SIA_PROJECT_25_26,
-    SIA_PROJECT_24_25,
-    SIA_PROJECT_23_24,
-    SIA_PROJECT_22_23,
-    SIA_PROJECT_21_22,
-]
+# Every SIA_PROJECT_* dictionary defined above is discovered automatically, so
+# adding a project does not require updating a second, manually maintained list.
+_REQUIRED_GROUNDTRUTH_FIELDS = {
+    "name",
+    "description",
+    "actors",
+    "highLevelGoals",
+    "lowLevelGoals",
+}
+
+
+def _discover_groundtruths(namespace):
+    projects = []
+    for variable_name, value in namespace.items():
+        if not variable_name.startswith("SIA_PROJECT_"):
+            continue
+        if not isinstance(value, dict):
+            raise TypeError(f"{variable_name} must be a dictionary")
+
+        missing_fields = _REQUIRED_GROUNDTRUTH_FIELDS - value.keys()
+        if missing_fields:
+            missing = ", ".join(sorted(missing_fields))
+            raise ValueError(f"{variable_name} is missing fields: {missing}")
+        projects.append(value)
+
+    if not projects:
+        raise RuntimeError("No SIA_PROJECT_* ground truths were found")
+
+    names = [project["name"] for project in projects]
+    duplicate_names = sorted({name for name in names if names.count(name) > 1})
+    if duplicate_names:
+        raise ValueError(
+            "Ground-truth project names must be unique: "
+            + ", ".join(duplicate_names)
+        )
+
+    return projects
+
+
+ALL_GROUNDTRUTHS = _discover_groundtruths(globals())
 
 GROUNDTRUTH_BY_NAME = {
     groundtruth["name"]: groundtruth

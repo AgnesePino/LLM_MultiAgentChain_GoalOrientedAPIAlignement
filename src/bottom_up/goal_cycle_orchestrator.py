@@ -4,6 +4,7 @@ from pathlib import Path
 
 from src.bottom_up.global_goal_evaluator import (
     evaluate_all_branches,
+    evaluate_llg_cleanup,
     evaluate_missing_high_level_goals,
 )
 from src.bottom_up.goal_reconstructor import reconstruct_all_branches
@@ -11,6 +12,7 @@ from src.bottom_up.low_level_goal_mapper import group_low_level_goals
 from src.data_model import (
     Actor,
     Actors,
+    ConfidenceLevel,
     GlobalGoalCycleIteration,
     GlobalGoalCycleResult,
     GlobalGoalCycleStopReason,
@@ -21,6 +23,10 @@ from src.data_model import (
     HighLevelGoalGenerationRequest,
     HighLevelGoalGeneratorInput,
     HighLevelGoals,
+    LowLevelGoalCleanupBranch,
+    LowLevelGoalCleanupPrepass,
+    LowLevelGoalDecision,
+    LowLevelGoalEvaluation,
     LowLevelGoal,
     LowLevelGoalRegenerationRequest,
     LowLevelGoals,
@@ -41,6 +47,7 @@ from src.self_critique.refine_response import (
 DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS = 5
 MAX_LLG_REGENERATIONS_PER_BRANCH = 2
 MAX_HLG_REWRITES_PER_BRANCH = 2
+MAX_HLG_REMOVALS_PER_ITERATION = 5
 MAX_NEW_HLGS_PER_ITERATION = 1
 MAX_LLG_GROWTH_PER_REPAIR = 2
 MAX_LLGS_FOR_NEW_HLG = 6
@@ -207,6 +214,10 @@ def _generate_hlgs_with_top_down(
         ),
         shotPromptingMode=mode,
         llama_ablation=evaluator_ablation,
+        focused_scope=(
+            "Evaluate only the supplied actor and the single functional "
+            "intention described by this replacement request."
+        ),
     )
     if not isinstance(result, HighLevelGoals) or not result.goals:
         raise ValueError("The top-down pipeline generated no High-Level Goals.")
@@ -289,6 +300,10 @@ def _regenerate_llgs_with_top_down(
         eval_args=(focused_description, actors, request.high_level_goals),
         shotPromptingMode=mode,
         llama_ablation=evaluator_ablation,
+        focused_scope=(
+            "Evaluate only the supplied actor, the listed parent HLGs, and "
+            "their LLG decomposition. Do not require other project goals."
+        ),
     )
     if not isinstance(result, LowLevelGoals):
         raise TypeError("The top-down pipeline did not return LowLevelGoals.")
@@ -338,6 +353,115 @@ def _accept_regenerated_llgs(
     return [_replace_parent(item, parent) for item in candidates], None
 
 
+def _run_llg_cleanup_prepass(
+    project_description: str,
+    high_level_goals: HighLevelGoals,
+    low_level_goals: LowLevelGoals,
+) -> LowLevelGoalCleanupPrepass:
+    """Remove only explicitly identified, safe LLGs before full evaluation."""
+    branches = group_low_level_goals(high_level_goals, low_level_goals)
+    retained: list[LowLevelGoal] = []
+    results: dict[str, LowLevelGoalCleanupBranch] = {}
+    warnings: list[str] = []
+
+    for branch in branches:
+        try:
+            evaluation = evaluate_llg_cleanup(project_description, branch)
+        except Exception as exc:
+            # Cleanup is optional and must never destroy or block a valid
+            # baseline. Preserve the branch and record the provider failure.
+            evaluation = LowLevelGoalEvaluation(
+                rationale=(
+                    "Cleanup evaluation failed; the original branch was "
+                    f"preserved. {type(exc).__name__}: {exc}"
+                ),
+                decision=LowLevelGoalDecision.KEEP,
+                confidence=ConfidenceLevel.LOW,
+            )
+            warnings.append(
+                f"{branch.branch_id}: LLG_CLEANUP_EVALUATION_FAILED"
+            )
+
+        by_id = {
+            f"llg_{index:03d}": goal
+            for index, goal in enumerate(branch.low_level_goals, start=1)
+        }
+        removable_ids = set(evaluation.unsupported_or_misleading_llg_ids)
+        removed: list[LowLevelGoal] = []
+        applied = False
+        rationale = evaluation.rationale
+
+        safe_removal = (
+            evaluation.decision == LowLevelGoalDecision.REGENERATE
+            and evaluation.confidence == ConfidenceLevel.HIGH
+            and bool(removable_ids)
+            and not evaluation.missing_essential_capabilities
+        )
+        if safe_removal and len(removable_ids) < len(branch.low_level_goals):
+            removed = [
+                goal for goal_id, goal in by_id.items()
+                if goal_id in removable_ids
+            ]
+            kept = [
+                goal for goal_id, goal in by_id.items()
+                if goal_id not in removable_ids
+            ]
+            applied = bool(removed)
+            retained.extend(kept)
+        else:
+            retained.extend(branch.low_level_goals)
+            if evaluation.missing_essential_capabilities:
+                warnings.append(
+                    f"{branch.branch_id}: LLG_CLEANUP_DEFERRED_MISSING_CAPABILITIES"
+                )
+                rationale += (
+                    " Cleanup deferred because the branch also requires "
+                    "additions; the normal repair cycle will handle it."
+                )
+            elif safe_removal and len(removable_ids) >= len(branch.low_level_goals):
+                warnings.append(
+                    f"{branch.branch_id}: LLG_CLEANUP_REJECTED_EMPTY_BRANCH"
+                )
+                rationale += (
+                    " Cleanup rejected because it would remove every LLG "
+                    "from the branch."
+                )
+
+        results[branch.branch_id] = LowLevelGoalCleanupBranch(
+            branch_id=branch.branch_id,
+            high_level_goal=branch.high_level_goal,
+            evaluation=evaluation,
+            removed_low_level_goals=removed,
+            retained_low_level_goal_count=(
+                len(branch.low_level_goals) - len(removed)
+            ),
+            applied=applied,
+            rationale=rationale,
+        )
+
+    cleaned = LowLevelGoals(low_level_goals=retained)
+    return LowLevelGoalCleanupPrepass(
+        branches=results,
+        initial_low_level_goal_count=len(low_level_goals.low_level_goals),
+        final_low_level_goal_count=len(cleaned.low_level_goals),
+        low_level_goals=cleaned,
+        warnings=warnings,
+    )
+
+
+def _save_cleanup_prepass(
+    directory: str | Path | None,
+    prepass: LowLevelGoalCleanupPrepass,
+) -> None:
+    if directory is None:
+        return
+    path = Path(directory)
+    path.mkdir(parents=True, exist_ok=True)
+    (path / "llg_cleanup_prepass.json").write_text(
+        prepass.model_dump_json(indent=2), encoding="utf-8"
+    )
+
+
 def _save_iteration(directory: str | Path | None, trace: GlobalGoalCycleIteration):
     if directory is None:
         return
@@ -373,13 +497,31 @@ def run_global_goal_cycle(
 ) -> GlobalGoalCycleResult:
     current_hlgs = initial_high_level_goals.model_copy(deep=True)
     current_llgs = initial_low_level_goals.model_copy(deep=True)
+    print("[bottom-up] conservative LLG cleanup pre-pass starting", flush=True)
+    llg_cleanup_prepass = _run_llg_cleanup_prepass(
+        project_description,
+        current_hlgs,
+        current_llgs,
+    )
+    current_llgs = llg_cleanup_prepass.low_level_goals.model_copy(deep=True)
+    _save_cleanup_prepass(evaluation_output_directory, llg_cleanup_prepass)
+    removed_in_prepass = (
+        llg_cleanup_prepass.initial_low_level_goal_count
+        - llg_cleanup_prepass.final_low_level_goal_count
+    )
+    print(
+        "[bottom-up] conservative LLG cleanup pre-pass completed | "
+        f"removed={removed_in_prepass}, "
+        f"retained={llg_cleanup_prepass.final_low_level_goal_count}",
+        flush=True,
+    )
     llg_regeneration_counts: dict[str, int] = {}
     stabilized_llg_keys: set[str] = set()
     confirmed_branch_keys: set[str] = set()
     hlg_rewrite_counts: dict[str, int] = {}
     excluded_hlg_keys: set[str] = set()
     traces: list[GlobalGoalCycleIteration] = []
-    warnings: list[str] = []
+    warnings: list[str] = list(llg_cleanup_prepass.warnings)
     known_actors = _actors_from_goals(initial_high_level_goals)
 
     for iteration in range(1, max_iterations + 1):
@@ -466,31 +608,102 @@ def run_global_goal_cycle(
             *(_stable_hlg_key(goal) for goal in current_hlgs.goals),
             *excluded_hlg_keys,
         }
-        # Deterministic action order: rewrite, remove, then LLG regeneration.
-        # Only the first applicable action is applied in this iteration.
-        priority = {
-            GlobalGoalEvaluationDecision.REWRITE_ORIGINAL_HIGH_LEVEL_GOAL: 0,
-            GlobalGoalEvaluationDecision.REMOVE_ORIGINAL_HIGH_LEVEL_GOAL: 1,
-            GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS: 2,
-        }
-        ordered_branches = sorted(
-            active_branches,
-            key=lambda branch: priority.get(
-                evaluations[branch.branch_id].final_decision, 99
-            ),
-        )
-        for branch in ordered_branches:
+        # Deterministic action order: one rewrite, then a bounded batch of
+        # independent removals, then one LLG regeneration. Rewrites and LLG
+        # repairs stay sequential because each can change another branch's
+        # scope; removals were all evaluated against the same immutable state.
+        rewrite_handled = False
+        rewrite_branches = [
+            branch for branch in active_branches
+            if evaluations[branch.branch_id].final_decision
+            == GlobalGoalEvaluationDecision.REWRITE_ORIGINAL_HIGH_LEVEL_GOAL
+        ]
+        for branch in rewrite_branches:
             evaluation = evaluations[branch.branch_id]
-            decision = evaluation.final_decision
+            original_key = _stable_hlg_key(branch.high_level_goal)
+            rewrite_count = hlg_rewrite_counts.get(original_key, 0)
+            if rewrite_count >= MAX_HLG_REWRITES_PER_BRANCH:
+                evaluations[branch.branch_id] = _with_decision(
+                    evaluation,
+                    GlobalGoalEvaluationDecision.EVALUATION_INCONCLUSIVE,
+                    "HLG rewrite limit reached; retaining the current HLG.",
+                )
+                iteration_warnings.append(
+                    f"{branch.branch_id}: HLG_REWRITE_LIMIT_REACHED"
+                )
+                continue
 
-            if decision == GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS:
+            request = evaluation.replacement_request
+            generated = _generate_hlgs_with_top_down(
+                _generation_request(
+                    f"{branch.branch_id}_rewrite",
+                    HighLevelGoalGenerationAction.REPLACE_EXISTING_HIGH_LEVEL_GOAL,
+                    request.generation_project_description,
+                    request.actor,
+                    request.rationale,
+                    branch.branch_id,
+                ),
+                mode,
+                evaluator_ablation,
+            )
+            reserved_names.discard(original_key)
+            replacement_goals = []
+            # A focused rewrite request yields one candidate at most;
+            # accepting every candidate here caused HLG proliferation.
+            for goal in generated.goals[:MAX_NEW_HLGS_PER_ITERATION]:
+                goal_key = _stable_hlg_key(goal)
+                if goal_key in reserved_names:
+                    continue
+                reserved_names.add(goal_key)
+                replacement_goals.append(goal)
+                llg_regenerations[goal_key] = (
+                    goal,
+                    request.rationale,
+                    list(branch.low_level_goals),
+                    len(branch.low_level_goals) + MAX_LLG_GROWTH_PER_REPAIR,
+                )
+            if replacement_goals:
+                hlg_rewrite_counts[original_key] = rewrite_count + 1
+                replacements[original_key] = replacement_goals
+            else:
+                iteration_warnings.append(
+                    f"{branch.branch_id}: HLG_REGENERATION_DUPLICATE_IGNORED"
+                )
+            rewrite_handled = True
+            break
+
+        if not rewrite_handled:
+            removal_branches = [
+                branch for branch in active_branches
+                if evaluations[branch.branch_id].final_decision
+                == GlobalGoalEvaluationDecision.REMOVE_ORIGINAL_HIGH_LEVEL_GOAL
+            ]
+            for branch in removal_branches[:MAX_HLG_REMOVALS_PER_ITERATION]:
+                original_key = _stable_hlg_key(branch.high_level_goal)
+                removed_names.add(original_key)
+                excluded_hlg_keys.add(original_key)
+            if len(removal_branches) > MAX_HLG_REMOVALS_PER_ITERATION:
+                iteration_warnings.append(
+                    "HLG_REMOVAL_BATCH_LIMIT_REACHED "
+                    f"({len(removal_branches)} requested, "
+                    f"{MAX_HLG_REMOVALS_PER_ITERATION} applied)"
+                )
+
+        if not rewrite_handled and not removed_names:
+            regeneration_branches = [
+                branch for branch in active_branches
+                if evaluations[branch.branch_id].final_decision
+                == GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS
+            ]
+            for branch in regeneration_branches:
                 # Missing/redundant HLGs are repaired before decompositions so
                 # LLG churn cannot starve the project-wide HLG pass.
                 if (
                     missing_hlg_evaluation.decision
                     == MissingHighLevelGoalDecision.FOUND
                 ):
-                    continue
+                    break
+                evaluation = evaluations[branch.branch_id]
                 stable_key = _stable_hlg_key(branch.high_level_goal)
                 count = llg_regeneration_counts.get(stable_key, 0)
                 if count >= MAX_LLG_REGENERATIONS_PER_BRANCH:
@@ -503,78 +716,17 @@ def run_global_goal_cycle(
                     iteration_warnings.append(
                         f"{branch.branch_id}: LLG_REGENERATION_LIMIT_REACHED"
                     )
-                else:
-                    llg_regeneration_counts[stable_key] = count + 1
-                    if count + 1 >= MAX_LLG_REGENERATIONS_PER_BRANCH:
-                        stabilized_llg_keys.add(stable_key)
-                    llg_regenerations[_stable_hlg_key(branch.high_level_goal)] = (
-                        branch.high_level_goal,
-                        evaluation.low_level_evaluation.regeneration_feedback
-                        or evaluation.rationale,
-                        list(branch.low_level_goals),
-                        len(branch.low_level_goals)
-                        + MAX_LLG_GROWTH_PER_REPAIR,
-                    )
-                    break
-
-            elif decision == GlobalGoalEvaluationDecision.REMOVE_ORIGINAL_HIGH_LEVEL_GOAL:
-                removed_key = _stable_hlg_key(branch.high_level_goal)
-                removed_names.add(removed_key)
-                excluded_hlg_keys.add(removed_key)
-                break
-
-            elif decision == GlobalGoalEvaluationDecision.REWRITE_ORIGINAL_HIGH_LEVEL_GOAL:
-                original_key = _stable_hlg_key(branch.high_level_goal)
-                rewrite_count = hlg_rewrite_counts.get(original_key, 0)
-                if rewrite_count >= MAX_HLG_REWRITES_PER_BRANCH:
-                    evaluations[branch.branch_id] = _with_decision(
-                        evaluation,
-                        GlobalGoalEvaluationDecision.EVALUATION_INCONCLUSIVE,
-                        "HLG rewrite limit reached; retaining the current HLG.",
-                    )
-                    iteration_warnings.append(
-                        f"{branch.branch_id}: HLG_REWRITE_LIMIT_REACHED"
-                    )
                     continue
-                request = evaluation.replacement_request
-                generated = _generate_hlgs_with_top_down(
-                    _generation_request(
-                        f"{branch.branch_id}_rewrite",
-                        HighLevelGoalGenerationAction.REPLACE_EXISTING_HIGH_LEVEL_GOAL,
-                        request.generation_project_description,
-                        request.actor,
-                        request.rationale,
-                        branch.branch_id,
-                    ),
-                    mode,
-                    evaluator_ablation,
+                llg_regeneration_counts[stable_key] = count + 1
+                if count + 1 >= MAX_LLG_REGENERATIONS_PER_BRANCH:
+                    stabilized_llg_keys.add(stable_key)
+                llg_regenerations[stable_key] = (
+                    branch.high_level_goal,
+                    evaluation.low_level_evaluation.regeneration_feedback
+                    or evaluation.rationale,
+                    list(branch.low_level_goals),
+                    len(branch.low_level_goals) + MAX_LLG_GROWTH_PER_REPAIR,
                 )
-                reserved_names.discard(original_key)
-                replacement_goals = []
-                # A focused rewrite request yields one candidate at most;
-                # accepting every candidate here caused HLG proliferation.
-                for goal in generated.goals[:MAX_NEW_HLGS_PER_ITERATION]:
-                    goal_key = _stable_hlg_key(goal)
-                    if goal_key in reserved_names:
-                        continue
-                    reserved_names.add(goal_key)
-                    replacement_goals.append(goal)
-                    llg_regenerations[goal_key] = (
-                        goal,
-                        request.rationale,
-                        list(branch.low_level_goals),
-                        len(branch.low_level_goals)
-                        + MAX_LLG_GROWTH_PER_REPAIR,
-                    )
-                if replacement_goals:
-                    hlg_rewrite_counts[original_key] = rewrite_count + 1
-                    replacements[original_key] = replacement_goals
-                else:
-                    # A top-down retry may return only the unchanged HLG. Keep
-                    # the current goal and continue evaluating the project.
-                    iteration_warnings.append(
-                        f"{branch.branch_id}: HLG_REGENERATION_DUPLICATE_IGNORED"
-                    )
                 break
 
         unresolved_decisions = {
@@ -827,6 +979,7 @@ def run_global_goal_cycle(
                 completed_iterations=iteration,
                 final_high_level_goals=current_hlgs,
                 final_low_level_goals=current_llgs,
+                llg_cleanup_prepass=llg_cleanup_prepass,
                 iterations=traces,
                 llg_regeneration_counts=dict(llg_regeneration_counts),
                 warnings=warnings,
@@ -851,6 +1004,7 @@ def run_global_goal_cycle(
                 completed_iterations=iteration,
                 final_high_level_goals=current_hlgs,
                 final_low_level_goals=current_llgs,
+                llg_cleanup_prepass=llg_cleanup_prepass,
                 iterations=traces,
                 llg_regeneration_counts=dict(llg_regeneration_counts),
                 warnings=warnings,
@@ -862,6 +1016,7 @@ def run_global_goal_cycle(
         completed_iterations=max_iterations,
         final_high_level_goals=current_hlgs,
         final_low_level_goals=current_llgs,
+        llg_cleanup_prepass=llg_cleanup_prepass,
         iterations=traces,
         llg_regeneration_counts=dict(llg_regeneration_counts),
         warnings=warnings,

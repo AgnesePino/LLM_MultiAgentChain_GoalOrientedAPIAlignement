@@ -1,63 +1,61 @@
 """
-LLM clients shared by the original top-down pipeline and the bottom-up extension.
+LLM clients shared by the top-down pipeline and the bottom-up extension.
 
-The top-down generator behaviour is kept equal to the original repository:
-- gpt-4o-mini for structured Pydantic outputs;
-- gpt-4o for plain-text outputs;
-- llama-3.3-70b-versatile as the preferred evaluator.
+Gemini generates descriptions, actors, HLGs, LLGs and other structured
+generator outputs. Qwen 3.8 on Groq is the evaluator.
 
-The only infrastructure compatibility addition is a Qwen 3.6 fallback when
-the historical Llama model is not available on the current Groq account.
+Historical Llama-oriented names are retained only for notebook compatibility.
 """
 
 from __future__ import annotations
 
 import os
+from importlib import import_module
 
-from openai import APIStatusError, OpenAI, RateLimitError
+from Gemini_API.ModelWrapper import MODEL_ID as GEMINI_MODEL
+from Gemini_API.ModelWrapper import generate_response as generate_gemini_response
 
-from key import get_key_openai, get_key_llama, count_Llama_keys
 
+# Compatibility aliases for notebooks that display these old attributes.
+# generate_response no longer sends requests to OpenAI.
+OPENAI_STRUCTURED_MODEL = GEMINI_MODEL
+OPENAI_TEXT_MODEL = GEMINI_MODEL
 
-OPENAI_STRUCTURED_MODEL = os.getenv("OPENAI_STRUCTURED_MODEL", "gpt-4o-mini")
-OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4o")
-
-PREFERRED_GROQ_EVALUATOR_MODEL = os.getenv(
-    "GROQ_EVALUATOR_MODEL",
-    "llama-3.3-70b-versatile",
-)
-GROQ_EVALUATOR_FALLBACK_MODEL = os.getenv(
-    "GROQ_EVALUATOR_FALLBACK_MODEL",
-    "qwen/qwen3.6-27b",
-)
+# Keep the evaluator fixed so environment variables cannot silently select a
+# different model and make experimental runs incomparable.
+PREFERRED_GROQ_EVALUATOR_MODEL = "qwen/qwen3.8-27b"
+GROQ_EVALUATOR_FALLBACK_MODEL = PREFERRED_GROQ_EVALUATOR_MODEL
 
 GROQ_EVALUATOR_MODEL = PREFERRED_GROQ_EVALUATOR_MODEL
 
-# Original repository budget for Llama.
-GROQ_LLAMA_MAX_TOKENS = int(os.getenv("GROQ_LLAMA_MAX_TOKENS", "6000"))
+# The evaluator only has to produce ``Feedback`` and ``Score``.  Groq counts
+# the requested completion budget together with the prompt against the
+# organisation's tokens-per-minute ceiling.  Reserving the historical 6000
+# tokens therefore makes an otherwise small evaluator call exceed the 8000
+# token on-demand limit and Groq rejects it with HTTP 413.
+GROQ_LLAMA_MAX_TOKENS = int(os.getenv("GROQ_LLAMA_MAX_TOKENS", "1200"))
 
-# The fallback critic only has to produce Feedback + Score.
-# 2000 also avoids the previous 900-token truncation while remaining much
-# smaller than the original 6000-token reservation.
+# Keep the fallback under the same request-size ceiling.
 GROQ_FALLBACK_MAX_TOKENS = int(
-    os.getenv("GROQ_FALLBACK_MAX_TOKENS", "2000")
+    os.getenv("GROQ_FALLBACK_MAX_TOKENS", "1200")
 )
 
 
-client = None
 llama = None
 
 
-def _openai_client() -> OpenAI:
-    global client
-    if client is None:
-        client = OpenAI(api_key=get_key_openai())
-    return client
+def _key_helpers():
+    """Load legacy Groq key helpers only when the evaluator is requested."""
+    module = import_module("key")
+    return module.get_key_llama, module.count_Llama_keys
 
 
-def _groq_client() -> OpenAI:
+def _groq_client():
     global llama
     if llama is None:
+        from openai import OpenAI
+
+        get_key_llama, _ = _key_helpers()
         llama = OpenAI(
             api_key=get_key_llama(),
             base_url="https://api.groq.com/openai/v1",
@@ -67,6 +65,9 @@ def _groq_client() -> OpenAI:
 
 def _rotate_groq_key() -> None:
     global llama
+    from openai import OpenAI
+
+    get_key_llama, _ = _key_helpers()
     llama = OpenAI(
         api_key=get_key_llama(increment_counter=True),
         base_url="https://api.groq.com/openai/v1",
@@ -74,34 +75,19 @@ def _rotate_groq_key() -> None:
 
 
 def generate_response(prompt, sys_prompt, response_format=None):
-    """Original GPT generator path."""
-    messages = [
-        {"role": "system", "content": sys_prompt},
-        {"role": "user", "content": prompt},
-    ]
-
-    if response_format is not None:
-        response = _openai_client().beta.chat.completions.parse(
-            messages=messages,
-            model=OPENAI_STRUCTURED_MODEL,
-            max_tokens=6000,
-            response_format=response_format,
-            temperature=0,
-        )
-        return response.choices[0].message.parsed
-
-    response = _openai_client().chat.completions.create(
-        messages=messages,
-        model=OPENAI_TEXT_MODEL,
-        max_tokens=6000,
-        temperature=0,
+    """Generate text or a validated Pydantic object with Gemini."""
+    return generate_gemini_response(
+        prompt=prompt,
+        sys_prompt=sys_prompt,
+        response_format=response_format,
     )
-    return response.choices[0].message.content
 
 
-def generate_response_llama(prompt, sys_prompt):
-    """Evaluator call with the historical Llama model and one explicit fallback."""
+def generate_evaluator_response(prompt, sys_prompt):
+    """Run the evaluator using Qwen 3.8 on Groq."""
     global GROQ_EVALUATOR_MODEL
+
+    from openai import APIStatusError, RateLimitError
 
     last_exception = None
     fallback_attempted = (
@@ -110,7 +96,8 @@ def generate_response_llama(prompt, sys_prompt):
     # Try each configured key at most once per evaluator request. Retrying
     # every key twice can block one dataset for many minutes when the whole
     # account is rate-limited, preventing the outer dataset loop from moving on.
-    attempts = max(1, count_Llama_keys())
+    _, count_llama_keys = _key_helpers()
+    attempts = max(1, count_llama_keys())
 
     for _ in range(attempts):
         model = GROQ_EVALUATOR_MODEL
@@ -128,12 +115,21 @@ def generate_response_llama(prompt, sys_prompt):
 
             if model == GROQ_EVALUATOR_FALLBACK_MODEL:
                 request["max_completion_tokens"] = GROQ_FALLBACK_MAX_TOKENS
+            else:
+                request["max_completion_tokens"] = GROQ_LLAMA_MAX_TOKENS
+
+            # Reasoning controls are model-specific, not dependent on whether
+            # the model happens to be configured as primary or fallback.
+            if model.startswith("qwen/"):
                 request["extra_body"] = {
                     "reasoning_effort": "none",
                     "reasoning_format": "hidden",
                 }
-            else:
-                request["max_completion_tokens"] = GROQ_LLAMA_MAX_TOKENS
+            elif model.startswith("openai/gpt-oss"):
+                request["extra_body"] = {
+                    "reasoning_effort": "low",
+                    "reasoning_format": "hidden",
+                }
 
             response = groq_client.chat.completions.create(**request)
             content = response.choices[0].message.content
@@ -169,3 +165,7 @@ def generate_response_llama(prompt, sys_prompt):
         raise last_exception
 
     raise RuntimeError("No Groq evaluator API call could be completed.")
+
+
+# Compatibility alias for older notebooks and external imports.
+generate_response_llama = generate_evaluator_response
