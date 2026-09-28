@@ -1,0 +1,497 @@
+{
+  "iteration": 2,
+  "reconstructions": {
+    "branch_002": {
+      "reconstructed_high_level_goal": "Manage Hospital Information",
+      "rationale": "These low-level goals collectively describe the essential operations (create, read, update) required for the Public Health System Administrator to maintain accurate and comprehensive records of hospitals within the system. They cover the full lifecycle of managing hospital data, from initial entry to modification and retrieval.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Register New Hospital Details",
+        "Update Existing Hospital Information",
+        "Retrieve Details for a Specific Hospital",
+        "Retrieve List of All Hospitals"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Ensure timely notification of critical inventory shortages",
+      "rationale": "These low-level goals collectively aim to provide the Hospital Inventory Manager with automated and timely alerts when product quantities, including specialized items like blood, fall below predefined critical thresholds. This functionality is crucial for proactive inventory management and preventing stockouts.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Configure critical inventory thresholds for products",
+        "Receive automated alerts for low stock levels",
+        "Receive automated alerts for critical blood bank supply levels"
+      ]
+    },
+    "branch_007": {
+      "reconstructed_high_level_goal": "Manage Inter-Hospital Product Transfers",
+      "rationale": "The low-level goals collectively describe the necessary steps for a Logistics Coordinator to effectively manage the transfer of specific products between hospitals. Searching for product availability and identifying the closest source are preparatory actions that enable the successful initiation of a product transfer request.",
+      "branch_id": "branch_007",
+      "source_low_level_goal_ids": [
+        "Request a product transfer between hospitals",
+        "Query product availability in other hospitals",
+        "Identify the nearest hospital with available products"
+      ]
+    },
+    "branch_008": {
+      "reconstructed_high_level_goal": "Enable Efficient and Monitored Product Transfer Management",
+      "rationale": "The low-level goals collectively aim to provide the Logistics Coordinator with comprehensive capabilities to manage product transfers. This includes optimizing routes for efficiency (llg_003), monitoring their real-time progress and location (llg_001), and receiving timely alerts upon successful completion (llg_002). Together, these operations ensure that transfers are planned effectively, tracked diligently, and confirmed upon delivery, thereby enabling efficient and well-controlled product transfer operations.",
+      "branch_id": "branch_008",
+      "source_low_level_goal_ids": [
+        "Track the real-time status of product transfers",
+        "Receive notifications upon transfer completion",
+        "Get recommended routes for product transfers"
+      ]
+    },
+    "branch_010": {
+      "reconstructed_high_level_goal": "Facilitate Emergency Hospital Access",
+      "rationale": "These operations collectively enable a user in an emergency to identify a suitable hospital based on their needs, receive navigation guidance to reach it, and establish direct communication, thereby streamlining the process of accessing urgent medical care.",
+      "branch_id": "branch_010",
+      "source_low_level_goal_ids": [
+        "Initiate an emergency hospital search with specific needs",
+        "Get real-time directions to a recommended hospital",
+        "Directly contact a recommended hospital"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
+      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "high_level_evaluation": {
+        "rationale": "Malformed evaluator response; keeping the current HLG.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "LOW"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
+      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal is supported by the project description, which explicitly mentions that the system should 'consider inventory thresholds' and that hospitals with low stock (4 or fewer items) are deemed to have just enough for their own needs. The actor description also confirms the role of monitoring inventory thresholds. However, there is significant semantic overlap with the existing High-Level Goal 'Maintain real-time visibility and control over hospital inventory levels', which aims to 'prevent shortages'. The original HLG focuses specifically on the *alerting* mechanism when thresholds are breached, which is a distinct functional intention from general tracking/visibility. While related, the specific intent of 'being alerted' to trigger replenishment or transfer actions is a key requirement implied by the threshold logic. The bottom-up reconstruction 'Ensure timely notification of critical inventory shortages' is more precise and action-oriented than the original 'Ensure critical inventory thresholds are monitored...'. The original is slightly passive ('monitored') whereas the system's value lies in the *notification* or *alert* that enables action. Therefore, a rewrite to focus on the notification/alert aspect is more faithful to the functional requirement of acting on the threshold data.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": "Refine the goal to explicitly focus on the generation of alerts or notifications when inventory levels fall below critical thresholds, rather than just general monitoring, to distinguish it from general inventory tracking goals.",
+        "confidence": "MEDIUM"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_007": {
+      "branch_id": "branch_007",
+      "rationale": "The original High-Level Goal 'Facilitate efficient transfer of critical products between hospitals' is supported by the project description, which explicitly states the system needs to 'facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock.' However, there is another existing High-Level Goal for the same actor: 'Optimize logistics for inter-hospital product transfers'. Both goals describe the same functional intention: managing the movement of products between hospitals based on availability and proximity. The original goal focuses on 'facilitating' and 'identifying/arranging', while the other focuses on 'optimizing logistics'. These are semantically overlapping and effectively split one stakeholder intention into two wording variants. According to the instructions, we should not keep several HLGs that merely split one stakeholder intention. The existing goal 'Optimize logistics for inter-hospital product transfers' is slightly more aligned with the 'Logistics Coordinator' role and the system's goal to 'optimize resources'. Therefore, the original goal should be removed to avoid redundancy.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Facilitate efficient transfer of critical products between hospitals' is supported by the project description, which explicitly states the system needs to 'facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock.' However, there is another existing High-Level Goal for the same actor: 'Optimize logistics for inter-hospital product transfers'. Both goals describe the same functional intention: managing the movement of products between hospitals based on availability and proximity. The original goal focuses on 'facilitating' and 'identifying/arranging', while the other focuses on 'optimizing logistics'. These are semantically overlapping and effectively split one stakeholder intention into two wording variants. According to the instructions, we should not keep several HLGs that merely split one stakeholder intention. The existing goal 'Optimize logistics for inter-hospital product transfers' is slightly more aligned with the 'Logistics Coordinator' role and the system's goal to 'optimize resources'. Therefore, the original goal should be removed to avoid redundancy.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_008": {
+      "branch_id": "branch_008",
+      "rationale": "The original High-Level Goal 'Optimize logistics for inter-hospital product transfers' is semantically equivalent to the existing High-Level Goal 'Facilitate efficient transfer of critical products between hospitals' for the same actor (Logistics Coordinator). Both goals address the core requirement of moving products (like blood) between hospitals based on stock and proximity. The bottom-up reconstruction ('Enable Efficient and Monitored Product Transfer Management') introduces 'monitoring' and 'alerts' which are not explicitly supported by the project description for this specific actor (the description focuses on identifying the closest facility with stock and facilitating the transfer, not on real-time tracking or completion alerts). Keeping the original goal would result in duplicate HLGs for the same stakeholder intention. Therefore, the original goal should be removed in favor of the existing, well-scoped HLG that covers the functional intention.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Optimize logistics for inter-hospital product transfers' is semantically equivalent to the existing High-Level Goal 'Facilitate efficient transfer of critical products between hospitals' for the same actor (Logistics Coordinator). Both goals address the core requirement of moving products (like blood) between hospitals based on stock and proximity. The bottom-up reconstruction ('Enable Efficient and Monitored Product Transfer Management') introduces 'monitoring' and 'alerts' which are not explicitly supported by the project description for this specific actor (the description focuses on identifying the closest facility with stock and facilitating the transfer, not on real-time tracking or completion alerts). Keeping the original goal would result in duplicate HLGs for the same stakeholder intention. Therefore, the original goal should be removed in favor of the existing, well-scoped HLG that covers the functional intention.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_010": {
+      "branch_id": "branch_010",
+      "rationale": "The original High-Level Goal 'Ensure quick access to appropriate medical facilities during emergencies' is semantically equivalent to the existing High-Level Goal 'Receive prompt and accurate recommendations for the nearest hospital with available beds'. Both goals describe the same functional intention for the 'Patient/Emergency Services User': obtaining a recommendation for a nearby hospital with capacity. The project description supports this specific functionality (recommending the nearest hospital with available beds). Keeping both would result in redundant High-Level Goals that split a single stakeholder intention into wording variants. Therefore, the original goal should be removed in favor of the more specific and descriptive existing goal.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Ensure quick access to appropriate medical facilities during emergencies' is semantically equivalent to the existing High-Level Goal 'Receive prompt and accurate recommendations for the nearest hospital with available beds'. Both goals describe the same functional intention for the 'Patient/Emergency Services User': obtaining a recommendation for a nearby hospital with capacity. The project description supports this specific functionality (recommending the nearest hospital with available beds). Keeping both would result in redundant High-Level Goals that split a single stakeholder intention into wording variants. Therefore, the original goal should be removed in favor of the more specific and descriptive existing goal.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Ensure comprehensive and accurate registration of all public health facilities",
+        "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+        "actor": {
+          "name": "Public Health System Administrator",
+          "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+        }
+      },
+      {
+        "name": "Manage Hospital Information",
+        "description": "Enable the Public Health System Administrator to register, update, and retrieve comprehensive details for all hospitals, including their name, address, and available bed count, within the public health system.",
+        "actor": {
+          "name": "Public Health System Administrator",
+          "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+        }
+      },
+      {
+        "name": "Maintain real-time visibility and control over hospital inventory levels",
+        "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+        "actor": {
+          "name": "Hospital Inventory Manager",
+          "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+        }
+      },
+      {
+        "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+        "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+        "actor": {
+          "name": "Hospital Inventory Manager",
+          "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+        }
+      },
+      {
+        "name": "Streamline patient check-in and check-out processes",
+        "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+        "actor": {
+          "name": "Hospital Admissions Staff",
+          "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+        }
+      },
+      {
+        "name": "Ensure quick and secure access to essential patient details",
+        "description": "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+        "actor": {
+          "name": "Hospital Admissions Staff",
+          "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+        }
+      },
+      {
+        "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+        "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+        "actor": {
+          "name": "Patient/Emergency Services User",
+          "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Register a new public health facility",
+        "description": "The Public Health System Administrator can create a new hospital registration record, including essential details like name, address, contact information, and initial capacity.",
+        "high_level_associated": {
+          "name": "Ensure comprehensive and accurate registration of all public health facilities",
+          "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Update existing public health facility details",
+        "description": "The Public Health System Administrator can modify the details of an already registered hospital, such as updating its address, contact information, or bed capacity.",
+        "high_level_associated": {
+          "name": "Ensure comprehensive and accurate registration of all public health facilities",
+          "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Retrieve a list of all registered public health facilities",
+        "description": "The Public Health System Administrator can fetch a comprehensive list of all hospitals currently registered within the system.",
+        "high_level_associated": {
+          "name": "Ensure comprehensive and accurate registration of all public health facilities",
+          "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "View detailed information for a specific public health facility",
+        "description": "The Public Health System Administrator can retrieve all registered details for a particular hospital by its unique identifier.",
+        "high_level_associated": {
+          "name": "Ensure comprehensive and accurate registration of all public health facilities",
+          "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Add a new product to hospital inventory",
+        "description": "The Hospital Inventory Manager can register a new medical product or supply item into the hospital's inventory system, specifying its name, type, and initial quantity.",
+        "high_level_associated": {
+          "name": "Maintain real-time visibility and control over hospital inventory levels",
+          "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update the quantity of an existing inventory product",
+        "description": "The Hospital Inventory Manager can adjust the stock level of any product in the inventory, reflecting new deliveries or consumption.",
+        "high_level_associated": {
+          "name": "Maintain real-time visibility and control over hospital inventory levels",
+          "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Retrieve current inventory levels for all products",
+        "description": "The Hospital Inventory Manager can fetch a comprehensive list of all products in stock, along with their current quantities.",
+        "high_level_associated": {
+          "name": "Maintain real-time visibility and control over hospital inventory levels",
+          "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Access detailed blood bank supply information",
+        "description": "The Hospital Inventory Manager can view specific details for all blood bank supplies, including blood type, quantity, and expiration dates.",
+        "high_level_associated": {
+          "name": "Maintain real-time visibility and control over hospital inventory levels",
+          "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Configure critical inventory thresholds for products",
+        "description": "The Hospital Inventory Manager can set minimum stock levels for individual products, triggering alerts when quantities fall below these thresholds.",
+        "high_level_associated": {
+          "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+          "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Receive automated alerts for low stock levels",
+        "description": "The Hospital Inventory Manager will automatically receive notifications when any product's quantity drops below its predefined critical threshold.",
+        "high_level_associated": {
+          "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+          "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Receive automated alerts for critical blood bank supply levels",
+        "description": "The Hospital Inventory Manager will automatically receive notifications when specific blood types or overall blood bank supplies fall below critical thresholds.",
+        "high_level_associated": {
+          "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+          "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Register a new patient admission",
+        "description": "The Hospital Admissions Staff can record a new patient's admission, capturing essential details such as patient identification, admission date, and reason for admission.",
+        "high_level_associated": {
+          "name": "Streamline patient check-in and check-out processes",
+          "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+          }
+        }
+      },
+      {
+        "name": "Record a patient discharge",
+        "description": "The Hospital Admissions Staff can process a patient's discharge, documenting the discharge date and any relevant outcome information.",
+        "high_level_associated": {
+          "name": "Streamline patient check-in and check-out processes",
+          "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+          }
+        }
+      },
+      {
+        "name": "Update a patient's admission status",
+        "description": "The Hospital Admissions Staff can change the status of a patient's admission (e.g., from 'pending' to 'admitted', or 'admitted' to 'transferred').",
+        "high_level_associated": {
+          "name": "Streamline patient check-in and check-out processes",
+          "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+          }
+        }
+      },
+      {
+        "name": "Search for patient admission records",
+        "description": "The Hospital Admissions Staff can search for patient admission records using various criteria such as patient name, CPF, or admission date range.",
+        "high_level_associated": {
+          "name": "Streamline patient check-in and check-out processes",
+          "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+          }
+        }
+      },
+      {
+        "name": "Retrieve a patient's demographic information",
+        "description": "The Hospital Admissions Staff can quickly access a patient's full name, CPF, date of birth, and sex using their patient ID or CPF.",
+        "high_level_associated": {
+          "name": "Ensure quick and secure access to essential patient details",
+          "description": "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+          }
+        }
+      },
+      {
+        "name": "Access a patient's admission history",
+        "description": "The Hospital Admissions Staff can view a complete history of a specific patient's past admissions and discharges.",
+        "high_level_associated": {
+          "name": "Ensure quick and secure access to essential patient details",
+          "description": "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+          }
+        }
+      },
+      {
+        "name": "Submit current location for hospital recommendations",
+        "description": "The Patient/Emergency Services User can provide their current geographical location to the system to receive relevant hospital recommendations.",
+        "high_level_associated": {
+          "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+          "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+          "actor": {
+            "name": "Patient/Emergency Services User",
+            "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+          }
+        }
+      },
+      {
+        "name": "Request nearest hospital with available beds",
+        "description": "The Patient/Emergency Services User can query the system to find the closest hospital that has available beds, optionally specifying a type of bed (e.g., ICU).",
+        "high_level_associated": {
+          "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+          "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+          "actor": {
+            "name": "Patient/Emergency Services User",
+            "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+          }
+        }
+      },
+      {
+        "name": "Receive detailed hospital recommendations",
+        "description": "The Patient/Emergency Services User will receive comprehensive information about recommended hospitals, including their name, address, distance, and current bed availability.",
+        "high_level_associated": {
+          "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+          "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+          "actor": {
+            "name": "Patient/Emergency Services User",
+            "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+          }
+        }
+      },
+      {
+        "name": "Filter hospital recommendations by medical specialty",
+        "description": "The Patient/Emergency Services User can refine hospital recommendations by specifying a required medical specialty or service.",
+        "high_level_associated": {
+          "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+          "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+          "actor": {
+            "name": "Patient/Emergency Services User",
+            "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+          }
+        }
+      },
+      {
+        "name": "Register New Hospital Details",
+        "description": "Enable the Public Health System Administrator to submit new hospital details, including its name, address, and initial available bed count, to the system.",
+        "high_level_associated": {
+          "name": "Manage Hospital Information",
+          "description": "Enable the Public Health System Administrator to register, update, and retrieve comprehensive details for all hospitals, including their name, address, and available bed count, within the public health system.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Update Existing Hospital Information",
+        "description": "Enable the Public Health System Administrator to modify an existing hospital's name, address, or available bed count in the system.",
+        "high_level_associated": {
+          "name": "Manage Hospital Information",
+          "description": "Enable the Public Health System Administrator to register, update, and retrieve comprehensive details for all hospitals, including their name, address, and available bed count, within the public health system.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Details for a Specific Hospital",
+        "description": "Enable the Public Health System Administrator to retrieve the comprehensive details (name, address, available bed count) for a specific hospital by its unique identifier.",
+        "high_level_associated": {
+          "name": "Manage Hospital Information",
+          "description": "Enable the Public Health System Administrator to register, update, and retrieve comprehensive details for all hospitals, including their name, address, and available bed count, within the public health system.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Retrieve List of All Hospitals",
+        "description": "Enable the Public Health System Administrator to retrieve a list of all registered hospitals, including their names, addresses, and available bed counts.",
+        "high_level_associated": {
+          "name": "Manage Hospital Information",
+          "description": "Enable the Public Health System Administrator to register, update, and retrieve comprehensive details for all hospitals, including their name, address, and available bed count, within the public health system.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "The project description outlines five main functional areas: hospital registration, inventory management (including thresholds), patient admission/discharge and details, inter-hospital product transfer, and nearest hospital recommendation. All these areas are explicitly covered by the current High-Level Goals (HLGs). Specifically: 'Manage Hospital Information' covers registration; 'Maintain real-time visibility...' and 'Ensure critical inventory thresholds...' cover inventory and thresholds; 'Streamline patient check-in...' and 'Ensure quick and secure access...' cover patient processes; 'Facilitate efficient transfer...' and 'Optimize logistics...' cover product transfers; and 'Receive prompt and accurate recommendations...' and 'Ensure quick access...' cover the nearest hospital feature. There are no distinct, documented functional intentions in the description that are absent from the current HLG list.",
+    "missing_goal_requests": []
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {},
+  "warnings": [
+    "UNRESOLVED_EVALUATION_INCONCLUSIVE"
+  ]
+}

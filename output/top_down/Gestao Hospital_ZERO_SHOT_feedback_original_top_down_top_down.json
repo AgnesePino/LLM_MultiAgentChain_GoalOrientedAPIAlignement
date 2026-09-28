@@ -1,0 +1,613 @@
+{
+    "name": "Gestao Hospital",
+    "description": "We need to develop an API to organize and manage a public health system, specifically to support the Sistema Único de Saúde (SUS). The primary goal is to create a tool that helps optimize resources and reduce waste by improving the management of hospitals and their assets. The system should allow us to register and retrieve detailed information about hospitals, including their name, address, and the number of available beds. It must also manage hospital inventories, tracking various products and their quantities, including blood bank supplies. A key feature is the ability to recommend the nearest hospital with available beds to a patient based on their location. Furthermore, the system needs to support patient check-in and check-out processes, and provide access to patient details such as full name, CPF, date of birth, sex, and admission date. It should also facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock. Finally, the system should consider inventory thresholds, where hospitals with four or fewer items or liters of a product are deemed to have just enough for their own needs.",
+    "rawDescription": "# Sistema de Gestão Hospitalar\n\n## Objetivo\n\nO objetivo do projeto é criar uma API para organizar um sistema público de saúde.\n\n## Contextualização\n\nO Sistema Único de Saúde (SUS) é um dos maiores e mais complexos sistemas de saúde pública do mundo, abrangendo desde o simples atendimento para avaliação da pressão arterial, por meio da Atenção Básica, até o transplante de órgãos, garantindo acesso integral, universal e gratuito para toda a população do país. Com a sua criação, o SUS proporcionou o acesso universal ao sistema público de saúde, sem discriminação. A atenção integral à saúde, e não somente aos cuidados assistenciais, passou a ser um direito de todos os brasileiros, desde a gestação e por toda a vida, com foco na saúde com qualidade de vida, visando a prevenção e a promoção da saúde. O objetivo desse projeto é criar uma ferramenta para auxiliar o SUS, evitar desperdício e potencializar os recursos a partir dos pacientes.\n\nAo final do programa, além de apresentar a API criada, cada squad deverá expor quais são os pontos de melhoria e quais seriam os próximos passos no projeto, caso fossem seguir adiante.\n\n## Requisitos técnicos obrigatórios\n\nPara o projeto é necessário que as squads se utilizem dos aprendizados repassados pelo programa AceleraDev, portanto a solução deve ser construída de acordo com os seguintes requisitos:\n\n- Banco de dados;\n- Desenvolvimento do backend e APIs com Java Spring Boot;\n- Testes unitários são obrigatórios\n\n## Definições do Sistema\n\n- Todo hospital tem um estoque contendo diversos produtos.\n- Um estoque tem produtos e suas respectivas quantidades.\n- Dentro do estoque também tem banco de sangue\n- O hospital também possui leitos.\n- Ao encontrar um paciente é importante o recomendar para um hospital mais próximo e que tenha vaga disponível.\n- Caso o hospital precise de um produto, por exemplo, um banco de sangue, é importante fazer o envio do hospital mais próximo ao local.\n- Caso o hospital tenha apenas 4 itens ou 4 litros ele terá apenas o suficiente para o próprio hospital.\n\n## Exemplos de chamadas:\n\nA partir da API que gerencia os hospitais dentro do SUS o usuário conseguirá, por exemplo:\n\n- Cadastrar o hospital\n- A partir da localização do paciente indicar o hospital mais próximo.\n- Realizar check-in/ check-out do paciente no hospital\n- Verificar quantos leitos disponíveis no hospital\n- Cadastrar produtos e suas respectivas quantidades\n- Cadastrar e gerenciar banco de sangue\n\n### /v1/hospitais/{id}\n\nMétodo: GET\nRetorna as informações do hospital, por exemplo:\n\n- Nome\n- Endereço\n- Número de leitos\n- Números de leitos disponíveis\n\n### /v1/hospitais/{id}/estoque\n\nMétodo: GET\nRetorna as informações dos produtos existentes estoque, por exemplo.\n\n### /v1/hospitais/{id}/estoque/{produto}\n\nMétodo: GET\nRetorna mais detalhes de um produto.\n\n- Nome\n- Descrição\n- Quantidade\n\n### /v1/hospitais/{id}/pacientes\n\nMétodo: GET\nRetorna o nome dos pacientes dentro do hospital.\n\n### /v1/hospitais/{id}/pacientes/{paciente}\n\nMétodo: GET\nRetorna todas as informações do paciente cadastrado, por exemplo:\n\n- Nome completo\n- CPF\n- Data de nascimento\n- Sexo\n- Data de entrada no hospital.\n",
+    "documentationPreprocessing": {
+        "chunked": false,
+        "chunkCount": 1,
+        "originalChars": 3156,
+        "processedChars": 1179,
+        "strategy": "original_generate_description"
+    },
+    "actors": [
+        "Public Health System Administrator",
+        "Hospital Inventory Manager",
+        "Hospital Admissions Staff",
+        "Logistics Coordinator",
+        "Patient/Emergency Services User"
+    ],
+    "highLevelGoals": [
+        "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+        "The Public Health System Administrator seeks to improve the efficiency of resource distribution and reduce waste by having a clear overview of hospital assets and capacities.",
+        "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+        "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+        "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+        "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+        "The Logistics Coordinator aims to quickly identify and arrange the movement of necessary supplies, like blood, between facilities based on stock availability and proximity.",
+        "The Logistics Coordinator seeks to ensure that product transfers are executed in the most timely and effective manner, minimizing delays and ensuring supplies reach their destination promptly.",
+        "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+        "The Patient/Emergency Services User seeks to minimize response time by being directed to a hospital that can immediately accommodate their needs."
+    ],
+    "lowLevelGoals": [
+        "The Public Health System Administrator can create a new hospital registration record, including essential details like name, address, contact information, and initial capacity.",
+        "The Public Health System Administrator can modify the details of an already registered hospital, such as updating its address, contact information, or bed capacity.",
+        "The Public Health System Administrator can fetch a comprehensive list of all hospitals currently registered within the system.",
+        "The Public Health System Administrator can retrieve all registered details for a particular hospital by its unique identifier.",
+        "The Public Health System Administrator can query the system to get current statistics on available, occupied, and total beds across all registered hospitals.",
+        "The Public Health System Administrator can request and receive analytical reports detailing the usage patterns of beds and other key resources within hospitals over specified periods.",
+        "The Public Health System Administrator can search for the availability of specific resources (e.g., ICU beds, ventilators) across all hospitals.",
+        "The Hospital Inventory Manager can register a new medical product or supply item into the hospital's inventory system, specifying its name, type, and initial quantity.",
+        "The Hospital Inventory Manager can adjust the stock level of any product in the inventory, reflecting new deliveries or consumption.",
+        "The Hospital Inventory Manager can fetch a comprehensive list of all products in stock, along with their current quantities.",
+        "The Hospital Inventory Manager can view specific details for all blood bank supplies, including blood type, quantity, and expiration dates.",
+        "The Hospital Inventory Manager can set minimum stock levels for individual products, triggering alerts when quantities fall below these thresholds.",
+        "The Hospital Inventory Manager will automatically receive notifications when any product's quantity drops below its predefined critical threshold.",
+        "The Hospital Inventory Manager will automatically receive notifications when specific blood types or overall blood bank supplies fall below critical thresholds.",
+        "The Hospital Admissions Staff can record a new patient's admission, capturing essential details such as patient identification, admission date, and reason for admission.",
+        "The Hospital Admissions Staff can process a patient's discharge, documenting the discharge date and any relevant outcome information.",
+        "The Hospital Admissions Staff can change the status of a patient's admission (e.g., from 'pending' to 'admitted', or 'admitted' to 'transferred').",
+        "The Hospital Admissions Staff can search for patient admission records using various criteria such as patient name, CPF, or admission date range.",
+        "The Hospital Admissions Staff can quickly access a patient's full name, CPF, date of birth, and sex using their patient ID or CPF.",
+        "The Hospital Admissions Staff can view a complete history of a specific patient's past admissions and discharges.",
+        "The Logistics Coordinator can initiate a request to transfer a specific product, such as blood, from one hospital to another, specifying quantity and destination.",
+        "The Logistics Coordinator can search for the availability of a specific product (e.g., a particular blood type) across all hospitals in the system.",
+        "The Logistics Coordinator can identify the closest hospital that has a specific product in stock, based on geographical proximity and current inventory.",
+        "The Logistics Coordinator can monitor the progress and current location of ongoing product transfers between hospitals.",
+        "The Logistics Coordinator will be automatically alerted when a requested product transfer has been successfully completed and the items have reached their destination.",
+        "The Logistics Coordinator can request optimized routes for product transfers, considering factors like distance, traffic, and estimated travel time.",
+        "The Patient/Emergency Services User can provide their current geographical location to the system to receive relevant hospital recommendations.",
+        "The Patient/Emergency Services User can query the system to find the closest hospital that has available beds, optionally specifying a type of bed (e.g., ICU).",
+        "The Patient/Emergency Services User will receive comprehensive information about recommended hospitals, including their name, address, distance, and current bed availability.",
+        "The Patient/Emergency Services User can refine hospital recommendations by specifying a required medical specialty or service.",
+        "The Patient/Emergency Services User can trigger an urgent search for a hospital, providing details about their specific medical emergency or required facilities.",
+        "The Patient/Emergency Services User can request and receive turn-by-turn navigation instructions to a recommended hospital from their current location.",
+        "The Patient/Emergency Services User can use the system to directly call or message a recommended hospital using provided contact information."
+    ],
+    "structuredActors": {
+        "actors": [
+            {
+                "name": "Public Health System Administrator",
+                "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+            },
+            {
+                "name": "Hospital Inventory Manager",
+                "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+            },
+            {
+                "name": "Hospital Admissions Staff",
+                "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+            },
+            {
+                "name": "Logistics Coordinator",
+                "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+            },
+            {
+                "name": "Patient/Emergency Services User",
+                "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+            }
+        ]
+    },
+    "structuredHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Ensure comprehensive and accurate registration of all public health facilities",
+                "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+                "actor": {
+                    "name": "Public Health System Administrator",
+                    "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                }
+            },
+            {
+                "name": "Optimize resource allocation and utilization across the public health system",
+                "description": "The Public Health System Administrator seeks to improve the efficiency of resource distribution and reduce waste by having a clear overview of hospital assets and capacities.",
+                "actor": {
+                    "name": "Public Health System Administrator",
+                    "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                }
+            },
+            {
+                "name": "Maintain real-time visibility and control over hospital inventory levels",
+                "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+                "actor": {
+                    "name": "Hospital Inventory Manager",
+                    "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                }
+            },
+            {
+                "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+                "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+                "actor": {
+                    "name": "Hospital Inventory Manager",
+                    "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                }
+            },
+            {
+                "name": "Streamline patient check-in and check-out processes",
+                "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+                "actor": {
+                    "name": "Hospital Admissions Staff",
+                    "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                }
+            },
+            {
+                "name": "Ensure quick and secure access to essential patient details",
+                "description": "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+                "actor": {
+                    "name": "Hospital Admissions Staff",
+                    "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                }
+            },
+            {
+                "name": "Facilitate efficient transfer of critical products between hospitals",
+                "description": "The Logistics Coordinator aims to quickly identify and arrange the movement of necessary supplies, like blood, between facilities based on stock availability and proximity.",
+                "actor": {
+                    "name": "Logistics Coordinator",
+                    "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                }
+            },
+            {
+                "name": "Optimize logistics for inter-hospital product transfers",
+                "description": "The Logistics Coordinator seeks to ensure that product transfers are executed in the most timely and effective manner, minimizing delays and ensuring supplies reach their destination promptly.",
+                "actor": {
+                    "name": "Logistics Coordinator",
+                    "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                }
+            },
+            {
+                "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+                "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+                "actor": {
+                    "name": "Patient/Emergency Services User",
+                    "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                }
+            },
+            {
+                "name": "Ensure quick access to appropriate medical facilities during emergencies",
+                "description": "The Patient/Emergency Services User seeks to minimize response time by being directed to a hospital that can immediately accommodate their needs.",
+                "actor": {
+                    "name": "Patient/Emergency Services User",
+                    "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                }
+            }
+        ]
+    },
+    "structuredLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Register a new public health facility",
+                "description": "The Public Health System Administrator can create a new hospital registration record, including essential details like name, address, contact information, and initial capacity.",
+                "high_level_associated": {
+                    "name": "Ensure comprehensive and accurate registration of all public health facilities",
+                    "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "Update existing public health facility details",
+                "description": "The Public Health System Administrator can modify the details of an already registered hospital, such as updating its address, contact information, or bed capacity.",
+                "high_level_associated": {
+                    "name": "Ensure comprehensive and accurate registration of all public health facilities",
+                    "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve a list of all registered public health facilities",
+                "description": "The Public Health System Administrator can fetch a comprehensive list of all hospitals currently registered within the system.",
+                "high_level_associated": {
+                    "name": "Ensure comprehensive and accurate registration of all public health facilities",
+                    "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "View detailed information for a specific public health facility",
+                "description": "The Public Health System Administrator can retrieve all registered details for a particular hospital by its unique identifier.",
+                "high_level_associated": {
+                    "name": "Ensure comprehensive and accurate registration of all public health facilities",
+                    "description": "The Public Health System Administrator aims to maintain a complete and up-to-date registry of hospitals, including their essential details, to support system-wide management.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "Access real-time bed availability data for all hospitals",
+                "description": "The Public Health System Administrator can query the system to get current statistics on available, occupied, and total beds across all registered hospitals.",
+                "high_level_associated": {
+                    "name": "Optimize resource allocation and utilization across the public health system",
+                    "description": "The Public Health System Administrator seeks to improve the efficiency of resource distribution and reduce waste by having a clear overview of hospital assets and capacities.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "Generate reports on hospital resource utilization",
+                "description": "The Public Health System Administrator can request and receive analytical reports detailing the usage patterns of beds and other key resources within hospitals over specified periods.",
+                "high_level_associated": {
+                    "name": "Optimize resource allocation and utilization across the public health system",
+                    "description": "The Public Health System Administrator seeks to improve the efficiency of resource distribution and reduce waste by having a clear overview of hospital assets and capacities.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "Query specific resource availability across the system",
+                "description": "The Public Health System Administrator can search for the availability of specific resources (e.g., ICU beds, ventilators) across all hospitals.",
+                "high_level_associated": {
+                    "name": "Optimize resource allocation and utilization across the public health system",
+                    "description": "The Public Health System Administrator seeks to improve the efficiency of resource distribution and reduce waste by having a clear overview of hospital assets and capacities.",
+                    "actor": {
+                        "name": "Public Health System Administrator",
+                        "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+                    }
+                }
+            },
+            {
+                "name": "Add a new product to hospital inventory",
+                "description": "The Hospital Inventory Manager can register a new medical product or supply item into the hospital's inventory system, specifying its name, type, and initial quantity.",
+                "high_level_associated": {
+                    "name": "Maintain real-time visibility and control over hospital inventory levels",
+                    "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Update the quantity of an existing inventory product",
+                "description": "The Hospital Inventory Manager can adjust the stock level of any product in the inventory, reflecting new deliveries or consumption.",
+                "high_level_associated": {
+                    "name": "Maintain real-time visibility and control over hospital inventory levels",
+                    "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve current inventory levels for all products",
+                "description": "The Hospital Inventory Manager can fetch a comprehensive list of all products in stock, along with their current quantities.",
+                "high_level_associated": {
+                    "name": "Maintain real-time visibility and control over hospital inventory levels",
+                    "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Access detailed blood bank supply information",
+                "description": "The Hospital Inventory Manager can view specific details for all blood bank supplies, including blood type, quantity, and expiration dates.",
+                "high_level_associated": {
+                    "name": "Maintain real-time visibility and control over hospital inventory levels",
+                    "description": "The Hospital Inventory Manager aims to accurately track all products, quantities, and blood bank supplies to ensure continuous availability and prevent shortages.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Configure critical inventory thresholds for products",
+                "description": "The Hospital Inventory Manager can set minimum stock levels for individual products, triggering alerts when quantities fall below these thresholds.",
+                "high_level_associated": {
+                    "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+                    "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Receive automated alerts for low stock levels",
+                "description": "The Hospital Inventory Manager will automatically receive notifications when any product's quantity drops below its predefined critical threshold.",
+                "high_level_associated": {
+                    "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+                    "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Receive automated alerts for critical blood bank supply levels",
+                "description": "The Hospital Inventory Manager will automatically receive notifications when specific blood types or overall blood bank supplies fall below critical thresholds.",
+                "high_level_associated": {
+                    "name": "Ensure critical inventory thresholds are monitored to meet immediate hospital needs",
+                    "description": "The Hospital Inventory Manager seeks to be alerted when product levels, especially blood bank supplies, fall to critical thresholds to ensure timely replenishment.",
+                    "actor": {
+                        "name": "Hospital Inventory Manager",
+                        "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+                    }
+                }
+            },
+            {
+                "name": "Register a new patient admission",
+                "description": "The Hospital Admissions Staff can record a new patient's admission, capturing essential details such as patient identification, admission date, and reason for admission.",
+                "high_level_associated": {
+                    "name": "Streamline patient check-in and check-out processes",
+                    "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+                    "actor": {
+                        "name": "Hospital Admissions Staff",
+                        "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                    }
+                }
+            },
+            {
+                "name": "Record a patient discharge",
+                "description": "The Hospital Admissions Staff can process a patient's discharge, documenting the discharge date and any relevant outcome information.",
+                "high_level_associated": {
+                    "name": "Streamline patient check-in and check-out processes",
+                    "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+                    "actor": {
+                        "name": "Hospital Admissions Staff",
+                        "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                    }
+                }
+            },
+            {
+                "name": "Update a patient's admission status",
+                "description": "The Hospital Admissions Staff can change the status of a patient's admission (e.g., from 'pending' to 'admitted', or 'admitted' to 'transferred').",
+                "high_level_associated": {
+                    "name": "Streamline patient check-in and check-out processes",
+                    "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+                    "actor": {
+                        "name": "Hospital Admissions Staff",
+                        "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                    }
+                }
+            },
+            {
+                "name": "Search for patient admission records",
+                "description": "The Hospital Admissions Staff can search for patient admission records using various criteria such as patient name, CPF, or admission date range.",
+                "high_level_associated": {
+                    "name": "Streamline patient check-in and check-out processes",
+                    "description": "The Hospital Admissions Staff aims to efficiently manage patient admissions and discharges, reducing administrative burden and improving patient flow.",
+                    "actor": {
+                        "name": "Hospital Admissions Staff",
+                        "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve a patient's demographic information",
+                "description": "The Hospital Admissions Staff can quickly access a patient's full name, CPF, date of birth, and sex using their patient ID or CPF.",
+                "high_level_associated": {
+                    "name": "Ensure quick and secure access to essential patient details",
+                    "description": "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+                    "actor": {
+                        "name": "Hospital Admissions Staff",
+                        "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                    }
+                }
+            },
+            {
+                "name": "Access a patient's admission history",
+                "description": "The Hospital Admissions Staff can view a complete history of a specific patient's past admissions and discharges.",
+                "high_level_associated": {
+                    "name": "Ensure quick and secure access to essential patient details",
+                    "description": "The Hospital Admissions Staff needs to readily retrieve patient information such as full name, CPF, date of birth, sex, and admission date to facilitate care.",
+                    "actor": {
+                        "name": "Hospital Admissions Staff",
+                        "description": "Handles patient check-in and check-out processes and accesses patient details within the system."
+                    }
+                }
+            },
+            {
+                "name": "Request a product transfer between hospitals",
+                "description": "The Logistics Coordinator can initiate a request to transfer a specific product, such as blood, from one hospital to another, specifying quantity and destination.",
+                "high_level_associated": {
+                    "name": "Facilitate efficient transfer of critical products between hospitals",
+                    "description": "The Logistics Coordinator aims to quickly identify and arrange the movement of necessary supplies, like blood, between facilities based on stock availability and proximity.",
+                    "actor": {
+                        "name": "Logistics Coordinator",
+                        "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                    }
+                }
+            },
+            {
+                "name": "Query product availability in other hospitals",
+                "description": "The Logistics Coordinator can search for the availability of a specific product (e.g., a particular blood type) across all hospitals in the system.",
+                "high_level_associated": {
+                    "name": "Facilitate efficient transfer of critical products between hospitals",
+                    "description": "The Logistics Coordinator aims to quickly identify and arrange the movement of necessary supplies, like blood, between facilities based on stock availability and proximity.",
+                    "actor": {
+                        "name": "Logistics Coordinator",
+                        "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                    }
+                }
+            },
+            {
+                "name": "Identify the nearest hospital with available products",
+                "description": "The Logistics Coordinator can identify the closest hospital that has a specific product in stock, based on geographical proximity and current inventory.",
+                "high_level_associated": {
+                    "name": "Facilitate efficient transfer of critical products between hospitals",
+                    "description": "The Logistics Coordinator aims to quickly identify and arrange the movement of necessary supplies, like blood, between facilities based on stock availability and proximity.",
+                    "actor": {
+                        "name": "Logistics Coordinator",
+                        "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                    }
+                }
+            },
+            {
+                "name": "Track the real-time status of product transfers",
+                "description": "The Logistics Coordinator can monitor the progress and current location of ongoing product transfers between hospitals.",
+                "high_level_associated": {
+                    "name": "Optimize logistics for inter-hospital product transfers",
+                    "description": "The Logistics Coordinator seeks to ensure that product transfers are executed in the most timely and effective manner, minimizing delays and ensuring supplies reach their destination promptly.",
+                    "actor": {
+                        "name": "Logistics Coordinator",
+                        "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                    }
+                }
+            },
+            {
+                "name": "Receive notifications upon transfer completion",
+                "description": "The Logistics Coordinator will be automatically alerted when a requested product transfer has been successfully completed and the items have reached their destination.",
+                "high_level_associated": {
+                    "name": "Optimize logistics for inter-hospital product transfers",
+                    "description": "The Logistics Coordinator seeks to ensure that product transfers are executed in the most timely and effective manner, minimizing delays and ensuring supplies reach their destination promptly.",
+                    "actor": {
+                        "name": "Logistics Coordinator",
+                        "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                    }
+                }
+            },
+            {
+                "name": "Get recommended routes for product transfers",
+                "description": "The Logistics Coordinator can request optimized routes for product transfers, considering factors like distance, traffic, and estimated travel time.",
+                "high_level_associated": {
+                    "name": "Optimize logistics for inter-hospital product transfers",
+                    "description": "The Logistics Coordinator seeks to ensure that product transfers are executed in the most timely and effective manner, minimizing delays and ensuring supplies reach their destination promptly.",
+                    "actor": {
+                        "name": "Logistics Coordinator",
+                        "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+                    }
+                }
+            },
+            {
+                "name": "Submit current location for hospital recommendations",
+                "description": "The Patient/Emergency Services User can provide their current geographical location to the system to receive relevant hospital recommendations.",
+                "high_level_associated": {
+                    "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+                    "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            },
+            {
+                "name": "Request nearest hospital with available beds",
+                "description": "The Patient/Emergency Services User can query the system to find the closest hospital that has available beds, optionally specifying a type of bed (e.g., ICU).",
+                "high_level_associated": {
+                    "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+                    "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            },
+            {
+                "name": "Receive detailed hospital recommendations",
+                "description": "The Patient/Emergency Services User will receive comprehensive information about recommended hospitals, including their name, address, distance, and current bed availability.",
+                "high_level_associated": {
+                    "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+                    "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            },
+            {
+                "name": "Filter hospital recommendations by medical specialty",
+                "description": "The Patient/Emergency Services User can refine hospital recommendations by specifying a required medical specialty or service.",
+                "high_level_associated": {
+                    "name": "Receive prompt and accurate recommendations for the nearest hospital with available beds",
+                    "description": "The Patient/Emergency Services User aims to quickly identify the most suitable hospital for immediate care based on their location and current bed availability.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            },
+            {
+                "name": "Initiate an emergency hospital search with specific needs",
+                "description": "The Patient/Emergency Services User can trigger an urgent search for a hospital, providing details about their specific medical emergency or required facilities.",
+                "high_level_associated": {
+                    "name": "Ensure quick access to appropriate medical facilities during emergencies",
+                    "description": "The Patient/Emergency Services User seeks to minimize response time by being directed to a hospital that can immediately accommodate their needs.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            },
+            {
+                "name": "Get real-time directions to a recommended hospital",
+                "description": "The Patient/Emergency Services User can request and receive turn-by-turn navigation instructions to a recommended hospital from their current location.",
+                "high_level_associated": {
+                    "name": "Ensure quick access to appropriate medical facilities during emergencies",
+                    "description": "The Patient/Emergency Services User seeks to minimize response time by being directed to a hospital that can immediately accommodate their needs.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            },
+            {
+                "name": "Directly contact a recommended hospital",
+                "description": "The Patient/Emergency Services User can use the system to directly call or message a recommended hospital using provided contact information.",
+                "high_level_associated": {
+                    "name": "Ensure quick access to appropriate medical facilities during emergencies",
+                    "description": "The Patient/Emergency Services User seeks to minimize response time by being directed to a hospital that can immediately accommodate their needs.",
+                    "actor": {
+                        "name": "Patient/Emergency Services User",
+                        "description": "Requests and receives recommendations for the nearest hospital with available beds based on a patient's location."
+                    }
+                }
+            }
+        ]
+    },
+    "baselineScores": {
+        "actors": 10.0,
+        "highLevelGoals": 10,
+        "lowLevelGoals": 10
+    },
+    "baselineCritiques": {
+        "actors": "The identified actors are highly relevant and accurately reflect the functional requirements described in the text. The roles cover hospital management, inventory control, patient admissions, logistics, and the end-user (patient/emergency) perspective. There are no obvious contradictions or critical omissions. The descriptions are specific and align well with the GORE framework's definition of actors as active entities performing actions to achieve goals.",
+        "highLevelGoals": null,
+        "lowLevelGoals": null
+    },
+    "baselineConfiguration": {
+        "generatorModel": "gemini-2.5-flash",
+        "actorPromptingMode": "ZERO_SHOT",
+        "actorEvaluatorEnabled": true,
+        "highLevelGoalPromptingMode": "FEW_SHOT",
+        "lowLevelGoalPromptingMode": "FEW_SHOT",
+        "highLevelGoalEvaluatorEnabled": false,
+        "lowLevelGoalEvaluatorEnabled": false,
+        "goalEvaluatorModel": "qwen/qwen3.8-27b",
+        "qualityThreshold": 8.5,
+        "maxReflectionAttempts": 3,
+        "evaluatorFewShotExampleCount": 4
+    },
+    "pipelineConfiguration": {
+        "actors": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "highLevelGoals": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false
+        },
+        "lowLevelGoals": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false,
+            "generationStrategy": "all_hlgs_in_one_call"
+        },
+        "profile": "ACTORS_ZERO_SHOT_CRITIC_HLG_LLG_FEW_SHOT_NO_CRITIC"
+    }
+}

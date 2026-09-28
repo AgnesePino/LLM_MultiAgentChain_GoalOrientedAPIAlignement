@@ -1,0 +1,564 @@
+{
+    "name": "London Ambulance Service",
+    "description": "\n    The London Ambulance Service dispatches ambulances in emergencies. The key\n    goal is to allocate an available ambulance for every call that can reach the\n    scene within 11 minutes. The entire dispatch process must not exceed a set\n    maximum time limit.\n\n    To make this work, the Computer Aided Despatch system analyzes incident forms\n    and assigns vehicles. It is vital to track the exact location of moving\n    ambulances. This requires ambulance staff to follow standard routes and\n    correctly communicate departure and destination information, allowing radio\n    operators and the CAD system to record data accurately.\n    ",
+    "rawDescription": "\n    The London Ambulance Service dispatches ambulances in emergencies. The key\n    goal is to allocate an available ambulance for every call that can reach the\n    scene within 11 minutes. The entire dispatch process must not exceed a set\n    maximum time limit.\n\n    To make this work, the Computer Aided Despatch system analyzes incident forms\n    and assigns vehicles. It is vital to track the exact location of moving\n    ambulances. This requires ambulance staff to follow standard routes and\n    correctly communicate departure and destination information, allowing radio\n    operators and the CAD system to record data accurately.\n    ",
+    "documentationPreprocessing": {
+        "chunked": false,
+        "chunkCount": 1,
+        "originalChars": 643,
+        "processedChars": 643,
+        "strategy": "groundtruth_description"
+    },
+    "actors": [
+        "Ambulance Staff",
+        "Radio Operator",
+        "Dispatcher"
+    ],
+    "highLevelGoals": [
+        "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
+        "Ambulance Staff seek to accurately communicate their departure, destination, and real-time location to support effective dispatch and tracking.",
+        "Ambulance Staff are required to follow standard routes to ensure predictable travel times and accurate system tracking.",
+        "Radio Operators aim to precisely record all critical data, such as departure and destination information, communicated by ambulance staff.",
+        "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
+        "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
+        "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
+        "Dispatchers seek to complete the entire ambulance dispatch process within a predefined maximum time limit.",
+        "Dispatchers need to accurately analyze incident forms to make informed and effective ambulance allocation decisions.",
+        "Dispatchers require the ability to track the exact location of moving ambulances to optimize dispatch and resource management."
+    ],
+    "lowLevelGoals": [
+        "Ambulance Staff can receive optimal route suggestions from the system to reach emergency scenes efficiently.",
+        "Ambulance Staff can confirm their arrival at an emergency scene via the system to update their status.",
+        "Ambulance Staff can initiate their departure from a station via the system to mark the start of a mission.",
+        "Ambulance Staff can update their current operational status (e.g., 'en route', 'on scene', 'transporting patient') in the system.",
+        "Ambulance Staff can transmit their current GPS coordinates to the system for real-time location tracking.",
+        "Ambulance Staff can declare their destination (e.g., incident scene address, hospital name) to the system.",
+        "Ambulance Staff can retrieve the pre-defined standard route for a given destination from the system.",
+        "Ambulance Staff can receive alerts from the system if they deviate from the assigned standard route.",
+        "Ambulance Staff can request an alternative route through the system if the standard route is impassable.",
+        "Radio Operators can input ambulance departure times into the system based on communication from staff.",
+        "Radio Operators can input ambulance destination details into the system based on communication from staff.",
+        "Radio Operators can update an ambulance's status (e.g., 'en route', 'on scene') in the system based on verbal communication.",
+        "Radio Operators can validate entered data against predefined formats or rules before submission to the CAD system.",
+        "Radio Operators can correct erroneous data entries in the CAD system to maintain data integrity.",
+        "Radio Operators can confirm successful data transmission to the CAD system to ensure information is received.",
+        "Dispatchers can view a list of available ambulances and their current locations to aid in allocation.",
+        "Dispatchers can assign an available ambulance to a specific incident through the system.",
+        "Dispatchers can receive system-generated suggestions for optimal ambulance allocation based on incident and ambulance availability.",
+        "Dispatchers can monitor the estimated time of arrival (ETA) for assigned ambulances to track response progress.",
+        "Dispatchers can receive alerts if an ambulance's ETA exceeds critical thresholds, indicating potential delays.",
+        "Dispatchers can prioritize incidents based on urgency to influence ambulance allocation decisions.",
+        "Dispatchers can view a timer indicating the remaining dispatch time for an incident.",
+        "Dispatchers can receive warnings when dispatch time limits are approaching for an incident.",
+        "Dispatchers can log the start and end times of the dispatch process for an incident.",
+        "Dispatchers can retrieve detailed incident reports from the system to accurately analyze information.",
+        "Dispatchers can categorize incidents based on severity and type to aid in allocation decisions.",
+        "Dispatchers can search for relevant historical incident data to inform current allocation decisions.",
+        "Dispatchers can view the real-time GPS location of all active ambulances on a map interface.",
+        "Dispatchers can track the movement history of a specific ambulance to review its past routes and locations.",
+        "Dispatchers can filter ambulances displayed on the map by status or availability to focus on relevant units."
+    ],
+    "structuredActors": {
+        "actors": [
+            {
+                "name": "Ambulance Staff",
+                "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+            },
+            {
+                "name": "Radio Operator",
+                "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+            },
+            {
+                "name": "Dispatcher",
+                "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+            }
+        ]
+    },
+    "structuredHighLevelGoals": {
+        "goals": [
+            {
+                "name": "Ensure timely arrival at emergency scenes",
+                "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
+                "actor": {
+                    "name": "Ambulance Staff",
+                    "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                }
+            },
+            {
+                "name": "Maintain accurate communication of status and location",
+                "description": "Ambulance Staff seek to accurately communicate their departure, destination, and real-time location to support effective dispatch and tracking.",
+                "actor": {
+                    "name": "Ambulance Staff",
+                    "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                }
+            },
+            {
+                "name": "Adhere to standard operational routes",
+                "description": "Ambulance Staff are required to follow standard routes to ensure predictable travel times and accurate system tracking.",
+                "actor": {
+                    "name": "Ambulance Staff",
+                    "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                }
+            },
+            {
+                "name": "Accurately record ambulance status data",
+                "description": "Radio Operators aim to precisely record all critical data, such as departure and destination information, communicated by ambulance staff.",
+                "actor": {
+                    "name": "Radio Operator",
+                    "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                }
+            },
+            {
+                "name": "Ensure data integrity for the CAD system",
+                "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
+                "actor": {
+                    "name": "Radio Operator",
+                    "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                }
+            },
+            {
+                "name": "Allocate ambulances efficiently",
+                "description": "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
+                "actor": {
+                    "name": "Dispatcher",
+                    "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                }
+            },
+            {
+                "name": "Achieve rapid response times",
+                "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
+                "actor": {
+                    "name": "Dispatcher",
+                    "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                }
+            },
+            {
+                "name": "Manage dispatch process within time limits",
+                "description": "Dispatchers seek to complete the entire ambulance dispatch process within a predefined maximum time limit.",
+                "actor": {
+                    "name": "Dispatcher",
+                    "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                }
+            },
+            {
+                "name": "Accurately analyze incident information",
+                "description": "Dispatchers need to accurately analyze incident forms to make informed and effective ambulance allocation decisions.",
+                "actor": {
+                    "name": "Dispatcher",
+                    "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                }
+            },
+            {
+                "name": "Monitor real-time ambulance locations",
+                "description": "Dispatchers require the ability to track the exact location of moving ambulances to optimize dispatch and resource management.",
+                "actor": {
+                    "name": "Dispatcher",
+                    "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                }
+            }
+        ]
+    },
+    "structuredLowLevelGoals": {
+        "low_level_goals": [
+            {
+                "name": "Receive optimal route suggestions",
+                "description": "Ambulance Staff can receive optimal route suggestions from the system to reach emergency scenes efficiently.",
+                "high_level_associated": {
+                    "name": "Ensure timely arrival at emergency scenes",
+                    "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Confirm arrival at an emergency scene",
+                "description": "Ambulance Staff can confirm their arrival at an emergency scene via the system to update their status.",
+                "high_level_associated": {
+                    "name": "Ensure timely arrival at emergency scenes",
+                    "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Initiate departure from a station",
+                "description": "Ambulance Staff can initiate their departure from a station via the system to mark the start of a mission.",
+                "high_level_associated": {
+                    "name": "Ensure timely arrival at emergency scenes",
+                    "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Update current operational status",
+                "description": "Ambulance Staff can update their current operational status (e.g., 'en route', 'on scene', 'transporting patient') in the system.",
+                "high_level_associated": {
+                    "name": "Maintain accurate communication of status and location",
+                    "description": "Ambulance Staff seek to accurately communicate their departure, destination, and real-time location to support effective dispatch and tracking.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Transmit current GPS coordinates",
+                "description": "Ambulance Staff can transmit their current GPS coordinates to the system for real-time location tracking.",
+                "high_level_associated": {
+                    "name": "Maintain accurate communication of status and location",
+                    "description": "Ambulance Staff seek to accurately communicate their departure, destination, and real-time location to support effective dispatch and tracking.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Declare destination details",
+                "description": "Ambulance Staff can declare their destination (e.g., incident scene address, hospital name) to the system.",
+                "high_level_associated": {
+                    "name": "Maintain accurate communication of status and location",
+                    "description": "Ambulance Staff seek to accurately communicate their departure, destination, and real-time location to support effective dispatch and tracking.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve pre-defined standard route",
+                "description": "Ambulance Staff can retrieve the pre-defined standard route for a given destination from the system.",
+                "high_level_associated": {
+                    "name": "Adhere to standard operational routes",
+                    "description": "Ambulance Staff are required to follow standard routes to ensure predictable travel times and accurate system tracking.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Receive alerts for route deviation",
+                "description": "Ambulance Staff can receive alerts from the system if they deviate from the assigned standard route.",
+                "high_level_associated": {
+                    "name": "Adhere to standard operational routes",
+                    "description": "Ambulance Staff are required to follow standard routes to ensure predictable travel times and accurate system tracking.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Request an alternative route",
+                "description": "Ambulance Staff can request an alternative route through the system if the standard route is impassable.",
+                "high_level_associated": {
+                    "name": "Adhere to standard operational routes",
+                    "description": "Ambulance Staff are required to follow standard routes to ensure predictable travel times and accurate system tracking.",
+                    "actor": {
+                        "name": "Ambulance Staff",
+                        "description": "Personnel who operate ambulances, communicate their status, and follow routes."
+                    }
+                }
+            },
+            {
+                "name": "Input ambulance departure times",
+                "description": "Radio Operators can input ambulance departure times into the system based on communication from staff.",
+                "high_level_associated": {
+                    "name": "Accurately record ambulance status data",
+                    "description": "Radio Operators aim to precisely record all critical data, such as departure and destination information, communicated by ambulance staff.",
+                    "actor": {
+                        "name": "Radio Operator",
+                        "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                    }
+                }
+            },
+            {
+                "name": "Input ambulance destination details",
+                "description": "Radio Operators can input ambulance destination details into the system based on communication from staff.",
+                "high_level_associated": {
+                    "name": "Accurately record ambulance status data",
+                    "description": "Radio Operators aim to precisely record all critical data, such as departure and destination information, communicated by ambulance staff.",
+                    "actor": {
+                        "name": "Radio Operator",
+                        "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                    }
+                }
+            },
+            {
+                "name": "Update ambulance status based on communication",
+                "description": "Radio Operators can update an ambulance's status (e.g., 'en route', 'on scene') in the system based on verbal communication.",
+                "high_level_associated": {
+                    "name": "Accurately record ambulance status data",
+                    "description": "Radio Operators aim to precisely record all critical data, such as departure and destination information, communicated by ambulance staff.",
+                    "actor": {
+                        "name": "Radio Operator",
+                        "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                    }
+                }
+            },
+            {
+                "name": "Validate entered data for CAD system",
+                "description": "Radio Operators can validate entered data against predefined formats or rules before submission to the CAD system.",
+                "high_level_associated": {
+                    "name": "Ensure data integrity for the CAD system",
+                    "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
+                    "actor": {
+                        "name": "Radio Operator",
+                        "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                    }
+                }
+            },
+            {
+                "name": "Correct erroneous data entries in CAD",
+                "description": "Radio Operators can correct erroneous data entries in the CAD system to maintain data integrity.",
+                "high_level_associated": {
+                    "name": "Ensure data integrity for the CAD system",
+                    "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
+                    "actor": {
+                        "name": "Radio Operator",
+                        "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                    }
+                }
+            },
+            {
+                "name": "Confirm successful data transmission to CAD",
+                "description": "Radio Operators can confirm successful data transmission to the CAD system to ensure information is received.",
+                "high_level_associated": {
+                    "name": "Ensure data integrity for the CAD system",
+                    "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
+                    "actor": {
+                        "name": "Radio Operator",
+                        "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
+                    }
+                }
+            },
+            {
+                "name": "View list of available ambulances",
+                "description": "Dispatchers can view a list of available ambulances and their current locations to aid in allocation.",
+                "high_level_associated": {
+                    "name": "Allocate ambulances efficiently",
+                    "description": "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Assign an available ambulance to an incident",
+                "description": "Dispatchers can assign an available ambulance to a specific incident through the system.",
+                "high_level_associated": {
+                    "name": "Allocate ambulances efficiently",
+                    "description": "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Receive system-generated allocation suggestions",
+                "description": "Dispatchers can receive system-generated suggestions for optimal ambulance allocation based on incident and ambulance availability.",
+                "high_level_associated": {
+                    "name": "Allocate ambulances efficiently",
+                    "description": "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Monitor estimated time of arrival (ETA)",
+                "description": "Dispatchers can monitor the estimated time of arrival (ETA) for assigned ambulances to track response progress.",
+                "high_level_associated": {
+                    "name": "Achieve rapid response times",
+                    "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Receive alerts for exceeding ETA thresholds",
+                "description": "Dispatchers can receive alerts if an ambulance's ETA exceeds critical thresholds, indicating potential delays.",
+                "high_level_associated": {
+                    "name": "Achieve rapid response times",
+                    "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Prioritize incidents for allocation",
+                "description": "Dispatchers can prioritize incidents based on urgency to influence ambulance allocation decisions.",
+                "high_level_associated": {
+                    "name": "Achieve rapid response times",
+                    "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "View dispatch process timer",
+                "description": "Dispatchers can view a timer indicating the remaining dispatch time for an incident.",
+                "high_level_associated": {
+                    "name": "Manage dispatch process within time limits",
+                    "description": "Dispatchers seek to complete the entire ambulance dispatch process within a predefined maximum time limit.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Receive warnings for approaching dispatch time limits",
+                "description": "Dispatchers can receive warnings when dispatch time limits are approaching for an incident.",
+                "high_level_associated": {
+                    "name": "Manage dispatch process within time limits",
+                    "description": "Dispatchers seek to complete the entire ambulance dispatch process within a predefined maximum time limit.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Log dispatch process start and end times",
+                "description": "Dispatchers can log the start and end times of the dispatch process for an incident.",
+                "high_level_associated": {
+                    "name": "Manage dispatch process within time limits",
+                    "description": "Dispatchers seek to complete the entire ambulance dispatch process within a predefined maximum time limit.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Retrieve detailed incident reports",
+                "description": "Dispatchers can retrieve detailed incident reports from the system to accurately analyze information.",
+                "high_level_associated": {
+                    "name": "Accurately analyze incident information",
+                    "description": "Dispatchers need to accurately analyze incident forms to make informed and effective ambulance allocation decisions.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Categorize incidents by severity and type",
+                "description": "Dispatchers can categorize incidents based on severity and type to aid in allocation decisions.",
+                "high_level_associated": {
+                    "name": "Accurately analyze incident information",
+                    "description": "Dispatchers need to accurately analyze incident forms to make informed and effective ambulance allocation decisions.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Search for relevant historical incident data",
+                "description": "Dispatchers can search for relevant historical incident data to inform current allocation decisions.",
+                "high_level_associated": {
+                    "name": "Accurately analyze incident information",
+                    "description": "Dispatchers need to accurately analyze incident forms to make informed and effective ambulance allocation decisions.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "View real-time GPS location of ambulances",
+                "description": "Dispatchers can view the real-time GPS location of all active ambulances on a map interface.",
+                "high_level_associated": {
+                    "name": "Monitor real-time ambulance locations",
+                    "description": "Dispatchers require the ability to track the exact location of moving ambulances to optimize dispatch and resource management.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Track movement history of a specific ambulance",
+                "description": "Dispatchers can track the movement history of a specific ambulance to review its past routes and locations.",
+                "high_level_associated": {
+                    "name": "Monitor real-time ambulance locations",
+                    "description": "Dispatchers require the ability to track the exact location of moving ambulances to optimize dispatch and resource management.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            },
+            {
+                "name": "Filter ambulances displayed on map",
+                "description": "Dispatchers can filter ambulances displayed on the map by status or availability to focus on relevant units.",
+                "high_level_associated": {
+                    "name": "Monitor real-time ambulance locations",
+                    "description": "Dispatchers require the ability to track the exact location of moving ambulances to optimize dispatch and resource management.",
+                    "actor": {
+                        "name": "Dispatcher",
+                        "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
+                    }
+                }
+            }
+        ]
+    },
+    "baselineScores": {
+        "actors": 9.0,
+        "highLevelGoals": 10,
+        "lowLevelGoals": 10
+    },
+    "baselineCritiques": {
+        "actors": "The identified actors are relevant to the operational workflow described (Ambulance Staff, Radio Operator, Dispatcher). However, the description explicitly mentions that the Computer Aided Despatch (CAD) system \"analyzes incident forms and assigns vehicles.\" This implies an automated or semi-automated component that acts as an agent in the system, distinct from the human dispatcher who might oversee or intervene. In GORE, the system itself or its automated components are often considered actors if they perform actions to achieve goals (like analyzing and assigning). Additionally, the \"London Ambulance Service\" as an organization or the \"Emergency Caller\" (who initiates the incident form) could be considered, though the focus here is on the dispatch process. The most significant omission is the CAD system itself as an active entity performing analysis and assignment, or at least acknowledging the automated nature of the assignment which distinguishes it from a purely human dispatcher. Given the specific phrasing \"CAD system analyzes... and assigns\", treating it as a passive tool rather than an actor (or at least a distinct automated actor) is a slight oversight in a GORE context where the system's capabilities are key. However, in many software engineering contexts, the \"Dispatcher\" is the human role interacting with the CAD. If we strictly look at human end-users, the list is good. But the prompt asks for actors in the context of GORE where the system's goals are achieved by actors. The CAD system is a key actor in achieving the goal of allocation. Let's look at the examples: \"GitHub user\" was the actor. Here, the \"CAD System\" performs actions. Is it an actor? Usually, the software system is the subject, but in GORE, we model the environment. The environment includes the CAD system if it's an external system being integrated, but here it *is* the system. Wait, the description says \"The Computer Aided Despatch system... assigns vehicles\". If this is the software we are building, it is not an actor *of* the software, it *is* the software. The actors are the humans interacting with it. So, Ambulance Staff, Radio Operator, and Dispatcher are the correct human actors. Are there any others? \"Emergency Caller\" is not mentioned as interacting with the system directly, only that incident forms are analyzed. So the human actors seem complete. The score should be high. Let's re-read carefully. \"London Ambulance Service dispatches...\". The actors are the people. The list covers the people mentioned: Ambulance staff, Radio operators, and the people using the CAD (Dispatchers). This seems complete for the human roles.",
+        "highLevelGoals": null,
+        "lowLevelGoals": null
+    },
+    "baselineConfiguration": {
+        "generatorModel": "gemini-2.5-flash",
+        "actorPromptingMode": "ZERO_SHOT",
+        "actorEvaluatorEnabled": true,
+        "highLevelGoalPromptingMode": "FEW_SHOT",
+        "lowLevelGoalPromptingMode": "FEW_SHOT",
+        "highLevelGoalEvaluatorEnabled": false,
+        "lowLevelGoalEvaluatorEnabled": false,
+        "goalEvaluatorModel": "qwen/qwen3.8-27b",
+        "qualityThreshold": 8.5,
+        "maxReflectionAttempts": 3,
+        "evaluatorFewShotExampleCount": 4
+    },
+    "pipelineConfiguration": {
+        "actors": {
+            "promptingMode": "ZERO_SHOT",
+            "evaluator": true
+        },
+        "highLevelGoals": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false
+        },
+        "lowLevelGoals": {
+            "promptingMode": "FEW_SHOT",
+            "evaluator": false,
+            "generationStrategy": "all_hlgs_in_one_call"
+        },
+        "profile": "ACTORS_ZERO_SHOT_CRITIC_HLG_LLG_FEW_SHOT_NO_CRITIC"
+    }
+}

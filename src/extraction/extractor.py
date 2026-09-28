@@ -172,6 +172,13 @@ def generate_low_level_goals(
 
     print("This is the provided sys prompt: ", sys_prompt)
 
+    generation_context_section = ""
+    if generation_context:
+        generation_context_section = f"""
+        **Project and repair context:**\n\n
+        {generation_context}\n
+        """
+
     prompt = f""" 
 
         {(example1_ll if mode == ShotPromptingMode.ONE_SHOT else f"{example1_ll}, {example2_ll}" if mode == ShotPromptingMode.FEW_SHOT else "")}\n
@@ -181,9 +188,7 @@ def generate_low_level_goals(
         **High-level goals:**\n\n
         {highLevelGoals}\n
 
-        **Project and repair context:**\n\n
-        {generation_context or 'No additional project context provided.'}\n
-
+        {generation_context_section}
         **Output:**
     """
 

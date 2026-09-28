@@ -1,47 +1,205 @@
 {
   "iteration": 4,
-  "reconstructions": {},
-  "evaluations": {},
+  "reconstructions": {
+    "branch_002": {
+      "reconstructed_high_level_goal": "Manage Event Organizer Profile Information",
+      "rationale": "The low-level goals collectively describe the complete set of operations an Event Organizer performs to create, update, retrieve, and delete their personal, contact, and payment method details, all of which constitute their profile information within the platform. They are all essential for maintaining an accurate and functional Event Organizer profile.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Register Event Organizer Profile",
+        "Update Event Organizer Profile Details",
+        "Retrieve Event Organizer Profile Details",
+        "Add Event Organizer Payment Method",
+        "Update Event Organizer Payment Method",
+        "Remove Event Organizer Payment Method",
+        "Retrieve Event Organizer Payment Methods"
+      ]
+    },
+    "branch_005": {
+      "reconstructed_high_level_goal": "Enable Event Organizer to Manage Event Blog Content and Interactions",
+      "rationale": "All low-level goals describe the Event Organizer's capabilities to create, enrich, publish, view, and moderate content and interactions specifically within an event's blog. They collectively aim to provide a comprehensive system for managing event-specific communication and engagement through a blog.",
+      "branch_id": "branch_005",
+      "source_low_level_goal_ids": [
+        "Create Event Blog Post",
+        "Upload Media to Blog Post",
+        "Publish Event Blog Post",
+        "Moderate Blog Comments",
+        "View Event Blog Feed"
+      ]
+    },
+    "branch_006": {
+      "reconstructed_high_level_goal": "Enable Service Providers to establish and manage their business presence and client interactions on the platform.",
+      "rationale": "The low-level goals collectively describe the necessary functionalities for a Service Provider to onboard onto the platform, create and maintain their professional profile and service listings, monitor their performance, and communicate with potential clients. These operations are all essential for a Service Provider to effectively establish their presence, attract interest, and manage initial engagements with event organizers through the platform.",
+      "branch_id": "branch_006",
+      "source_low_level_goal_ids": [
+        "Register Service Provider Account",
+        "Update Service Provider Profile",
+        "List Provider Service Categories",
+        "View Provider Visibility Analytics",
+        "Respond to Client Inquiry"
+      ]
+    },
+    "branch_009": {
+      "reconstructed_high_level_goal": "Manage Service Provider Payments",
+      "rationale": "The low-level goals collectively describe the essential functionalities for a Service Provider to effectively oversee and administer all financial transactions related to the services they provide. This includes monitoring outstanding payments, recording received funds, reviewing historical payment data, and issuing official documentation for payments, all of which are integral to comprehensive payment management.",
+      "branch_id": "branch_009",
+      "source_low_level_goal_ids": [
+        "View Pending Payments",
+        "Confirm Payment Receipt",
+        "View Service Payment History",
+        "Generate Payment Receipts"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "The original High-Level Goal 'Manage Personal and Payment Information' is semantically identical to the existing High-Level Goal 'Enable secure registration and profile management'. Both goals describe the Event Organizer's intention to register and maintain their personal, contact, and financial (IBAN) details. The project description supports this functionality (registration with credentials, personal info, fiscal code, IBAN), but since another HLG already covers this exact functional intention for the same actor, keeping both would result in redundant goals that merely split one stakeholder intention into wording variants. Therefore, the original goal should be removed to avoid duplication.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Manage Personal and Payment Information' is semantically identical to the existing High-Level Goal 'Enable secure registration and profile management'. Both goals describe the Event Organizer's intention to register and maintain their personal, contact, and financial (IBAN) details. The project description supports this functionality (registration with credentials, personal info, fiscal code, IBAN), but since another HLG already covers this exact functional intention for the same actor, keeping both would result in redundant goals that merely split one stakeholder intention into wording variants. Therefore, the original goal should be removed to avoid duplication.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
+      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Foster Event Community Engagement' is supported by the project description, which explicitly states that 'Each event has an associated blog where both organizers and invited guests can publish information... create new posts, and comment'. The bottom-up reconstruction 'Enable Event Organizer to Manage Event Blog Content and Interactions' is a more precise and functional description of the actor's specific capabilities (managing content/interactions) rather than the broader, slightly abstract outcome of 'fostering engagement'. While the original is not incorrect, the reconstruction is more faithful to the functional requirements derived from the low-level goals (create, enrich, publish, view, moderate). However, looking at the other HLGs, there is no direct duplicate for the Organizer's blog management. The Invited Guest has a separate HLG for their interaction. The original HLG captures the intent well, but 'Manage Event Blog Content and Interactions' is a clearer functional goal. Given the instruction to rewrite if the original is 'less faithful than the reconstruction', and the reconstruction accurately reflects the specific actions (manage content/interactions) rather than the vague 'foster engagement', a rewrite is appropriate to align with the functional scope. Alternatively, one could argue 'Foster' is the WHY and 'Manage' is the WHAT. In Goal-Oriented RE, HLGs are often the 'Why'. 'Foster Event Community Engagement' is a valid 'Why'. However, the prompt asks to judge if the original is generic/narrow/incorrectly scoped. 'Foster' is a bit abstract. The reconstruction is concrete. Let's look at the other HLGs: 'Discover and Secure Event Services', 'Maintain Financial Control'. These are functional/managerial. 'Foster Event Community Engagement' fits the pattern of a high-level intent. But is it the *best* representation? The bottom-up goal is 'Enable Event Organizer to Manage Event Blog Content and Interactions'. This is a capability. The original is an outcome. Usually, HLGs are outcomes. However, the evaluator calibration says 'Generic, narrow, UI/API-oriented, or incorrectly scoped intention -> REWRITE'. 'Foster' is not generic, it's specific to community. Is it less faithful? The reconstruction is very specific to the mechanism (blog). The original is specific to the purpose (community). The project description says the blog is for sharing info/media/interacting. 'Foster Event Community Engagement' captures this well. However, comparing it to 'Manage Personal and Payment Information' (which is a capability), the style is mixed. Let's look at the overlap. There is no other HLG for the Organizer covering the blog. The Invited Guest has 'Engage in Event Community Interaction'. The Organizer's role is to *manage* the blog (create, moderate, etc.) to *foster* engagement. The reconstruction 'Manage Event Blog Content and Interactions' is a better functional goal. I will rewrite to be more precise and functional, aligning with the 'Manage' style of other HLGs like 'Manage Personal...'.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": "Refine the goal to focus on the functional capability of managing the event blog (content creation, moderation, and interaction facilitation) rather than the abstract outcome of fostering engagement, ensuring it aligns with the specific low-level goals of creating, enriching, publishing, and moderating blog content.",
+        "confidence": "MEDIUM"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_006": {
+      "branch_id": "branch_006",
+      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
+      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "high_level_evaluation": {
+        "rationale": "Malformed evaluator response; keeping the current HLG.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "LOW"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_009": {
+      "branch_id": "branch_009",
+      "rationale": "The original High-Level Goal 'Ensure Accurate and Timely Payment Confirmation' is supported by the project description, which explicitly states that providers confirm received amounts (on-site or installments) through the portal. However, the bottom-up reconstruction 'Manage Service Provider Payments' is a more faithful and comprehensive representation of the stakeholder's intention. The original goal focuses narrowly on the act of 'confirmation' and uses subjective qualifiers ('Accurate and Timely') that are not explicitly defined as goals in the text. The reconstruction captures the broader functional scope of handling the financial side of the service delivery (tracking and confirming payments), which aligns better with the standard goal-oriented modeling practice of describing the functional outcome rather than just a specific transaction step. Therefore, the original goal should be rewritten to reflect the broader management aspect of payments.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "The original High-Level Goal 'Ensure Accurate and Timely Payment Confirmation' is supported by the project description, which explicitly states that providers confirm received amounts (on-site or installments) through the portal. However, the bottom-up reconstruction 'Manage Service Provider Payments' is a more faithful and comprehensive representation of the stakeholder's intention. The original goal focuses narrowly on the act of 'confirmation' and uses subjective qualifiers ('Accurate and Timely') that are not explicitly defined as goals in the text. The reconstruction captures the broader functional scope of handling the financial side of the service delivery (tracking and confirming payments), which aligns better with the standard goal-oriented modeling practice of describing the functional outcome rather than just a specific transaction step. Therefore, the original goal should be rewritten to reflect the broader management aspect of payments.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": "Broaden the scope from just 'confirmation' to 'managing' or 'tracking and confirming' payments to align with the reconstructed goal and the full functional intent of the provider regarding financial transactions.",
+        "confidence": "HIGH"
+      },
+      "replacement_request": {
+        "rationale": "The original HLG focused narrowly on 'confirmation' of payments, which only covers the final step of the financial transaction process. The project description indicates that the Service Provider is responsible for the broader lifecycle of financial interactions, specifically uploading quotations and then tracking/confirming receipts (whether full or installments). To align with the reconstructed goal 'Manage Service Provider Payments' and the full functional intent, the scope must be broadened to include the management and tracking of these financial transactions, not just the act of confirming receipt.",
+        "generation_project_description": "The system is a web portal for organizing events, supporting event organizers, service providers, and invited guests. Service providers register with company details and accepted payment methods. They publish services in categories with virtual showcases. Organizers create events with budgets and select service categories. They request appointments with providers. Providers approve appointments. After an appointment, the provider prepares a quotation and uploads the corresponding amount to the portal, associating it with the completed appointment. The organizer accepts or rejects the quotation. If accepted, the organizer selects a payment schedule (installments, deposit plus final balance, or full payment) and a payment method (online or on-site). If payment is made on-site or in installments, the provider must track and confirm the receipt of each payment amount through the portal. The provider can view the status of these financial transactions.",
+        "actor": {
+          "name": "Service Provider",
+          "description": "Offers and manages event-related services, appointments, and quotations."
+        }
+      },
+      "low_level_evaluation": null
+    }
+  },
   "high_level_goals": {
     "goals": [
       {
-        "name": "Secure Necessary Services for Events",
-        "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+        "name": "Enable secure registration and profile management",
+        "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
         "actor": {
-          "name": "Event Organizers",
-          "description": "Individuals who plan and manage events using the platform."
+          "name": "Event Organizer",
+          "description": "Manages event planning, budget, guest invitations, and service bookings."
         }
       },
       {
-        "name": "Maintain Financial Control Over Event Expenses",
-        "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
+        "name": "Manage Personal and Payment Information",
+        "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
         "actor": {
-          "name": "Event Organizers",
-          "description": "Individuals who plan and manage events using the platform."
+          "name": "Event Organizer",
+          "description": "Manages event planning, budget, guest invitations, and service bookings."
         }
       },
       {
-        "name": "Manage Event Guest Invitations and Information",
-        "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+        "name": "Discover and Secure Event Services",
+        "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
         "actor": {
-          "name": "Event Organizers",
-          "description": "Individuals who plan and manage events using the platform."
+          "name": "Event Organizer",
+          "description": "Manages event planning, budget, guest invitations, and service bookings."
         }
       },
       {
-        "name": "Efficiently Manage Service Appointments and Client Interactions",
-        "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+        "name": "Maintain Financial Control and Budget Oversight",
+        "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
         "actor": {
-          "name": "Service Providers",
-          "description": "Companies or individuals offering services for events."
+          "name": "Event Organizer",
+          "description": "Manages event planning, budget, guest invitations, and service bookings."
         }
       },
       {
-        "name": "Stay Informed and Engaged with the Event",
-        "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+        "name": "Foster Event Community Engagement",
+        "description": "The Event Organizer aims to create a collaborative space for themselves and invited guests to share information, media, and interact through a dedicated event blog.",
         "actor": {
-          "name": "Invited Guests",
-          "description": "People invited to an event who can interact with the event's blog."
+          "name": "Event Organizer",
+          "description": "Manages event planning, budget, guest invitations, and service bookings."
+        }
+      },
+      {
+        "name": "Expand Service Visibility and Client Acquisition",
+        "description": "The Service Provider aims to register on the platform, showcase their offerings, and reach a broader audience of potential event organizers to secure new business opportunities.",
+        "actor": {
+          "name": "Service Provider",
+          "description": "Offers and manages event-related services, appointments, and quotations."
+        }
+      },
+      {
+        "name": "Efficiently Manage Service Offerings and Availability",
+        "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
+        "actor": {
+          "name": "Service Provider",
+          "description": "Offers and manages event-related services, appointments, and quotations."
+        }
+      },
+      {
+        "name": "Streamline Appointment and Quotation Workflow",
+        "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
+        "actor": {
+          "name": "Service Provider",
+          "description": "Offers and manages event-related services, appointments, and quotations."
+        }
+      },
+      {
+        "name": "Manage Service Offerings",
+        "description": "The Service Provider aims to effectively register their company, define their accepted payment methods, and showcase their services to potential event organizers.",
+        "actor": {
+          "name": "Service Provider",
+          "description": "Offers and manages event-related services, appointments, and quotations."
+        }
+      },
+      {
+        "name": "Access Event Information and Updates",
+        "description": "The Invited Guest aims to conveniently and securely access all relevant details and updates about the event they are attending, shared by the organizer.",
+        "actor": {
+          "name": "Invited Guest",
+          "description": "Attends events and interacts with event content on the platform."
+        }
+      },
+      {
+        "name": "Engage in Event Community Interaction",
+        "description": "The Invited Guest desires to actively participate in the event's blog by publishing information, uploading photos or videos, creating new posts, and commenting on existing posts.",
+        "actor": {
+          "name": "Invited Guest",
+          "description": "Attends events and interacts with event content on the platform."
         }
       }
     ]
@@ -49,782 +207,758 @@
   "low_level_goals": {
     "low_level_goals": [
       {
-        "name": "CreateEvent",
-        "description": "The system shall allow Event Organizers to initiate the creation of a new event.",
+        "name": "Browse Service Categories",
+        "description": "Event Organizer can browse available service categories (e.g., catering, photography, venue).",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Discover and Secure Event Services",
+          "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SpecifyEventTypeForEvent",
-        "description": "The system shall allow Event Organizers to specify the type of an event (e.g., wedding, corporate).",
+        "name": "Search Service Providers",
+        "description": "Event Organizer can search for service providers within a specific category.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Discover and Secure Event Services",
+          "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SetEventDate",
-        "description": "The system shall allow Event Organizers to set the date and time for an event.",
+        "name": "View Service Provider Profile",
+        "description": "Event Organizer can view the detailed profile of a service provider, including their offerings and reviews.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Discover and Secure Event Services",
+          "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SetEventLocation",
-        "description": "The system shall allow Event Organizers to define the geographical location for an event.",
+        "name": "Request Service Appointment",
+        "description": "Event Organizer can request an appointment with a service provider for a specific date and time.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Discover and Secure Event Services",
+          "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SetEventBudget",
-        "description": "The system shall allow Event Organizers to allocate a total budget for an event.",
+        "name": "Accept Service Agreement/Quotation",
+        "description": "Event Organizer can accept a service agreement or quotation from a service provider.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Discover and Secure Event Services",
+          "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SelectRequiredServiceCategoriesForEvent",
-        "description": "The system shall allow Event Organizers to select the types of services needed for an event (e.g., catering, photography).",
+        "name": "View Event Services List",
+        "description": "Event Organizer can view a list of all requested or booked services for an event.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Discover and Secure Event Services",
+          "description": "The Event Organizer desires to easily browse, select, and book various service categories and providers, facilitating appointment requests and service agreements for their event.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "AddGuestToEvent",
-        "description": "The system shall allow Event Organizers to add an invited guest to an event.",
+        "name": "View Event Quotations",
+        "description": "Event Organizer can view all received quotations for an event.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "GenerateInvitationCodeForGuest",
-        "description": "The system shall allow Event Organizers to generate a unique invitation code for a specific guest.",
+        "name": "Approve/Reject Quotation",
+        "description": "Event Organizer can approve or reject a specific quotation.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SendInvitationCodeToGuest",
-        "description": "The system shall allow Event Organizers to send an invitation code to a guest.",
+        "name": "Define Payment Schedules",
+        "description": "Event Organizer can define and track payment schedules for booked services.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "ViewEventCalendar",
-        "description": "The system shall allow Event Organizers to view their event calendar, including confirmed appointments.",
+        "name": "Record Service Payment",
+        "description": "Event Organizer can record a payment made for a service.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SearchServiceProvidersByServiceCategory",
-        "description": "The system shall allow Event Organizers to search for service providers by specifying a service category (e.g., catering, photography).",
+        "name": "View Remaining Budget",
+        "description": "Event Organizer can view the current remaining budget for an event.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "FilterServiceProvidersByAvailability",
-        "description": "The system shall allow Event Organizers to filter service providers based on their availability for specific event dates and times.",
+        "name": "Access Event Contract History",
+        "description": "Event Organizer can access the historical record of all contracts and agreements for an event.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "RetrieveServiceProviderDetails",
-        "description": "The system shall allow Event Organizers to retrieve and view detailed profiles of individual service providers, including services offered, portfolio, and contact information.",
+        "name": "View Service Payment Status",
+        "description": "Event Organizer can view the payment status for each service agreement.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Maintain Financial Control and Budget Oversight",
+          "description": "The Event Organizer needs to track quotations, manage payment schedules, and monitor the remaining event budget and contract history to ensure financial control.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "RequestServiceProviderAppointment",
-        "description": "The system shall allow Event Organizers to send a request for an appointment to a selected service provider.",
+        "name": "Create Event Blog Post",
+        "description": "Event Organizer can create a new blog post for a specific event.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Foster Event Community Engagement",
+          "description": "The Event Organizer aims to create a collaborative space for themselves and invited guests to share information, media, and interact through a dedicated event blog.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "SelectAppointmentTimeSlot",
-        "description": "The system shall allow Event Organizers to choose a preferred time slot for an appointment with a service provider, compatible with provider availability.",
+        "name": "Upload Media to Blog Post",
+        "description": "Event Organizer can upload media (photos, videos) to an event blog post.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Foster Event Community Engagement",
+          "description": "The Event Organizer aims to create a collaborative space for themselves and invited guests to share information, media, and interact through a dedicated event blog.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "ViewUploadedServiceProviderQuotation",
-        "description": "The system shall allow Event Organizers to view a quotation uploaded by a service provider after an appointment.",
+        "name": "Publish Event Blog Post",
+        "description": "Event Organizer can publish an event blog post, making it visible to invited guests.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Foster Event Community Engagement",
+          "description": "The Event Organizer aims to create a collaborative space for themselves and invited guests to share information, media, and interact through a dedicated event blog.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "AcceptServiceProviderQuotation",
-        "description": "The system shall allow Event Organizers to formally accept a quotation uploaded by a chosen service provider.",
+        "name": "Moderate Blog Comments",
+        "description": "Event Organizer can moderate comments on event blog posts.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Foster Event Community Engagement",
+          "description": "The Event Organizer aims to create a collaborative space for themselves and invited guests to share information, media, and interact through a dedicated event blog.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "RejectServiceProviderQuotation",
-        "description": "The system shall allow Event Organizers to formally reject a quotation uploaded by a service provider.",
+        "name": "View Event Blog Feed",
+        "description": "Event Organizer can view all posts and comments on an event's blog.",
         "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
+          "name": "Foster Event Community Engagement",
+          "description": "The Event Organizer aims to create a collaborative space for themselves and invited guests to share information, media, and interact through a dedicated event blog.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "SelectPaymentScheduleForQuotation",
-        "description": "The system shall allow Event Organizers to select a payment schedule (e.g., full payment, deposit, installments) for an accepted quotation.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "SelectPaymentMethodForQuotation",
-        "description": "The system shall allow Event Organizers to choose a payment method (e.g., online payment, on-site payment) for an accepted quotation.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "InitiateOnlinePaymentForService",
-        "description": "The system shall allow Event Organizers to initiate an online payment transaction for a booked service.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "ViewOnSitePaymentConfirmation",
-        "description": "The system shall allow Event Organizers to view the confirmation status of on-site payments made to service providers.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "ViewContractHistory",
-        "description": "The system shall allow Event Organizers to consult a history of all their service contracts.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "ViewRemainingBudget",
-        "description": "The system shall allow Event Organizers to view the remaining budget for an event after expenses.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "ViewBookingStatus",
-        "description": "The system shall allow Event Organizers to view the current status of their service provider bookings and contracts.",
-        "high_level_associated": {
-          "name": "Secure Necessary Services for Events",
-          "description": "Event Organizers seek to find, select, and contract suitable service providers to fulfill the various needs of their events, ensuring all required services are booked and confirmed.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Define Event Budget",
-        "description": "The Event Organizer can set an initial budget amount and currency for a new event during its creation.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Retrieve Event Budget Overview",
-        "description": "The Event Organizer can view the initial allocated budget, the total amount committed through accepted quotations, and the remaining available funds for a specific event.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Retrieve Provider Quotation Details",
-        "description": "The Event Organizer can view the specific details (e.g., services, cost breakdown, terms) of a quotation submitted by a service provider for a requested appointment.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Accept Provider Quotation",
-        "description": "The Event Organizer can formally accept a specific service provider's quotation, which automatically commits the quoted amount from the event's budget.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Reject Provider Quotation",
-        "description": "The Event Organizer can formally reject a specific service provider's quotation.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Define Payment Schedule for Accepted Quotation",
-        "description": "The Event Organizer can set up a payment schedule (e.g., installment amounts, due dates) for an accepted service quotation.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Select Payment Method for Scheduled Payment",
-        "description": "The Event Organizer can choose the preferred payment method (e.g., online payment, on-site cash) for a specific payment installment within a defined schedule.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "View Payment Status for Services",
-        "description": "The Event Organizer can check the current payment status (e.g., pending, paid, overdue) for services linked to accepted quotations.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "View Upcoming Payment Deadlines",
-        "description": "The Event Organizer can retrieve a list of all payments that are due in the near future across their events.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
-          }
-        }
-      },
-      {
-        "name": "Generate Budget vs. Committed Report",
-        "description": "The Event Organizer can generate a report comparing the initial allocated budget against the total committed expenses from accepted quotations for a specific event.",
-        "high_level_associated": {
-          "name": "Maintain Financial Control Over Event Expenses",
-          "description": "Event Organizers need to manage and track the budget allocated for their events, including monitoring costs, accepting quotations, and overseeing payment schedules to stay within financial limits.",
-          "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
         "name": "Register Service Provider Account",
-        "description": "The Service Provider wants to create a new account on the platform by providing their registration details.",
+        "description": "Service Provider can register a new account on the platform.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Expand Service Visibility and Client Acquisition",
+          "description": "The Service Provider aims to register on the platform, showcase their offerings, and reach a broader audience of potential event organizers to secure new business opportunities.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Publish New Service Offering",
-        "description": "The Service Provider wants to add a new service to their profile, making it available for clients to request.",
+        "name": "Update Service Provider Profile",
+        "description": "Service Provider can create and update their public profile, including business name and description.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Expand Service Visibility and Client Acquisition",
+          "description": "The Service Provider aims to register on the platform, showcase their offerings, and reach a broader audience of potential event organizers to secure new business opportunities.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Upload Service Showcase Photo",
-        "description": "The Service Provider wants to upload an image to their virtual showcase for a specific service.",
+        "name": "List Provider Service Categories",
+        "description": "Service Provider can list their available service categories.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Expand Service Visibility and Client Acquisition",
+          "description": "The Service Provider aims to register on the platform, showcase their offerings, and reach a broader audience of potential event organizers to secure new business opportunities.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "View Provider Visibility Analytics",
+        "description": "Service Provider can view analytics on profile views and service inquiries.",
+        "high_level_associated": {
+          "name": "Expand Service Visibility and Client Acquisition",
+          "description": "The Service Provider aims to register on the platform, showcase their offerings, and reach a broader audience of potential event organizers to secure new business opportunities.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Respond to Client Inquiry",
+        "description": "Service Provider can respond to inquiries from potential event organizers.",
+        "high_level_associated": {
+          "name": "Expand Service Visibility and Client Acquisition",
+          "description": "The Service Provider aims to register on the platform, showcase their offerings, and reach a broader audience of potential event organizers to secure new business opportunities.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Add New Service Offering",
+        "description": "Service Provider can add a new service offering with details (name, description, category).",
+        "high_level_associated": {
+          "name": "Efficiently Manage Service Offerings and Availability",
+          "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Upload Service Media",
+        "description": "Service Provider can upload demonstration photos or videos for a specific service offering.",
+        "high_level_associated": {
+          "name": "Efficiently Manage Service Offerings and Availability",
+          "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
         "name": "Set Service Pricing",
-        "description": "The Service Provider wants to define or update the pricing details for a specific service.",
+        "description": "Service Provider can set or update the pricing for a service offering.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Efficiently Manage Service Offerings and Availability",
+          "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Define Service Availability",
-        "description": "The Service Provider wants to specify the dates and time slots when a particular service is available.",
+        "name": "Update Availability Slots",
+        "description": "Service Provider can define and update their available time slots for appointments.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Efficiently Manage Service Offerings and Availability",
+          "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Configure Accepted Payment Methods",
-        "description": "The Service Provider wants to define or update the payment methods they accept for their services.",
+        "name": "Modify Service Offering Details",
+        "description": "Service Provider can modify the details of an existing service offering.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Efficiently Manage Service Offerings and Availability",
+          "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Retrieve Pending Appointment Requests",
-        "description": "The Service Provider wants to retrieve a list of all appointment requests that are currently pending their review and action.",
+        "name": "Remove Service Offering",
+        "description": "Service Provider can remove a service offering.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Efficiently Manage Service Offerings and Availability",
+          "description": "The Service Provider seeks tools to easily publish, update, and manage their detailed service information, including demonstration photos, prices, and available time slots.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Approve Specific Appointment Request",
-        "description": "The Service Provider wants to approve a specific pending appointment request, changing its status to 'approved' within the system.",
+        "name": "View Incoming Appointment Requests",
+        "description": "Service Provider can view incoming appointment requests from event organizers.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Streamline Appointment and Quotation Workflow",
+          "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Reject Specific Appointment Request",
-        "description": "The Service Provider wants to reject a specific pending appointment request, changing its status to 'rejected' within the system.",
+        "name": "Approve/Decline Appointment Request",
+        "description": "Service Provider can approve or decline an appointment request.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Streamline Appointment and Quotation Workflow",
+          "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "View Details of Specific Appointment",
-        "description": "The Service Provider wants to retrieve and view all detailed information for a specific appointment, regardless of its status.",
+        "name": "Generate Service Quotation",
+        "description": "Service Provider can generate a new service quotation for an event organizer.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Streamline Appointment and Quotation Workflow",
+          "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
-          }
-        }
-      },
-      {
-        "name": "View Service Availability Calendar",
-        "description": "The Service Provider wants to view their overall service availability and scheduled appointments on a calendar.",
-        "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
-          "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
-          }
-        }
-      },
-      {
-        "name": "Generate New Service Quotation",
-        "description": "The Service Provider wants to create a new quotation for a client, specifying services, quantities, and pricing details.",
-        "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
-          "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
         "name": "Upload Service Quotation",
-        "description": "The Service Provider wants to submit a generated service quotation to the system, making it available to the client.",
+        "description": "Service Provider can upload a generated service quotation to the platform.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Streamline Appointment and Quotation Workflow",
+          "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Retrieve All Generated Quotations",
-        "description": "The Service Provider wants to retrieve a comprehensive list of all quotations they have generated, regardless of their current status.",
+        "name": "View Quotation Status",
+        "description": "Service Provider can view the status of submitted quotations (e.g., pending, accepted, rejected).",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Streamline Appointment and Quotation Workflow",
+          "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Confirm Received Payment Amount",
-        "description": "The Service Provider wants to record the confirmation of a received payment amount for an appointment or installment.",
+        "name": "Manage Confirmed Appointments Calendar",
+        "description": "Service Provider can manage their calendar of confirmed appointments.",
         "high_level_associated": {
-          "name": "Efficiently Manage Service Appointments and Client Interactions",
-          "description": "Service Providers seek to streamline the process of receiving, approving, and managing appointment requests, as well as preparing accurate quotations for their services.",
+          "name": "Streamline Appointment and Quotation Workflow",
+          "description": "The Service Provider desires an organized system for receiving, approving, and managing appointment requests, and for generating and uploading accurate service quotations.",
           "actor": {
-            "name": "Service Providers",
-            "description": "Companies or individuals offering services for events."
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       },
       {
-        "name": "Authenticate with Invitation Code",
-        "description": "The system shall allow an Invited Guest to authenticate and gain access to the platform by providing their unique invitation code.",
+        "name": "Guest Login to Event",
+        "description": "Invited Guest can log in to securely access their invited event.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Access Event Information and Updates",
+          "description": "The Invited Guest aims to conveniently and securely access all relevant details and updates about the event they are attending, shared by the organizer.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "List All Blog Posts",
-        "description": "The system shall allow an Invited Guest to retrieve a list of all published blog posts related to the event.",
+        "name": "View Event Basic Details",
+        "description": "Invited Guest can view the event's basic details (date, time, location).",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Access Event Information and Updates",
+          "description": "The Invited Guest aims to conveniently and securely access all relevant details and updates about the event they are attending, shared by the organizer.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Read Specific Blog Post",
-        "description": "The system shall allow an Invited Guest to retrieve and view the content of a specific blog post by its identifier.",
+        "name": "Access Event Schedule",
+        "description": "Invited Guest can access the event schedule.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Access Event Information and Updates",
+          "description": "The Invited Guest aims to conveniently and securely access all relevant details and updates about the event they are attending, shared by the organizer.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Post Comment on Blog Post",
-        "description": "The system shall allow an Invited Guest to submit a new comment on a specific blog post.",
+        "name": "View Shared Event Content",
+        "description": "Invited Guest can view any shared documents or media related to the event.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Access Event Information and Updates",
+          "description": "The Invited Guest aims to conveniently and securely access all relevant details and updates about the event they are attending, shared by the organizer.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "View Comments on Blog Post",
-        "description": "The system shall allow an Invited Guest to retrieve and view all comments associated with a specific blog post.",
+        "name": "Receive Event Notifications",
+        "description": "Invited Guest can receive notifications about event updates.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Access Event Information and Updates",
+          "description": "The Invited Guest aims to conveniently and securely access all relevant details and updates about the event they are attending, shared by the organizer.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Create New Blog Post",
-        "description": "The system shall allow an Invited Guest to create and publish a new blog post about the event.",
+        "name": "View Event Blog Posts",
+        "description": "Invited Guest can view the event's blog posts.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Engage in Event Community Interaction",
+          "description": "The Invited Guest desires to actively participate in the event's blog by publishing information, uploading photos or videos, creating new posts, and commenting on existing posts.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Upload Photo to Blog Post",
-        "description": "The system shall allow an Invited Guest to upload a photo to an existing or new blog post.",
+        "name": "Create Guest Blog Post",
+        "description": "Invited Guest can create a new post on the event blog.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Engage in Event Community Interaction",
+          "description": "The Invited Guest desires to actively participate in the event's blog by publishing information, uploading photos or videos, creating new posts, and commenting on existing posts.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Upload Video to Blog Post",
-        "description": "The system shall allow an Invited Guest to upload a video to an existing or new blog post.",
+        "name": "Upload Media to Guest Post",
+        "description": "Invited Guest can upload photos or videos to their blog post.",
         "high_level_associated": {
-          "name": "Stay Informed and Engaged with the Event",
-          "description": "Invited Guests aim to access relevant information about the event they are attending and participate in discussions or updates related to it.",
+          "name": "Engage in Event Community Interaction",
+          "description": "The Invited Guest desires to actively participate in the event's blog by publishing information, uploading photos or videos, creating new posts, and commenting on existing posts.",
           "actor": {
-            "name": "Invited Guests",
-            "description": "People invited to an event who can interact with the event's blog."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Create Guest Record",
-        "description": "Allow event organizers to create a new guest entry in the system, providing initial details such as name and contact information.",
+        "name": "Comment on Blog Post",
+        "description": "Invited Guest can comment on an existing blog post.",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Engage in Event Community Interaction",
+          "description": "The Invited Guest desires to actively participate in the event's blog by publishing information, uploading photos or videos, creating new posts, and commenting on existing posts.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Assign Guest Category",
-        "description": "Enable event organizers to assign a predefined category (e.g., VIP, Speaker, General Attendee) to a specific guest.",
+        "name": "View Blog Post Comments",
+        "description": "Invited Guest can view comments on blog posts.",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Engage in Event Community Interaction",
+          "description": "The Invited Guest desires to actively participate in the event's blog by publishing information, uploading photos or videos, creating new posts, and commenting on existing posts.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Invited Guest",
+            "description": "Attends events and interacts with event content on the platform."
           }
         }
       },
       {
-        "name": "Generate and Associate Invitation Code",
-        "description": "Allow the system to automatically generate a unique invitation code for a specified guest and associate it with their record.",
+        "name": "Allow the Event Organizer to submit new account registration details.",
+        "description": "The Event Organizer can provide their personal and contact information to create a new user account in the portal.",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Enable secure registration and profile management",
+          "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "Retrieve Guest List",
-        "description": "Enable event organizers to retrieve a comprehensive list of all invited guests for a specific event, including their associated details and categories.",
+        "name": "Enable the Event Organizer to securely set and update their account password.",
+        "description": "The Event Organizer can establish a new password during registration and later modify it, ensuring secure access to their profile.",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Enable secure registration and profile management",
+          "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "Update Guest Information",
-        "description": "Allow event organizers to modify existing details (e.g., name, email, category) for a specific guest record.",
+        "name": "Allow the Event Organizer to retrieve their personal and contact profile information.",
+        "description": "The Event Organizer can view their currently stored personal details (e.g., name, address) and contact information (e.g., email, phone number).",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Enable secure registration and profile management",
+          "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "Delete Guest Record",
-        "description": "Enable event organizers to remove a guest entry and all associated data from the event's guest list.",
+        "name": "Enable the Event Organizer to update their personal profile details.",
+        "description": "The Event Organizer can modify and save changes to their personal information, such as name, address, or date of birth.",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Enable secure registration and profile management",
+          "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
           }
         }
       },
       {
-        "name": "Retrieve Guest Invitation Code",
-        "description": "Allow event organizers to retrieve the unique invitation code assigned to a specific guest.",
+        "name": "Enable the Event Organizer to update their contact information.",
+        "description": "The Event Organizer can modify and save changes to their contact details, such as email address or phone number.",
         "high_level_associated": {
-          "name": "Manage Event Guest Invitations and Information",
-          "description": "To efficiently add, categorize, and maintain a comprehensive list of invited guests, ensuring each guest receives a unique invitation code for platform access.",
+          "name": "Enable secure registration and profile management",
+          "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
           "actor": {
-            "name": "Event Organizers",
-            "description": "Individuals who plan and manage events using the platform."
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Allow the Event Organizer to add, update, or remove financial account details.",
+        "description": "The Event Organizer can securely input, modify, or delete payment methods and billing addresses for facilitating event-related transactions.",
+        "high_level_associated": {
+          "name": "Enable secure registration and profile management",
+          "description": "The Event Organizer aims to securely register and manage their personal, financial, and contact information within the portal to establish their identity and facilitate event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Register Event Organizer Profile",
+        "description": "Event Organizer submits their initial personal and contact details to create their profile within the platform.",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Update Event Organizer Profile Details",
+        "description": "Event Organizer modifies their existing personal and contact information stored in their profile.",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Event Organizer Profile Details",
+        "description": "Event Organizer fetches their own registered personal and contact information for viewing or verification.",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Add Event Organizer Payment Method",
+        "description": "Event Organizer securely registers a new payment method, such as an IBAN, to their profile.",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Update Event Organizer Payment Method",
+        "description": "Event Organizer modifies the details of an existing registered payment method (e.g., IBAN).",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Remove Event Organizer Payment Method",
+        "description": "Event Organizer deletes a registered payment method (e.g., IBAN) from their profile.",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Event Organizer Payment Methods",
+        "description": "Event Organizer fetches a list of their currently registered payment methods for viewing.",
+        "high_level_associated": {
+          "name": "Manage Personal and Payment Information",
+          "description": "The Event Organizer aims to securely register and maintain their personal details, contact information, and payment methods (IBAN) within the platform for event-related transactions.",
+          "actor": {
+            "name": "Event Organizer",
+            "description": "Manages event planning, budget, guest invitations, and service bookings."
+          }
+        }
+      },
+      {
+        "name": "Allow the Service Provider to submit their company's registration details.",
+        "description": "The Service Provider can create a new company profile by providing essential business information.",
+        "high_level_associated": {
+          "name": "Manage Service Offerings",
+          "description": "The Service Provider aims to effectively register their company, define their accepted payment methods, and showcase their services to potential event organizers.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Allow the Service Provider to configure the payment methods their company accepts.",
+        "description": "The Service Provider can specify and update the types of payment methods (e.g., credit card, bank transfer) that their company will accept for services.",
+        "high_level_associated": {
+          "name": "Manage Service Offerings",
+          "description": "The Service Provider aims to effectively register their company, define their accepted payment methods, and showcase their services to potential event organizers.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Allow the Service Provider to create a new service offering.",
+        "description": "The Service Provider can add a new service to their catalog, including details such as service name, description, pricing, and availability.",
+        "high_level_associated": {
+          "name": "Manage Service Offerings",
+          "description": "The Service Provider aims to effectively register their company, define their accepted payment methods, and showcase their services to potential event organizers.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Allow the Service Provider to modify an existing service offering.",
+        "description": "The Service Provider can update the details of an already listed service, such as changing its description, adjusting pricing, or modifying availability.",
+        "high_level_associated": {
+          "name": "Manage Service Offerings",
+          "description": "The Service Provider aims to effectively register their company, define their accepted payment methods, and showcase their services to potential event organizers.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
+          }
+        }
+      },
+      {
+        "name": "Allow the Service Provider to retrieve a list of their registered service offerings.",
+        "description": "The Service Provider can view all the services currently listed under their company profile to review or manage them.",
+        "high_level_associated": {
+          "name": "Manage Service Offerings",
+          "description": "The Service Provider aims to effectively register their company, define their accepted payment methods, and showcase their services to potential event organizers.",
+          "actor": {
+            "name": "Service Provider",
+            "description": "Offers and manages event-related services, appointments, and quotations."
           }
         }
       }
@@ -832,10 +966,12 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "The project description outlines the core functionalities for Event Organizers (event creation, guest management, service selection, appointment scheduling, quotation acceptance, payment management, and budget tracking), Service Providers (registration, service showcase management, appointment handling, quotation creation, and payment confirmation), and Invited Guests (blog interaction). The current High-Level Goals (HLGs) comprehensively cover these intentions: 'Secure Necessary Services for Events' and 'Maintain Financial Control Over Event Expenses' cover the organizer's operational and financial workflows; 'Manage Event Guest Invitations and Information' covers guest list management; 'Efficiently Manage Service Appointments and Client Interactions' covers the provider's workflow; and 'Stay Informed and Engaged with the Event' covers the guest's interaction. No distinct, documented functional intention remains uncovered by the existing HLGs.",
+    "rationale": "The project description outlines three main user types: Event Organizers, Service Providers, and Invited Guests. The current High-Level Goals (HLGs) comprehensively cover the functional intentions for all three actors. \n\n1. **Event Organizer**: Goals cover registration/profile management (HLG 1, 2), service discovery and booking (HLG 3), financial control/budget (HLG 4), and community engagement/blog (HLG 5). The specific workflow steps like creating events, inviting guests, requesting appointments, accepting quotations, and managing payments are all subsumed under these broad stakeholder intentions.\n2. **Service Provider**: Goals cover registration/visibility (HLG 6), service management (HLG 7), appointment/quotation workflow (HLG 8), and payment confirmation (HLG 9). This covers the provider's lifecycle from registration to service delivery and payment verification.\n3. **Invited Guest**: Goals cover accessing event information (HLG 10) and engaging in community interaction (HLG 11). This covers the guest's role in receiving invitations (implied by access) and participating in the blog.\n\nThere are no distinct, documented functional intentions in the description that are absent from the current HLG list. All workflow steps (e.g., generating invitation codes, confirming on-site payments, viewing calendars) are operational details supporting the existing high-level goals.",
     "missing_goal_requests": []
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
   "llg_regeneration_counts": {},
-  "warnings": []
+  "warnings": [
+    "UNRESOLVED_EVALUATION_INCONCLUSIVE"
+  ]
 }
