@@ -3,52 +3,38 @@
   "reconstructions": {
     "branch_002": {
       "reconstructed_high_level_goal": "Manage Farmer's Product Supply Commitments",
-      "rationale": "These operations collectively enable the farmer to establish, track, and adjust the actual quantities of products they commit to supplying, ensuring accurate inventory management and communication regarding their delivery capabilities.",
+      "rationale": "Both low-level goals enable the farmer to interact with and oversee the quantities of products they are committed to supplying for orders. One facilitates the submission of new commitments, while the other allows for the review of existing ones, collectively supporting the management of their supply obligations.",
       "branch_id": "branch_002",
       "source_low_level_goal_ids": [
         "Confirm actual product quantity",
-        "View confirmed product quantities",
-        "Report quantity discrepancy"
+        "View confirmed product quantities"
       ]
     },
-    "branch_005": {
-      "reconstructed_high_level_goal": "Facilitate Customer Product Ordering",
-      "rationale": "These low-level goals collectively describe the complete process a customer undertakes to select products, build an order, and then submit that order. They cover product discovery, order item management (add, modify, remove), and final order submission, all essential steps in a customer's purchasing journey.",
-      "branch_id": "branch_005",
+    "branch_003": {
+      "reconstructed_high_level_goal": "Farmer can manage product delivery status and schedule",
+      "rationale": "These operations collectively enable the farmer to monitor scheduled deliveries, confirm their dispatch, and proactively report any delays, thereby providing comprehensive control and communication over the product delivery process from the farm to the store.",
+      "branch_id": "branch_003",
       "source_low_level_goal_ids": [
-        "Retrieve available products",
-        "Add product to pending order",
-        "Update product quantity in pending order",
-        "Remove product from pending order",
-        "Submit initial order"
-      ]
-    },
-    "branch_007": {
-      "reconstructed_high_level_goal": "Manage Customer Order Pickup",
-      "rationale": "These low-level goals collectively describe the complete lifecycle of a customer's interaction with an order pickup, encompassing scheduling, viewing details, receiving reminders, and confirming collection. They all contribute to ensuring a smooth and informed customer experience for order pickups.",
-      "branch_id": "branch_007",
-      "source_low_level_goal_ids": [
-        "Schedule order pickup time",
-        "View scheduled pickup details",
-        "Confirm order collection",
-        "Receive pickup reminder notification"
+        "Mark product delivery as dispatched",
+        "View scheduled delivery times",
+        "Report delivery delay"
       ]
     }
   },
   "evaluations": {
     "branch_002": {
       "branch_id": "branch_002",
-      "rationale": "The original High-Level Goal 'Confirm actual product quantities' is supported by the project description, which states that farmers confirm actual quantities available by Monday morning. However, the bottom-up reconstruction 'Manage Farmer's Product Supply Commitments' is broader and potentially overlaps with the existing HLG 'Provide product availability and details'. The specific action of confirming final quantities is a distinct step in the workflow (occurring after initial estimates and before order confirmation) that ensures accurate order processing. The original goal is reasonably scoped and distinct from 'Provide product availability and details' (which refers to the initial estimation phase between Friday and Saturday). Therefore, the original goal should be kept as it accurately reflects a specific, supported functional intention of the Farmer actor. The parent HLG 'Confirm actual product quantities' requires the farmer to finalize the supply commitment. The current LLGs cover the core action (llg_001: Confirm actual product quantity) and a reasonable verification step (llg_002: View confirmed product quantities). The third LLG (llg_003: Report quantity discrepancy) is not explicitly required by the parent HLG's description ('confirm the final quantities... to ensure accurate order processing'). While the documentation mentions that store employees confirm receipt and handle discrepancies later in the cycle (Tuesday), the farmer's specific role in the 'Confirm' phase is to provide the final numbers. Reporting a discrepancy *after* confirmation is not a distinct capability explicitly mandated by the parent HLG's wording, which focuses on the act of confirming the quantities themselves. Furthermore, llg_003 is not contradicted by the documentation, but rather represents an optional or subsequent workflow step that is not essential to the definition of 'Confirming actual product quantities' in this context. Since no essential capability explicitly required by the parent is missing, and no LLG is contradicted by the documentation, the decomposition is acceptable.",
+      "rationale": "The original High-Level Goal 'Confirm actual product quantities' accurately captures the specific functional intention of the Farmer described in the project documentation: 'Customer orders initially remain in an entered state until farmers confirm the actual quantities available by Monday morning.' This is a distinct phase from the initial estimation ('Provide product availability and details') and the physical delivery ('Ensure timely product delivery to the store'). The bottom-up reconstruction 'Manage Farmer's Product Supply Commitments' is too generic and overlaps significantly with the existing HLG 'Provide product availability and details', as both deal with the farmer's supply obligations. The original goal is more precise and faithful to the specific action of confirming final quantities to trigger order processing. Therefore, the original goal should be kept. The parent HLG 'Confirm actual product quantities' is supported by the documentation stating that 'Customer orders initially remain in an entered state until farmers confirm the actual quantities available by Monday morning.' The current LLGs cover the two essential aspects of this interaction: submitting the confirmation (llg_001) and reviewing the confirmed state (llg_002). The documentation does not specify any other distinct capabilities for the farmer in this phase (e.g., editing after confirmation is not mentioned, and the system handles the allocation logic automatically). The sibling HLG 'Provide product availability and details' covers the initial estimation phase, which is distinct from the final confirmation. Therefore, the decomposition is complete and accurate.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Confirm actual product quantities' is supported by the project description, which states that farmers confirm actual quantities available by Monday morning. However, the bottom-up reconstruction 'Manage Farmer's Product Supply Commitments' is broader and potentially overlaps with the existing HLG 'Provide product availability and details'. The specific action of confirming final quantities is a distinct step in the workflow (occurring after initial estimates and before order confirmation) that ensures accurate order processing. The original goal is reasonably scoped and distinct from 'Provide product availability and details' (which refers to the initial estimation phase between Friday and Saturday). Therefore, the original goal should be kept as it accurately reflects a specific, supported functional intention of the Farmer actor.",
+        "rationale": "The original High-Level Goal 'Confirm actual product quantities' accurately captures the specific functional intention of the Farmer described in the project documentation: 'Customer orders initially remain in an entered state until farmers confirm the actual quantities available by Monday morning.' This is a distinct phase from the initial estimation ('Provide product availability and details') and the physical delivery ('Ensure timely product delivery to the store'). The bottom-up reconstruction 'Manage Farmer's Product Supply Commitments' is too generic and overlaps significantly with the existing HLG 'Provide product availability and details', as both deal with the farmer's supply obligations. The original goal is more precise and faithful to the specific action of confirming final quantities to trigger order processing. Therefore, the original goal should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The parent HLG 'Confirm actual product quantities' requires the farmer to finalize the supply commitment. The current LLGs cover the core action (llg_001: Confirm actual product quantity) and a reasonable verification step (llg_002: View confirmed product quantities). The third LLG (llg_003: Report quantity discrepancy) is not explicitly required by the parent HLG's description ('confirm the final quantities... to ensure accurate order processing'). While the documentation mentions that store employees confirm receipt and handle discrepancies later in the cycle (Tuesday), the farmer's specific role in the 'Confirm' phase is to provide the final numbers. Reporting a discrepancy *after* confirmation is not a distinct capability explicitly mandated by the parent HLG's wording, which focuses on the act of confirming the quantities themselves. Furthermore, llg_003 is not contradicted by the documentation, but rather represents an optional or subsequent workflow step that is not essential to the definition of 'Confirming actual product quantities' in this context. Since no essential capability explicitly required by the parent is missing, and no LLG is contradicted by the documentation, the decomposition is acceptable.",
+        "rationale": "The parent HLG 'Confirm actual product quantities' is supported by the documentation stating that 'Customer orders initially remain in an entered state until farmers confirm the actual quantities available by Monday morning.' The current LLGs cover the two essential aspects of this interaction: submitting the confirmation (llg_001) and reviewing the confirmed state (llg_002). The documentation does not specify any other distinct capabilities for the farmer in this phase (e.g., editing after confirmation is not mentioned, and the system handles the allocation logic automatically). The sibling HLG 'Provide product availability and details' covers the initial estimation phase, which is distinct from the final confirmation. Therefore, the decomposition is complete and accurate.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "regeneration_feedback": null,
         "unsupported_or_misleading_llg_ids": [],
@@ -56,38 +42,25 @@
         "confidence": "HIGH"
       }
     },
-    "branch_005": {
-      "branch_id": "branch_005",
-      "rationale": "The original High-Level Goal 'Enable customers to browse products and place orders' is semantically identical to the existing High-Level Goal 'Discover and order local produce' (which describes the same intention: browsing offers and placing orders). The bottom-up reconstruction 'Facilitate Customer Product Ordering' also describes this same functional intention. According to the calibration rules, if another HLG for the same actor already covers the same functional intention, the duplicate should be removed to avoid splitting one stakeholder intention into wording variants. The existing HLG 'Discover and order local produce' is well-scoped and supported by the project description.",
-      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "The original High-Level Goal 'Ensure timely product delivery to the store' is supported by the documentation, which states that 'Farmers deliver their products to the store by Tuesday evening' and that the system handles reminders and consequences for late delivery. This is a distinct functional intention from 'Confirm actual product quantities' (which happens earlier in the cycle, by Monday morning) and 'Provide product availability and details' (which happens even earlier, Friday/Saturday). The bottom-up reconstruction 'Farmer can manage product delivery status and schedule' is less precise because the documentation does not indicate that farmers actively 'manage' the status or 'schedule' the delivery within the system; rather, they perform the physical delivery, and the system/employees track it. The original goal accurately captures the farmer's responsibility to deliver on time. Therefore, the original goal should be kept. The parent HLG 'Ensure timely product delivery to the store' is supported by the documentation stating that 'Farmers deliver their products to the store by Tuesday evening' and that the system sends reminders if goods have not arrived. The current LLGs cover the essential farmer-side actions for this process: marking the delivery as dispatched (llg_001), viewing the scheduled time to ensure punctuality (llg_002), and reporting delays (llg_003). These capabilities allow the farmer to actively manage the delivery timeline. The documentation does not specify other distinct farmer actions for this phase (e.g., the system handles the consequences of late delivery, and store employees confirm receipt, which falls under the sibling HLG 'Verify farmer deliveries'). Therefore, the decomposition is complete and accurate.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Enable customers to browse products and place orders' is semantically identical to the existing High-Level Goal 'Discover and order local produce' (which describes the same intention: browsing offers and placing orders). The bottom-up reconstruction 'Facilitate Customer Product Ordering' also describes this same functional intention. According to the calibration rules, if another HLG for the same actor already covers the same functional intention, the duplicate should be removed to avoid splitting one stakeholder intention into wording variants. The existing HLG 'Discover and order local produce' is well-scoped and supported by the project description.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rationale": "The original High-Level Goal 'Ensure timely product delivery to the store' is supported by the documentation, which states that 'Farmers deliver their products to the store by Tuesday evening' and that the system handles reminders and consequences for late delivery. This is a distinct functional intention from 'Confirm actual product quantities' (which happens earlier in the cycle, by Monday morning) and 'Provide product availability and details' (which happens even earlier, Friday/Saturday). The bottom-up reconstruction 'Farmer can manage product delivery status and schedule' is less precise because the documentation does not indicate that farmers actively 'manage' the status or 'schedule' the delivery within the system; rather, they perform the physical delivery, and the system/employees track it. The original goal accurately captures the farmer's responsibility to deliver on time. Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
-      "low_level_evaluation": null
-    },
-    "branch_007": {
-      "branch_id": "branch_007",
-      "rationale": "The original High-Level Goal 'Conveniently collect purchased goods' is supported by the project description, which details the process of reserving time slots, receiving reminders, and confirming collection. However, the bottom-up reconstruction 'Manage Customer Order Pickup' is more precise and functionally accurate. The original goal's phrasing 'Conveniently collect' is slightly subjective and focuses on the outcome (convenience) rather than the functional intent (managing the pickup process, including scheduling and confirmation). The reconstruction better captures the full scope of the customer's interaction with the pickup phase (scheduling, viewing details, reminders, confirmation) as described in the rationale. Therefore, rewriting to align with the more precise functional intent is appropriate.",
-      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-      "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Conveniently collect purchased goods' is supported by the project description, which details the process of reserving time slots, receiving reminders, and confirming collection. However, the bottom-up reconstruction 'Manage Customer Order Pickup' is more precise and functionally accurate. The original goal's phrasing 'Conveniently collect' is slightly subjective and focuses on the outcome (convenience) rather than the functional intent (managing the pickup process, including scheduling and confirmation). The reconstruction better captures the full scope of the customer's interaction with the pickup phase (scheduling, viewing details, reminders, confirmation) as described in the rationale. Therefore, rewriting to align with the more precise functional intent is appropriate.",
-        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "rewriting_focus": "Manage Customer Order Pickup",
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Ensure timely product delivery to the store' is supported by the documentation stating that 'Farmers deliver their products to the store by Tuesday evening' and that the system sends reminders if goods have not arrived. The current LLGs cover the essential farmer-side actions for this process: marking the delivery as dispatched (llg_001), viewing the scheduled time to ensure punctuality (llg_002), and reporting delays (llg_003). These capabilities allow the farmer to actively manage the delivery timeline. The documentation does not specify other distinct farmer actions for this phase (e.g., the system handles the consequences of late delivery, and store employees confirm receipt, which falls under the sibling HLG 'Verify farmer deliveries'). Therefore, the decomposition is complete and accurate.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
         "confidence": "HIGH"
-      },
-      "replacement_request": {
-        "rationale": "The original HLG 'Conveniently collect purchased goods' is too broad and mixes scheduling with the physical act of collection. The project description explicitly details a workflow where customers reserve a time slot, employees prepare packages, and employees confirm collection. The focus should be narrowed to the specific functional intention of managing the pickup process, which includes reserving the slot and the subsequent confirmation by the store, as this is the distinct operational phase after payment. The actor remains the Customer, who initiates the reservation and is the subject of the collection.",
-        "generation_project_description": "The system supports the management of an Ethical Purchasing Group (EPS) associated with a km-zero fruit and vegetable store. After payment is successfully completed for a customer's order, the customer can reserve a specific time slot for collecting their products from the store. Store employees can view the pickup schedule at the beginning of their shifts to prepare the packages corresponding to customer orders. When a customer arrives at the store, the employee confirms the collection of the order. If a customer fails to collect the order at the scheduled time, the system sends an SMS reminder. If the order has not been collected by Friday, the order is marked as forfeited and the customer's fair-play score is updated.",
-        "actor": {
-          "name": "Customer",
-          "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-        }
-      },
-      "low_level_evaluation": null
+      }
     }
   },
   "high_level_goals": {
@@ -125,8 +98,8 @@
         }
       },
       {
-        "name": "Enable customers to browse products and place orders",
-        "description": "Customers should be able to view the weekly product availability from farmers and select desired items and quantities to create an initial order.",
+        "name": "Ensure order accuracy and fulfillment",
+        "description": "Customers seek to have their orders processed correctly, receive notifications about any modifications due to availability, and confirm final order details.",
         "actor": {
           "name": "Customer",
           "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
@@ -141,8 +114,8 @@
         }
       },
       {
-        "name": "Enable customers to schedule product collection",
-        "description": "The customer aims to reserve a specific time slot for collecting their purchased products from the store, ensuring convenience and availability.",
+        "name": "Conveniently collect purchased goods",
+        "description": "Customers desire the ability to schedule a pickup time and confirm the collection of their orders from the store.",
         "actor": {
           "name": "Customer",
           "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
@@ -222,42 +195,6 @@
         "high_level_associated": {
           "name": "Provide product availability and details",
           "description": "Farmers aim to efficiently submit estimates of available products, including type, quantity, price, and characteristics, to the system.",
-          "actor": {
-            "name": "Farmer",
-            "description": "Provides product availability and details, and delivers goods to the store."
-          }
-        }
-      },
-      {
-        "name": "Confirm actual product quantity",
-        "description": "Farmer can confirm the final actual quantity for a specific product estimate they can supply.",
-        "high_level_associated": {
-          "name": "Confirm actual product quantities",
-          "description": "Farmers seek to confirm the final quantities of products they can supply to ensure accurate order processing and fulfillment.",
-          "actor": {
-            "name": "Farmer",
-            "description": "Provides product availability and details, and delivers goods to the store."
-          }
-        }
-      },
-      {
-        "name": "View confirmed product quantities",
-        "description": "Farmer can view a list of all products for which they have confirmed actual quantities.",
-        "high_level_associated": {
-          "name": "Confirm actual product quantities",
-          "description": "Farmers seek to confirm the final quantities of products they can supply to ensure accurate order processing and fulfillment.",
-          "actor": {
-            "name": "Farmer",
-            "description": "Provides product availability and details, and delivers goods to the store."
-          }
-        }
-      },
-      {
-        "name": "Report quantity discrepancy",
-        "description": "Farmer can report a discrepancy between the confirmed quantity and the actual quantity available for delivery.",
-        "high_level_associated": {
-          "name": "Confirm actual product quantities",
-          "description": "Farmers seek to confirm the final quantities of products they can supply to ensure accurate order processing and fulfillment.",
           "actor": {
             "name": "Farmer",
             "description": "Provides product availability and details, and delivers goods to the store."
@@ -349,6 +286,54 @@
         }
       },
       {
+        "name": "View current order details",
+        "description": "Customer can view the current details of their active orders, including items, quantities, and total price.",
+        "high_level_associated": {
+          "name": "Ensure order accuracy and fulfillment",
+          "description": "Customers seek to have their orders processed correctly, receive notifications about any modifications due to availability, and confirm final order details.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "Receive order modification notification",
+        "description": "Customer can receive a notification if their order has been modified due to product availability or other reasons.",
+        "high_level_associated": {
+          "name": "Ensure order accuracy and fulfillment",
+          "description": "Customers seek to have their orders processed correctly, receive notifications about any modifications due to availability, and confirm final order details.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "Confirm final order details",
+        "description": "Customer can confirm the final details of their order after any modifications have been applied.",
+        "high_level_associated": {
+          "name": "Ensure order accuracy and fulfillment",
+          "description": "Customers seek to have their orders processed correctly, receive notifications about any modifications due to availability, and confirm final order details.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "Cancel order",
+        "description": "Customer can cancel an order before it reaches a certain processing stage.",
+        "high_level_associated": {
+          "name": "Ensure order accuracy and fulfillment",
+          "description": "Customers seek to have their orders processed correctly, receive notifications about any modifications due to availability, and confirm final order details.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
         "name": "View virtual wallet balance",
         "description": "Customer can view their current virtual wallet balance.",
         "high_level_associated": {
@@ -390,6 +375,54 @@
         "high_level_associated": {
           "name": "Manage personal payment for purchases",
           "description": "Customers aim to maintain a sufficient balance in their virtual wallet for automatic payments and be informed of any payment-related issues.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "Schedule order pickup time",
+        "description": "Customer can select and schedule a preferred pickup time for their order from available time slots.",
+        "high_level_associated": {
+          "name": "Conveniently collect purchased goods",
+          "description": "Customers desire the ability to schedule a pickup time and confirm the collection of their orders from the store.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "View scheduled pickup details",
+        "description": "Customer can view the details of their scheduled order pickup, including time and location.",
+        "high_level_associated": {
+          "name": "Conveniently collect purchased goods",
+          "description": "Customers desire the ability to schedule a pickup time and confirm the collection of their orders from the store.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "Confirm order collection",
+        "description": "Customer can confirm the successful collection of their order from the store.",
+        "high_level_associated": {
+          "name": "Conveniently collect purchased goods",
+          "description": "Customers desire the ability to schedule a pickup time and confirm the collection of their orders from the store.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+          }
+        }
+      },
+      {
+        "name": "Receive pickup reminder notification",
+        "description": "Customer can receive a reminder notification for an upcoming order pickup.",
+        "high_level_associated": {
+          "name": "Conveniently collect purchased goods",
+          "description": "Customers desire the ability to schedule a pickup time and confirm the collection of their orders from the store.",
           "actor": {
             "name": "Customer",
             "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
@@ -625,122 +658,26 @@
         }
       },
       {
-        "name": "Retrieve available products",
-        "description": "Enable customers to retrieve a list of currently available products, including their quantities and associated farmers.",
+        "name": "Confirm actual product quantity",
+        "description": "Enable the farmer to submit the final, actual quantity of a specific product they can supply for an order.",
         "high_level_associated": {
-          "name": "Enable customers to browse products and place orders",
-          "description": "Customers should be able to view the weekly product availability from farmers and select desired items and quantities to create an initial order.",
+          "name": "Confirm actual product quantities",
+          "description": "Farmers seek to confirm the final quantities of products they can supply to ensure accurate order processing and fulfillment.",
           "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+            "name": "Farmer",
+            "description": "Provides product availability and details, and delivers goods to the store."
           }
         }
       },
       {
-        "name": "Add product to pending order",
-        "description": "Allow customers to add a specified quantity of a product to their pending order.",
+        "name": "View confirmed product quantities",
+        "description": "Allow the farmer to retrieve and review the quantities of products they have already confirmed for supply.",
         "high_level_associated": {
-          "name": "Enable customers to browse products and place orders",
-          "description": "Customers should be able to view the weekly product availability from farmers and select desired items and quantities to create an initial order.",
+          "name": "Confirm actual product quantities",
+          "description": "Farmers seek to confirm the final quantities of products they can supply to ensure accurate order processing and fulfillment.",
           "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Update product quantity in pending order",
-        "description": "Enable customers to modify the quantity of a specific product within their pending order.",
-        "high_level_associated": {
-          "name": "Enable customers to browse products and place orders",
-          "description": "Customers should be able to view the weekly product availability from farmers and select desired items and quantities to create an initial order.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Remove product from pending order",
-        "description": "Allow customers to remove a specific product from their pending order.",
-        "high_level_associated": {
-          "name": "Enable customers to browse products and place orders",
-          "description": "Customers should be able to view the weekly product availability from farmers and select desired items and quantities to create an initial order.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Submit initial order",
-        "description": "Enable customers to finalize and submit their pending order for processing.",
-        "high_level_associated": {
-          "name": "Enable customers to browse products and place orders",
-          "description": "Customers should be able to view the weekly product availability from farmers and select desired items and quantities to create an initial order.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Retrieve available product collection time slots",
-        "description": "Enable the customer to query the system for a list of time slots currently open for product collection.",
-        "high_level_associated": {
-          "name": "Enable customers to schedule product collection",
-          "description": "The customer aims to reserve a specific time slot for collecting their purchased products from the store, ensuring convenience and availability.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Reserve a specific product collection time slot for a designated order",
-        "description": "Allow the customer to submit a request to the system to book a chosen time slot for the collection of a particular order.",
-        "high_level_associated": {
-          "name": "Enable customers to schedule product collection",
-          "description": "The customer aims to reserve a specific time slot for collecting their purchased products from the store, ensuring convenience and availability.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Retrieve details of their scheduled product collections",
-        "description": "Enable the customer to fetch information about all their previously reserved product collection time slots.",
-        "high_level_associated": {
-          "name": "Enable customers to schedule product collection",
-          "description": "The customer aims to reserve a specific time slot for collecting their purchased products from the store, ensuring convenience and availability.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Cancel an existing product collection reservation",
-        "description": "Allow the customer to submit a request to the system to revoke a previously booked product collection time slot.",
-        "high_level_associated": {
-          "name": "Enable customers to schedule product collection",
-          "description": "The customer aims to reserve a specific time slot for collecting their purchased products from the store, ensuring convenience and availability.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
-          }
-        }
-      },
-      {
-        "name": "Modify an existing product collection reservation to a different time slot",
-        "description": "Enable the customer to submit a request to change the time of an already scheduled product collection to a new available slot.",
-        "high_level_associated": {
-          "name": "Enable customers to schedule product collection",
-          "description": "The customer aims to reserve a specific time slot for collecting their purchased products from the store, ensuring convenience and availability.",
-          "actor": {
-            "name": "Customer",
-            "description": "Browses product offers, places and manages orders, recharges virtual wallet, schedules and collects pickups."
+            "name": "Farmer",
+            "description": "Provides product availability and details, and delivers goods to the store."
           }
         }
       }
@@ -748,10 +685,12 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "The project description outlines a weekly purchasing cycle involving farmers, customers, and store employees. The current High-Level Goals (HLGs) comprehensively cover the functional intentions of all identified actors: Farmers (providing availability, confirming quantities, delivering goods), Customers (browsing/ordering, managing payments/wallets, collecting goods, maintaining fair-play scores), and Store Employees (managing orders, overseeing payments, coordinating pickups, verifying deliveries). Specific workflow steps such as order modification due to availability, automatic payment execution, SMS/email notifications, and fair-play score calculation are operational details or narrower variants of the existing broad stakeholder intentions (e.g., 'Manage personal payment for purchases' covers the wallet and notification logic; 'Maintain a reliable purchasing record' covers the fair-play score usage). There are no distinct, documented functional intentions for any actor that are absent from the current HLG list.",
+    "rationale": "The current High-Level Goals for the Farmer actor comprehensively cover the functional responsibilities described in the project documentation. 'Provide product availability and details' covers the initial estimation phase (Friday/Saturday). 'Confirm actual product quantities' covers the confirmation phase (Monday morning) which triggers order processing. 'Ensure timely product delivery to the store' covers the physical delivery phase (Tuesday evening). There are no other distinct functional intentions or responsibilities assigned to the Farmer in the description that are not already captured by these broad goals. The consequences of late delivery (SMS reminders, order updates, refunds) are handled by the system and Store Employees (covered by 'Verify farmer deliveries'), not by the Farmer directly.",
     "missing_goal_requests": []
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-  "llg_regeneration_counts": {},
+  "llg_regeneration_counts": {
+    "farmer::confirm actual product quantities": 1
+  },
   "warnings": []
 }

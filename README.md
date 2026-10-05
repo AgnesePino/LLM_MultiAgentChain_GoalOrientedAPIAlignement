@@ -65,87 +65,101 @@ and the complete iteration trace are stored separately under
 
 ### Execution algorithm
 
-Before the iterative cycle, a conservative branch-local pre-pass asks the
-evaluator to identify clearly duplicated, contradicted, unrelated, or misleading
-LLGs. It removes an LLG only from a HIGH-confidence structured decision and
-defers the branch when a missing capability is also reported.
-
 During each iteration, the orchestrator performs the following operations:
 
 1. removes HLGs that have no associated LLG and deduplicates HLGs by normalized
    actor/name identity;
 2. reconstructs one diagnostic HLG from the LLGs of every active branch, without
    showing the original parent HLG to the reconstructor;
-3. compares the reconstructed intention, original HLG, LLG decomposition,
+3. evaluates the original HLG with a dedicated prompt using the reconstruction,
    sibling HLGs, and project description;
-4. assigns one branch decision only when the evaluator reports HIGH confidence;
-5. runs one independent, project-wide missing-HLG check over the project
-   description and current HLG set;
+4. when the HLG is retained, evaluates its LLG decomposition with a second
+   dedicated prompt;
+5. runs a third, project-wide coverage prompt over the description and current
+   HLG set, considering explicit and workflow-implied intentions for existing
+   actors;
 6. applies a bounded state change and starts a new iteration;
 7. stops when all branches are confirmed and no missing HLG is reported, when no
    executable action remains, or when the iteration limit is reached.
 
+The three bottom-up evaluator prompts share one bounded critic conversation per
+project. After each iteration, the orchestrator records the HLG additions,
+removals or replacements and the LLG additions or removals that were actually
+applied for each parent.
+From iteration two onward, that previous-iteration state is included explicitly
+in every critic request. The first iteration receives only the initial state.
+Generators, reconstruction, top-down evaluation, and different projects do not
+share this memory. The retained context is compact: it contains at most four
+recent evaluator exchanges, two state updates, and 2,500 characters of critic
+history rather than replaying complete earlier prompts.
+
+Each of the three critic prompts includes task-specific few-shot examples. The
+HLG prompt calibrates `KEEP`, `REWRITE`, and `REMOVE`; the LLG prompt contrasts
+valid API-mappable decompositions with material coverage defects; the global
+prompt distinguishes genuinely missing actor intentions from narrower variants
+of goals that are already covered.
+
 The orchestrator default is 5 iterations, while the current bottom-up notebook
-sets an explicit experimental limit of 25. A confirmed branch is frozen for the
-rest of that execution and is identified by stable actor/HLG identity rather
-than its positional `branch_NNN` identifier.
+sets an explicit experimental limit of 25. A confirmed branch is skipped while
+the HLG structure remains unchanged. An HLG addition, removal, or rewrite clears
+those confirmations and triggers a complete branch audit in the next iteration.
+Branches are identified by stable actor/HLG identity rather than positional
+`branch_NNN` identifiers.
 
 | Evaluator decision | Current state transition | Creates a new branch? |
 |---|---|---|
-| `CONFIRM_BRANCH` | Preserves and freezes the branch | No |
+| `CONFIRM_BRANCH` | Preserves the branch until the HLG structure changes | No |
 | `REWRITE_ORIGINAL_HIGH_LEVEL_GOAL` | Calls the top-down HLG generator, replaces one HLG, and regenerates its LLGs | Replacement, not net discovery |
 | `REMOVE_ORIGINAL_HIGH_LEVEL_GOAL` | Removes the HLG and all its LLGs | No; deletes one branch |
 | `REGENERATE_LOW_LEVEL_GOALS` | Calls the top-down LLG generator for the same parent HLG | No |
 | `MISSING_HIGH_LEVEL_GOALS_FOUND` | Calls the top-down HLG generator and then the top-down LLG generator | Yes |
 | `EVALUATION_INCONCLUSIVE` | Preserves the current state and records a warning | No |
 
-State changes are deliberately bounded: at most one HLG rewrite or missing-HLG
-addition is generated at a time, at most five HLG removals are applied in one
-iteration, one branch receives LLG regeneration at a time, an existing branch
-may be regenerated or rewritten at most twice, and a newly discovered HLG may
-receive at most six LLGs. Rewrite and removal actions take precedence over a
-missing-HLG addition because they can change the goal space against which global
-coverage is judged.
+State changes are deliberately bounded: at most one HLG rewrite and up to two
+missing-HLG additions are generated per iteration, at most five HLG removals are
+applied together, and one branch receives LLG regeneration at a time. An
+existing branch may be regenerated or rewritten at most twice, and a newly
+discovered HLG may receive at most six LLGs. Rewrite and removal actions take
+precedence over missing-HLG additions because they change the goal space against
+which global coverage is judged.
 
 ### Does it currently perform discovery?
 
-**Yes, but only in a limited form.** Every iteration contains a global coverage
-query that asks for the single strongest documented actor-level gap. When that
-gap is accepted, the normal top-down HLG and LLG generators create a new branch.
-The bottom-up process is therefore not restricted to deleting or rewriting the
-baseline.
+**Yes, but only in a bounded form.** Every iteration contains a global coverage
+query that can return up to two distinct, documented actor-level gaps. A gap may
+be explicit or inferred from at least two coherent workflow passages or actor
+responsibilities. When accepted, the normal top-down HLG and LLG generators
+create a new branch. The bottom-up process is therefore not restricted to
+deleting or rewriting the baseline.
 
 The present implementation nevertheless has important discovery limitations:
 
-- only one missing intention can be proposed per iteration;
+- at most two missing intentions can be proposed per iteration;
 - discovery is based on one consolidated project description rather than an
   indexed collection of source passages;
-- the evaluator prompt allows an explicit new actor, but the orchestrator rejects
-  the request as `UNKNOWN_ACTOR_REQUEST_IGNORED` unless that actor already occurs
-  in a current HLG;
+- discovery is restricted to actors already represented by the current HLG set;
 - duplicate prevention is primarily normalized actor/name matching, not semantic
   equivalence with evidence-aware clustering;
 - regenerated LLGs are accepted when non-empty and within the numerical growth
   bound; there is no before/after semantic coverage gate;
 - HLG rewrite and removal can reduce coverage before discovery is evaluated on a
   stable state;
-- a single evaluator is responsible for HIGH-confidence keep, rewrite, removal,
-  and discovery decisions.
+- the three specialized evaluator calls increase cost as the number of active
+  branches grows.
 
-The current evaluation therefore demonstrates stronger **precision**, not higher
-coverage. Macro HLG F1 rises from `0.4323` to `0.4903` and macro LLG F1 from
-`0.5998` to `0.6494`, but recall changes from `0.7479` to `0.7415` for HLGs and
-from `0.7453` to `0.7402` for LLGs. HLG count decreases from 106 to 88 and LLG
-count from 356 to 309. All eight datasets improve at HLG level and seven of eight
-improve at LLG level, with Genome Nexus losing LLG recall after a destructive
-rewrite/removal.
+The currently saved evaluation therefore demonstrates stronger **precision**,
+not higher overall coverage. Macro HLG F1 rises from `0.4323` to `0.4823` and
+macro LLG F1 from `0.5998` to `0.6346`. HLG recall changes from `0.7479` to
+`0.7432`, while LLG recall changes from `0.7453` to `0.7317`. HLG count decreases
+from 106 to 91 and LLG count from 356 to 314. These files predate the latest
+two-gap coverage prompt and post-change branch re-audit, so they must be
+regenerated before being treated as final results for the current code.
 
-The missing-HLG mechanism was triggered in the current trace for Gestao Hospital
-and produced `Logistics Coordinator :: Facilitate Inter-Hospital Product
-Transfer`. Because this branch semantically consolidates similar logistics goals
-that existed earlier in the baseline, it shows that the addition mechanism works
-but does not by itself demonstrate discovery of previously absent functionality.
-Detailed measurements are available in
+None of the currently saved traces contains a final
+`MISSING_HIGH_LEVEL_GOALS_FOUND` decision. The discovery path is implemented and
+tested by the cycle, but this experimental snapshot therefore does not yet
+demonstrate recovery of a genuinely absent functional intention. Detailed
+measurements are available in
 `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_macro_summary.csv`
 and `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_deltas.csv`.
 
@@ -167,8 +181,7 @@ protecting precision.
 2. **Add a real actor-discovery pass.** Run actor extraction over uncovered
    evidence and allow an evidence-backed actor to enter `known_actors` before
    generating its HLG. Require at least one source span and a distinct functional
-   intention. This removes the current contradiction between a prompt that
-   permits new actors and an orchestrator that rejects them.
+   intention. This extends discovery beyond the current existing-actor boundary.
 
 3. **Separate discovery from destructive validation.** First produce and validate
    an additive candidate pool on an immutable baseline; only afterwards perform

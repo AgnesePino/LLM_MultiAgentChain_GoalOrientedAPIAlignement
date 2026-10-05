@@ -2,14 +2,23 @@
   "iteration": 2,
   "reconstructions": {
     "branch_001": {
-      "reconstructed_high_level_goal": "Manage Ambulance Transit to Emergency Scene",
-      "rationale": "The low-level goals collectively describe the complete process of an ambulance traveling from its departure point to an emergency scene. They cover initiating the journey, providing navigation support, continuously monitoring the ambulance's progress and status during transit, and marking its arrival at the destination. All these operations are essential for effectively managing the ambulance's response phase.",
+      "reconstructed_high_level_goal": "Manage Ambulance Staff Emergency Response",
+      "rationale": "The low-level goals collectively describe the essential steps and system support required for ambulance staff to efficiently initiate a mission, navigate to an emergency scene, and confirm their arrival, which are critical components of their overall emergency response process.",
       "branch_id": "branch_001",
       "source_low_level_goal_ids": [
-        "Initiate ambulance departure for an assigned emergency",
-        "Retrieve optimized route to the emergency scene",
-        "Update ambulance status while en route",
-        "Confirm ambulance arrival at the emergency scene"
+        "Receive optimal route suggestions",
+        "Confirm arrival at an emergency scene",
+        "Initiate departure from a station"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Provide real-time operational visibility of Ambulance Staff",
+      "rationale": "These low-level goals collectively ensure that the system maintains a comprehensive, real-time understanding of an ambulance crew's current activity (status), precise location (GPS coordinates), and intended next movement (destination). This integrated information is crucial for effective dispatch, coordination, and overall management of emergency response operations.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Update current operational status",
+        "Transmit current GPS coordinates",
+        "Declare destination details"
       ]
     },
     "branch_003": {
@@ -22,81 +31,133 @@
         "Request an alternative route"
       ]
     },
-    "branch_005": {
-      "reconstructed_high_level_goal": "Ensure Accurate and Reliable Data Handling by Radio Operators",
-      "rationale": "These low-level goals collectively aim to guarantee that data entered by Radio Operators is accurate through validation and correction, and reliably transmitted to the CAD system, ensuring the overall quality and integrity of information.",
-      "branch_id": "branch_005",
+    "branch_004": {
+      "reconstructed_high_level_goal": "Track Ambulance Operational Status and Movement",
+      "rationale": "The low-level goals describe various data entry tasks performed by Radio Operators to update a system with real-time information about ambulances. These tasks include recording departure times, destination details, and changes in operational status (e.g., 'en route', 'on scene'). Collectively, these operations aim to maintain an accurate and current overview of where ambulances are and what their current operational state is, which is essential for effective dispatch and emergency response management.",
+      "branch_id": "branch_004",
       "source_low_level_goal_ids": [
-        "Validate entered data for CAD system",
-        "Correct erroneous data entries in CAD",
-        "Confirm successful data transmission to CAD"
+        "Input ambulance departure times",
+        "Input ambulance destination details",
+        "Update ambulance status based on communication"
       ]
     },
-    "branch_006": {
-      "reconstructed_high_level_goal": "Optimize Ambulance Allocation Process",
-      "rationale": "The low-level goals collectively aim to enhance the ambulance allocation process. They provide dispatchers with the necessary information (available ambulances and locations), the means to perform the allocation (assigning ambulances), and intelligent support (system suggestions) to ensure that ambulances are assigned to incidents in the most effective and efficient manner possible.",
-      "branch_id": "branch_006",
+    "branch_005": {
+      "reconstructed_high_level_goal": "Support Dispatcher Ambulance Allocation",
+      "rationale": "These low-level goals collectively describe the functionalities required for dispatchers to effectively manage and assign ambulances to incidents. They cover providing necessary information (availability, location), enabling the core action of assignment, and offering intelligent support for optimal decision-making.",
+      "branch_id": "branch_005",
       "source_low_level_goal_ids": [
         "View list of available ambulances",
         "Assign an available ambulance to an incident",
         "Receive system-generated allocation suggestions"
       ]
     },
-    "branch_007": {
-      "reconstructed_high_level_goal": "Ensure Effective Ambulance Response and Resource Allocation",
-      "rationale": "These goals collectively empower dispatchers to maintain situational awareness of ongoing ambulance responses (monitoring ETA), proactively address potential delays (ETA alerts), and make strategic decisions for resource deployment (incident prioritization). Together, they aim to optimize the overall efficiency and effectiveness of emergency medical services by ensuring timely and appropriate allocation of ambulances.",
-      "branch_id": "branch_007",
-      "source_low_level_goal_ids": [
-        "Monitor estimated time of arrival (ETA)",
-        "Receive alerts for exceeding ETA thresholds",
-        "Prioritize incidents for allocation"
-      ]
-    },
-    "branch_008": {
+    "branch_006": {
       "reconstructed_high_level_goal": "Manage Incident Dispatch Timeliness",
-      "rationale": "These low-level goals collectively aim to ensure that incident dispatch processes are completed within acceptable timeframes. They provide dispatchers with tools to monitor remaining time, receive proactive warnings about approaching deadlines, and log actual dispatch durations for accountability and performance analysis.",
-      "branch_id": "branch_008",
+      "rationale": "The low-level goals collectively aim to provide dispatchers with the necessary tools and information to monitor, track, and react to dispatch time limits, ensuring that incidents are dispatched within acceptable timeframes and that the process is properly documented for accountability and improvement.",
+      "branch_id": "branch_006",
       "source_low_level_goal_ids": [
         "View dispatch process timer",
         "Receive warnings for approaching dispatch time limits",
         "Log dispatch process start and end times"
+      ]
+    },
+    "branch_007": {
+      "reconstructed_high_level_goal": "Support Dispatchers in Making Informed Incident Management Decisions",
+      "rationale": "These low-level goals collectively enable dispatchers to access, analyze, and organize incident-related information, including current reports, categorization, and historical data. This comprehensive information access and processing capability is crucial for making accurate and informed decisions regarding incident response and resource allocation.",
+      "branch_id": "branch_007",
+      "source_low_level_goal_ids": [
+        "Retrieve detailed incident reports",
+        "Categorize incidents by severity and type",
+        "Search for relevant historical incident data"
+      ]
+    },
+    "branch_008": {
+      "reconstructed_high_level_goal": "Enable Dispatchers to Monitor Ambulance Locations and Status",
+      "rationale": "These low-level goals collectively provide dispatchers with comprehensive tools to observe, track, and filter ambulance positions and availability, both in real-time and historically, which is essential for effective operational management and resource allocation.",
+      "branch_id": "branch_008",
+      "source_low_level_goal_ids": [
+        "View real-time GPS location of ambulances",
+        "Track movement history of a specific ambulance",
+        "Filter ambulances displayed on map"
       ]
     }
   },
   "evaluations": {
     "branch_001": {
       "branch_id": "branch_001",
-      "rationale": "The original High-Level Goal 'Manage Ambulance Response Lifecycle' is too generic and abstract. The project description specifically focuses on the operational phase of the ambulance's movement: following standard routes and communicating departure/destination information to allow for tracking. The bottom-up reconstruction 'Manage Ambulance Transit to Emergency Scene' is more faithful to the specific functional intent described in the text (the transit phase) rather than a broad 'lifecycle' which might imply pre-dispatch or post-arrival tasks not detailed for this actor. Additionally, the other existing HLGs for Ambulance Staff ('Maintain accurate communication...' and 'Adhere to standard operational routes') cover the specific *means* (communication and routing), but the original HLG attempts to capture the overarching *end* (getting to the scene). However, looking closely at the evaluator's calibration and the specific text: The text says 'It is vital to track the exact location... This requires ambulance staff to follow standard routes and correctly communicate departure and destination information'. The goal of the staff is to enable this tracking by performing these actions. The reconstructed goal 'Manage Ambulance Transit to Emergency Scene' is a reasonable summary of the outcome of following routes and communicating status. The original 'Manage Ambulance Response Lifecycle' is vague. Is it better to keep or rewrite? The prompt asks to rewrite if it is 'too generic... or less faithful than the reconstruction'. 'Manage Ambulance Response Lifecycle' is indeed generic. 'Manage Ambulance Transit to Emergency Scene' is more specific to the 'transit' aspect mentioned in the rationale ('traveling from its departure point to an emergency scene'). Therefore, rewriting to align with the more specific and faithful reconstruction is appropriate.",
-      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "rationale": "The original HLG 'Ensure timely arrival at emergency scenes' is a valid functional intention for Ambulance Staff, as the project description explicitly states the key goal is to reach the scene within 11 minutes. However, the bottom-up reconstruction 'Manage Ambulance Staff Emergency Response' is too generic and does not capture the specific time-critical nature of the goal. More importantly, the current HLG list already includes 'Adhere to standard operational routes' and 'Maintain accurate communication of status and location'. While 'Ensure timely arrival' is the ultimate outcome, it is largely a result of the Dispatcher's allocation and the Staff's adherence to routes. However, looking closely at the description: 'It is vital to track the exact location... This requires ambulance staff to follow standard routes and correctly communicate...'. The 'timely arrival' is the primary business goal. Is it redundant? The Dispatcher has 'Manage dispatch process within time limits' and 'Allocate ambulances efficiently'. The Ambulance Staff's specific contribution to timeliness is following routes and communicating. 'Ensure timely arrival' is the overarching goal for the staff. It is distinct from 'Adhere to standard operational routes' (which is a means) and 'Maintain accurate communication' (which is a means). Therefore, it should be kept as it represents the primary outcome-oriented goal for the actor, distinct from the procedural goals. The reconstruction is worse because it is vague. The original is specific and supported by the '11 minutes' constraint. The parent HLG 'Ensure timely arrival at emergency scenes' is an outcome-oriented goal. The current LLGs ('Receive optimal route suggestions', 'Confirm arrival', 'Initiate departure') describe specific system interactions that support this outcome. However, the core mechanism for ensuring timely arrival, as explicitly stated in the project description ('This requires ambulance staff to follow standard routes and correctly communicate departure and destination information'), is covered by the sibling HLGs 'Adhere to standard operational routes' and 'Maintain accurate communication of status and location'. The current LLGs for 'Ensure timely arrival' are largely redundant with these siblings or represent system features (route suggestions) that are not explicitly documented as a requirement for the staff (the text says they must follow standard routes, not that the system suggests them). More critically, 'Ensure timely arrival' is a high-level outcome that is achieved by the combination of the sibling goals. Decomposing it into 'Initiate departure' and 'Confirm arrival' overlaps significantly with 'Maintain accurate communication of status and location'. However, looking at the strict definition of material defects: Is an essential capability missing? The description says staff must 'follow standard routes' and 'communicate departure/destination'. These are handled by siblings. The current LLGs are not contradicted, but they are weak. 'Receive optimal route suggestions' is not in the text. The text says 'follow standard routes'. This makes LLG_001 unsupported/misleading. The text does not mention the system providing route suggestions; it implies the staff know the standard routes. Therefore, LLG_001 is unsupported. Additionally, the decomposition doesn't really capture the 'timely' aspect other than the generic actions. But the primary defect is the unsupported nature of 'Receive optimal route suggestions' which is not in the documentation. The documentation says 'follow standard routes'.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Manage Ambulance Response Lifecycle' is too generic and abstract. The project description specifically focuses on the operational phase of the ambulance's movement: following standard routes and communicating departure/destination information to allow for tracking. The bottom-up reconstruction 'Manage Ambulance Transit to Emergency Scene' is more faithful to the specific functional intent described in the text (the transit phase) rather than a broad 'lifecycle' which might imply pre-dispatch or post-arrival tasks not detailed for this actor. Additionally, the other existing HLGs for Ambulance Staff ('Maintain accurate communication...' and 'Adhere to standard operational routes') cover the specific *means* (communication and routing), but the original HLG attempts to capture the overarching *end* (getting to the scene). However, looking closely at the evaluator's calibration and the specific text: The text says 'It is vital to track the exact location... This requires ambulance staff to follow standard routes and correctly communicate departure and destination information'. The goal of the staff is to enable this tracking by performing these actions. The reconstructed goal 'Manage Ambulance Transit to Emergency Scene' is a reasonable summary of the outcome of following routes and communicating status. The original 'Manage Ambulance Response Lifecycle' is vague. Is it better to keep or rewrite? The prompt asks to rewrite if it is 'too generic... or less faithful than the reconstruction'. 'Manage Ambulance Response Lifecycle' is indeed generic. 'Manage Ambulance Transit to Emergency Scene' is more specific to the 'transit' aspect mentioned in the rationale ('traveling from its departure point to an emergency scene'). Therefore, rewriting to align with the more specific and faithful reconstruction is appropriate.",
-        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "rewriting_focus": "Narrow the scope from the entire 'response lifecycle' to the specific 'transit to emergency scene' phase, focusing on the operational movement and status updates required for tracking.",
-        "confidence": "HIGH"
-      },
-      "replacement_request": {
-        "rationale": "The original scope covered the entire response lifecycle, which is too broad for the specific operational phase of movement. The focus is narrowed to the 'transit to emergency scene' phase to capture the specific operational movement and status updates required for tracking, as mandated by the evaluator's instructions.",
-        "generation_project_description": "The London Ambulance Service dispatches ambulances in emergencies. The key goal is to allocate an available ambulance for every call that can reach the scene within 11 minutes. The entire dispatch process must not exceed a set maximum time limit.\n\nTo make this work, the Computer Aided Despatch system analyzes incident forms and assigns vehicles. It is vital to track the exact location of moving ambulances. This requires ambulance staff to follow standard routes and correctly communicate departure and destination information, allowing radio operators and the CAD system to record data accurately.",
-        "actor": {
-          "name": "Ambulance Staff",
-          "description": "Personnel who operate ambulances, communicate their status, and follow routes."
-        }
-      },
-      "low_level_evaluation": null
-    },
-    "branch_003": {
-      "branch_id": "branch_003",
-      "rationale": "The original High-Level Goal 'Adhere to standard operational routes' is supported by the project description, which states it is vital for ambulance staff to follow standard routes to allow accurate tracking and data recording. However, the bottom-up reconstruction 'Provide Comprehensive Route Guidance for Ambulance Staff' suggests a broader scope that includes obtaining, monitoring, and adapting routes. While the original goal is valid, it is somewhat narrow, focusing only on the 'adherence' aspect rather than the full lifecycle of route management (retrieval, monitoring, adaptation) implied by the low-level goals. More importantly, looking at the other existing High-Level Goals, 'Maintain accurate communication of status and location' covers the communication aspect, and 'Manage Ambulance Response Lifecycle' covers the operational flow. The specific act of following routes is a distinct functional requirement for the Ambulance Staff actor to ensure the system's tracking works. The original goal is reasonably scoped and faithful to the text ('follow standard routes'). The reconstruction is slightly more generic ('Provide... Guidance' sounds like a system feature rather than an actor goal, though the actor is Ambulance Staff). The original goal 'Adhere to standard operational routes' is a clear, supported intention for the actor. It is not generic, narrow (it covers the core routing behavior), or incorrectly scoped. It is distinct from 'Manage Ambulance Response Lifecycle' (which is about the start/end of the trip) and 'Maintain accurate communication' (which is about data transmission). Therefore, the original goal is kept as it accurately reflects the actor's responsibility to follow the prescribed path. The current low-level goals (LLGs) effectively decompose the parent High-Level Goal (HLG) 'Adhere to standard operational routes'. LLG_001 covers the initial acquisition of the route, LLG_002 covers the monitoring and feedback mechanism for adherence (deviation alerts), and LLG_003 covers the adaptation mechanism (requesting alternatives) when the standard route is not viable. These three capabilities collectively enable the ambulance staff to follow the standard routes as required by the HLG. There are no contradictions with the documentation, and no essential capabilities explicitly required by this specific HLG are missing. Capabilities related to communicating location or status are correctly excluded as they belong to sibling HLGs.",
-      "final_decision": "CONFIRM_BRANCH",
-      "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Adhere to standard operational routes' is supported by the project description, which states it is vital for ambulance staff to follow standard routes to allow accurate tracking and data recording. However, the bottom-up reconstruction 'Provide Comprehensive Route Guidance for Ambulance Staff' suggests a broader scope that includes obtaining, monitoring, and adapting routes. While the original goal is valid, it is somewhat narrow, focusing only on the 'adherence' aspect rather than the full lifecycle of route management (retrieval, monitoring, adaptation) implied by the low-level goals. More importantly, looking at the other existing High-Level Goals, 'Maintain accurate communication of status and location' covers the communication aspect, and 'Manage Ambulance Response Lifecycle' covers the operational flow. The specific act of following routes is a distinct functional requirement for the Ambulance Staff actor to ensure the system's tracking works. The original goal is reasonably scoped and faithful to the text ('follow standard routes'). The reconstruction is slightly more generic ('Provide... Guidance' sounds like a system feature rather than an actor goal, though the actor is Ambulance Staff). The original goal 'Adhere to standard operational routes' is a clear, supported intention for the actor. It is not generic, narrow (it covers the core routing behavior), or incorrectly scoped. It is distinct from 'Manage Ambulance Response Lifecycle' (which is about the start/end of the trip) and 'Maintain accurate communication' (which is about data transmission). Therefore, the original goal is kept as it accurately reflects the actor's responsibility to follow the prescribed path.",
+        "rationale": "The original HLG 'Ensure timely arrival at emergency scenes' is a valid functional intention for Ambulance Staff, as the project description explicitly states the key goal is to reach the scene within 11 minutes. However, the bottom-up reconstruction 'Manage Ambulance Staff Emergency Response' is too generic and does not capture the specific time-critical nature of the goal. More importantly, the current HLG list already includes 'Adhere to standard operational routes' and 'Maintain accurate communication of status and location'. While 'Ensure timely arrival' is the ultimate outcome, it is largely a result of the Dispatcher's allocation and the Staff's adherence to routes. However, looking closely at the description: 'It is vital to track the exact location... This requires ambulance staff to follow standard routes and correctly communicate...'. The 'timely arrival' is the primary business goal. Is it redundant? The Dispatcher has 'Manage dispatch process within time limits' and 'Allocate ambulances efficiently'. The Ambulance Staff's specific contribution to timeliness is following routes and communicating. 'Ensure timely arrival' is the overarching goal for the staff. It is distinct from 'Adhere to standard operational routes' (which is a means) and 'Maintain accurate communication' (which is a means). Therefore, it should be kept as it represents the primary outcome-oriented goal for the actor, distinct from the procedural goals. The reconstruction is worse because it is vague. The original is specific and supported by the '11 minutes' constraint.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "The current low-level goals (LLGs) effectively decompose the parent High-Level Goal (HLG) 'Adhere to standard operational routes'. LLG_001 covers the initial acquisition of the route, LLG_002 covers the monitoring and feedback mechanism for adherence (deviation alerts), and LLG_003 covers the adaptation mechanism (requesting alternatives) when the standard route is not viable. These three capabilities collectively enable the ambulance staff to follow the standard routes as required by the HLG. There are no contradictions with the documentation, and no essential capabilities explicitly required by this specific HLG are missing. Capabilities related to communicating location or status are correctly excluded as they belong to sibling HLGs.",
+        "rationale": "The parent HLG 'Ensure timely arrival at emergency scenes' is an outcome-oriented goal. The current LLGs ('Receive optimal route suggestions', 'Confirm arrival', 'Initiate departure') describe specific system interactions that support this outcome. However, the core mechanism for ensuring timely arrival, as explicitly stated in the project description ('This requires ambulance staff to follow standard routes and correctly communicate departure and destination information'), is covered by the sibling HLGs 'Adhere to standard operational routes' and 'Maintain accurate communication of status and location'. The current LLGs for 'Ensure timely arrival' are largely redundant with these siblings or represent system features (route suggestions) that are not explicitly documented as a requirement for the staff (the text says they must follow standard routes, not that the system suggests them). More critically, 'Ensure timely arrival' is a high-level outcome that is achieved by the combination of the sibling goals. Decomposing it into 'Initiate departure' and 'Confirm arrival' overlaps significantly with 'Maintain accurate communication of status and location'. However, looking at the strict definition of material defects: Is an essential capability missing? The description says staff must 'follow standard routes' and 'communicate departure/destination'. These are handled by siblings. The current LLGs are not contradicted, but they are weak. 'Receive optimal route suggestions' is not in the text. The text says 'follow standard routes'. This makes LLG_001 unsupported/misleading. The text does not mention the system providing route suggestions; it implies the staff know the standard routes. Therefore, LLG_001 is unsupported. Additionally, the decomposition doesn't really capture the 'timely' aspect other than the generic actions. But the primary defect is the unsupported nature of 'Receive optimal route suggestions' which is not in the documentation. The documentation says 'follow standard routes'.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "regeneration_feedback": "The current LLGs include 'Receive optimal route suggestions', which is not supported by the project description. The description states that staff must 'follow standard routes', not that they receive suggestions from the system. The LLGs should focus on the actions that directly contribute to timeliness as described, such as following the assigned standard route (though this overlaps with sibling HLG, the specific act of navigating to the scene is part of arrival) and communicating status updates that allow the system to track progress towards the 11-minute target. However, since 'Adhere to standard operational routes' is a sibling HLG, the LLGs for 'Ensure timely arrival' should perhaps focus on the execution of the drive and the final confirmation, but 'Receive optimal route suggestions' is definitely unsupported. A better decomposition might involve 'Navigate to emergency scene via standard route' (if not fully covered by sibling) or simply acknowledging that the current LLGs are weak/unsupported. Given the strict instruction to regenerate if an LLG is unsupported, 'Receive optimal route suggestions' is the key issue.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_001"
+        ],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "The original HLG 'Maintain accurate communication of status and location' is explicitly supported by the project description, which states that it is vital to track exact locations and that this requires ambulance staff to 'correctly communicate departure and destination information'. This goal is distinct from 'Adhere to standard operational routes' (which is about physical movement) and 'Ensure timely arrival' (which is the outcome). The bottom-up reconstruction 'Provide real-time operational visibility of Ambulance Staff' is too generic and passive; it describes the system's benefit rather than the actor's specific functional intention to communicate data. The original HLG accurately captures the actor's responsibility to provide the data necessary for the system to function. The parent HLG 'Maintain accurate communication of status and location' requires Ambulance Staff to communicate their status, departure, destination, and real-time location. The current LLGs cover: 1) 'Update current operational status' (covers status), 2) 'Transmit current GPS coordinates' (covers real-time location), and 3) 'Declare destination details' (covers destination). The project description explicitly states that ambulance staff must 'correctly communicate departure and destination information'. While 'departure' is not explicitly named as a separate LLG, it is functionally covered by the combination of 'Update current operational status' (e.g., 'departed') and 'Transmit current GPS coordinates' (which implies the location at departure). More importantly, 'Declare destination details' covers the destination aspect. The sibling HLG 'Adhere to standard operational routes' covers the physical movement, not the communication of the route itself. The communication of the destination is the key data point required for the CAD system to track the ambulance. The current LLGs adequately decompose the communication requirements for status and location/destination. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The original HLG 'Maintain accurate communication of status and location' is explicitly supported by the project description, which states that it is vital to track exact locations and that this requires ambulance staff to 'correctly communicate departure and destination information'. This goal is distinct from 'Adhere to standard operational routes' (which is about physical movement) and 'Ensure timely arrival' (which is the outcome). The bottom-up reconstruction 'Provide real-time operational visibility of Ambulance Staff' is too generic and passive; it describes the system's benefit rather than the actor's specific functional intention to communicate data. The original HLG accurately captures the actor's responsibility to provide the data necessary for the system to function.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Maintain accurate communication of status and location' requires Ambulance Staff to communicate their status, departure, destination, and real-time location. The current LLGs cover: 1) 'Update current operational status' (covers status), 2) 'Transmit current GPS coordinates' (covers real-time location), and 3) 'Declare destination details' (covers destination). The project description explicitly states that ambulance staff must 'correctly communicate departure and destination information'. While 'departure' is not explicitly named as a separate LLG, it is functionally covered by the combination of 'Update current operational status' (e.g., 'departed') and 'Transmit current GPS coordinates' (which implies the location at departure). More importantly, 'Declare destination details' covers the destination aspect. The sibling HLG 'Adhere to standard operational routes' covers the physical movement, not the communication of the route itself. The communication of the destination is the key data point required for the CAD system to track the ambulance. The current LLGs adequately decompose the communication requirements for status and location/destination. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "The project description explicitly states that 'ambulance staff to follow standard routes' is vital for tracking and predictable travel times. The original HLG 'Adhere to standard operational routes' accurately captures this functional intention. The reconstructed HLG 'Provide Comprehensive Route Guidance for Ambulance Staff' shifts the focus from the staff's action (adhering/following) to a system capability (providing guidance). While related, the description emphasizes the staff's requirement to follow routes, making the original HLG more faithful to the actor's responsibility. There is no overlap with other HLGs; 'Ensure timely arrival' is the outcome, while 'Adhere to standard routes' is the specific operational constraint/method required to achieve it and support tracking. The current LLGs cover the essential lifecycle of adhering to standard routes: retrieving the route, monitoring adherence (via deviation alerts), and handling exceptions (requesting alternative routes). These capabilities are directly supported by the requirement for ambulance staff to 'follow standard routes' to ensure predictable travel times and accurate tracking. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs. The sibling HLG 'Maintain accurate communication of status and location' covers the communication of departure/destination, which is distinct from the route adherence logic itself. The decomposition is complete and consistent with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The project description explicitly states that 'ambulance staff to follow standard routes' is vital for tracking and predictable travel times. The original HLG 'Adhere to standard operational routes' accurately captures this functional intention. The reconstructed HLG 'Provide Comprehensive Route Guidance for Ambulance Staff' shifts the focus from the staff's action (adhering/following) to a system capability (providing guidance). While related, the description emphasizes the staff's requirement to follow routes, making the original HLG more faithful to the actor's responsibility. There is no overlap with other HLGs; 'Ensure timely arrival' is the outcome, while 'Adhere to standard routes' is the specific operational constraint/method required to achieve it and support tracking.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The current LLGs cover the essential lifecycle of adhering to standard routes: retrieving the route, monitoring adherence (via deviation alerts), and handling exceptions (requesting alternative routes). These capabilities are directly supported by the requirement for ambulance staff to 'follow standard routes' to ensure predictable travel times and accurate tracking. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs. The sibling HLG 'Maintain accurate communication of status and location' covers the communication of departure/destination, which is distinct from the route adherence logic itself. The decomposition is complete and consistent with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "The project description explicitly states that radio operators and the CAD system need to 'record data accurately' based on communications from ambulance staff. The original HLG 'Accurately record ambulance status data' directly captures this functional intention for the Radio Operator actor. The reconstructed HLG 'Track Ambulance Operational Status and Movement' is less precise because 'tracking' is typically the responsibility of the Dispatcher or the CAD system itself, whereas the Radio Operator's specific role is the manual or semi-automated *recording* of the data provided by the staff. The original HLG is faithful to the actor's description ('Staff responsible for recording data accurately') and the text. There is no overlap with other HLGs; 'Maintain accurate communication' is the Ambulance Staff's action, while 'Accurately record' is the Radio Operator's action. The parent HLG 'Accurately record ambulance status data' explicitly requires the Radio Operator to record critical data such as departure and destination information, as well as general status updates, based on communications from ambulance staff. The current LLGs cover these specific requirements: 'Input ambulance departure times' (llg_001), 'Input ambulance destination details' (llg_002), and 'Update ambulance status based on communication' (llg_003). These LLGs are directly supported by the project description which states that radio operators need to 'record data accurately' based on communications. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs. The sibling HLGs cover the communication side (Ambulance Staff) and the monitoring/analysis side (Dispatcher), so there is no duplication of responsibilities. The decomposition is complete and consistent.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The project description explicitly states that radio operators and the CAD system need to 'record data accurately' based on communications from ambulance staff. The original HLG 'Accurately record ambulance status data' directly captures this functional intention for the Radio Operator actor. The reconstructed HLG 'Track Ambulance Operational Status and Movement' is less precise because 'tracking' is typically the responsibility of the Dispatcher or the CAD system itself, whereas the Radio Operator's specific role is the manual or semi-automated *recording* of the data provided by the staff. The original HLG is faithful to the actor's description ('Staff responsible for recording data accurately') and the text. There is no overlap with other HLGs; 'Maintain accurate communication' is the Ambulance Staff's action, while 'Accurately record' is the Radio Operator's action.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Accurately record ambulance status data' explicitly requires the Radio Operator to record critical data such as departure and destination information, as well as general status updates, based on communications from ambulance staff. The current LLGs cover these specific requirements: 'Input ambulance departure times' (llg_001), 'Input ambulance destination details' (llg_002), and 'Update ambulance status based on communication' (llg_003). These LLGs are directly supported by the project description which states that radio operators need to 'record data accurately' based on communications. There are no missing essential capabilities explicitly required by the parent HLG that are absent from the current LLGs. The sibling HLGs cover the communication side (Ambulance Staff) and the monitoring/analysis side (Dispatcher), so there is no duplication of responsibilities. The decomposition is complete and consistent.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "regeneration_feedback": null,
         "unsupported_or_misleading_llg_ids": [],
@@ -106,62 +167,90 @@
     },
     "branch_005": {
       "branch_id": "branch_005",
-      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
-      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "rationale": "The project description explicitly states that the Computer Aided Despatch system 'assigns vehicles' and that the key goal is to 'allocate an available ambulance for every call'. The actor description for the Dispatcher confirms they 'allocate ambulances'. The original HLG 'Allocate ambulances efficiently' accurately captures this core functional intention. The reconstructed HLG 'Support Dispatcher Ambulance Allocation' is less precise and slightly passive compared to the direct action described in the text. There is no overlap with other Dispatcher HLGs: 'Accurately analyze incident information' covers the input/analysis phase, 'Monitor real-time ambulance locations' covers the tracking phase, and 'Manage dispatch process within time limits' covers the temporal constraint. 'Allocate ambulances efficiently' is the distinct action of assignment. Therefore, the original HLG is supported and correctly scoped. The parent HLG 'Allocate ambulances efficiently' requires the Dispatcher to assign available ambulances to incidents. The current LLGs cover the essential steps: viewing available resources (llg_001), performing the assignment action (llg_002), and receiving system support for optimization (llg_003). These are directly supported by the project description which states the CAD system 'assigns vehicles' and the goal is to 'allocate an available ambulance'. There is no duplication with sibling HLGs: 'Monitor real-time ambulance locations' covers the tracking aspect, while 'Allocate' covers the decision/assignment aspect. 'Accurately analyze incident information' covers the input analysis. The decomposition is complete and consistent with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Ensure data integrity for the CAD system' is too generic and incorrectly scoped. The project description specifies that Radio Operators are responsible for 'recording data accurately' based on communications from ambulance staff. The bottom-up reconstruction 'Ensure Accurate and Reliable Data Handling by Radio Operators' better captures the specific functional intention of the actor (validating and correcting input data) rather than the abstract system-level outcome of 'data integrity'. Furthermore, there is an existing HLG 'Accurately record ambulance status data' for the same actor. While the original HLG is broader, it overlaps significantly with the specific recording goal. However, the reconstruction suggests a focus on the *process* of handling (validation/correction) which ensures reliability. The original HLG's focus on 'CAD system' is a system component, not the actor's direct goal. The actor's goal is to ensure the data they handle is correct. The reconstruction is more faithful to the actor's role described in the project ('recording data accurately'). The existing HLG 'Accurately record ambulance status data' covers the recording aspect. The original HLG 'Ensure data integrity' is a higher-level abstraction that might be redundant or too vague compared to the specific recording goal. However, looking at the evaluator's calibration, 'Generic... intention -> REWRITE'. The original is generic. The reconstruction is specific to the actor's action. But wait, is there a distinct intention? The project says 'allowing radio operators and the CAD system to record data accurately'. The Radio Operator's specific job is recording. The 'data integrity' is the result. The existing HLG 'Accurately record ambulance status data' already covers the core functional intention. The original HLG 'Ensure data integrity' is a broader, less precise statement of the same intention. It is arguably a duplicate or a less faithful version of the specific recording goal. However, the prompt asks to decide between Keep, Rewrite, or Remove. If I remove it, I rely on 'Accurately record ambulance status data'. Does 'Ensure data integrity' add value? It implies validation/correction, which is part of 'recording accurately'. The reconstruction 'Ensure Accurate and Reliable Data Handling' is very similar to 'Accurately record...'. Given the instruction to 'Judge semantic overlap... Do not keep several HLGs that merely split one stakeholder intention into wording variants', the original HLG is a variant of the existing 'Accurately record ambulance status data'. Therefore, it should be removed to avoid redundancy, or rewritten if it captures a distinct aspect. The reconstruction suggests 'Data Handling' which includes validation. The existing HLG is 'Record'. Is validation distinct? The project says 'validation and correction' in the evaluator rationale for the LLGs. The existing HLG 'Accurately record' might not explicitly cover the validation/correction aspect if 'record' is interpreted as just input. However, 'accurately' implies correctness. The original HLG 'Ensure data integrity' is vague. The best course is likely to REMOVE it because the specific intention is already covered by 'Accurately record ambulance status data', and the original is a generic, less precise variant. Alternatively, if 'Data Handling' is seen as distinct from 'Recording', it might be a rewrite. But 'Recording' is the primary action. Let's look at the other HLGs. 'Accurately record ambulance status data' is very specific. 'Ensure data integrity' is a system quality goal, not really an actor goal in the same way. The actor's goal is to record accurately. Thus, the original HLG is redundant/overlapping with the existing specific HLG. Decision: REMOVE.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "rewriting_focus": null,
-        "confidence": "MEDIUM"
-      },
-      "replacement_request": null,
-      "low_level_evaluation": null
-    },
-    "branch_006": {
-      "branch_id": "branch_006",
-      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
-      "final_decision": "EVALUATION_INCONCLUSIVE",
-      "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Allocate ambulances efficiently' is supported by the project description, which states the key goal is to allocate an available ambulance for every call. However, the bottom-up reconstruction 'Optimize Ambulance Allocation Process' is more faithful to the specific functional intent derived from the low-level goals (providing info, assigning, suggesting). More importantly, looking at the other current High-Level Goals for the Dispatcher, we see 'Achieve rapid response times' and 'Manage dispatch process within time limits'. The original goal 'Allocate ambulances efficiently' is somewhat generic and overlaps significantly with the core functional action of allocation. However, the prompt asks to judge if it should be kept, rewritten, or removed. The original goal is a valid functional intention. Is it redundant? 'Achieve rapid response times' is a quality goal (11 mins). 'Manage dispatch process within time limits' is a process constraint. 'Allocate ambulances efficiently' is the core functional task. The bottom-up reconstruction 'Optimize Ambulance Allocation Process' is slightly more specific about the *process* optimization (using CAD suggestions, etc.). The original is acceptable but 'Optimize Ambulance Allocation Process' better captures the integration of the CAD system's role in the allocation. However, usually, we keep the original if it is reasonably scoped. Let's look closer. The original says 'efficiently assign... to meet response time targets'. This is very close to 'Achieve rapid response times'. But 'Achieve rapid response times' is about the *outcome* (arrival time), while 'Allocate ambulances efficiently' is about the *action* (assignment). They are distinct. The bottom-up goal 'Optimize Ambulance Allocation Process' is a good rewrite because it encompasses the use of the CAD system (analysis, suggestions) which is the 'how' of the allocation. The original is a bit generic ('efficiently'). The reconstruction is more precise. I will rewrite to align with the more specific functional scope of optimizing the allocation process using the system's capabilities.",
-        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "rewriting_focus": "Optimize Ambulance Allocation Process",
-        "confidence": "MEDIUM"
-      },
-      "replacement_request": null,
-      "low_level_evaluation": null
-    },
-    "branch_007": {
-      "branch_id": "branch_007",
-      "rationale": "The original High-Level Goal 'Achieve rapid response times' is supported by the project description, which explicitly states the key goal is to allocate an ambulance that can reach the scene within 11 minutes. However, looking at the other current High-Level Goals for the Dispatcher, there is already a goal named 'Allocate ambulances efficiently' with the description 'Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.' This existing goal semantically covers the intention of meeting the 11-minute timeframe through efficient allocation. Keeping both would result in redundant goals that split the same stakeholder intention (meeting time targets via allocation) into wording variants. Therefore, the original goal should be removed to avoid duplication, as the functional intention is already captured by 'Allocate ambulances efficiently'.",
-      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-      "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Achieve rapid response times' is supported by the project description, which explicitly states the key goal is to allocate an ambulance that can reach the scene within 11 minutes. However, looking at the other current High-Level Goals for the Dispatcher, there is already a goal named 'Allocate ambulances efficiently' with the description 'Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.' This existing goal semantically covers the intention of meeting the 11-minute timeframe through efficient allocation. Keeping both would result in redundant goals that split the same stakeholder intention (meeting time targets via allocation) into wording variants. Therefore, the original goal should be removed to avoid duplication, as the functional intention is already captured by 'Allocate ambulances efficiently'.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rationale": "The project description explicitly states that the Computer Aided Despatch system 'assigns vehicles' and that the key goal is to 'allocate an available ambulance for every call'. The actor description for the Dispatcher confirms they 'allocate ambulances'. The original HLG 'Allocate ambulances efficiently' accurately captures this core functional intention. The reconstructed HLG 'Support Dispatcher Ambulance Allocation' is less precise and slightly passive compared to the direct action described in the text. There is no overlap with other Dispatcher HLGs: 'Accurately analyze incident information' covers the input/analysis phase, 'Monitor real-time ambulance locations' covers the tracking phase, and 'Manage dispatch process within time limits' covers the temporal constraint. 'Allocate ambulances efficiently' is the distinct action of assignment. Therefore, the original HLG is supported and correctly scoped.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
         "confidence": "HIGH"
       },
       "replacement_request": null,
-      "low_level_evaluation": null
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Allocate ambulances efficiently' requires the Dispatcher to assign available ambulances to incidents. The current LLGs cover the essential steps: viewing available resources (llg_001), performing the assignment action (llg_002), and receiving system support for optimization (llg_003). These are directly supported by the project description which states the CAD system 'assigns vehicles' and the goal is to 'allocate an available ambulance'. There is no duplication with sibling HLGs: 'Monitor real-time ambulance locations' covers the tracking aspect, while 'Allocate' covers the decision/assignment aspect. 'Accurately analyze incident information' covers the input analysis. The decomposition is complete and consistent with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_006": {
+      "branch_id": "branch_006",
+      "rationale": "The project description explicitly states that 'The entire dispatch process must not exceed a set maximum time limit.' The original HLG 'Manage dispatch process within time limits' directly captures this constraint and the dispatcher's responsibility to adhere to it. The reconstructed HLG 'Manage Incident Dispatch Timeliness' is semantically equivalent but slightly less precise regarding the 'process' aspect mentioned in the text. There is no overlap with other Dispatcher HLGs: 'Allocate ambulances efficiently' covers the assignment action, 'Accurately analyze incident information' covers the input analysis, and 'Monitor real-time ambulance locations' covers tracking. The time limit is a distinct constraint governing the overall process, separate from the specific actions of analysis, allocation, or monitoring. Therefore, the original HLG is supported and correctly scoped. The parent HLG 'Manage dispatch process within time limits' requires the Dispatcher to ensure the process stays within a maximum time limit. The current LLGs cover the essential capabilities for this: viewing the timer (llg_001) allows the dispatcher to monitor progress, receiving warnings (llg_002) alerts them to potential breaches, and logging start/end times (llg_003) provides the data necessary to verify compliance and manage the process duration. These goals are directly supported by the project description stating 'The entire dispatch process must not exceed a set maximum time limit.' There is no duplication with sibling HLGs; 'Allocate ambulances efficiently' covers the assignment action, while this HLG covers the temporal constraint management. The decomposition is complete and consistent.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The project description explicitly states that 'The entire dispatch process must not exceed a set maximum time limit.' The original HLG 'Manage dispatch process within time limits' directly captures this constraint and the dispatcher's responsibility to adhere to it. The reconstructed HLG 'Manage Incident Dispatch Timeliness' is semantically equivalent but slightly less precise regarding the 'process' aspect mentioned in the text. There is no overlap with other Dispatcher HLGs: 'Allocate ambulances efficiently' covers the assignment action, 'Accurately analyze incident information' covers the input analysis, and 'Monitor real-time ambulance locations' covers tracking. The time limit is a distinct constraint governing the overall process, separate from the specific actions of analysis, allocation, or monitoring. Therefore, the original HLG is supported and correctly scoped.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Manage dispatch process within time limits' requires the Dispatcher to ensure the process stays within a maximum time limit. The current LLGs cover the essential capabilities for this: viewing the timer (llg_001) allows the dispatcher to monitor progress, receiving warnings (llg_002) alerts them to potential breaches, and logging start/end times (llg_003) provides the data necessary to verify compliance and manage the process duration. These goals are directly supported by the project description stating 'The entire dispatch process must not exceed a set maximum time limit.' There is no duplication with sibling HLGs; 'Allocate ambulances efficiently' covers the assignment action, while this HLG covers the temporal constraint management. The decomposition is complete and consistent.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
+    },
+    "branch_007": {
+      "branch_id": "branch_007",
+      "rationale": "The project description explicitly states that the CAD system 'analyzes incident forms' and that dispatchers use the system to 'analyze incidents'. The original HLG 'Accurately analyze incident information' is a direct, supported functional intention for the Dispatcher. The reconstructed HLG 'Support Dispatchers in Making Informed Incident Management Decisions' is broader and less specific than the text, which focuses on the analysis of incident forms as a prerequisite for allocation. The original HLG is distinct from 'Allocate ambulances efficiently' (the action) and 'Manage dispatch process within time limits' (the constraint). It is not a UI step but a core cognitive/functional task supported by the text. Therefore, the original is more faithful and appropriately scoped. The parent HLG 'Accurately analyze incident information' is supported by the project description stating that the CAD system 'analyzes incident forms' and dispatchers use it to 'analyze incidents'. The current LLGs cover the essential aspects of this analysis: retrieving the data (llg_001), categorizing it for decision-making (llg_002), and accessing historical context (llg_003). These capabilities are directly relevant to making informed allocation decisions, which is the stated purpose of the analysis. There is no duplication with sibling HLGs; 'Allocate ambulances efficiently' covers the assignment action, while this HLG covers the analytical preparation. The decomposition is complete and consistent with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "The project description explicitly states that the CAD system 'analyzes incident forms' and that dispatchers use the system to 'analyze incidents'. The original HLG 'Accurately analyze incident information' is a direct, supported functional intention for the Dispatcher. The reconstructed HLG 'Support Dispatchers in Making Informed Incident Management Decisions' is broader and less specific than the text, which focuses on the analysis of incident forms as a prerequisite for allocation. The original HLG is distinct from 'Allocate ambulances efficiently' (the action) and 'Manage dispatch process within time limits' (the constraint). It is not a UI step but a core cognitive/functional task supported by the text. Therefore, the original is more faithful and appropriately scoped.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rewriting_focus": null,
+        "confidence": "HIGH"
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Accurately analyze incident information' is supported by the project description stating that the CAD system 'analyzes incident forms' and dispatchers use it to 'analyze incidents'. The current LLGs cover the essential aspects of this analysis: retrieving the data (llg_001), categorizing it for decision-making (llg_002), and accessing historical context (llg_003). These capabilities are directly relevant to making informed allocation decisions, which is the stated purpose of the analysis. There is no duplication with sibling HLGs; 'Allocate ambulances efficiently' covers the assignment action, while this HLG covers the analytical preparation. The decomposition is complete and consistent with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
     },
     "branch_008": {
       "branch_id": "branch_008",
-      "rationale": "HLG evaluator confidence was below HIGH; branch was not confirmed.",
-      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "rationale": "The project description explicitly states that 'It is vital to track the exact location of moving ambulances' and that this allows the CAD system to record data accurately. The Dispatcher's role involves using the CAD system to allocate ambulances, which inherently requires knowing where they are. The original HLG 'Monitor real-time ambulance locations' is a specific, supported functional intention distinct from 'Allocate ambulances efficiently' (the action) and 'Accurately analyze incident information' (the input analysis). The reconstructed HLG 'Enable Dispatchers to Monitor Ambulance Locations and Status' is slightly broader by adding 'Status', but the text emphasizes 'exact location' and 'moving ambulances'. The original HLG is faithful to the text's emphasis on location tracking for dispatch optimization. It is not a UI step, nor is it redundant with other HLGs. The parent HLG 'Monitor real-time ambulance locations' is supported by the project description stating that 'It is vital to track the exact location of moving ambulances'. The current LLGs cover the essential aspects of this monitoring: viewing real-time locations (llg_001), tracking movement history (llg_002), and filtering for relevant units (llg_003). These capabilities are directly relevant to the dispatcher's need to optimize dispatch. There is no duplication with sibling HLGs; 'Allocate ambulances efficiently' covers the assignment action, while this HLG covers the observational/monitoring aspect. The decomposition is complete and consistent with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "The original High-Level Goal 'Manage dispatch process within time limits' is supported by the project description, which states that 'The entire dispatch process must not exceed a set maximum time limit.' However, there is significant semantic overlap with the existing High-Level Goal 'Achieve rapid response times' (which focuses on the 11-minute arrival target) and 'Allocate ambulances efficiently' (which aims to meet response time targets). The bottom-up reconstruction 'Manage Incident Dispatch Timeliness' suggests a focus on the process duration and monitoring, which is distinct from the outcome of arrival time. However, in the context of the provided HLG list, 'Achieve rapid response times' already captures the primary time-related intention for the Dispatcher (ensuring the ambulance arrives within 11 minutes). The 'dispatch process' time limit is a constraint on the allocation/decision phase, which is largely subsumed by the need to allocate efficiently to meet the 11-minute target. Keeping a separate HLG for 'process time limits' alongside 'rapid response times' creates redundancy, as the ultimate goal is the response time. The original HLG is somewhat generic ('manage... within time limits') compared to the specific '11-minute' constraint mentioned in the description. More importantly, the intention to ensure the dispatch happens quickly enough to allow for the 11-minute arrival is already covered by 'Achieve rapid response times'. Therefore, to avoid splitting one stakeholder intention (timeliness) into multiple overlapping HLGs, this specific HLG should be removed as it is redundant with the existing time-focused goals.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "rationale": "The project description explicitly states that 'It is vital to track the exact location of moving ambulances' and that this allows the CAD system to record data accurately. The Dispatcher's role involves using the CAD system to allocate ambulances, which inherently requires knowing where they are. The original HLG 'Monitor real-time ambulance locations' is a specific, supported functional intention distinct from 'Allocate ambulances efficiently' (the action) and 'Accurately analyze incident information' (the input analysis). The reconstructed HLG 'Enable Dispatchers to Monitor Ambulance Locations and Status' is slightly broader by adding 'Status', but the text emphasizes 'exact location' and 'moving ambulances'. The original HLG is faithful to the text's emphasis on location tracking for dispatch optimization. It is not a UI step, nor is it redundant with other HLGs.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "rewriting_focus": null,
-        "confidence": "MEDIUM"
+        "confidence": "HIGH"
       },
       "replacement_request": null,
-      "low_level_evaluation": null
+      "low_level_evaluation": {
+        "rationale": "The parent HLG 'Monitor real-time ambulance locations' is supported by the project description stating that 'It is vital to track the exact location of moving ambulances'. The current LLGs cover the essential aspects of this monitoring: viewing real-time locations (llg_001), tracking movement history (llg_002), and filtering for relevant units (llg_003). These capabilities are directly relevant to the dispatcher's need to optimize dispatch. There is no duplication with sibling HLGs; 'Allocate ambulances efficiently' covers the assignment action, while this HLG covers the observational/monitoring aspect. The decomposition is complete and consistent with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "confidence": "HIGH"
+      }
     }
   },
   "high_level_goals": {
     "goals": [
       {
-        "name": "Ensure accurate location tracking during transit",
-        "description": "Ambulance Staff aim to ensure their current location is accurately transmitted to the Computer Aided Despatch (CAD) system during transit to an emergency scene.",
+        "name": "Ensure timely arrival at emergency scenes",
+        "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
         "actor": {
           "name": "Ambulance Staff",
           "description": "Personnel who operate ambulances, communicate their status, and follow routes."
@@ -192,24 +281,8 @@
         }
       },
       {
-        "name": "Ensure data integrity for the CAD system",
-        "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
-        "actor": {
-          "name": "Radio Operator",
-          "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
-        }
-      },
-      {
         "name": "Allocate ambulances efficiently",
         "description": "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
-        "actor": {
-          "name": "Dispatcher",
-          "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
-        }
-      },
-      {
-        "name": "Achieve rapid response times",
-        "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
         "actor": {
           "name": "Dispatcher",
           "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
@@ -352,42 +425,6 @@
         }
       },
       {
-        "name": "Validate entered data for CAD system",
-        "description": "Radio Operators can validate entered data against predefined formats or rules before submission to the CAD system.",
-        "high_level_associated": {
-          "name": "Ensure data integrity for the CAD system",
-          "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
-          "actor": {
-            "name": "Radio Operator",
-            "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
-          }
-        }
-      },
-      {
-        "name": "Correct erroneous data entries in CAD",
-        "description": "Radio Operators can correct erroneous data entries in the CAD system to maintain data integrity.",
-        "high_level_associated": {
-          "name": "Ensure data integrity for the CAD system",
-          "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
-          "actor": {
-            "name": "Radio Operator",
-            "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
-          }
-        }
-      },
-      {
-        "name": "Confirm successful data transmission to CAD",
-        "description": "Radio Operators can confirm successful data transmission to the CAD system to ensure information is received.",
-        "high_level_associated": {
-          "name": "Ensure data integrity for the CAD system",
-          "description": "Radio Operators strive to ensure that the Computer Aided Despatch (CAD) system receives correct and timely information to facilitate accurate dispatch and tracking.",
-          "actor": {
-            "name": "Radio Operator",
-            "description": "Staff responsible for recording data accurately based on communications from ambulance staff."
-          }
-        }
-      },
-      {
         "name": "View list of available ambulances",
         "description": "Dispatchers can view a list of available ambulances and their current locations to aid in allocation.",
         "high_level_associated": {
@@ -417,42 +454,6 @@
         "high_level_associated": {
           "name": "Allocate ambulances efficiently",
           "description": "Dispatchers aim to efficiently assign available ambulances to emergency calls to meet response time targets.",
-          "actor": {
-            "name": "Dispatcher",
-            "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
-          }
-        }
-      },
-      {
-        "name": "Monitor estimated time of arrival (ETA)",
-        "description": "Dispatchers can monitor the estimated time of arrival (ETA) for assigned ambulances to track response progress.",
-        "high_level_associated": {
-          "name": "Achieve rapid response times",
-          "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
-          "actor": {
-            "name": "Dispatcher",
-            "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
-          }
-        }
-      },
-      {
-        "name": "Receive alerts for exceeding ETA thresholds",
-        "description": "Dispatchers can receive alerts if an ambulance's ETA exceeds critical thresholds, indicating potential delays.",
-        "high_level_associated": {
-          "name": "Achieve rapid response times",
-          "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
-          "actor": {
-            "name": "Dispatcher",
-            "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
-          }
-        }
-      },
-      {
-        "name": "Prioritize incidents for allocation",
-        "description": "Dispatchers can prioritize incidents based on urgency to influence ambulance allocation decisions.",
-        "high_level_associated": {
-          "name": "Achieve rapid response times",
-          "description": "Dispatchers are focused on ensuring that allocated ambulances can reach incident scenes within the critical 11-minute timeframe.",
           "actor": {
             "name": "Dispatcher",
             "description": "Personnel who use the Computer Aided Despatch system to analyze incidents and allocate ambulances."
@@ -568,11 +569,11 @@
         }
       },
       {
-        "name": "Initiate continuous GPS location transmission",
-        "description": "Ambulance Staff initiates the continuous transmission of the ambulance's current GPS coordinates to the CAD system.",
+        "name": "Initiate departure from a station",
+        "description": "Ambulance Staff will signal the system to record the start of their journey from the station towards an emergency scene, enabling time tracking.",
         "high_level_associated": {
-          "name": "Ensure accurate location tracking during transit",
-          "description": "Ambulance Staff aim to ensure their current location is accurately transmitted to the Computer Aided Despatch (CAD) system during transit to an emergency scene.",
+          "name": "Ensure timely arrival at emergency scenes",
+          "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
           "actor": {
             "name": "Ambulance Staff",
             "description": "Personnel who operate ambulances, communicate their status, and follow routes."
@@ -580,11 +581,11 @@
         }
       },
       {
-        "name": "Retrieve optimized route to emergency scene",
-        "description": "Ambulance Staff retrieves the current optimized route and turn-by-turn directions to the emergency scene from the CAD system.",
+        "name": "Transmit current location and status updates during transit",
+        "description": "Ambulance Staff will send periodic updates of their current GPS location and operational status to the system while en route to an emergency scene, allowing real-time progress monitoring against critical timeframes.",
         "high_level_associated": {
-          "name": "Ensure accurate location tracking during transit",
-          "description": "Ambulance Staff aim to ensure their current location is accurately transmitted to the Computer Aided Despatch (CAD) system during transit to an emergency scene.",
+          "name": "Ensure timely arrival at emergency scenes",
+          "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
           "actor": {
             "name": "Ambulance Staff",
             "description": "Personnel who operate ambulances, communicate their status, and follow routes."
@@ -592,35 +593,11 @@
         }
       },
       {
-        "name": "Update operational status to En Route",
-        "description": "Ambulance Staff updates the ambulance's operational status to 'En Route' within the CAD system.",
+        "name": "Confirm arrival at an emergency scene",
+        "description": "Ambulance Staff will notify the system upon their arrival at the emergency scene, marking the end of the travel phase for accurate time-to-scene calculation.",
         "high_level_associated": {
-          "name": "Ensure accurate location tracking during transit",
-          "description": "Ambulance Staff aim to ensure their current location is accurately transmitted to the Computer Aided Despatch (CAD) system during transit to an emergency scene.",
-          "actor": {
-            "name": "Ambulance Staff",
-            "description": "Personnel who operate ambulances, communicate their status, and follow routes."
-          }
-        }
-      },
-      {
-        "name": "Update operational status to On Scene",
-        "description": "Ambulance Staff updates the ambulance's operational status to 'On Scene' within the CAD system upon arrival at the emergency location.",
-        "high_level_associated": {
-          "name": "Ensure accurate location tracking during transit",
-          "description": "Ambulance Staff aim to ensure their current location is accurately transmitted to the Computer Aided Despatch (CAD) system during transit to an emergency scene.",
-          "actor": {
-            "name": "Ambulance Staff",
-            "description": "Personnel who operate ambulances, communicate their status, and follow routes."
-          }
-        }
-      },
-      {
-        "name": "Query last location transmission status",
-        "description": "Ambulance Staff queries the system to confirm the last successful transmission of location data to the CAD system.",
-        "high_level_associated": {
-          "name": "Ensure accurate location tracking during transit",
-          "description": "Ambulance Staff aim to ensure their current location is accurately transmitted to the Computer Aided Despatch (CAD) system during transit to an emergency scene.",
+          "name": "Ensure timely arrival at emergency scenes",
+          "description": "Ambulance Staff aim to operate ambulances efficiently to reach emergency scenes within critical timeframes.",
           "actor": {
             "name": "Ambulance Staff",
             "description": "Personnel who operate ambulances, communicate their status, and follow routes."
@@ -631,12 +608,12 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "The project description focuses on the dispatch process, ambulance allocation, tracking, and communication. The current High-Level Goals (HLGs) comprehensively cover these aspects: 'Allocate ambulances efficiently' and 'Accurately analyze incident information' cover the CAD analysis and assignment; 'Monitor real-time ambulance locations' and 'Maintain accurate communication of status and location' cover the tracking and data recording requirements; 'Manage dispatch process within time limits' and 'Achieve rapid response times' cover the 11-minute and maximum time limit constraints. There are no distinct, documented functional intentions in the text that are not already addressed by the existing HLGs.",
+    "rationale": "The project description outlines a workflow involving incident analysis, ambulance allocation, location tracking, and data recording. The current High-Level Goals comprehensively cover these responsibilities for all identified actors. Specifically, the Dispatcher's goals cover analyzing incidents, allocating ambulances, managing time limits, and monitoring locations. The Ambulance Staff's goals cover adhering to routes and communicating status/location. The Radio Operator's goal covers recording data. There are no distinct functional intentions in the description that are not already captured by these broad stakeholder intentions.",
     "missing_goal_requests": []
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-  "llg_regeneration_counts": {},
-  "warnings": [
-    "UNRESOLVED_EVALUATION_INCONCLUSIVE"
-  ]
+  "llg_regeneration_counts": {
+    "ambulance staff::ensure timely arrival at emergency scenes": 1
+  },
+  "warnings": []
 }

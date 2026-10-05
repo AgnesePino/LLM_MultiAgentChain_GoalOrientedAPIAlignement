@@ -30,18 +30,85 @@ GROQ_EVALUATOR_MODEL = PREFERRED_GROQ_EVALUATOR_MODEL
 
 # The evaluator only has to produce ``Feedback`` and ``Score``.  Groq counts
 # the requested completion budget together with the prompt against the
-# organisation's tokens-per-minute ceiling.  Reserving the historical 6000
-# tokens therefore makes an otherwise small evaluator call exceed the 8000
-# token on-demand limit and Groq rejects it with HTTP 413.
-GROQ_LLAMA_MAX_TOKENS = int(os.getenv("GROQ_LLAMA_MAX_TOKENS", "1200"))
+# organisation's tokens-per-minute ceiling. Reserving the historical 6000
+# tokens therefore makes an otherwise small evaluator call exceed the
+# available limit and Groq rejects it with HTTP 413.
+GROQ_LLAMA_MAX_TOKENS = int(os.getenv("GROQ_LLAMA_MAX_TOKENS", "700"))
 
 # Keep the fallback under the same request-size ceiling.
 GROQ_FALLBACK_MAX_TOKENS = int(
-    os.getenv("GROQ_FALLBACK_MAX_TOKENS", "1200")
+    os.getenv("GROQ_FALLBACK_MAX_TOKENS", "700")
+)
+
+# The current evaluator prompt is always sent in full. Only compact memories
+# from previous calls share this additional character budget.
+GROQ_CRITIC_HISTORY_MAX_CHARS = int(
+    os.getenv("GROQ_CRITIC_HISTORY_MAX_CHARS", "2500")
 )
 
 
 llama = None
+
+
+class EvaluatorConversation:
+    """Bounded, compact chat history for one bottom-up critic execution."""
+
+    def __init__(self, max_turns: int = 8, max_state_updates: int = 8):
+        if max_turns < 1 or max_state_updates < 1:
+            raise ValueError("Conversation memory limits must be positive.")
+        self.max_turns = max_turns
+        self.max_state_updates = max_state_updates
+        self._exchanges: list[tuple[str, str]] = []
+        self._state_updates: list[str] = []
+
+    def build_messages(self, prompt: str, sys_prompt: str) -> list[dict[str, str]]:
+        system_content = sys_prompt
+        if self._state_updates:
+            system_content += (
+                "\n\nMost recent bottom-up state supplied as explicit input "
+                "for this evaluation (the previous iteration when available):\n"
+                f"{self._state_updates[-1]}"
+            )
+
+        messages = [{"role": "system", "content": system_content}]
+
+        # Select the newest compact exchanges that fit. Replaying full earlier
+        # prompts would resend the project description and goal collections on
+        # every critic call, quickly exceeding Groq's request/token limit.
+        selected_exchanges: list[tuple[str, str]] = []
+        retained_chars = 0
+        for label, previous_response in reversed(self._exchanges):
+            exchange_chars = len(label) + len(previous_response)
+            if retained_chars + exchange_chars > GROQ_CRITIC_HISTORY_MAX_CHARS:
+                continue
+            selected_exchanges.append((label, previous_response))
+            retained_chars += exchange_chars
+
+        for label, previous_response in reversed(selected_exchanges):
+            messages.extend([
+                {"role": "user", "content": label},
+                {"role": "assistant", "content": previous_response},
+            ])
+        messages.append({"role": "user", "content": prompt})
+        return messages
+
+    def record_exchange(self, label: str, response: str) -> None:
+        normalized_label = " ".join(label.split())
+        if not normalized_label:
+            return
+        self._exchanges.append((normalized_label, response))
+        self._exchanges = self._exchanges[-self.max_turns:]
+
+    def remember_state(self, update: str) -> None:
+        normalized = " ".join(update.split())
+        if not normalized:
+            return
+        self._state_updates.append(normalized)
+        self._state_updates = self._state_updates[-self.max_state_updates:]
+
+    @property
+    def retained_turns(self) -> int:
+        return len(self._exchanges)
 
 
 def _key_helpers():
@@ -83,8 +150,12 @@ def generate_response(prompt, sys_prompt, response_format=None):
     )
 
 
-def generate_evaluator_response(prompt, sys_prompt):
-    """Run the evaluator using Qwen 3.8 on Groq."""
+def generate_evaluator_response(
+    prompt,
+    sys_prompt,
+    conversation: EvaluatorConversation | None = None,
+):
+    """Run Qwen on Groq, optionally replaying a bounded conversation."""
     global GROQ_EVALUATOR_MODEL
 
     from openai import APIStatusError, RateLimitError
@@ -105,10 +176,14 @@ def generate_evaluator_response(prompt, sys_prompt):
         try:
             groq_client = _groq_client()
             request = {
-                "messages": [
-                    {"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": prompt},
-                ],
+                "messages": (
+                    conversation.build_messages(prompt, sys_prompt)
+                    if conversation is not None
+                    else [
+                        {"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": prompt},
+                    ]
+                ),
                 "model": model,
                 "temperature": 0,
             }

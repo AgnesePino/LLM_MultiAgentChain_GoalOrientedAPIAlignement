@@ -225,31 +225,17 @@ class GlobalGoalCycleIteration(BaseModel):
     warnings: list[str] = Field(default_factory=list)
 
 
-class LowLevelGoalCleanupBranch(BaseModel):
-    branch_id: str
-    high_level_goal: HighLevelGoal
-    evaluation: LowLevelGoalEvaluation
-    removed_low_level_goals: list[LowLevelGoal] = Field(default_factory=list)
-    retained_low_level_goal_count: int
-    applied: bool = False
-    rationale: str
-
-
-class LowLevelGoalCleanupPrepass(BaseModel):
-    branches: dict[str, LowLevelGoalCleanupBranch] = Field(default_factory=dict)
-    initial_low_level_goal_count: int
-    final_low_level_goal_count: int
-    low_level_goals: LowLevelGoals
-    warnings: list[str] = Field(default_factory=list)
-
-
 class GlobalGoalCycleResult(BaseModel):
     converged: bool
     stop_reason: GlobalGoalCycleStopReason
     completed_iterations: int
     final_high_level_goals: HighLevelGoals
     final_low_level_goals: LowLevelGoals
-    llg_cleanup_prepass: LowLevelGoalCleanupPrepass | None = None
     iterations: list[GlobalGoalCycleIteration] = Field(default_factory=list)
     llg_regeneration_counts: dict[str, int] = Field(default_factory=dict)
     warnings: list[str] = Field(default_factory=list)
+
+    @property
+    def kaos_analysis(self) -> None:
+        """Compatibility for stale notebook cells; KAOS is no longer run."""
+        return None

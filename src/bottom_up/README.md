@@ -1,180 +1,347 @@
-# Pipeline bottom-up
+# Pipeline di validazione bottom-up
 
-La pipeline bottom-up serve a controllare e, quando necessario, migliorare
-la gerarchia di obiettivi prodotta dalla pipeline top-down.
+In questo lavoro ho aggiunto una seconda fase alla pipeline top-down originale.
+La pipeline iniziale estrae dalla descrizione del progetto gli attori, gli
+High-Level Goal (HLG) e i Low-Level Goal (LLG). La fase bottom-up parte dallo
+stesso risultato e prova a rispondere a una domanda diversa:
 
-La pipeline top-down parte dalla descrizione del progetto e produce:
+> Gli LLG prodotti dal modello giustificano davvero l'HLG a cui sono collegati?
+
+L'obiettivo non è generare nuovamente tutto da zero, ma controllare la gerarchia
+già prodotta e correggere soltanto i branch che presentano un problema. Il file
+top-down originale non viene sovrascritto, così posso confrontare la baseline
+con il risultato ottenuto dopo la validazione bottom-up.
+
+## Struttura dei goal
+
+La gerarchia usata dalla pipeline è:
 
 ```text
-descrizione del progetto -> attori -> HLG -> LLG
+descrizione del progetto
+        └── attore
+              └── High-Level Goal (WHY)
+                    └── Low-Level Goal (HOW)
 ```
 
-Gli HLG (*High-Level Goals*) descrivono le intenzioni principali degli attori,
-mentre gli LLG (*Low-Level Goals*) descrivono le attività più concrete che
-realizzano quelle intenzioni.
+Un HLG rappresenta un'intenzione funzionale dell'attore, mentre un LLG descrive
+un'azione più concreta attraverso cui quell'intenzione può essere realizzata.
+Nel codice, un HLG e i suoi LLG formano un **branch**.
 
-La pipeline bottom-up non riparte da zero e non modifica il risultato originale.
-Legge gli HLG e gli LLG già prodotti, li controlla e salva una nuova versione
-in `output/top_down_bottom_up/`. In questo modo è possibile confrontare
-direttamente il risultato top-down con quello ottenuto dopo il controllo
-bottom-up.
+## Flusso completo
 
-## Come funziona
+Il ciclo bottom-up può essere riassunto così:
 
-Il notebook
-[`01_pipeline_execution_bottom_up_only.ipynb`](../../notebook/01_pipeline_execution_bottom_up_only.ipynb)
-esegue la pipeline per ogni progetto presente nella ground truth.
+```text
+output top-down
+      │
+      ▼
+mapping LLG → HLG
+      │
+      ▼
+ricostruzione dell'HLG osservando solo gli LLG
+      │
+      ▼
+valutazione dell'HLG originale
+      │
+      ├── KEEP ──────► valutazione degli LLG
+      ├── REWRITE ───► rigenerazione mirata dell'HLG e dei suoi LLG
+      └── REMOVE ────► rimozione del branch
+      │
+      ▼
+controllo globale degli HLG mancanti
+      │
+      ▼
+applicazione delle correzioni e nuova iterazione
+```
 
-Per prima cosa legge il file JSON prodotto dalla pipeline top-down. Poi
-raggruppa ogni LLG sotto il suo HLG e crea un *branch*, cioè un gruppo formato
-da un HLG e dai suoi LLG.
+La descrizione del progetto rimane sempre la fonte principale. La ricostruzione
+bottom-up è un indizio utile, ma non è sufficiente da sola per eliminare o
+riscrivere un goal.
 
-Prima di iniziare il ciclo viene fatto un controllo iniziale molto prudente:
-vengono eliminati solo gli LLG chiaramente superflui. Anche gli HLG che non
-hanno nessun LLG vengono rimossi, perché non possono essere valutati. Se due
-HLG sono duplicati, viene mantenuto il primo e i relativi LLG vengono
-ricollegati a quello mantenuto.
+## 1. Costruzione dei branch
 
-A questo punto comincia il ciclo bottom-up. Per ogni branch il sistema prova a
-ricostruire l'HLG partendo soltanto dai suoi LLG. Questo nuovo obiettivo,
-indicato come `HLG'`, permette di capire quale intenzione emerge davvero dalla
-decomposizione.
+Il mapping è implementato in
+[`low_level_goal_mapper.py`](./low_level_goal_mapper.py).
 
-L'evaluator confronta quindi:
+Ogni LLG contiene un riferimento al proprio HLG. Il codice collega i due goal
+confrontando il nome dell'attore e il nome dell'HLG dopo una normalizzazione del
+testo. Se l'attore è stato leggermente parafrasato, viene usato il solo nome
+dell'HLG, ma esclusivamente quando quel nome è univoco.
 
-- la descrizione completa del progetto;
-- l'HLG originale e il suo attore;
-- l'HLG ricostruito dagli LLG;
-- gli altri HLG già presenti.
+Questa scelta evita una chiamata LLM per il mapping e riduce il rischio di
+assegnare un LLG al branch sbagliato. Prima della valutazione vengono inoltre
+rimossi gli HLG senza LLG e i duplicati con la stessa identità normalizzata.
 
-In base a questo confronto può decidere di mantenere l'HLG, riscriverlo oppure
-rimuoverlo. Se l'HLG è corretto, viene controllato anche se i suoi LLG coprono
-tutte le capacità richieste.
+## 2. Ricostruzione bottom-up dell'HLG
 
-Gli LLG vengono rigenerati solo quando c'è un problema importante: per esempio
-quando manca una capacità richiesta dal parent, quando un LLG non è supportato
-dalla descrizione oppure quando gli LLG appartengono a un altro obiettivo.
-Una differenza di stile, di granularità o di formulazione tecnica non è
-sufficiente per avviare una rigenerazione.
+La ricostruzione è implementata in
+[`goal_reconstructor.py`](./goal_reconstructor.py).
 
-Durante ogni iterazione viene eseguito anche un controllo globale. Questo
-controllo verifica se nella descrizione del progetto esiste un'intenzione
-funzionale importante che non è ancora rappresentata da nessun HLG. Se trova
-una lacuna, il sistema chiede alla pipeline top-down di generare un nuovo HLG
-focalizzato su quella sola intenzione.
+Il modello riceve soltanto gli LLG del branch, senza vedere l'HLG originale, e
+deve inferire l'intenzione comune che emerge dalle azioni descritte. L'output
+contiene:
 
-## Ordine delle modifiche
+- l'HLG ricostruito;
+- una breve motivazione;
+- gli identificatori degli LLG usati.
 
-Il sistema valuta tutti i branch, ma applica le modifiche in un ordine preciso.
-Prima elimina eventuali duplicati, poi prova a riscrivere un HLG. Se non serve
-una riscrittura, può rimuovere gli HLG non supportati; successivamente può
-rigenerare gli LLG di un solo branch oppure aggiungere un solo HLG mancante.
+Ho scelto di nascondere l'HLG originale per evitare che il modello si limiti a
+ripeterlo. In questo modo la ricostruzione può essere confrontata con il parent
+prodotto dal top-down come segnale indipendente di coerenza.
 
-Le richieste di generazione vengono eseguite una alla volta. In questo modo
-ogni modifica viene controllata nelle iterazioni successive e non vengono
-introdotti molti cambiamenti contemporaneamente.
+## 3. I tre critic
 
-Un branch confermato non viene rivalutato, a meno che una modifica successiva
-non ne cambi la struttura. Ogni branch può provare al massimo due rigenerazioni
-degli LLG. Se anche il secondo tentativo non risolve il problema, gli ultimi
-LLG vengono mantenuti e viene registrato il warning
-`LLG_REGENERATION_LIMIT_REACHED`.
+La valutazione è divisa in tre prompt distinti, implementati in
+[`global_goal_evaluator.py`](./global_goal_evaluator.py). Ho preferito separare
+i compiti perché un unico prompt avrebbe dovuto valutare contemporaneamente
+scope dell'HLG, qualità degli LLG e copertura dell'intero progetto.
 
-Il ciclo termina quando tutti i branch sono confermati e non risultano HLG
-mancanti. Può terminare anche con warning quando non sono più possibili
-modifiche. In quest'ultimo caso il sistema conserva comunque il risultato
-ottenuto e rende visibili i problemi residui.
+### Critic dell'HLG
 
-Nel notebook usato per l'esperimento il ciclo poteva eseguire al massimo 25
-iterazioni. Il valore predefinito del codice, usato se non viene specificata
-un'impostazione diversa, è 5.
+`evaluate_original_hlg` confronta:
 
-## File principali
+- descrizione del progetto;
+- attore del branch;
+- HLG originale;
+- HLG ricostruito dagli LLG;
+- altri HLG correnti.
 
-- [`low_level_goal_mapper.py`](./low_level_goal_mapper.py) collega gli LLG ai
-  rispettivi HLG;
-- [`goal_reconstructor.py`](./goal_reconstructor.py) ricostruisce `HLG'` dagli
-  LLG;
-- [`global_goal_evaluator.py`](./global_goal_evaluator.py) valuta gli HLG, gli
-  LLG e la copertura globale;
-- [`goal_cycle_orchestrator.py`](./goal_cycle_orchestrator.py) coordina il
-  ciclo, applica le modifiche e gestisce la terminazione.
+Le decisioni possibili sono:
 
-La generazione degli obiettivi riparati o aggiunti usa le funzioni originali
-della pipeline top-down. Nel run sperimentale la generazione è stata eseguita
-con Gemini, mentre la valutazione è stata eseguita con il modello evaluator
-configurato su Groq.
+- `KEEP_ORIGINAL_HIGH_LEVEL_GOAL`: l'intenzione è supportata e ha uno scope
+  adeguato;
+- `REWRITE_ORIGINAL_HIGH_LEVEL_GOAL`: l'intenzione è valida ma troppo generica,
+  troppo stretta, ambigua o assegnata male;
+- `REMOVE_ORIGINAL_HIGH_LEVEL_GOAL`: l'intenzione non è supportata oppure è già
+  coperta da un altro HLG dello stesso attore.
 
-## Valutazione dei risultati
+Una decisione viene applicata soltanto con confidence `HIGH`. Se il modello
+sceglie `REWRITE`, deve anche indicare `rewriting_focus`; il codice usa questo
+campo per costruire la richiesta al generatore senza aggiungere un quarto
+critic.
 
-Il notebook
-[`02_experimental_evaluation_top_down_vs_bottom_up.ipynb`](../../notebook/02_experimental_evaluation_top_down_vs_bottom_up.ipynb)
-non genera nuovi obiettivi: legge i risultati già salvati e confronta:
+### Critic degli LLG
 
-1. la baseline top-down;
-2. la stessa baseline dopo il ciclo bottom-up.
+`evaluate_llg_decomposition` viene eseguito solo quando l'HLG è stato
+mantenuto. Controlla se gli LLG descrivono in modo adeguato il parent e sceglie
+tra:
 
-Il confronto viene fatto separatamente per HLG e LLG, usando la stessa
-ground truth. Per misurare la somiglianza tra due obiettivi il notebook usa il
-modello `bert-base-uncased`, la similarità coseno e un abbinamento uno-a-uno
-calcolato con l'algoritmo ungherese. Una coppia viene considerata valida quando
-la similarità è almeno `0.65`. Il testo viene usato così com'è, senza
-stemming o lemmatizzazione.
+- `KEEP_LOW_LEVEL_GOALS`;
+- `REGENERATE_LOW_LEVEL_GOALS`.
 
-Le metriche sono *soft*: tengono conto del grado di somiglianza, non solo del
-fatto che due stringhe siano uguali. I valori sono quindi:
+La rigenerazione è ammessa solo quando esiste un difetto materiale: una
+capacità essenziale mancante, un LLG non supportato dalla documentazione oppure
+un LLG appartenente a un'altra intenzione. Differenze di stile, wording tecnico,
+granularità o operazioni CRUD opzionali non sono considerate sufficienti.
 
-- **Precision**: quanto sono pertinenti gli obiettivi generati;
-- **Recall**: quanta parte della ground truth viene ritrovata;
-- **F1**: il compromesso tra Precision e Recall.
+Il codice applica anche un controllo deterministico: `REGENERATE` deve avere
+confidence `HIGH` e almeno un ID LLG problematico valido oppure una capacità
+essenziale mancante. In caso contrario la decisione viene convertita in `KEEP`.
 
-I risultati reali salvati dal notebook sono i seguenti. I valori sono medie
-calcolate sui dataset.
+### Critic della copertura globale
+
+`evaluate_missing_high_level_goals` viene chiamato una volta per iterazione e
+osserva l'intero progetto, non un singolo branch. Cerca fino a due intenzioni
+funzionali distinte che non sono coperte dagli HLG correnti.
+
+Il goal può essere dichiarato esplicitamente oppure emergere da più passaggi del
+workflow, ma deve essere supportato dalla descrizione e appartenere a un attore
+già esistente. Il prompt non deve proporre varianti più strette di goal presenti,
+azioni CRUD, dettagli tecnici o funzionalità semplicemente comuni in sistemi
+simili.
+
+Il risultato è una richiesta focalizzata per il generatore top-down, non il
+nuovo HLG definitivo. Vengono proposti al massimo due HLG mancanti per
+iterazione. Ogni critic contiene inoltre esempi few-shot specifici del proprio
+compito, usati per calibrare le decisioni senza mescolare i tre ruoli.
+
+## 4. Memoria del critic
+
+I tre critic bottom-up condividono una conversazione durante l'esecuzione di un
+singolo progetto. Groq non mantiene una sessione server-side, quindi il codice
+realizza la memoria reinviando una parte dello storico.
+
+La prima iterazione riceve lo stato iniziale. Al termine dell'iterazione il
+codice registra:
+
+- HLG aggiunti;
+- HLG rimossi o sostituiti;
+- LLG aggiunti e rimossi per ogni parent;
+- insieme corrente degli HLG.
+
+Dalla seconda iterazione in poi questo riepilogo viene fornito esplicitamente ai
+critic come stato dell'iterazione precedente. La memoria è isolata per progetto
+e conserva al massimo 4 turni e 2 aggiornamenti di stato. Nelle richieste non
+reinvia i prompt completi: conserva una breve etichetta della valutazione e la
+risposta del critic, entro un budget di caratteri. Il ricostruttore e i
+generatori Gemini restano stateless.
+
+Questa memoria aiuta il critic a non ripetere decisioni già applicate, ma ha un
+costo: lo storico aumenta la dimensione dei prompt e può trasmettere un errore
+di giudizio alle iterazioni successive.
+
+## Modelli e gestione dei token
+
+I generatori e i critic hanno ruoli distinti:
+
+- **Gemini 2.5 Flash** genera output strutturati, ricostruzioni e nuovi HLG/LLG;
+- **Qwen 3.8 27B**, eseguito tramite l'API di **Groq**, svolge le tre valutazioni
+  bottom-up.
+
+Groq è quindi il provider, mentre Qwen è il modello del critic. Per evitare
+richieste `413 Request too large`, la risposta del critic è limitata a 700 token
+e lo storico compatto a 2.500 caratteri. I prompt correnti vengono sempre inviati
+per intero. Nel wrapper Gemini l'Automatic Function Calling è disabilitato,
+perché questa pipeline non espone tool al modello.
+
+## 5. Applicazione delle correzioni
+
+L'orchestratore è implementato in
+[`goal_cycle_orchestrator.py`](./goal_cycle_orchestrator.py). Le modifiche non
+vengono applicate tutte insieme, perché una correzione può cambiare il contesto
+usato per valutare gli altri branch.
+
+L'ordine è:
+
+1. riscrittura di un HLG, al massimo una per iterazione;
+2. rimozione degli HLG giudicati non validi, entro il limite configurato;
+3. rigenerazione degli LLG di un solo branch;
+4. aggiunta di un massimo di due HLG mancanti.
+
+Le operazioni di generazione riusano le funzioni top-down già esistenti. Una
+riscrittura rigenera anche gli LLG del nuovo parent; un HLG scoperto dal
+controllo globale riceve una nuova decomposizione in LLG.
+
+Un branch confermato viene congelato finché la struttura degli HLG non cambia.
+Dopo un'aggiunta, una rimozione o una riscrittura, tutti i branch vengono riaperti
+per un nuovo audit nell'iterazione successiva. L'identità stabile `attore::nome
+HLG` evita che la rinumerazione dei branch faccia perdere il loro stato.
+
+Non è presente un pre-pass di cleanup degli LLG: eventuali problemi vengono
+gestiti dal critic LLG all'interno del normale ciclo.
+
+## Limiti del ciclo
+
+I limiti principali sono:
+
+| Parametro | Valore | Significato |
+|---|---:|---|
+| `DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS` | 5 | Iterazioni predefinite del ciclo |
+| `MAX_LLG_REGENERATIONS_PER_BRANCH` | 2 | Rigenerazioni LLG per branch |
+| `MAX_HLG_REWRITES_PER_BRANCH` | 2 | Riscritture dello stesso HLG |
+| `MAX_HLG_REMOVALS_PER_ITERATION` | 5 | Rimozioni applicabili insieme |
+| `MAX_NEW_HLGS_PER_ITERATION` | 2 | Nuovi HLG per iterazione |
+| `MAX_LLG_GROWTH_PER_REPAIR` | 2 | Crescita massima durante una riparazione |
+| `MAX_LLGS_FOR_NEW_HLG` | 6 | LLG massimi per un HLG scoperto |
+
+Il notebook può sovrascrivere il numero massimo di iterazioni. Il ciclo termina
+quando tutti i branch sono confermati e non risultano HLG mancanti, quando non
+rimangono azioni applicabili ma sono presenti warning, oppure quando viene
+raggiunto il limite di iterazioni.
+
+## Costo dell'esecuzione
+
+La pipeline esegue le chiamate in modo sequenziale. Con `B` branch attivi, una
+iterazione completa può richiedere:
+
+- `B` chiamate Gemini per la ricostruzione;
+- `B` chiamate Groq per valutare gli HLG;
+- fino a `B` chiamate Groq per valutare gli LLG;
+- una chiamata Groq per la copertura globale;
+- eventuali chiamate aggiuntive per rewrite e rigenerazioni.
+
+Il costo massimo indicativo è quindi vicino a `3B + 1` chiamate remote per
+iterazione. La memoria compatta del critic aggiunge comunque alcuni token. Per questo è
+preferibile provare inizialmente un solo dataset e poche iterazioni, prima di
+avviare l'esecuzione completa.
+
+## Scelte che possono influenzare Precision e Recall
+
+Il confronto è riferito alla
+[`pipeline originale`](https://github.com/ArnaudoAnnA/LLM_MultiAgentChain_GoalOrientedAPIAlignement/commit/77c9acb98b7534b0d954b3a340ff585b83e423ab).
+La tabella contiene soltanto le modifiche che possono cambiare i goal prodotti.
+Gli effetti indicati sono attesi dal disegno della pipeline: per attribuire un
+delta a una singola scelta servirebbe un esperimento di ablation dedicato.
+
+| Scelta | Possibile effetto sulla Precision | Possibile effetto sulla Recall | Rischio principale |
+|---|---|---|---|
+| Mapping deterministico LLG-HLG | Riduce associazioni errate tra branch | Non modifica la Recall quando il mapping riesce | Una parafrasi forte o un nome ambiguo interrompono il caricamento perché il matching non è semantico |
+| Rimozione di HLG vuoti e duplicati | Elimina goal senza decomposizione o ridondanti | Può rimuovere un'intenzione valida ma non ancora decomposta | Decisione effettuata prima del critic del branch |
+| Ricostruzione cieca dell'HLG dagli LLG | Aiuta a individuare parent incoerenti | Può sottostimare l'HLG quando gli LLG iniziali sono incompleti | La qualità del controllo dipende dalla baseline LLG |
+| `KEEP`, `REWRITE` e `REMOVE` sugli HLG | Può eliminare goal non supportati e sovrapposti | Rewrite o remove errati possono cancellare capacità corrette | Le operazioni sono distruttive |
+| Gate `HIGH` per le decisioni | Riduce correzioni arbitrarie | Può lasciare errori reali quando il critic è incerto | Approccio conservativo |
+| Rigenerazione mirata degli LLG | Può sostituire LLG fuori scope o non supportati | Può aggiungere capacità mancanti, ma anche perdere dettagli già validi | La sostituzione non garantisce copertura non regressiva |
+| Controllo globale degli HLG mancanti | Può evitare aggiunte generiche grazie al controllo sull'intero progetto | Può recuperare fino a due intenzioni assenti per iterazione | È limitato agli attori già esistenti |
+| Nuovo audit dopo modifiche HLG | Riesamina la coerenza dei branch nel nuovo contesto | Può recuperare gap comparsi o diventati visibili dopo una modifica | Maggiore costo, latenza e rischio di oscillazioni |
+| Limiti su iterazioni e rigenerazioni | Contengono proliferazione e falsi positivi | Possono fermare la ricerca prima di recuperare tutti i goal | Convergenza tecnica diversa da completezza |
+| Memoria condivisa del critic | Può rendere i giudizi più coerenti tra iterazioni | Può ricordare capacità rimosse e aiutare a evitare regressioni | Anchoring su una decisione precedente errata |
+| Assenza del cleanup preliminare | Evita eliminazioni anticipate e protegge goal potenzialmente validi | Conserva più evidenza per il normale ciclo LLG | LLG rumorosi possono restare più a lungo e ridurre la Precision |
+
+## Output e tracciamento
+
+Se viene specificata `evaluation_output_directory`, per ogni iterazione viene
+salvato un file `iteration_NNN.json` con:
+
+- ricostruzioni bottom-up;
+- decisioni dei critic;
+- HLG e LLG correnti;
+- controllo della copertura globale;
+- contatori di rigenerazione;
+- warning.
+
+Gli output principali sono separati:
+
+- `output/top_down/`: baseline originale;
+- `output/top_down_bottom_up/`: risultato dopo il ciclo;
+- `output/bottom_up_iterations/`: trace delle iterazioni.
+
+I notebook usati sono:
+
+- [`01_pipeline_execution_top_down_only.ipynb`](../../notebook/01_pipeline_execution_top_down_only.ipynb), per la baseline;
+- [`01_pipeline_execution_bottom_up_only.ipynb`](../../notebook/01_pipeline_execution_bottom_up_only.ipynb), per il ciclo bottom-up;
+- [`02_experimental_evaluation_top_down_vs_bottom_up.ipynb`](../../notebook/02_experimental_evaluation_top_down_vs_bottom_up.ipynb), per il confronto.
+
+## Risultati sperimentali disponibili
+
+La valutazione usa `bert-base-uncased`, similarità coseno, matching uno-a-uno
+tramite algoritmo ungherese e soglia `0.65`.
 
 | Livello | Metodo | Precision | Recall | F1 |
 |---|---|---:|---:|---:|
-| HLG | top-down | 0.3270 | 0.7479 | 0.4323 |
-| HLG | top-down + bottom-up | 0.3886 | 0.7415 | 0.4903 |
-| LLG | top-down | 0.5348 | 0.7453 | 0.5998 |
-| LLG | top-down + bottom-up | 0.5992 | 0.7402 | 0.6494 |
+| HLG | Top-down | 0.3270 | 0.7479 | 0.4323 |
+| HLG | Top-down + bottom-up | 0.3914 | 0.7432 | 0.4823 |
+| LLG | Top-down | 0.5348 | 0.7453 | 0.5998 |
+| LLG | Top-down + bottom-up | 0.5919 | 0.7317 | 0.6346 |
 
-In media il bottom-up migliora la F1 degli HLG da `0.4323` a `0.4903` e
-quella degli LLG da `0.5998` a `0.6494`. La Recall rimane quasi invariata,
-mentre la Precision aumenta: questo significa che il risultato finale contiene
-obiettivi mediamente più pertinenti rispetto alla baseline.
+Nei risultati salvati la F1 cresce sia per gli HLG sia per gli LLG. Il
+miglioramento deriva soprattutto dalla Precision, mentre la Recall diminuisce
+leggermente. Questo è coerente con una pipeline prudente, orientata soprattutto
+alla rimozione di goal ridondanti o non supportati.
 
-La tabella seguente riporta i valori effettivi per ogni progetto. L'ordine
-delle metriche è sempre `Precision / Recall / F1`; l'ultima colonna mostra la
-differenza di F1 tra bottom-up e top-down.
+Il miglioramento non è uniforme: per esempio, su Genome Nexus la F1 degli LLG
+diminuisce. La convergenza del ciclo indica quindi che le sue regole interne non
+richiedono altre modifiche, non che ogni metrica sia necessariamente migliorata.
+Nei trace attualmente salvati non rimane alcuna decisione finale
+`MISSING_HIGH_LEVEL_GOALS_FOUND`: il percorso di discovery è implementato, ma
+questo snapshot non dimostra ancora il recupero di un'intenzione davvero assente
+dalla baseline.
 
-| Dataset | Livello | Top-down | Top-down + bottom-up | ΔF1 |
-|---|---|---:|---:|---:|
-| Assegno Unico Universale - SIA Project 24 25 | HLG | 0.2070 / 0.7764 / 0.3269 | 0.2583 / 0.7748 / 0.3874 | +0.0605 |
-| Assegno Unico Universale - SIA Project 24 25 | LLG | 0.6482 / 0.7963 / 0.7147 | 0.7669 / 0.7450 / 0.7558 | +0.0411 |
-| Ethical Purchasing Group - SIA Project 22 23 | HLG | 0.3545 / 0.8507 / 0.5004 | 0.3867 / 0.8507 / 0.5317 | +0.0313 |
-| Ethical Purchasing Group - SIA Project 22 23 | LLG | 0.5135 / 0.7531 / 0.6107 | 0.5636 / 0.7515 / 0.6442 | +0.0335 |
-| Event Organization Portal - SIA Project 21 22 | HLG | 0.2196 / 0.8051 / 0.3450 | 0.2945 / 0.7852 / 0.4283 | +0.0833 |
-| Event Organization Portal - SIA Project 21 22 | LLG | 0.3997 / 0.8128 / 0.5359 | 0.5092 / 0.7978 / 0.6216 | +0.0857 |
-| Genome Nexus | HLG | 0.6620 / 0.7355 / 0.6968 | 0.7331 / 0.7331 / 0.7331 | +0.0363 |
-| Genome Nexus | LLG | 0.8198 / 0.7474 / 0.7819 | 0.8201 / 0.7236 / 0.7689 | -0.0131 |
-| Gestao Hospital | HLG | 0.3077 / 0.7692 / 0.4396 | 0.4338 / 0.7591 / 0.5521 | +0.1125 |
-| Gestao Hospital | LLG | 0.4559 / 0.7522 / 0.5677 | 0.5696 / 0.7405 / 0.6439 | +0.0762 |
-| La Reine Marlene - SIA Project 23 24 | HLG | 0.3323 / 0.7976 / 0.4692 | 0.3780 / 0.7938 / 0.5121 | +0.0430 |
-| La Reine Marlene - SIA Project 23 24 | LLG | 0.4554 / 0.7833 / 0.5759 | 0.4987 / 0.7779 / 0.6078 | +0.0318 |
-| London Ambulance Service | HLG | 0.1531 / 0.7655 / 0.2552 | 0.2147 / 0.7514 / 0.3340 | +0.0788 |
-| London Ambulance Service | LLG | 0.2547 / 0.7640 / 0.3820 | 0.3596 / 0.7551 / 0.4872 | +0.1052 |
-| SIA Project 25 26 | HLG | 0.3798 / 0.4833 / 0.4253 | 0.4096 / 0.4840 / 0.4437 | +0.0184 |
-| SIA Project 25 26 | LLG | 0.7313 / 0.5534 / 0.6300 | 0.7061 / 0.6298 / 0.6658 | +0.0358 |
+Questi numeri provengono dagli output sperimentali attualmente salvati. Dopo le
+modifiche più recenti, in particolare gli esempi few-shot nei tre prompt, la
+ricerca di due gap e il nuovo audit dopo una modifica strutturale, è necessario
+rieseguire i notebook prima di considerarli risultati definitivi della versione
+corrente.
 
-Questi risultati mostrano un miglioramento medio in entrambi i livelli, ma non
-un miglioramento garantito per ogni singolo progetto: nel caso di Genome Nexus,
-per esempio, la F1 degli LLG diminuisce leggermente. Per questo la convergenza
-del ciclo indica che il processo si è concluso secondo le sue regole, ma non
-significa automaticamente che tutte le metriche siano aumentate.
-
-I dati completi, compresi il numero di goal generati, il numero di goal nella
-ground truth e lo stato del ciclo, si trovano nei file:
+I dati completi sono disponibili in:
 
 - `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_metrics.csv`;
 - `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_deltas.csv`;
 - `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_macro_summary.csv`.
+
+## File principali
+
+- [`low_level_goal_mapper.py`](./low_level_goal_mapper.py): costruzione dei branch;
+- [`goal_reconstructor.py`](./goal_reconstructor.py): ricostruzione diagnostica;
+- [`global_goal_evaluator.py`](./global_goal_evaluator.py): tre critic bottom-up;
+- [`goal_cycle_orchestrator.py`](./goal_cycle_orchestrator.py): ciclo, modifiche e terminazione;
+- [`../data_model.py`](../data_model.py): modelli Pydantic condivisi.

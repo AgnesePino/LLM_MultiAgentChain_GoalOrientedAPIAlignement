@@ -4,7 +4,6 @@ from pathlib import Path
 
 from src.bottom_up.global_goal_evaluator import (
     evaluate_all_branches,
-    evaluate_llg_cleanup,
     evaluate_missing_high_level_goals,
 )
 from src.bottom_up.goal_reconstructor import reconstruct_all_branches
@@ -12,7 +11,6 @@ from src.bottom_up.low_level_goal_mapper import group_low_level_goals
 from src.data_model import (
     Actor,
     Actors,
-    ConfidenceLevel,
     GlobalGoalCycleIteration,
     GlobalGoalCycleResult,
     GlobalGoalCycleStopReason,
@@ -23,10 +21,6 @@ from src.data_model import (
     HighLevelGoalGenerationRequest,
     HighLevelGoalGeneratorInput,
     HighLevelGoals,
-    LowLevelGoalCleanupBranch,
-    LowLevelGoalCleanupPrepass,
-    LowLevelGoalDecision,
-    LowLevelGoalEvaluation,
     LowLevelGoal,
     LowLevelGoalRegenerationRequest,
     LowLevelGoals,
@@ -42,15 +36,19 @@ from src.self_critique.refine_response import (
     EvalMode,
     generate_response_with_reflection,
 )
+from src.llm_clients import EvaluatorConversation
 
 
 DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS = 5
 MAX_LLG_REGENERATIONS_PER_BRANCH = 2
 MAX_HLG_REWRITES_PER_BRANCH = 2
 MAX_HLG_REMOVALS_PER_ITERATION = 5
-MAX_NEW_HLGS_PER_ITERATION = 1
+MAX_NEW_HLGS_PER_ITERATION = 2
+MAX_REPLACEMENT_HLGS_PER_REWRITE = 1
 MAX_LLG_GROWTH_PER_REPAIR = 2
 MAX_LLGS_FOR_NEW_HLG = 6
+BOTTOM_UP_CRITIC_MEMORY_TURNS = 4
+BOTTOM_UP_CRITIC_STATE_UPDATES = 2
 
 
 def _key(value: str) -> str:
@@ -353,115 +351,6 @@ def _accept_regenerated_llgs(
     return [_replace_parent(item, parent) for item in candidates], None
 
 
-def _run_llg_cleanup_prepass(
-    project_description: str,
-    high_level_goals: HighLevelGoals,
-    low_level_goals: LowLevelGoals,
-) -> LowLevelGoalCleanupPrepass:
-    """Remove only explicitly identified, safe LLGs before full evaluation."""
-    branches = group_low_level_goals(high_level_goals, low_level_goals)
-    retained: list[LowLevelGoal] = []
-    results: dict[str, LowLevelGoalCleanupBranch] = {}
-    warnings: list[str] = []
-
-    for branch in branches:
-        try:
-            evaluation = evaluate_llg_cleanup(project_description, branch)
-        except Exception as exc:
-            # Cleanup is optional and must never destroy or block a valid
-            # baseline. Preserve the branch and record the provider failure.
-            evaluation = LowLevelGoalEvaluation(
-                rationale=(
-                    "Cleanup evaluation failed; the original branch was "
-                    f"preserved. {type(exc).__name__}: {exc}"
-                ),
-                decision=LowLevelGoalDecision.KEEP,
-                confidence=ConfidenceLevel.LOW,
-            )
-            warnings.append(
-                f"{branch.branch_id}: LLG_CLEANUP_EVALUATION_FAILED"
-            )
-
-        by_id = {
-            f"llg_{index:03d}": goal
-            for index, goal in enumerate(branch.low_level_goals, start=1)
-        }
-        removable_ids = set(evaluation.unsupported_or_misleading_llg_ids)
-        removed: list[LowLevelGoal] = []
-        applied = False
-        rationale = evaluation.rationale
-
-        safe_removal = (
-            evaluation.decision == LowLevelGoalDecision.REGENERATE
-            and evaluation.confidence == ConfidenceLevel.HIGH
-            and bool(removable_ids)
-            and not evaluation.missing_essential_capabilities
-        )
-        if safe_removal and len(removable_ids) < len(branch.low_level_goals):
-            removed = [
-                goal for goal_id, goal in by_id.items()
-                if goal_id in removable_ids
-            ]
-            kept = [
-                goal for goal_id, goal in by_id.items()
-                if goal_id not in removable_ids
-            ]
-            applied = bool(removed)
-            retained.extend(kept)
-        else:
-            retained.extend(branch.low_level_goals)
-            if evaluation.missing_essential_capabilities:
-                warnings.append(
-                    f"{branch.branch_id}: LLG_CLEANUP_DEFERRED_MISSING_CAPABILITIES"
-                )
-                rationale += (
-                    " Cleanup deferred because the branch also requires "
-                    "additions; the normal repair cycle will handle it."
-                )
-            elif safe_removal and len(removable_ids) >= len(branch.low_level_goals):
-                warnings.append(
-                    f"{branch.branch_id}: LLG_CLEANUP_REJECTED_EMPTY_BRANCH"
-                )
-                rationale += (
-                    " Cleanup rejected because it would remove every LLG "
-                    "from the branch."
-                )
-
-        results[branch.branch_id] = LowLevelGoalCleanupBranch(
-            branch_id=branch.branch_id,
-            high_level_goal=branch.high_level_goal,
-            evaluation=evaluation,
-            removed_low_level_goals=removed,
-            retained_low_level_goal_count=(
-                len(branch.low_level_goals) - len(removed)
-            ),
-            applied=applied,
-            rationale=rationale,
-        )
-
-    cleaned = LowLevelGoals(low_level_goals=retained)
-    return LowLevelGoalCleanupPrepass(
-        branches=results,
-        initial_low_level_goal_count=len(low_level_goals.low_level_goals),
-        final_low_level_goal_count=len(cleaned.low_level_goals),
-        low_level_goals=cleaned,
-        warnings=warnings,
-    )
-
-
-def _save_cleanup_prepass(
-    directory: str | Path | None,
-    prepass: LowLevelGoalCleanupPrepass,
-) -> None:
-    if directory is None:
-        return
-    path = Path(directory)
-    path.mkdir(parents=True, exist_ok=True)
-    (path / "llg_cleanup_prepass.json").write_text(
-        prepass.model_dump_json(indent=2), encoding="utf-8"
-    )
-
-
 def _save_iteration(directory: str | Path | None, trace: GlobalGoalCycleIteration):
     if directory is None:
         return
@@ -485,6 +374,55 @@ def _with_decision(
     )
 
 
+def _llg_names_by_parent(
+    low_level_goals: LowLevelGoals,
+) -> dict[str, set[str]]:
+    names: dict[str, set[str]] = {}
+    for goal in low_level_goals.low_level_goals:
+        parent_key = _stable_hlg_key(goal.high_level_associated)
+        names.setdefault(parent_key, set()).add(goal.name)
+    return names
+
+
+def _critic_state_summary(
+    *,
+    iteration: int,
+    previous_hlgs: HighLevelGoals,
+    previous_llgs: LowLevelGoals,
+    current_hlgs: HighLevelGoals,
+    current_llgs: LowLevelGoals,
+) -> str:
+    previous_keys = {_stable_hlg_key(goal) for goal in previous_hlgs.goals}
+    current_keys = {_stable_hlg_key(goal) for goal in current_hlgs.goals}
+    added = sorted(current_keys - previous_keys)
+    removed = sorted(previous_keys - current_keys)
+
+    previous_llg_names = _llg_names_by_parent(previous_llgs)
+    current_llg_names = _llg_names_by_parent(current_llgs)
+    llg_changes = []
+    for key in sorted(previous_llg_names.keys() | current_llg_names.keys()):
+        added_llgs = sorted(
+            current_llg_names.get(key, set())
+            - previous_llg_names.get(key, set())
+        )
+        removed_llgs = sorted(
+            previous_llg_names.get(key, set())
+            - current_llg_names.get(key, set())
+        )
+        if added_llgs or removed_llgs:
+            llg_changes.append(
+                f"{key}: added {added_llgs or ['none']}, "
+                f"removed {removed_llgs or ['none']}"
+            )
+    return (
+        f"Iteration {iteration} applied state. "
+        f"HLGs added: {added or ['none']}. "
+        f"HLGs removed or replaced: {removed or ['none']}. "
+        f"LLG changes: {llg_changes or ['none']}. "
+        f"Current HLGs: {sorted(current_keys)}."
+    )
+
+
 def run_global_goal_cycle(
     *,
     project_description: str,
@@ -497,23 +435,15 @@ def run_global_goal_cycle(
 ) -> GlobalGoalCycleResult:
     current_hlgs = initial_high_level_goals.model_copy(deep=True)
     current_llgs = initial_low_level_goals.model_copy(deep=True)
-    print("[bottom-up] conservative LLG cleanup pre-pass starting", flush=True)
-    llg_cleanup_prepass = _run_llg_cleanup_prepass(
-        project_description,
-        current_hlgs,
-        current_llgs,
+    critic_conversation = EvaluatorConversation(
+        max_turns=BOTTOM_UP_CRITIC_MEMORY_TURNS,
+        max_state_updates=BOTTOM_UP_CRITIC_STATE_UPDATES,
     )
-    current_llgs = llg_cleanup_prepass.low_level_goals.model_copy(deep=True)
-    _save_cleanup_prepass(evaluation_output_directory, llg_cleanup_prepass)
-    removed_in_prepass = (
-        llg_cleanup_prepass.initial_low_level_goal_count
-        - llg_cleanup_prepass.final_low_level_goal_count
-    )
-    print(
-        "[bottom-up] conservative LLG cleanup pre-pass completed | "
-        f"removed={removed_in_prepass}, "
-        f"retained={llg_cleanup_prepass.final_low_level_goal_count}",
-        flush=True,
+    critic_conversation.remember_state(
+        "Initial input before iteration 1; no previous iteration exists. "
+        "Current HLGs: "
+        f"{sorted(_stable_hlg_key(goal) for goal in current_hlgs.goals)}. "
+        f"Total LLGs: {len(current_llgs.low_level_goals)}."
     )
     llg_regeneration_counts: dict[str, int] = {}
     stabilized_llg_keys: set[str] = set()
@@ -521,10 +451,12 @@ def run_global_goal_cycle(
     hlg_rewrite_counts: dict[str, int] = {}
     excluded_hlg_keys: set[str] = set()
     traces: list[GlobalGoalCycleIteration] = []
-    warnings: list[str] = list(llg_cleanup_prepass.warnings)
+    warnings: list[str] = []
     known_actors = _actors_from_goals(initial_high_level_goals)
 
     for iteration in range(1, max_iterations + 1):
+        iteration_start_hlgs = current_hlgs.model_copy(deep=True)
+        iteration_start_llgs = current_llgs.model_copy(deep=True)
         print(
             f"[bottom-up] iteration {iteration}/{max_iterations} starting",
             flush=True,
@@ -565,9 +497,9 @@ def run_global_goal_cycle(
         )
         branches = group_low_level_goals(current_hlgs, current_llgs)
 
-        # A confirmed branch is immutable for the remainder of the cycle. Use
-        # the stable actor/name identity rather than the positional branch ID,
-        # because removing or adding another HLG can renumber later branches.
+        # A confirmed branch is skipped while the HLG structure is unchanged.
+        # Structural changes clear this set after the iteration and trigger a
+        # fresh audit. Stable actor/name identity survives branch renumbering.
         active_branches = [
             branch
             for branch in branches
@@ -582,6 +514,7 @@ def run_global_goal_cycle(
             reconstructions,
             current_hlgs,
             stabilized_llg_keys,
+            critic_conversation,
         )
         evaluations = dict(raw_evaluations)
         confirmed_branch_keys.update(
@@ -595,7 +528,10 @@ def run_global_goal_cycle(
             known_actors, _actors_from_goals(current_hlgs)
         )
         missing_hlg_evaluation = evaluate_missing_high_level_goals(
-            project_description, current_hlgs, known_actors
+            project_description,
+            current_hlgs,
+            known_actors,
+            critic_conversation,
         )
 
         removed_names: set[str] = set()
@@ -650,7 +586,7 @@ def run_global_goal_cycle(
             replacement_goals = []
             # A focused rewrite request yields one candidate at most;
             # accepting every candidate here caused HLG proliferation.
-            for goal in generated.goals[:MAX_NEW_HLGS_PER_ITERATION]:
+            for goal in generated.goals[:MAX_REPLACEMENT_HLGS_PER_REWRITE]:
                 goal_key = _stable_hlg_key(goal)
                 if goal_key in reserved_names:
                     continue
@@ -850,7 +786,10 @@ def run_global_goal_cycle(
                 *excluded_hlg_keys,
             }
             for request_index, request in enumerate(
-                missing_hlg_evaluation.missing_goal_requests[:1], start=1
+                missing_hlg_evaluation.missing_goal_requests[
+                    :MAX_NEW_HLGS_PER_ITERATION
+                ],
+                start=1,
             ):
                 actor = _actor_for_request(request.actor, actors)
                 if actor is None:
@@ -877,7 +816,8 @@ def run_global_goal_cycle(
                     reserved_names.add(goal_key)
                     new_goals.append(goal)
                     additions.append(goal)
-                break
+                if len(additions) >= MAX_NEW_HLGS_PER_ITERATION:
+                    break
 
             if additions:
                 current_hlgs = HighLevelGoals(
@@ -934,6 +874,22 @@ def run_global_goal_cycle(
             current_hlgs, current_llgs, iteration_warnings
         )
 
+        # An HLG-level change alters the project-wide responsibility map. Audit
+        # every branch again on the next iteration instead of trusting a KEEP
+        # decision made against the previous HLG set.
+        if replacements or removed_names or additions:
+            confirmed_branch_keys.clear()
+
+        critic_conversation.remember_state(
+            _critic_state_summary(
+                iteration=iteration,
+                previous_hlgs=iteration_start_hlgs,
+                previous_llgs=iteration_start_llgs,
+                current_hlgs=current_hlgs,
+                current_llgs=current_llgs,
+            )
+        )
+
         # Only real confirmations permit convergence. Branches that exhausted
         # their repair budget and inconclusive evaluations remain unresolved;
         # their warnings prevent a false confirmed stop.
@@ -979,7 +935,6 @@ def run_global_goal_cycle(
                 completed_iterations=iteration,
                 final_high_level_goals=current_hlgs,
                 final_low_level_goals=current_llgs,
-                llg_cleanup_prepass=llg_cleanup_prepass,
                 iterations=traces,
                 llg_regeneration_counts=dict(llg_regeneration_counts),
                 warnings=warnings,
@@ -1004,7 +959,6 @@ def run_global_goal_cycle(
                 completed_iterations=iteration,
                 final_high_level_goals=current_hlgs,
                 final_low_level_goals=current_llgs,
-                llg_cleanup_prepass=llg_cleanup_prepass,
                 iterations=traces,
                 llg_regeneration_counts=dict(llg_regeneration_counts),
                 warnings=warnings,
@@ -1016,7 +970,6 @@ def run_global_goal_cycle(
         completed_iterations=max_iterations,
         final_high_level_goals=current_hlgs,
         final_low_level_goals=current_llgs,
-        llg_cleanup_prepass=llg_cleanup_prepass,
         iterations=traces,
         llg_regeneration_counts=dict(llg_regeneration_counts),
         warnings=warnings,

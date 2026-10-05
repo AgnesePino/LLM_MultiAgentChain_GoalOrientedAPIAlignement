@@ -9,7 +9,7 @@ from typing import Any
 
 from google import genai
 from google.genai import errors
-from google.genai.types import GenerateContentConfig
+from google.genai.types import AutomaticFunctionCallingConfig, GenerateContentConfig
 from pydantic import BaseModel
 
 from Gemini_API.APIKeysManager import APIKeysManager
@@ -41,6 +41,11 @@ class ModelWrapper:
             "system_instruction": self._sys_prompt,
             "temperature": 0,
             "max_output_tokens": max_output_tokens,
+            # This pipeline does not expose tools to Gemini. Disabling AFC
+            # avoids the SDK warning intended for tool-enabled conversations.
+            "automatic_function_calling": AutomaticFunctionCallingConfig(
+                disable=True
+            ),
         }
         if response_format is not None:
             config.update(
