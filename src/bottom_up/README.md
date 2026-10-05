@@ -1,106 +1,180 @@
-# Ciclo bottom-up
+# Pipeline bottom-up
 
-La pipeline parte sempre dal risultato della pipeline top-down. La fase top-down costruisce la prima gerarchia degli obiettivi:
+La pipeline bottom-up serve a controllare e, quando necessario, migliorare
+la gerarchia di obiettivi prodotta dalla pipeline top-down.
+
+La pipeline top-down parte dalla descrizione del progetto e produce:
 
 ```text
-descrizione del progetto → attori → High-Level Goals (HLG) → Low-Level Goals (LLG)
+descrizione del progetto -> attori -> HLG -> LLG
 ```
 
-Il bottom-up non sostituisce questa fase e non la modifica. Usa la gerarchia già prodotta per controllare se ogni HLG è rappresentato correttamente dai suoi LLG e se, considerando l'intera descrizione del progetto, manca ancora qualche intenzione funzionale importante.
+Gli HLG (*High-Level Goals*) descrivono le intenzioni principali degli attori,
+mentre gli LLG (*Low-Level Goals*) descrivono le attività più concrete che
+realizzano quelle intenzioni.
 
-## Come si svolge un'iterazione
+La pipeline bottom-up non riparte da zero e non modifica il risultato originale.
+Legge gli HLG e gli LLG già prodotti, li controlla e salva una nuova versione
+in `output/top_down_bottom_up/`. In questo modo è possibile confrontare
+direttamente il risultato top-down con quello ottenuto dopo il controllo
+bottom-up.
 
-All'inizio dell'iterazione gli LLG vengono raggruppati sotto il relativo HLG. Ogni gruppo è un branch. Per ciascun branch il sistema ricostruisce un HLG diagnostico, indicato come `HLG'`, partendo soltanto dagli LLG del gruppo. In questo modo si osserva quale obiettivo emerge realmente dalla decomposizione, senza copiare direttamente l'HLG originale.
+## Come funziona
 
-L'evaluator confronta la descrizione completa del progetto, l'HLG originale con il suo attore e l'HLG ricostruito dagli LLG. Il giudizio può stabilire che l'HLG è corretto, che deve essere riscritto oppure che non è supportato dalla descrizione. Se l'HLG è valido, una seconda valutazione controlla se i suoi LLG lo rappresentano in modo completo.
+Il notebook
+[`01_pipeline_execution_bottom_up_only.ipynb`](../../notebook/01_pipeline_execution_bottom_up_only.ipynb)
+esegue la pipeline per ogni progetto presente nella ground truth.
 
-Gli LLG vengono rigenerati soltanto con confidenza alta e con un difetto
-materiale esplicito: una capacità essenziale del parent assente oppure un LLG
-non supportato. Differenze di stile o granularità, CRUD opzionali e passi UI non
-sono errori. Una riparazione può aggiungere al massimo due LLG e viene rifiutata
-se è vuota o prolifera oltre il limite, conservando in quel caso il branch
-precedente.
+Per prima cosa legge il file JSON prodotto dalla pipeline top-down. Poi
+raggruppa ogni LLG sotto il suo HLG e crea un *branch*, cioè un gruppo formato
+da un HLG e dai suoi LLG.
 
-## Una sola modifica per iterazione
+Prima di iniziare il ciclo viene fatto un controllo iniziale molto prudente:
+vengono eliminati solo gli LLG chiaramente superflui. Anche gli HLG che non
+hanno nessun LLG vengono rimossi, perché non possono essere valutati. Se due
+HLG sono duplicati, viene mantenuto il primo e i relativi LLG vengono
+ricollegati a quello mantenuto.
 
-Il sistema valuta tutti i branch, ma non applica tutte le decisioni nello stesso momento. Sceglie una sola modifica effettiva per iterazione, così ogni cambiamento può essere osservato e verificato nel passaggio successivo.
+A questo punto comincia il ciclo bottom-up. Per ogni branch il sistema prova a
+ricostruire l'HLG partendo soltanto dai suoi LLG. Questo nuovo obiettivo,
+indicato come `HLG'`, permette di capire quale intenzione emerge davvero dalla
+decomposizione.
 
-La modifica può essere applicata seguendo questo ordine:
+L'evaluator confronta quindi:
 
-1. controllare ed eliminare gli HLG duplicati;
-2. riscrivere un solo HLG;
-3. rimuovere un solo HLG non supportato;
-4. aggiungere un solo HLG richiesto dal controllo globale;
-5. rigenerare gli LLG di un solo branch.
+- la descrizione completa del progetto;
+- l'HLG originale e il suo attore;
+- l'HLG ricostruito dagli LLG;
+- gli altri HLG già presenti.
 
-Quando viene riscritto o aggiunto un HLG, il generatore top-down originale riceve una richiesta focalizzata con attore e descrizione. Anche la relativa decomposizione LLG viene ottenuta tramite il generatore top-down originale. Le richieste sono eseguite una alla volta e non vengono lanciate in parallelo per tutti i branch.
+In base a questo confronto può decidere di mantenere l'HLG, riscriverlo oppure
+rimuoverlo. Se l'HLG è corretto, viene controllato anche se i suoi LLG coprono
+tutte le capacità richieste.
 
-Al termine dell'iterazione, la lista viene nuovamente controllata con lo stesso
-ordine. In questo modo una nuova decisione non viene applicata insieme ad altre
-decisioni ancora pendenti.
+Gli LLG vengono rigenerati solo quando c'è un problema importante: per esempio
+quando manca una capacità richiesta dal parent, quando un LLG non è supportato
+dalla descrizione oppure quando gli LLG appartengono a un altro obiettivo.
+Una differenza di stile, di granularità o di formulazione tecnica non è
+sufficiente per avviare una rigenerazione.
 
-## Controllo degli HLG mancanti
+Durante ogni iterazione viene eseguito anche un controllo globale. Questo
+controllo verifica se nella descrizione del progetto esiste un'intenzione
+funzionale importante che non è ancora rappresentata da nessun HLG. Se trova
+una lacuna, il sistema chiede alla pipeline top-down di generare un nuovo HLG
+focalizzato su quella sola intenzione.
 
-Ad ogni iterazione il sistema esegue una verifica globale sulla descrizione
-completa del progetto. Il controllo considera gli HLG presenti, gli attori già
-identificati e le intenzioni funzionali esplicitamente descritte. Una lacuna HLG
-ha priorità su una rigenerazione LLG, evitando che il dettaglio impedisca il
-miglioramento della struttura superiore.
+## Ordine delle modifiche
 
-Il controllo non genera direttamente HLG finali. Se trova una lacuna, produce una richiesta focalizzata per il generatore top-down. Nella stessa iterazione può essere aggiunto al massimo un nuovo HLG. Non vengono proposte intenzioni già coperte da un HLG corrente, né obiettivi tecnici o semplici varianti più ristrette di un obiettivo esistente.
+Il sistema valuta tutti i branch, ma applica le modifiche in un ordine preciso.
+Prima elimina eventuali duplicati, poi prova a riscrivere un HLG. Se non serve
+una riscrittura, può rimuovere gli HLG non supportati; successivamente può
+rigenerare gli LLG di un solo branch oppure aggiungere un solo HLG mancante.
 
-## Riduzione dei duplicati
+Le richieste di generazione vengono eseguite una alla volta. In questo modo
+ogni modifica viene controllata nelle iterazioni successive e non vengono
+introdotti molti cambiamenti contemporaneamente.
 
-Dopo ogni modifica la lista degli HLG viene controllata per evitare che la generazione bottom-up faccia crescere inutilmente la gerarchia. Gli obiettivi con lo stesso attore e con nomi uguali o chiaramente equivalenti vengono considerati duplicati.
+Un branch confermato non viene rivalutato, a meno che una modifica successiva
+non ne cambi la struttura. Ogni branch può provare al massimo due rigenerazioni
+degli LLG. Se anche il secondo tentativo non risolve il problema, gli ultimi
+LLG vengono mantenuti e viene registrato il warning
+`LLG_REGENERATION_LIMIT_REACHED`.
 
-In caso di duplicato viene mantenuto il primo obiettivo disponibile e gli LLG del duplicato vengono riallineati all'obiettivo mantenuto. L'eliminazione viene registrata nei warning dell'iterazione. Il controllo è volutamente conservativo e non elimina obiettivi diversi soltanto perché trattano lo stesso ambito generale.
+Il ciclo termina quando tutti i branch sono confermati e non risultano HLG
+mancanti. Può terminare anche con warning quando non sono più possibili
+modifiche. In quest'ultimo caso il sistema conserva comunque il risultato
+ottenuto e rende visibili i problemi residui.
 
-## Limite per la rigenerazione degli LLG
-
-Ogni branch può tentare al massimo due rigenerazioni degli LLG. Se anche il secondo tentativo non porta a una conferma, non vengono effettuate altre rigenerazioni, gli ultimi LLG vengono conservati, il branch viene considerato stabilizzato per la verifica globale e viene mantenuto il warning `LLG_REGENERATION_LIMIT_REACHED`.
-
-Un HLG non viene eliminato soltanto perché ha raggiunto questo limite. Un HLG che non ha alcun LLG viene invece rimosso prima della ricostruzione, perché non può formare un branch valutabile; anche questa rimozione viene registrata nei warning.
-
-## Quando il ciclo termina
-
-Il ciclo termina con convergenza quando tutti i branch sono confermati oppure stabilizzati dopo il limite LLG e il controllo globale restituisce `NO_MISSING_HIGH_LEVEL_GOALS`.
-
-Se rimangono branch non confermati, richieste di modifica o nuovi HLG da aggiungere, il ciclo continua con l'iterazione successiva. Se non sono più possibili azioni ma restano warning, il sistema restituisce la gerarchia corrente con lo stato di arresto e i warning, senza nascondere i problemi residui.
+Nel notebook usato per l'esperimento il ciclo poteva eseguire al massimo 25
+iterazioni. Il valore predefinito del codice, usato se non viene specificata
+un'impostazione diversa, è 5.
 
 ## File principali
 
-- `low_level_goal_mapper.py`: raggruppa in modo deterministico HLG e LLG;
-- `goal_reconstructor.py`: ricostruisce `HLG'` dagli LLG di un branch;
-- `global_goal_evaluator.py`: esegue i giudizi sui branch e il controllo globale della copertura;
-- `goal_cycle_orchestrator.py`: decide quale singola modifica applicare, aggiorna la gerarchia, elimina i duplicati e gestisce la convergenza.
+- [`low_level_goal_mapper.py`](./low_level_goal_mapper.py) collega gli LLG ai
+  rispettivi HLG;
+- [`goal_reconstructor.py`](./goal_reconstructor.py) ricostruisce `HLG'` dagli
+  LLG;
+- [`global_goal_evaluator.py`](./global_goal_evaluator.py) valuta gli HLG, gli
+  LLG e la copertura globale;
+- [`goal_cycle_orchestrator.py`](./goal_cycle_orchestrator.py) coordina il
+  ciclo, applica le modifiche e gestisce la terminazione.
 
-Il notebook `notebook/01_pipeline_execution_bottom_up_only.ipynb` legge i JSON strutturati prodotti dalla pipeline top-down e avvia il ciclo bottom-up senza rieseguire la generazione iniziale di attori, HLG e LLG.
+La generazione degli obiettivi riparati o aggiunti usa le funzioni originali
+della pipeline top-down. Nel run sperimentale la generazione è stata eseguita
+con Gemini, mentre la valutazione è stata eseguita con il modello evaluator
+configurato su Groq.
 
-## Confronto sperimentale
+## Valutazione dei risultati
 
-Il notebook `02_experimental_evaluation_top_down_vs_bottom_up.ipynb` confronta
-la baseline top-down con il risultato top-down + bottom-up usando la stessa
-ground truth. Precision, Recall e F1 sono metriche semantiche soft: i goal
-vengono preprocessati con NLTK, codificati con `bert-base-uncased` e abbinati
-uno-a-uno con l'algoritmo ungherese. Un valore positivo di F1 indica un
-miglioramento; un valore negativo indica un peggioramento.
+Il notebook
+[`02_experimental_evaluation_top_down_vs_bottom_up.ipynb`](../../notebook/02_experimental_evaluation_top_down_vs_bottom_up.ipynb)
+non genera nuovi obiettivi: legge i risultati già salvati e confronta:
 
-| Dataset | Livello | Top-down P/R/F1 | Top-down + bottom-up P/R/F1 | Esito F1 |
-|---|---|---:|---:|---|
-| Genome Nexus | HLG | 0.7767 / 0.2589 / 0.3883 | 0.7767 / 0.2589 / 0.3883 | = invariato |
-| Genome Nexus | LLG | 0.8325 / 0.2938 / 0.4344 | **0.8435 / 0.5706 / 0.6807** | **↑ +0.2463** |
-| Gestao Hospital | HLG | **0.7872 / 0.7872 / 0.7872** | 0.5305 / 0.7957 / 0.6366 | **↓ -0.1506** |
-| Gestao Hospital | LLG | **0.8040 / 0.5924 / 0.6822** | 0.4618 / 0.7778 / 0.5795 | **↓ -0.1027** |
-| London Ambulance Service | HLG | 0.2581 / 0.7743 / 0.3871 | 0.2581 / 0.7743 / 0.3871 | = invariato |
-| London Ambulance Service | LLG | **0.6641 / 0.7305 / 0.6958** | 0.2220 / 0.7769 / 0.3453 | **↓ -0.3505** |
-| SIA Project 25 26 | HLG | 0.7083 / 0.3935 / 0.5059 | **0.6644 / 0.5168 / 0.5814** | **↑ +0.0754** |
-| SIA Project 25 26 | LLG | **0.7089 / 0.4726 / 0.5671** | 0.3103 / 0.6797 / 0.4261 | **↓ -0.1410** |
+1. la baseline top-down;
+2. la stessa baseline dopo il ciclo bottom-up.
 
-Il bottom-up migliora chiaramente gli LLG di Genome Nexus e gli HLG di SIA,
-ma peggiora la precisione degli altri casi. In particolare Gestao Hospital e
-London Ambulance Service producono molti più LLG della ground truth: il Recall
-aumenta leggermente, ma la Precision diminuisce molto e quindi l'F1 peggiora.
-SIA mostra lo stesso effetto in forma più marcata e inoltre non raggiunge la
-convergenza entro il limite di iterazioni. I risultati sono quindi da leggere
-come confronto tra gli output persistiti, non come garanzia che la convergenza
-implichi una qualità metrica superiore.
+Il confronto viene fatto separatamente per HLG e LLG, usando la stessa
+ground truth. Per misurare la somiglianza tra due obiettivi il notebook usa il
+modello `bert-base-uncased`, la similarità coseno e un abbinamento uno-a-uno
+calcolato con l'algoritmo ungherese. Una coppia viene considerata valida quando
+la similarità è almeno `0.65`. Il testo viene usato così com'è, senza
+stemming o lemmatizzazione.
+
+Le metriche sono *soft*: tengono conto del grado di somiglianza, non solo del
+fatto che due stringhe siano uguali. I valori sono quindi:
+
+- **Precision**: quanto sono pertinenti gli obiettivi generati;
+- **Recall**: quanta parte della ground truth viene ritrovata;
+- **F1**: il compromesso tra Precision e Recall.
+
+I risultati reali salvati dal notebook sono i seguenti. I valori sono medie
+calcolate sui dataset.
+
+| Livello | Metodo | Precision | Recall | F1 |
+|---|---|---:|---:|---:|
+| HLG | top-down | 0.3270 | 0.7479 | 0.4323 |
+| HLG | top-down + bottom-up | 0.3886 | 0.7415 | 0.4903 |
+| LLG | top-down | 0.5348 | 0.7453 | 0.5998 |
+| LLG | top-down + bottom-up | 0.5992 | 0.7402 | 0.6494 |
+
+In media il bottom-up migliora la F1 degli HLG da `0.4323` a `0.4903` e
+quella degli LLG da `0.5998` a `0.6494`. La Recall rimane quasi invariata,
+mentre la Precision aumenta: questo significa che il risultato finale contiene
+obiettivi mediamente più pertinenti rispetto alla baseline.
+
+La tabella seguente riporta i valori effettivi per ogni progetto. L'ordine
+delle metriche è sempre `Precision / Recall / F1`; l'ultima colonna mostra la
+differenza di F1 tra bottom-up e top-down.
+
+| Dataset | Livello | Top-down | Top-down + bottom-up | ΔF1 |
+|---|---|---:|---:|---:|
+| Assegno Unico Universale - SIA Project 24 25 | HLG | 0.2070 / 0.7764 / 0.3269 | 0.2583 / 0.7748 / 0.3874 | +0.0605 |
+| Assegno Unico Universale - SIA Project 24 25 | LLG | 0.6482 / 0.7963 / 0.7147 | 0.7669 / 0.7450 / 0.7558 | +0.0411 |
+| Ethical Purchasing Group - SIA Project 22 23 | HLG | 0.3545 / 0.8507 / 0.5004 | 0.3867 / 0.8507 / 0.5317 | +0.0313 |
+| Ethical Purchasing Group - SIA Project 22 23 | LLG | 0.5135 / 0.7531 / 0.6107 | 0.5636 / 0.7515 / 0.6442 | +0.0335 |
+| Event Organization Portal - SIA Project 21 22 | HLG | 0.2196 / 0.8051 / 0.3450 | 0.2945 / 0.7852 / 0.4283 | +0.0833 |
+| Event Organization Portal - SIA Project 21 22 | LLG | 0.3997 / 0.8128 / 0.5359 | 0.5092 / 0.7978 / 0.6216 | +0.0857 |
+| Genome Nexus | HLG | 0.6620 / 0.7355 / 0.6968 | 0.7331 / 0.7331 / 0.7331 | +0.0363 |
+| Genome Nexus | LLG | 0.8198 / 0.7474 / 0.7819 | 0.8201 / 0.7236 / 0.7689 | -0.0131 |
+| Gestao Hospital | HLG | 0.3077 / 0.7692 / 0.4396 | 0.4338 / 0.7591 / 0.5521 | +0.1125 |
+| Gestao Hospital | LLG | 0.4559 / 0.7522 / 0.5677 | 0.5696 / 0.7405 / 0.6439 | +0.0762 |
+| La Reine Marlene - SIA Project 23 24 | HLG | 0.3323 / 0.7976 / 0.4692 | 0.3780 / 0.7938 / 0.5121 | +0.0430 |
+| La Reine Marlene - SIA Project 23 24 | LLG | 0.4554 / 0.7833 / 0.5759 | 0.4987 / 0.7779 / 0.6078 | +0.0318 |
+| London Ambulance Service | HLG | 0.1531 / 0.7655 / 0.2552 | 0.2147 / 0.7514 / 0.3340 | +0.0788 |
+| London Ambulance Service | LLG | 0.2547 / 0.7640 / 0.3820 | 0.3596 / 0.7551 / 0.4872 | +0.1052 |
+| SIA Project 25 26 | HLG | 0.3798 / 0.4833 / 0.4253 | 0.4096 / 0.4840 / 0.4437 | +0.0184 |
+| SIA Project 25 26 | LLG | 0.7313 / 0.5534 / 0.6300 | 0.7061 / 0.6298 / 0.6658 | +0.0358 |
+
+Questi risultati mostrano un miglioramento medio in entrambi i livelli, ma non
+un miglioramento garantito per ogni singolo progetto: nel caso di Genome Nexus,
+per esempio, la F1 degli LLG diminuisce leggermente. Per questo la convergenza
+del ciclo indica che il processo si è concluso secondo le sue regole, ma non
+significa automaticamente che tutte le metriche siano aumentate.
+
+I dati completi, compresi il numero di goal generati, il numero di goal nella
+ground truth e lo stato del ciclo, si trovano nei file:
+
+- `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_metrics.csv`;
+- `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_deltas.csv`;
+- `output/evaluation/top_down_vs_bottom_up/top_down_vs_bottom_up_macro_summary.csv`.
