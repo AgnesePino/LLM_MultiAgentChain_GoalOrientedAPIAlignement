@@ -1,0 +1,476 @@
+{
+  "iteration": 4,
+  "reconstructions": {
+    "branch_005": {
+      "reconstructed_high_level_goal": "Enable users to locate and obtain comprehensive information about recycling facilities.",
+      "rationale": "The low-level goals collectively focus on empowering users to find suitable recycling facilities by offering various search and filtering options based on location, material acceptance, and accessibility, and then providing detailed operational and contact information for selected facilities. This indicates a higher-level intention to facilitate the discovery and detailed inquiry of recycling facilities.",
+      "branch_id": "branch_005",
+      "source_low_level_goal_ids": [
+        "Search for recycling facilities by geographical location",
+        "Search for recycling facilities by zip code",
+        "Filter recycling facilities by accepted material types",
+        "Retrieve detailed information for a specific recycling facility",
+        "Retrieve map coordinates for a recycling facility",
+        "Filter recycling facilities by accessibility features"
+      ]
+    },
+    "branch_007": {
+      "reconstructed_high_level_goal": "Enable Administrator to Maintain System Data Integrity and Security",
+      "rationale": "The low-level goals collectively describe various administrative functions aimed at safeguarding the system's data. These include defining access permissions to protect data from unauthorized manipulation, validating data for consistency, and restoring data in case of corruption or loss. All these operations are essential for ensuring the overall integrity, security, and availability of the system's information assets.",
+      "branch_id": "branch_007",
+      "source_low_level_goal_ids": [
+        "DefineAccessPermissionsForFacilityDetails",
+        "DefineAccessPermissionsForUserInformation",
+        "InitiateSystemDataIntegrityValidation",
+        "PerformSystemDataRestorationFromBackup"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Discover suitable recycling facilities efficiently' accurately captures the primary stakeholder intention for the User actor as described in the project description ('allows users to discover and manage recycling facilities... searching for nearby centers... viewing operational hours, accessing maps'). The bottom-up reconstruction 'Enable users to locate and obtain comprehensive information about recycling facilities' is semantically equivalent and supported by the documentation. The goal is distinct from the sibling HLG 'Stay informed about recycling-related events and updates', which covers notifications rather than the active search and discovery process. It is appropriately scoped as an independent outcome, not a mere workflow fragment of a broader goal, and aligns with the documented features of searching, viewing hours, and accessing maps. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain material defects due to unsupported capabilities and missing essential features. Specifically, 'llg_003' (Filter by accepted material types) and 'llg_006' (Filter by accessibility features) are not explicitly stated or necessarily entailed by the project description, which only mentions searching by zip code, viewing hours, and accessing maps. Furthermore, the essential capability of 'Accessing maps of recycling locations' is missing; 'llg_005' only retrieves coordinates, which is a data retrieval step, not the user-facing map access feature explicitly documented. Therefore, the decomposition requires regeneration to remove unsupported filters and include the map access capability.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Discover suitable recycling facilities efficiently' accurately captures the primary stakeholder intention for the User actor as described in the project description ('allows users to discover and manage recycling facilities... searching for nearby centers... viewing operational hours, accessing maps'). The bottom-up reconstruction 'Enable users to locate and obtain comprehensive information about recycling facilities' is semantically equivalent and supported by the documentation. The goal is distinct from the sibling HLG 'Stay informed about recycling-related events and updates', which covers notifications rather than the active search and discovery process. It is appropriately scoped as an independent outcome, not a mere workflow fragment of a broader goal, and aligns with the documented features of searching, viewing hours, and accessing maps.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain material defects due to unsupported capabilities and missing essential features. Specifically, 'llg_003' (Filter by accepted material types) and 'llg_006' (Filter by accessibility features) are not explicitly stated or necessarily entailed by the project description, which only mentions searching by zip code, viewing hours, and accessing maps. Furthermore, the essential capability of 'Accessing maps of recycling locations' is missing; 'llg_005' only retrieves coordinates, which is a data retrieval step, not the user-facing map access feature explicitly documented. Therefore, the decomposition requires regeneration to remove unsupported filters and include the map access capability.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove unsupported filtering capabilities (llg_003, llg_006) and add the essential capability to access maps of recycling locations.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_003",
+          "llg_006"
+        ],
+        "missing_essential_capabilities": [
+          "Access maps of recycling locations"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_007": {
+      "branch_id": "branch_007",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Ensure the security and integrity of system data' is explicitly supported by the project description, which states that administrators ensure 'data security'. The bottom-up reconstruction 'Enable Administrator to Maintain System Data Integrity and Security' aligns semantically with the original goal, confirming the intention to safeguard data from unauthorized access and corruption. This goal is distinct from 'Maintain accurate and up-to-date recycling facility information' (which focuses on content correctness) and 'Address user feedback effectively' (which focuses on service improvement). It represents a valid, independently scoped stakeholder outcome for the Administrator actor, covering the protection of both facility details and user information. Therefore, the goal should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) introduce specific technical operations that are not explicitly stated or necessarily entailed by the project description. The description states that administrators ensure 'data security', but it does not mention specific mechanisms such as defining granular access permissions for facility details vs. user information (llg_001, llg_002), initiating system-wide integrity validation processes (llg_003), or performing data restoration from backups (llg_004). While these are standard practices for data security, the instructions require that capabilities be explicitly stated or necessarily entailed by the documentation. 'Ensuring data security' is a broad outcome goal; it does not explicitly mandate the existence of user-facing administrative functions for permission definition, integrity checks, or backup restoration. Therefore, these LLGs are considered unsupported additions that go beyond the documented scope. The decomposition should focus on the documented responsibility of safeguarding data, which might be better represented by more general or explicitly documented security management tasks if any were specified, or by acknowledging that the current specific technical LLGs are not grounded in the text.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Ensure the security and integrity of system data' is explicitly supported by the project description, which states that administrators ensure 'data security'. The bottom-up reconstruction 'Enable Administrator to Maintain System Data Integrity and Security' aligns semantically with the original goal, confirming the intention to safeguard data from unauthorized access and corruption. This goal is distinct from 'Maintain accurate and up-to-date recycling facility information' (which focuses on content correctness) and 'Address user feedback effectively' (which focuses on service improvement). It represents a valid, independently scoped stakeholder outcome for the Administrator actor, covering the protection of both facility details and user information. Therefore, the goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) introduce specific technical operations that are not explicitly stated or necessarily entailed by the project description. The description states that administrators ensure 'data security', but it does not mention specific mechanisms such as defining granular access permissions for facility details vs. user information (llg_001, llg_002), initiating system-wide integrity validation processes (llg_003), or performing data restoration from backups (llg_004). While these are standard practices for data security, the instructions require that capabilities be explicitly stated or necessarily entailed by the documentation. 'Ensuring data security' is a broad outcome goal; it does not explicitly mandate the existence of user-facing administrative functions for permission definition, integrity checks, or backup restoration. Therefore, these LLGs are considered unsupported additions that go beyond the documented scope. The decomposition should focus on the documented responsibility of safeguarding data, which might be better represented by more general or explicitly documented security management tasks if any were specified, or by acknowledging that the current specific technical LLGs are not grounded in the text.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "The current LLGs describe specific technical security operations (permission definition, integrity validation, backup restoration) that are not explicitly documented in the project description. The description only states that administrators ensure 'data security'. Please regenerate LLGs that are directly supported by the text, or if no specific security operations are detailed, consider if the HLG itself needs refinement or if the LLGs should be more general and strictly tied to the 'ensuring data security' mandate without inventing specific technical workflows like backup restoration or granular permission setting.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_001",
+          "llg_002",
+          "llg_003",
+          "llg_004"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Discover suitable recycling facilities efficiently",
+        "description": "Users aim to quickly find recycling centers that meet their needs, including location, operational hours, and accessibility.",
+        "actor": {
+          "name": "User",
+          "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+        }
+      },
+      {
+        "name": "Stay informed about recycling-related events and updates",
+        "description": "Users want to receive timely notifications regarding recycling events, changes in facility information, or other relevant community updates.",
+        "actor": {
+          "name": "User",
+          "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+        }
+      },
+      {
+        "name": "Maintain accurate and up-to-date recycling facility information",
+        "description": "Administrators seek to ensure that all facility details, such as operational hours and locations, are current and correct within the system.",
+        "actor": {
+          "name": "Administrator",
+          "description": "Manages facility information, user feedback, and ensures data security."
+        }
+      },
+      {
+        "name": "Address user feedback effectively to improve the service",
+        "description": "Administrators aim to process and respond to user feedback to enhance the overall quality and usability of the recycling facility discovery platform.",
+        "actor": {
+          "name": "Administrator",
+          "description": "Manages facility information, user feedback, and ensures data security."
+        }
+      },
+      {
+        "name": "Ensure the security and integrity of system data",
+        "description": "Administrators are responsible for safeguarding all data within the application, including facility details and user information, from unauthorized access or corruption.",
+        "actor": {
+          "name": "Administrator",
+          "description": "Manages facility information, user feedback, and ensures data security."
+        }
+      },
+      {
+        "name": "Provide accurate and timely information about their recycling facility",
+        "description": "Facility Representatives aim to submit and update their facility's details to ensure users have access to correct and current information.",
+        "actor": {
+          "name": "Facility Representative",
+          "description": "Communicates with site administrators to provide or update facility information."
+        }
+      },
+      {
+        "name": "Collaborate with administrators to ensure correct facility representation",
+        "description": "Facility Representatives seek to effectively communicate with site administrators to clarify or verify facility information, ensuring it is accurately displayed to users.",
+        "actor": {
+          "name": "Facility Representative",
+          "description": "Communicates with site administrators to provide or update facility information."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Subscribe to notifications for updates on specific recycling facilities",
+        "description": "The User can invoke an API to subscribe to receive alerts when information (e.g., hours, services) for a particular recycling facility changes.",
+        "high_level_associated": {
+          "name": "Stay informed about recycling-related events and updates",
+          "description": "Users want to receive timely notifications regarding recycling events, changes in facility information, or other relevant community updates.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Subscribe to notifications for recycling-related events",
+        "description": "The User can invoke an API to subscribe to receive alerts about upcoming recycling events or community initiatives.",
+        "high_level_associated": {
+          "name": "Stay informed about recycling-related events and updates",
+          "description": "Users want to receive timely notifications regarding recycling events, changes in facility information, or other relevant community updates.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Retrieve a list of all unread notifications",
+        "description": "The User can invoke an API to fetch a list of all notifications that have not yet been marked as read.",
+        "high_level_associated": {
+          "name": "Stay informed about recycling-related events and updates",
+          "description": "Users want to receive timely notifications regarding recycling events, changes in facility information, or other relevant community updates.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Mark a specific notification as read",
+        "description": "The User can invoke an API to change the status of a particular notification to 'read'.",
+        "high_level_associated": {
+          "name": "Stay informed about recycling-related events and updates",
+          "description": "Users want to receive timely notifications regarding recycling events, changes in facility information, or other relevant community updates.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Submit user feedback",
+        "description": "The User can invoke an API to submit feedback, suggestions, or report issues regarding the application or facility information.",
+        "high_level_associated": {
+          "name": "Address user feedback effectively to improve the service",
+          "description": "Administrators aim to process and respond to user feedback to enhance the overall quality and usability of the recycling facility discovery platform.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "Retrieve all submitted user feedback",
+        "description": "The Administrator can invoke an API to fetch a comprehensive list of all feedback entries submitted by users.",
+        "high_level_associated": {
+          "name": "Address user feedback effectively to improve the service",
+          "description": "Administrators aim to process and respond to user feedback to enhance the overall quality and usability of the recycling facility discovery platform.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "Mark user feedback as processed or reviewed",
+        "description": "The Administrator can invoke an API to update the status of a specific user feedback entry to indicate it has been addressed or reviewed.",
+        "high_level_associated": {
+          "name": "Address user feedback effectively to improve the service",
+          "description": "Administrators aim to process and respond to user feedback to enhance the overall quality and usability of the recycling facility discovery platform.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "Send a direct response to user feedback",
+        "description": "The Administrator can invoke an API to compose and send a reply to a specific user feedback submission.",
+        "high_level_associated": {
+          "name": "Address user feedback effectively to improve the service",
+          "description": "Administrators aim to process and respond to user feedback to enhance the overall quality and usability of the recycling facility discovery platform.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "Submit new recycling facility information for review",
+        "description": "The Facility Representative can invoke an API to submit comprehensive details for a new recycling facility to be added to the system, pending administrator approval.",
+        "high_level_associated": {
+          "name": "Provide accurate and timely information about their recycling facility",
+          "description": "Facility Representatives aim to submit and update their facility's details to ensure users have access to correct and current information.",
+          "actor": {
+            "name": "Facility Representative",
+            "description": "Communicates with site administrators to provide or update facility information."
+          }
+        }
+      },
+      {
+        "name": "Submit updates to an existing recycling facility's information",
+        "description": "The Facility Representative can invoke an API to propose changes to the details (e.g., hours, materials) of a facility they represent, for administrator review.",
+        "high_level_associated": {
+          "name": "Provide accurate and timely information about their recycling facility",
+          "description": "Facility Representatives aim to submit and update their facility's details to ensure users have access to correct and current information.",
+          "actor": {
+            "name": "Facility Representative",
+            "description": "Communicates with site administrators to provide or update facility information."
+          }
+        }
+      },
+      {
+        "name": "Retrieve the status of their submitted facility updates",
+        "description": "The Facility Representative can invoke an API to check whether their previously submitted facility information or updates have been approved, rejected, or are still pending.",
+        "high_level_associated": {
+          "name": "Provide accurate and timely information about their recycling facility",
+          "description": "Facility Representatives aim to submit and update their facility's details to ensure users have access to correct and current information.",
+          "actor": {
+            "name": "Facility Representative",
+            "description": "Communicates with site administrators to provide or update facility information."
+          }
+        }
+      },
+      {
+        "name": "Send a message to an administrator regarding facility information",
+        "description": "The Facility Representative can invoke an API to send a direct message to an administrator to clarify or discuss details about their facility.",
+        "high_level_associated": {
+          "name": "Collaborate with administrators to ensure correct facility representation",
+          "description": "Facility Representatives seek to effectively communicate with site administrators to clarify or verify facility information, ensuring it is accurately displayed to users.",
+          "actor": {
+            "name": "Facility Representative",
+            "description": "Communicates with site administrators to provide or update facility information."
+          }
+        }
+      },
+      {
+        "name": "Retrieve messages from administrators regarding their facility",
+        "description": "The Facility Representative can invoke an API to view any communications or requests for clarification sent by administrators concerning their facility's information.",
+        "high_level_associated": {
+          "name": "Collaborate with administrators to ensure correct facility representation",
+          "description": "Facility Representatives seek to effectively communicate with site administrators to clarify or verify facility information, ensuring it is accurately displayed to users.",
+          "actor": {
+            "name": "Facility Representative",
+            "description": "Communicates with site administrators to provide or update facility information."
+          }
+        }
+      },
+      {
+        "name": "Create a new recycling facility record in the system",
+        "description": "The Administrator can invoke an API to add a new recycling facility, providing all necessary details such as name, location, operational hours, and accepted materials.",
+        "high_level_associated": {
+          "name": "Maintain accurate and up-to-date recycling facility information",
+          "description": "Administrators seek to ensure that all facility details, such as operational hours and locations, are current and correct within the system.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "Update existing details of a recycling facility",
+        "description": "The Administrator can invoke an API to modify specific attributes of an existing recycling facility record, such as changing operational hours, updating location coordinates, or revising accepted material types.",
+        "high_level_associated": {
+          "name": "Maintain accurate and up-to-date recycling facility information",
+          "description": "Administrators seek to ensure that all facility details, such as operational hours and locations, are current and correct within the system.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "DefineAccessPermissionsForFacilityDetails",
+        "description": "Allow the Administrator to specify and apply access control rules for viewing, modifying, or deleting facility-related data within the system.",
+        "high_level_associated": {
+          "name": "Ensure the security and integrity of system data",
+          "description": "Administrators are responsible for safeguarding all data within the application, including facility details and user information, from unauthorized access or corruption.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "DefineAccessPermissionsForUserInformation",
+        "description": "Allow the Administrator to specify and apply access control rules for viewing or modifying sensitive user information stored in the system.",
+        "high_level_associated": {
+          "name": "Ensure the security and integrity of system data",
+          "description": "Administrators are responsible for safeguarding all data within the application, including facility details and user information, from unauthorized access or corruption.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "InitiateSystemDataIntegrityValidation",
+        "description": "Allow the Administrator to trigger a system-wide process to validate the consistency and integrity of all stored application data.",
+        "high_level_associated": {
+          "name": "Ensure the security and integrity of system data",
+          "description": "Administrators are responsible for safeguarding all data within the application, including facility details and user information, from unauthorized access or corruption.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "PerformSystemDataRestorationFromBackup",
+        "description": "Allow the Administrator to initiate the restoration of the entire system's data from a selected backup point to recover from corruption or data loss.",
+        "high_level_associated": {
+          "name": "Ensure the security and integrity of system data",
+          "description": "Administrators are responsible for safeguarding all data within the application, including facility details and user information, from unauthorized access or corruption.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Manages facility information, user feedback, and ensures data security."
+          }
+        }
+      },
+      {
+        "name": "Search for recycling facilities by geographical location",
+        "description": "The system shall allow the user to search for recycling facilities within a specified geographical area.",
+        "high_level_associated": {
+          "name": "Discover suitable recycling facilities efficiently",
+          "description": "Users aim to quickly find recycling centers that meet their needs, including location, operational hours, and accessibility.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Search for recycling facilities by zip code",
+        "description": "The system shall allow the user to search for recycling facilities by providing a specific zip code.",
+        "high_level_associated": {
+          "name": "Discover suitable recycling facilities efficiently",
+          "description": "Users aim to quickly find recycling centers that meet their needs, including location, operational hours, and accessibility.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Retrieve detailed information for a specific recycling facility",
+        "description": "The system shall provide detailed information for a selected recycling facility, including operational hours, accepted materials, and accessibility features.",
+        "high_level_associated": {
+          "name": "Discover suitable recycling facilities efficiently",
+          "description": "Users aim to quickly find recycling centers that meet their needs, including location, operational hours, and accessibility.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Retrieve map coordinates for a recycling facility",
+        "description": "The system shall provide the precise geographical coordinates (latitude and longitude) for a specified recycling facility.",
+        "high_level_associated": {
+          "name": "Discover suitable recycling facilities efficiently",
+          "description": "Users aim to quickly find recycling centers that meet their needs, including location, operational hours, and accessibility.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      },
+      {
+        "name": "Display a map showing recycling facilities",
+        "description": "The system shall render an interactive map displaying the locations of recycling facilities based on search results or user's current location.",
+        "high_level_associated": {
+          "name": "Discover suitable recycling facilities efficiently",
+          "description": "Users aim to quickly find recycling centers that meet their needs, including location, operational hours, and accessibility.",
+          "actor": {
+            "name": "User",
+            "description": "Discovers and manages recycling facilities, searches, views hours, accesses maps, and receives notifications."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description explicitly lists the following functional requirements: 1) Users search for nearby centers by zip code, view operational hours, and access maps (covered by 'Discover suitable recycling facilities efficiently'); 2) Users receive notifications about events (covered by 'Stay informed about recycling-related events and updates'); 3) Administrators manage facility information (covered by 'Maintain accurate and up-to-date recycling facility information'); 4) Administrators manage user feedback (covered by 'Address user feedback effectively to improve the service'); 5) Administrators ensure data security (covered by 'Ensure the security and integrity of system data'); 6) Facility representatives communicate with administrators to provide/update information (covered by 'Provide accurate and timely information about their recycling facility' and 'Collaborate with administrators to ensure correct facility representation'). All explicit actor-level capabilities and outcomes in the description are semantically entailed by the current High-Level Goals. No missing functional requirements were identified.",
+    "quality_score": 5,
+    "missing_goal_requests": [],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "NO_MISSING_HIGH_LEVEL_GOALS": 3
+    }
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "user::discover suitable recycling facilities efficiently": 2,
+    "administrator::maintain accurate and up-to-date recycling facility information": 1,
+    "administrator::ensure the security and integrity of system data": 1
+  },
+  "warnings": []
+}

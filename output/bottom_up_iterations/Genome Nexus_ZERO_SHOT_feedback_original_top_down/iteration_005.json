@@ -1,0 +1,573 @@
+{
+  "iteration": 5,
+  "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Enable Bioinformaticians to Access, Integrate, and Query Diverse Variant Data Sources",
+      "rationale": "The low-level goals collectively describe the necessary functionalities for a Bioinformatician to effectively work with variant data from various origins. This encompasses the ability to discover and configure data sources, prepare custom data for integration, and perform queries across the consolidated dataset, all of which are fundamental for comprehensive variant analysis.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "Query Integrated Variant Data",
+        "Configure External Databases",
+        "Retrieve Available Data Sources",
+        "Map Custom Variant Identifiers"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Support Cross-Species Variant Annotation and Comparative Genomics",
+      "rationale": "The low-level goals collectively describe functionalities for handling variant annotation across multiple species, including non-human ones, by allowing the specification of species-specific resources (reference genomes, databases) and enabling the retrieval and comparison of orthologous gene information and variant effects between different species. This indicates a high-level objective to facilitate comprehensive comparative analysis of genetic variants across diverse species.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Specify Reference Genome Assembly",
+        "Retrieve Orthologous Gene Information",
+        "Annotate Non-Human Variants",
+        "Compare Variant Effects Across Species"
+      ]
+    },
+    "branch_005": {
+      "reconstructed_high_level_goal": "Perform Batch Annotation of Genetic Variants",
+      "rationale": "The low-level goals collectively describe the complete workflow for a bioinformatician to initiate, configure, monitor, and retrieve results from a system that performs batch annotation of genetic variants, including specific types of predictions like DNA to protein conversion and functional effect prediction.",
+      "branch_id": "branch_005",
+      "source_low_level_goal_ids": [
+        "Upload VCF for Batch Annotation",
+        "Configure Batch Annotation Parameters",
+        "Enable Protein Consequence Prediction",
+        "Enable Functional Effect Prediction",
+        "Monitor Annotation Job Status",
+        "Download Batch Annotation Results"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Integrate Diverse Genomic Data' is well-supported by the project description, which explicitly states the system needs to 'integrate information from a variety of existing databases.' It represents a distinct, independently satisfiable stakeholder outcome for the Bioinformatician, separate from the annotation process (covered by 'Perform High-Throughput Variant Annotation') and the multi-species capability (covered by 'Support Multi-Species Genomic Analysis'). The bottom-up reconstruction 'Enable Bioinformaticians to Access, Integrate, and Query Diverse Variant Data Sources' is semantically equivalent but slightly broader by including 'Access' and 'Query'. However, the original goal's focus on integration is precise and aligns with the core requirement of data consolidation. The goal is not a mere workflow fragment but a foundational capability that enables the other analysis goals. Therefore, it should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) contain capabilities that are not explicitly supported by the project description. Specifically, 'Configure External Databases' (llg_002) implies a user-facing configuration interface for selecting data sources, which is not mentioned in the description; the system is described as integrating information from existing databases, not necessarily allowing users to configure which ones are active. Similarly, 'Map Custom Variant Identifiers' (llg_004) suggests a specific data preprocessing or mapping feature for custom identifiers, which is not entailed by the requirement to integrate data from existing databases or perform annotation. The description focuses on the system's ability to integrate and provide insights, not on user-driven configuration of sources or custom identifier mapping. These LLGs represent conventional but undocumented additions. Therefore, they must be removed to ensure the decomposition strictly aligns with the documented requirements.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Integrate Diverse Genomic Data' is well-supported by the project description, which explicitly states the system needs to 'integrate information from a variety of existing databases.' It represents a distinct, independently satisfiable stakeholder outcome for the Bioinformatician, separate from the annotation process (covered by 'Perform High-Throughput Variant Annotation') and the multi-species capability (covered by 'Support Multi-Species Genomic Analysis'). The bottom-up reconstruction 'Enable Bioinformaticians to Access, Integrate, and Query Diverse Variant Data Sources' is semantically equivalent but slightly broader by including 'Access' and 'Query'. However, the original goal's focus on integration is precise and aligns with the core requirement of data consolidation. The goal is not a mere workflow fragment but a foundational capability that enables the other analysis goals. Therefore, it should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) contain capabilities that are not explicitly supported by the project description. Specifically, 'Configure External Databases' (llg_002) implies a user-facing configuration interface for selecting data sources, which is not mentioned in the description; the system is described as integrating information from existing databases, not necessarily allowing users to configure which ones are active. Similarly, 'Map Custom Variant Identifiers' (llg_004) suggests a specific data preprocessing or mapping feature for custom identifiers, which is not entailed by the requirement to integrate data from existing databases or perform annotation. The description focuses on the system's ability to integrate and provide insights, not on user-driven configuration of sources or custom identifier mapping. These LLGs represent conventional but undocumented additions. Therefore, they must be removed to ensure the decomposition strictly aligns with the documented requirements.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove the unsupported LLGs 'Configure External Databases' and 'Map Custom Variant Identifiers'. Retain 'Query Integrated Variant Data' and 'Retrieve Available Data Sources' as they are directly supported by the need to integrate and access data from various databases. Ensure the remaining LLGs focus on the core capability of accessing and querying the integrated data without adding undocumented configuration or mapping features.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_002",
+          "llg_004"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Support Multi-Species Genomic Analysis' is supported by the project description, which explicitly states the system should support analysis for different species, including human and mouse. The bottom-up reconstruction 'Support Cross-Species Variant Annotation and Comparative Genomics' is semantically equivalent but slightly more specific in mentioning 'annotation' and 'comparative genomics'. However, the original goal is sufficiently clear and aligned with the stakeholder's intention to perform analysis across species. There is no broader sibling goal that encompasses this specific multi-species capability, as 'Perform High-Throughput Variant Annotation' focuses on the throughput aspect and 'Integrate Diverse Genomic Data' focuses on data sources, not the comparative analysis aspect. Therefore, the original goal is independently scoped and supported. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Support Multi-Species Genomic Analysis'. \n\n1. **llg_001 (Specify Reference Genome Assembly)**: Supported by the requirement to support analysis for different species (human and mouse), which necessitates selecting the correct reference genome (e.g., GRCh38 vs GRCm39) for accurate coordinate mapping and annotation.\n2. **llg_002 (Retrieve Orthologous Gene Information)**: Supported by the goal of 'comparative studies' across species. Comparing variants across species requires mapping genes between species (orthology).\n3. **llg_003 (Annotate Non-Human Variants)**: Directly supported by the explicit requirement to support analysis for 'different species, including human and mouse'. This distinguishes it from the sibling HLG 'Perform High-Throughput Variant Annotation' which focuses on the general mechanism/throughput, whereas this LLG focuses on the species-specific capability.\n4. **llg_004 (Compare Variant Effects Across Species)**: Directly supported by the HLG description 'for comparative studies' and the system's function of providing insights on variant effects. Comparing these effects across species is the core of multi-species analysis.\n\nThere are no unsupported LLGs. There are no missing essential capabilities explicitly required by the parent HLG that are not covered. The decomposition is precise and aligned with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Support Multi-Species Genomic Analysis' is supported by the project description, which explicitly states the system should support analysis for different species, including human and mouse. The bottom-up reconstruction 'Support Cross-Species Variant Annotation and Comparative Genomics' is semantically equivalent but slightly more specific in mentioning 'annotation' and 'comparative genomics'. However, the original goal is sufficiently clear and aligned with the stakeholder's intention to perform analysis across species. There is no broader sibling goal that encompasses this specific multi-species capability, as 'Perform High-Throughput Variant Annotation' focuses on the throughput aspect and 'Integrate Diverse Genomic Data' focuses on data sources, not the comparative analysis aspect. Therefore, the original goal is independently scoped and supported.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Support Multi-Species Genomic Analysis'. \n\n1. **llg_001 (Specify Reference Genome Assembly)**: Supported by the requirement to support analysis for different species (human and mouse), which necessitates selecting the correct reference genome (e.g., GRCh38 vs GRCm39) for accurate coordinate mapping and annotation.\n2. **llg_002 (Retrieve Orthologous Gene Information)**: Supported by the goal of 'comparative studies' across species. Comparing variants across species requires mapping genes between species (orthology).\n3. **llg_003 (Annotate Non-Human Variants)**: Directly supported by the explicit requirement to support analysis for 'different species, including human and mouse'. This distinguishes it from the sibling HLG 'Perform High-Throughput Variant Annotation' which focuses on the general mechanism/throughput, whereas this LLG focuses on the species-specific capability.\n4. **llg_004 (Compare Variant Effects Across Species)**: Directly supported by the HLG description 'for comparative studies' and the system's function of providing insights on variant effects. Comparing these effects across species is the core of multi-species analysis.\n\nThere are no unsupported LLGs. There are no missing essential capabilities explicitly required by the parent HLG that are not covered. The decomposition is precise and aligned with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Perform High-Throughput Variant Annotation' is supported by the project description, which explicitly states the system's primary function is 'rapid, automated, and high-throughput annotation and interpretation of genetic variants'. The actor (Bioinformatician) is explicitly described as leveraging the system for 'high-throughput annotation'. While the sibling goal 'Integrate Diverse Genomic Data' covers the data sourcing aspect and 'Support Multi-Species Genomic Analysis' covers the species scope, the core computational task of annotating variants (converting DNA to protein, predicting effects) is a distinct, independently satisfiable stakeholder outcome for the Bioinformatician. It is not merely a workflow phase of the other goals but the central processing capability. The bottom-up reconstruction 'Perform Batch Annotation of Genetic Variants' is semantically equivalent to the original, confirming the intent. The goal is appropriately scoped and not redundant with the other Bioinformatician goals. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain several capabilities that are not explicitly supported by the project description. Specifically, 'Upload VCF for Batch Annotation' (llg_001) assumes a specific file format (VCF) and input method (upload) not mentioned in the text. 'Configure Batch Annotation Parameters' (llg_002) assumes configuration options like output format and error handling that are not documented. 'Monitor Annotation Job Status' (llg_005) and 'Download Batch Annotation Results' (llg_006) assume asynchronous job management and file retrieval workflows, which are not entailed by the description of a 'centralized resource' for 'annotation and interpretation'. The description focuses on the system's ability to provide insights (converting DNA to protein, predicting effects, offering data) rather than a specific batch job submission/monitoring/retrieval workflow. While 'Enable Protein Consequence Prediction' (llg_003) and 'Enable Functional Effect Prediction' (llg_004) align with the documented capabilities, the presence of unsupported workflow LLGs requires regeneration to ensure all LLGs are grounded in the provided documentation.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Perform High-Throughput Variant Annotation' is supported by the project description, which explicitly states the system's primary function is 'rapid, automated, and high-throughput annotation and interpretation of genetic variants'. The actor (Bioinformatician) is explicitly described as leveraging the system for 'high-throughput annotation'. While the sibling goal 'Integrate Diverse Genomic Data' covers the data sourcing aspect and 'Support Multi-Species Genomic Analysis' covers the species scope, the core computational task of annotating variants (converting DNA to protein, predicting effects) is a distinct, independently satisfiable stakeholder outcome for the Bioinformatician. It is not merely a workflow phase of the other goals but the central processing capability. The bottom-up reconstruction 'Perform Batch Annotation of Genetic Variants' is semantically equivalent to the original, confirming the intent. The goal is appropriately scoped and not redundant with the other Bioinformatician goals.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain several capabilities that are not explicitly supported by the project description. Specifically, 'Upload VCF for Batch Annotation' (llg_001) assumes a specific file format (VCF) and input method (upload) not mentioned in the text. 'Configure Batch Annotation Parameters' (llg_002) assumes configuration options like output format and error handling that are not documented. 'Monitor Annotation Job Status' (llg_005) and 'Download Batch Annotation Results' (llg_006) assume asynchronous job management and file retrieval workflows, which are not entailed by the description of a 'centralized resource' for 'annotation and interpretation'. The description focuses on the system's ability to provide insights (converting DNA to protein, predicting effects, offering data) rather than a specific batch job submission/monitoring/retrieval workflow. While 'Enable Protein Consequence Prediction' (llg_003) and 'Enable Functional Effect Prediction' (llg_004) align with the documented capabilities, the presence of unsupported workflow LLGs requires regeneration to ensure all LLGs are grounded in the provided documentation.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove unsupported workflow LLGs (upload, configure, monitor, download) that are not explicitly documented. Focus LLGs on the core annotation capabilities explicitly stated: converting DNA changes to protein changes, predicting functional effects of protein mutations, and providing data on mutation frequencies, gene function, variant effects, and clinical actionability.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_001",
+          "llg_002",
+          "llg_005",
+          "llg_006"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+        "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+        "actor": {
+          "name": "Cancer Researcher",
+          "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+        }
+      },
+      {
+        "name": "Perform High-Throughput Variant Annotation",
+        "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+        "actor": {
+          "name": "Bioinformatician",
+          "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+        }
+      },
+      {
+        "name": "Integrate Diverse Genomic Data",
+        "description": "To integrate information from a variety of existing databases for comprehensive and unified genomic data analysis.",
+        "actor": {
+          "name": "Bioinformatician",
+          "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+        }
+      },
+      {
+        "name": "Support Multi-Species Genomic Analysis",
+        "description": "To support the analysis of genomic variants across different species, including human and mouse, for comparative studies.",
+        "actor": {
+          "name": "Bioinformatician",
+          "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+        }
+      },
+      {
+        "name": "Obtain Clinically Actionable Insights",
+        "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+        "actor": {
+          "name": "Clinical Oncologist",
+          "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Specify Reference Genome Assembly",
+        "description": "The system shall allow a Bioinformatician to specify the reference genome assembly (e.g., GRCh38, GRCm39) for variant annotation.",
+        "high_level_associated": {
+          "name": "Support Multi-Species Genomic Analysis",
+          "description": "To support the analysis of genomic variants across different species, including human and mouse, for comparative studies.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Orthologous Gene Information",
+        "description": "The system shall allow a Bioinformatician to retrieve orthologous gene information between human and mouse for a given gene.",
+        "high_level_associated": {
+          "name": "Support Multi-Species Genomic Analysis",
+          "description": "To support the analysis of genomic variants across different species, including human and mouse, for comparative studies.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Annotate Non-Human Variants",
+        "description": "The system shall allow a Bioinformatician to annotate variants from a non-human species (e.g., mouse) using species-specific databases.",
+        "high_level_associated": {
+          "name": "Support Multi-Species Genomic Analysis",
+          "description": "To support the analysis of genomic variants across different species, including human and mouse, for comparative studies.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Compare Variant Effects Across Species",
+        "description": "The system shall allow a Bioinformatician to compare variant effects and annotations for homologous genes across different species.",
+        "high_level_associated": {
+          "name": "Support Multi-Species Genomic Analysis",
+          "description": "To support the analysis of genomic variants across different species, including human and mouse, for comparative studies.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "SubmitBatchGeneticVariants",
+        "description": "The Cancer Researcher can submit a file containing a batch of genetic variants to the system for annotation.",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "InitiateVariantAnnotationProcess",
+        "description": "The Cancer Researcher can trigger the start of the annotation workflow for a previously submitted batch of genetic variants.",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "QueryVariantAnnotationJobStatus",
+        "description": "The Cancer Researcher can query the system to retrieve the current processing status of a specific variant annotation job.",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCompletedVariantAnnotations",
+        "description": "The Cancer Researcher can fetch all annotated genetic variants and their associated data once an annotation job has successfully completed.",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "ApplyVariantAnnotationFilters",
+        "description": "The Cancer Researcher can apply filters (e.g., gene name, variant type, pathogenicity score, clinical significance) to narrow down the displayed or retrieved set of annotated variants.",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "GetDetailedVariantInterpretationData",
+        "description": "The Cancer Researcher can request comprehensive details for a single annotated variant, including its biological context, predicted functional effects, and relevant clinical implications from integrated databases.",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "ExportAnnotatedVariantData",
+        "description": "The Cancer Researcher can download the annotated genetic variants, either the full set or a filtered subset, in a user-selected data format (e.g., CSV, JSON).",
+        "high_level_associated": {
+          "name": "Enable comprehensive, high-throughput annotation and interpretation of genetic variants to derive insights for cancer research",
+          "description": "The Cancer Researcher aims to efficiently submit, process, and analyze large batches of genetic variants, leveraging integrated data to understand their biological context, functional effects, and clinical implications within cancer biology.",
+          "actor": {
+            "name": "Cancer Researcher",
+            "description": "Utilizes the system to annotate and interpret genetic variants, understand gene function, and study mutation effects in cancer biology."
+          }
+        }
+      },
+      {
+        "name": "RetrievePatientGeneticProfile",
+        "description": "The Clinical Oncologist can retrieve the complete genetic profile for a specific patient by providing a patient identifier.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "QueryGeneticVariantsByPatient",
+        "description": "The Clinical Oncologist can query and retrieve a list of identified genetic variants associated with a specific patient's profile.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "GetVariantDetailedInformation",
+        "description": "The Clinical Oncologist can retrieve detailed information for a specific genetic variant, including its location, type, and genomic context.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "RetrieveVariantFunctionalImpact",
+        "description": "The Clinical Oncologist can retrieve the predicted functional impact of a specific genetic variant on gene expression or protein function.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "GetVariantAssociatedPathways",
+        "description": "The Clinical Oncologist can retrieve information on known biological pathways that are affected or implicated by a specific genetic variant.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "FetchVariantDiseaseAssociations",
+        "description": "The Clinical Oncologist can fetch known disease associations and their evidence levels for a specific genetic variant.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "AccessVariantTherapeuticImplications",
+        "description": "The Clinical Oncologist can access therapeutic implications, including drug sensitivities or resistances, linked to a specific genetic variant.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "RetrieveVariantClinicalTrialInformation",
+        "description": "The Clinical Oncologist can retrieve relevant ongoing or completed clinical trial information associated with a specific genetic variant or related disease.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "GetVariantTreatmentGuidelines",
+        "description": "The Clinical Oncologist can retrieve established treatment guidelines or recommendations based on the presence of a specific genetic variant.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "FilterInsightsByClinicalRelevance",
+        "description": "The Clinical Oncologist can filter the retrieved genetic insights based on predefined clinical relevance criteria, such as pathogenicity or frequency.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "GenerateActionableInsightsReport",
+        "description": "The Clinical Oncologist can generate a comprehensive report summarizing all clinically actionable insights for a specific patient, suitable for diagnosis and treatment planning.",
+        "high_level_associated": {
+          "name": "Obtain Clinically Actionable Insights",
+          "description": "To access comprehensive insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions.",
+          "actor": {
+            "name": "Clinical Oncologist",
+            "description": "Accesses the system for insights into genetic variants, their functional effects, and clinical actionability to inform patient diagnosis and treatment decisions."
+          }
+        }
+      },
+      {
+        "name": "Upload VCF for Batch Annotation",
+        "description": "The Bioinformatician uploads a VCF file containing genetic variants to the system for batch processing.",
+        "high_level_associated": {
+          "name": "Perform High-Throughput Variant Annotation",
+          "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Configure Batch Annotation Parameters",
+        "description": "The Bioinformatician sets general parameters for the batch annotation job, such as output format, reference genome version, and error handling preferences.",
+        "high_level_associated": {
+          "name": "Perform High-Throughput Variant Annotation",
+          "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Enable Protein Consequence Prediction",
+        "description": "The Bioinformatician activates the system's capability to convert DNA changes to protein changes and predict their consequences as part of the batch annotation process.",
+        "high_level_associated": {
+          "name": "Perform High-Throughput Variant Annotation",
+          "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Enable Functional Effect Prediction",
+        "description": "The Bioinformatician activates the system's capability to predict the functional effects of protein mutations as part of the batch annotation process.",
+        "high_level_associated": {
+          "name": "Perform High-Throughput Variant Annotation",
+          "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Monitor Annotation Job Status",
+        "description": "The Bioinformatician queries the system to check the current progress and status of an ongoing batch annotation job.",
+        "high_level_associated": {
+          "name": "Perform High-Throughput Variant Annotation",
+          "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Download Batch Annotation Results",
+        "description": "The Bioinformatician retrieves the complete output file containing all annotated variants from a completed batch annotation job.",
+        "high_level_associated": {
+          "name": "Perform High-Throughput Variant Annotation",
+          "description": "To perform rapid, automated, and high-throughput annotation of genetic variants for large-scale genomic analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Available Data Sources",
+        "description": "The Bioinformatician can send a request to the system to list all currently integrated genomic data sources and their metadata.",
+        "high_level_associated": {
+          "name": "Integrate Diverse Genomic Data",
+          "description": "To integrate information from a variety of existing databases for comprehensive and unified genomic data analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      },
+      {
+        "name": "Query Integrated Variant Data",
+        "description": "The Bioinformatician can submit a query to the system to retrieve specific genomic variant data from the unified integrated dataset based on specified criteria (e.g., gene, position, variant type).",
+        "high_level_associated": {
+          "name": "Integrate Diverse Genomic Data",
+          "description": "To integrate information from a variety of existing databases for comprehensive and unified genomic data analysis.",
+          "actor": {
+            "name": "Bioinformatician",
+            "description": "Leverages the system for high-throughput annotation, data integration, and complex analysis of genomic variants across different species."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description outlines a system for high-throughput annotation, data integration, multi-species support, and providing insights on functional effects and clinical actionability. The current HLGs cover these areas comprehensively: 'Perform High-Throughput Variant Annotation' and 'Integrate Diverse Genomic Data' address the Bioinformatician's needs for processing and data sourcing; 'Support Multi-Species Genomic Analysis' covers the human/mouse requirement; 'Enable comprehensive, high-throughput annotation and interpretation...' covers the Cancer Researcher's need for biological context and insights; and 'Obtain Clinically Actionable Insights' covers the Clinical Oncologist's need for treatment decisions. The retired HLGs (e.g., 'Gain Insights into Functional Effects', 'Access Comprehensive Gene and Variant Data') are semantically entailed by the broader current HLGs for the respective actors. No explicit functional requirements remain uncovered.",
+    "quality_score": 5,
+    "missing_goal_requests": [],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "NO_MISSING_HIGH_LEVEL_GOALS": 3
+    }
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "bioinformatician::perform high-throughput variant annotation": 1,
+    "bioinformatician::integrate diverse genomic data": 1
+  },
+  "warnings": []
+}

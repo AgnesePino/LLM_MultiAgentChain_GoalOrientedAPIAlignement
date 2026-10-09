@@ -35,23 +35,28 @@ Il ciclo bottom-up può essere riassunto così:
 output top-down
       │
       ▼
-mapping LLG → HLG
+validazione e lettura dei parent HLG già presenti negli LLG
       │
       ▼
-ricostruzione dell'HLG osservando solo gli LLG
+costruzione dei branch dai parent incorporati
       │
       ▼
-valutazione dell'HLG originale
-      │
-      ├── KEEP ──────► valutazione degli LLG
-      ├── REWRITE ───► rigenerazione mirata dell'HLG e dei suoi LLG
-      └── REMOVE ────► rimozione del branch
+ricostruzione dell'HLG osservando solo gli LLG del branch
       │
       ▼
-controllo globale degli HLG mancanti
+voting del critic sull'HLG originale
+      │
+      ├── KEEP ──────► voting del critic sugli LLG
+      ├── REWRITE ───► richiesta di riscrittura mirata
+      └── REMOVE ────► richiesta di rimozione
       │
       ▼
-applicazione delle correzioni e nuova iterazione
+voting globale sugli HLG mancanti
+      │
+      ▼
+applicazione limitata della correzione con priorità più alta
+      │
+      └──────────────► nuova iterazione
 ```
 
 La descrizione del progetto rimane sempre la fonte principale. La ricostruzione
@@ -60,17 +65,16 @@ riscrivere un goal.
 
 ## 1. Costruzione dei branch
 
-Il mapping è implementato in
-[`low_level_goal_mapper.py`](./low_level_goal_mapper.py).
+La pipeline top-down originale assegna già a ogni LLG il proprio HLG nel campo
+strutturato `high_level_associated`. La fase bottom-up usa direttamente questo
+riferimento e raggruppa soltanto gli LLG che contengono lo stesso oggetto parent.
 
-Ogni LLG contiene un riferimento al proprio HLG. Il codice collega i due goal
-confrontando il nome dell'attore e il nome dell'HLG dopo una normalizzazione del
-testo. Se l'attore è stato leggermente parafrasato, viene usato il solo nome
-dell'HLG, ma esclusivamente quando quel nome è univoco.
-
-Questa scelta evita una chiamata LLM per il mapping e riduce il rischio di
-assegnare un LLG al branch sbagliato. Prima della valutazione vengono inoltre
-rimossi gli HLG senza LLG e i duplicati con la stessa identità normalizzata.
+Non viene eseguito alcun nuovo matching per nome o attore, non esiste un fallback
+basato sul solo nome dell'HLG e il riferimento prodotto dal top-down non viene
+riscritto. In questo modo il bottom-up non introduce associazioni diverse dalla
+baseline. Se un parent incorporato non coincide esattamente con uno degli HLG
+ufficiali, l'esecuzione viene interrotta con un errore esplicito e richiede la
+rigenerazione della baseline top-down.
 
 ## 2. Ricostruzione bottom-up dell'HLG
 
@@ -115,10 +119,13 @@ Le decisioni possibili sono:
 - `REMOVE_ORIGINAL_HIGH_LEVEL_GOAL`: l'intenzione non è supportata oppure è già
   coperta da un altro HLG dello stesso attore.
 
-Una decisione viene applicata soltanto con confidence `HIGH`. Se il modello
-sceglie `REWRITE`, deve anche indicare `rewriting_focus`; il codice usa questo
-campo per costruire la richiesta al generatore senza aggiungere un quarto
-critic.
+Il supporto documentale non basta da solo per scegliere `KEEP`: il critic
+controlla anche la granularità intenzionale dell'intera gerarchia. Fasi come
+creazione, gestione della bozza, invio, consultazione, validazione ed eccezioni
+devono essere raggruppate quando realizzano un unico risultato end-to-end per lo
+stesso attore. Se esiste già un HLG ombrello, il frammento viene rimosso; se la
+gerarchia è frammentata e manca un HLG ombrello, il goal più adatto viene
+riscritto prima che i frammenti divenuti ridondanti siano rimossi.
 
 ### Critic degli LLG
 
@@ -131,29 +138,92 @@ tra:
 
 La rigenerazione è ammessa solo quando esiste un difetto materiale: una
 capacità essenziale mancante, un LLG non supportato dalla documentazione oppure
-un LLG appartenente a un'altra intenzione. Differenze di stile, wording tecnico,
-granularità o operazioni CRUD opzionali non sono considerate sufficienti.
+un LLG appartenente a un'altra intenzione. Ogni LLG presente deve essere
+esplicitamente dichiarato o necessariamente implicato dalla documentazione e
+dal parent: una funzionalità comune, utile o convenzionale non viene mantenuta
+solo perché plausibile. Differenze di stile, wording tecnico o granularità non
+sono considerate sufficienti. L'assenza di un'operazione CRUD opzionale non
+richiede rigenerazione; la presenza di un'operazione opzionale non documentata,
+invece, sì.
 
-Il codice applica anche un controllo deterministico: `REGENERATE` deve avere
-confidence `HIGH` e almeno un ID LLG problematico valido oppure una capacità
-essenziale mancante. In caso contrario la decisione viene convertita in `KEEP`.
+Il codice applica anche un controllo deterministico: oltre al quorum,
+`REGENERATE` deve contenere almeno un ID LLG problematico valido oppure una
+capacità essenziale mancante. In caso contrario la decisione viene convertita
+in `KEEP`.
 
 ### Critic della copertura globale
 
 `evaluate_missing_high_level_goals` viene chiamato una volta per iterazione e
-osserva l'intero progetto, non un singolo branch. Cerca fino a due intenzioni
+osserva l'intero progetto, non un singolo branch. Cerca tutte le intenzioni
 funzionali distinte che non sono coperte dagli HLG correnti.
 
-Il goal può essere dichiarato esplicitamente oppure emergere da più passaggi del
-workflow, ma deve essere supportato dalla descrizione e appartenere a un attore
-già esistente. Il prompt non deve proporre varianti più strette di goal presenti,
-azioni CRUD, dettagli tecnici o funzionalità semplicemente comuni in sistemi
-simili.
+Il critic esegue un audit requisito-per-requisito. Un requisito funzionale
+esplicito è sufficiente anche quando compare una sola volta; un goal implicito
+deve invece emergere da più passaggi coerenti del workflow. Un HLG corrente
+copre il requisito solo quando ne implica semanticamente lo stesso risultato:
+la semplice affinità con lo stesso attore, oggetto o dominio non basta. Restano
+escluse le varianti CRUD dello stesso risultato, i dettagli tecnici e le
+funzionalità soltanto comuni in sistemi simili. Ogni nuovo goal deve appartenere
+a un attore già esistente.
 
 Il risultato è una richiesta focalizzata per il generatore top-down, non il
-nuovo HLG definitivo. Vengono proposti al massimo due HLG mancanti per
-iterazione. Ogni critic contiene inoltre esempi few-shot specifici del proprio
-compito, usati per calibrare le decisioni senza mescolare i tre ruoli.
+nuovo HLG definitivo. Non esiste un limite numerico alle richieste distinte e
+documentate. Ogni critic contiene inoltre esempi few-shot specifici del proprio
+compito, usati per calibrare sia la decisione sia la scala di qualità `0-5`
+senza mescolare i tre ruoli.
+
+### Voting e quality score
+
+Ogni decisione dei tre critic viene richiesta mediante tre chiamate separate
+allo stesso modello Qwen. Non sono tre modelli diversi: sono tre esecuzioni
+indipendenti con lo stesso prompt e lo stesso snapshot di memoria, lanciate in
+parallelo con temperatura `0.2`. Nessun voter può vedere la risposta degli
+altri.
+
+Con tre voter il quorum è due. Per esempio:
+
+```text
+Voter 1: KEEP
+Voter 2: REMOVE
+Voter 3: REMOVE
+Risultato aggregato: REMOVE (2/3)
+```
+
+Se le risposte valide non producono una maggioranza, la valutazione è
+inconcludente:
+
+```text
+Voter 1: KEEP
+Voter 2: REWRITE
+Voter 3: risposta non valida
+Risultato aggregato: EVALUATION_INCONCLUSIVE
+```
+
+Ogni voter assegna anche un `quality_score` all'artefatto valutato. Non è una
+percentuale di confidenza del modello:
+
+| Punteggio | Interpretazione |
+|---:|---|
+| `0` | Artefatto non supportato o contraddittorio |
+| `1` | Difetto grave |
+| `2` | Difetto materiale correggibile |
+| `3` | Accettabile, con difetti non sostanziali |
+| `4` | Buona qualità e copertura |
+| `5` | Completo, preciso e coerente |
+
+Le decisioni di mantenimento richiedono un punteggio `3-5`; le decisioni
+correttive richiedono `0-2`. Un voto come `KEEP` con punteggio `1` viene
+scartato prima del quorum perché internamente incoerente. Se il voto sceglie
+`REWRITE`, deve anche fornire `rewriting_focus`; se sceglie `REGENERATE`, deve
+indicare almeno un LLG problematico o una capacità essenziale mancante.
+
+Una risposta individuale non valida dispone di tre tentativi complessivi: la
+prima chiamata più al massimo due retry. Se il quorum continua a mancare, il
+branch diventa `EVALUATION_INCONCLUSIVE`: non viene applicata una correzione
+distruttiva e il branch viene rivalutato nell'iterazione successiva. I branch
+già confermati restano congelati finché la struttura degli HLG non cambia. Lo
+stesso principio vale per il controllo globale, che usa
+`MISSING_HIGH_LEVEL_GOAL_EVALUATION_INCONCLUSIVE`.
 
 ## 4. Memoria del critic
 
@@ -161,8 +231,8 @@ I tre critic bottom-up condividono una conversazione durante l'esecuzione di un
 singolo progetto. Groq non mantiene una sessione server-side, quindi il codice
 realizza la memoria reinviando una parte dello storico.
 
-La prima iterazione riceve lo stato iniziale. Al termine dell'iterazione il
-codice registra:
+La prima iterazione riceve un riepilogo iniziale della gerarchia. Al termine
+dell'iterazione il codice registra:
 
 - HLG aggiunti;
 - HLG rimossi o sostituiti;
@@ -170,10 +240,11 @@ codice registra:
 - insieme corrente degli HLG.
 
 Dalla seconda iterazione in poi questo riepilogo viene fornito esplicitamente ai
-critic come stato dell'iterazione precedente. La memoria è isolata per progetto
-e conserva al massimo 4 turni e 2 aggiornamenti di stato. Nelle richieste non
-reinvia i prompt completi: conserva una breve etichetta della valutazione e la
-risposta del critic, entro un budget di caratteri. Il ricostruttore e i
+critic come descrizione della gerarchia prodotta dall'iterazione precedente. La
+memoria è isolata per progetto e conserva al massimo 4 turni e 2 riepiloghi delle
+modifiche. Nelle richieste non reinvia i prompt completi: conserva una breve
+etichetta della valutazione e la risposta del critic, entro un budget di
+caratteri. Il ricostruttore e i
 generatori Gemini restano stateless.
 
 Questa memoria aiuta il critic a non ripetere decisioni già applicate, ma ha un
@@ -188,11 +259,29 @@ I generatori e i critic hanno ruoli distinti:
 - **Qwen 3.8 27B**, eseguito tramite l'API di **Groq**, svolge le tre valutazioni
   bottom-up.
 
+Quando il ciclo richiede un rewrite o scopre un HLG mancante, il generatore HLG
+lavora in Zero-shot e il critic top-down Few-shot valuta il risultato. La stessa
+configurazione viene usata per rigenerare gli LLG. L'estrazione degli attori non
+viene ripetuta nel bottom-up: vengono riutilizzati gli attori della baseline.
+Questa configurazione è esplicita nel notebook bottom-up e non dipende dalla
+modalità con cui era stato prodotto il file top-down di ingresso.
+
+Nel notebook corrente il critic top-down usato sulle generazioni correttive ha
+`4` esempi few-shot, soglia `8.0/10` e al massimo `5` tentativi. Questi valori
+appartengono alla reflection della pipeline originale e sono distinti dalla
+soglia `3/5` dei tre critic bottom-up.
+
 Groq è quindi il provider, mentre Qwen è il modello del critic. Per evitare
 richieste `413 Request too large`, la risposta del critic è limitata a 700 token
 e lo storico compatto a 2.500 caratteri. I prompt correnti vengono sempre inviati
 per intero. Nel wrapper Gemini l'Automatic Function Calling è disabilitato,
 perché questa pipeline non espone tool al modello.
+
+I voter ricevono lo stesso prompt e lo stesso snapshot di memoria, ma sono
+chiamate separate con temperatura `0.2`; nessun voto vede le risposte degli
+altri. Nel trace vengono salvati numero di voter, voti validi, voti del vincitore
+e distribuzione delle decisioni. Solo il risultato aggregato entra nella memoria
+condivisa.
 
 ## 5. Applicazione delle correzioni
 
@@ -205,8 +294,30 @@ L'ordine è:
 
 1. riscrittura di un HLG, al massimo una per iterazione;
 2. rimozione degli HLG giudicati non validi, entro il limite configurato;
-3. rigenerazione degli LLG di un solo branch;
-4. aggiunta di un massimo di due HLG mancanti.
+3. aggiunta di tutti gli HLG mancanti distinti e documentati, se non è stata
+   applicata una riscrittura o una rimozione;
+4. rigenerazione degli LLG di un solo branch, soltanto quando il controllo
+   globale non segnala HLG mancanti.
+
+Questo elenco esprime una precedenza, non una sequenza che deve essere eseguita
+interamente nella stessa iterazione. Prima vengono calcolate le valutazioni sullo
+stato corrente; poi l'orchestratore applica una categoria di correzione
+compatibile con quello stato. Una possibile esecuzione è:
+
+```text
+Iterazione 1: REWRITE di un HLG frammentato
+Iterazione 2: nuovo audit e REMOVE dei frammenti ora coperti
+Iterazione 3: controllo globale e DISCOVERY degli eventuali gap
+Iterazione 4: REGENERATE degli LLG incompleti o non supportati
+Iterazione 5: conferma finale della gerarchia
+```
+
+`REWRITE` e `REMOVE` precedono la discovery perché modificano l'insieme rispetto
+al quale viene misurata la copertura. Una richiesta di discovery calcolata prima
+di tali modifiche potrebbe non essere più valida. Gli HLG rimossi o sostituiti
+vengono quindi mantenuti in un registro di audit: nell'iterazione successiva il
+critic globale verifica esplicitamente se ciascuna responsabilità è coperta da
+un HLG corrente oppure deve essere riscoperta.
 
 Le operazioni di generazione riusano le funzioni top-down già esistenti. Una
 riscrittura rigenera anche gli LLG del nuovo parent; un HLG scoperto dal
@@ -220,38 +331,90 @@ HLG` evita che la rinumerazione dei branch faccia perdere il loro stato.
 Non è presente un pre-pass di cleanup degli LLG: eventuali problemi vengono
 gestiti dal critic LLG all'interno del normale ciclo.
 
+### Convergenza e arresto
+
+Il ciclo restituisce `ALL_BRANCHES_CONFIRMED` soltanto quando, sulla gerarchia
+corrente:
+
+- ogni HLG attivo riceve `KEEP_ORIGINAL_HIGH_LEVEL_GOAL`;
+- ogni relativa decomposizione riceve `KEEP_LOW_LEVEL_GOALS`;
+- il controllo globale restituisce `NO_MISSING_HIGH_LEVEL_GOALS`;
+- non rimangono valutazioni inconcludenti da ripetere.
+
+`converged=True` significa quindi che i critic hanno raggiunto un accordo
+interno sulla gerarchia corrente. Non dimostra che il risultato coincida con la
+ground truth: Precision, Recall e F1 vengono misurate separatamente dal notebook
+di valutazione.
+
+Gli altri motivi di arresto sono:
+
+- `NO_ACTIONS_REMAIN_WITH_WARNINGS`: restano warning non risolvibili mediante
+  un'azione disponibile;
+- `MAX_ITERATIONS_REACHED`: è stato raggiunto il limite globale del ciclo senza
+  convergenza.
+
+La chiusura dei client dopo un dataset è indipendente dal motivo di arresto e
+avviene anche quando il ciclo converge correttamente.
+
 ## Limiti del ciclo
 
-I limiti principali sono:
+I limiti e i valori operativi correnti sono:
 
-| Parametro | Valore | Significato |
+| Parametro | Valore corrente | Significato |
 |---|---:|---|
-| `DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS` | 5 | Iterazioni predefinite del ciclo |
+| `DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS` | 5 | Default dell'orchestratore |
+| `GLOBAL_CYCLE_MAX_ITERATIONS_OVERRIDE` | 25 | Limite usato dal notebook bottom-up corrente |
 | `MAX_LLG_REGENERATIONS_PER_BRANCH` | 2 | Rigenerazioni LLG per branch |
 | `MAX_HLG_REWRITES_PER_BRANCH` | 2 | Riscritture dello stesso HLG |
 | `MAX_HLG_REMOVALS_PER_ITERATION` | 5 | Rimozioni applicabili insieme |
-| `MAX_NEW_HLGS_PER_ITERATION` | 2 | Nuovi HLG per iterazione |
-| `MAX_LLG_GROWTH_PER_REPAIR` | 2 | Crescita massima durante una riparazione |
-| `MAX_LLGS_FOR_NEW_HLG` | 6 | LLG massimi per un HLG scoperto |
+| `MAX_REPLACEMENT_HLGS_PER_REWRITE` | 1 | HLG accettati da una singola riscrittura |
+| `BOTTOM_UP_EVALUATOR_VOTERS` | 3 | Voter paralleli; valori ammessi: 3 o 5 |
+| `EVALUATOR_VOTING_QUORUM` | 2 | Maggioranza richiesta con 3 voter |
+| `BOTTOM_UP_EVALUATOR_TEMPERATURE` | 0.2 | Temperatura delle chiamate di voting bottom-up |
+| `BOTTOM_UP_EVALUATOR_VOTE_ATTEMPTS` | 3 | Tentativi per una risposta individuale non valida; valori ammessi: 1-3 |
+| `BOTTOM_UP_QUALITY_THRESHOLD` | 3/5 | `3`, `4` e `5` approvano; `0`, `1` e `2` richiedono correzione |
+| Esempi few-shot dei critic bottom-up | HLG: 5; LLG: 4; copertura: 3 | Esempi separati per tipo di decisione e difetto |
+| `BOTTOM_UP_CRITIC_MEMORY_TURNS` | 4 | Scambi recenti conservati per progetto |
+| `BOTTOM_UP_CRITIC_STATE_UPDATES` | 2 | Riepiloghi di iterazione conservati |
+| `GROQ_CRITIC_HISTORY_MAX_CHARS` | 2500 | Budget dello storico compatto |
+| `GROQ_LLAMA_MAX_TOKENS` | 700 | Massimo output del critic Groq |
+| Prompting delle generazioni correttive | Zero-shot | Modalità HLG/LLG impostata dal notebook |
+| Esempi del critic sulle generazioni | 4 | Few-shot della reflection top-down |
+| `QUALITY_THRESHOLD` | 8.0/10 | Soglia della reflection top-down |
+| `MAX_ATTEMPTS` | 5 | Tentativi massimi della generazione con reflection |
 
-Il notebook può sovrascrivere il numero massimo di iterazioni. Il ciclo termina
+I limiti numerici servono a mantenere finito il ciclo e a evitare ripetute
+riscritture dello stesso branch; sono vincoli operativi, non soglie ottimizzate
+empiricamente. La discovery HLG non ha un tetto numerico: il critic deve
+restituire tutti i gap distinti e documentati. Gli HLG rimossi o sostituiti
+restano in un registro di audit, usato nelle iterazioni successive per verificare
+che le loro responsabilità siano ancora coperte. Le decomposizioni LLG, sia
+quelle associate a un nuovo HLG sia quelle rigenerate per un branch esistente,
+non hanno un tetto numerico fisso: il generatore deve produrre un insieme
+completo e non ridondante di azioni funzionali atomiche, senza accorpare azioni
+documentate distinte in un goal generico. L'output viene controllato per
+scartare decomposizioni vuote, duplicate o non associate esattamente al parent.
+
+Il valore `25` non modifica il default della libreria: viene passato
+esplicitamente dal notebook a `run_global_goal_cycle`. Il ciclo termina
 quando tutti i branch sono confermati e non risultano HLG mancanti, quando non
 rimangono azioni applicabili ma sono presenti warning, oppure quando viene
 raggiunto il limite di iterazioni.
 
 ## Costo dell'esecuzione
 
-La pipeline esegue le chiamate in modo sequenziale. Con `B` branch attivi, una
-iterazione completa può richiedere:
+La pipeline elabora i branch in sequenza, ma esegue in parallelo i voter di ogni
+decisione. Con `B` branch attivi e `V` voter, un'iterazione può richiedere:
 
 - `B` chiamate Gemini per la ricostruzione;
-- `B` chiamate Groq per valutare gli HLG;
-- fino a `B` chiamate Groq per valutare gli LLG;
-- una chiamata Groq per la copertura globale;
+- `V × B` chiamate Groq per valutare gli HLG;
+- fino a `V × B` chiamate Groq per valutare gli LLG;
+- `V` chiamate Groq per la copertura globale;
 - eventuali chiamate aggiuntive per rewrite e rigenerazioni.
 
-Il costo massimo indicativo è quindi vicino a `3B + 1` chiamate remote per
-iterazione. La memoria compatta del critic aggiunge comunque alcuni token. Per questo è
+Il costo massimo indicativo del solo critic è quindi vicino a `V × (2B + 1)`
+chiamate per iterazione, oltre alle `B` ricostruzioni Gemini e alle eventuali
+generazioni correttive. La memoria compatta aggiunge alcuni token. Per questo è
 preferibile provare inizialmente un solo dataset e poche iterazioni, prima di
 avviare l'esecuzione completa.
 
@@ -265,13 +428,12 @@ delta a una singola scelta servirebbe un esperimento di ablation dedicato.
 
 | Scelta | Possibile effetto sulla Precision | Possibile effetto sulla Recall | Rischio principale |
 |---|---|---|---|
-| Mapping deterministico LLG-HLG | Riduce associazioni errate tra branch | Non modifica la Recall quando il mapping riesce | Una parafrasi forte o un nome ambiguo interrompono il caricamento perché il matching non è semantico |
-| Rimozione di HLG vuoti e duplicati | Elimina goal senza decomposizione o ridondanti | Può rimuovere un'intenzione valida ma non ancora decomposta | Decisione effettuata prima del critic del branch |
+| Parent HLG incorporato negli LLG | Preserva l'associazione prodotta dalla pipeline originale | Evita perdite dovute a remapping o fallback | Un'associazione errata della baseline resta visibile nel bottom-up |
 | Ricostruzione cieca dell'HLG dagli LLG | Aiuta a individuare parent incoerenti | Può sottostimare l'HLG quando gli LLG iniziali sono incompleti | La qualità del controllo dipende dalla baseline LLG |
 | `KEEP`, `REWRITE` e `REMOVE` sugli HLG | Può eliminare goal non supportati e sovrapposti | Rewrite o remove errati possono cancellare capacità corrette | Le operazioni sono distruttive |
-| Gate `HIGH` per le decisioni | Riduce correzioni arbitrarie | Può lasciare errori reali quando il critic è incerto | Approccio conservativo |
+| Quorum di voting per le decisioni | Riduce l'effetto di un singolo giudizio anomalo | Può lasciare irrisolti i casi senza maggioranza | Costo moltiplicato per il numero di voter |
 | Rigenerazione mirata degli LLG | Può sostituire LLG fuori scope o non supportati | Può aggiungere capacità mancanti, ma anche perdere dettagli già validi | La sostituzione non garantisce copertura non regressiva |
-| Controllo globale degli HLG mancanti | Può evitare aggiunte generiche grazie al controllo sull'intero progetto | Può recuperare fino a due intenzioni assenti per iterazione | È limitato agli attori già esistenti |
+| Controllo globale degli HLG mancanti | Può evitare aggiunte generiche grazie al controllo sull'intero progetto | Può recuperare tutti i gap distinti e riesaminare le responsabilità eliminate | È limitato agli attori già esistenti e il giudizio resta model-based |
 | Nuovo audit dopo modifiche HLG | Riesamina la coerenza dei branch nel nuovo contesto | Può recuperare gap comparsi o diventati visibili dopo una modifica | Maggiore costo, latenza e rischio di oscillazioni |
 | Limiti su iterazioni e rigenerazioni | Contengono proliferazione e falsi positivi | Possono fermare la ricerca prima di recuperare tutti i goal | Convergenza tecnica diversa da completezza |
 | Memoria condivisa del critic | Può rendere i giudizi più coerenti tra iterazioni | Può ricordare capacità rimosse e aiutare a evitare regressioni | Anchoring su una decisione precedente errata |
@@ -304,33 +466,37 @@ I notebook usati sono:
 ## Risultati sperimentali disponibili
 
 La valutazione usa `bert-base-uncased`, similarità coseno, matching uno-a-uno
-tramite algoritmo ungherese e soglia `0.65`.
+tramite algoritmo ungherese e soglia `0.65`. I risultati correnti comprendono
+12 dataset.
 
 | Livello | Metodo | Precision | Recall | F1 |
 |---|---|---:|---:|---:|
-| HLG | Top-down | 0.3270 | 0.7479 | 0.4323 |
-| HLG | Top-down + bottom-up | 0.3914 | 0.7432 | 0.4823 |
-| LLG | Top-down | 0.5348 | 0.7453 | 0.5998 |
-| LLG | Top-down + bottom-up | 0.5919 | 0.7317 | 0.6346 |
+| HLG | Top-down | 0.4910 | 0.7507 | 0.5504 |
+| HLG | Top-down + bottom-up | 0.6194 | 0.7070 | 0.6299 |
+| LLG | Top-down | 0.3362 | 0.4888 | 0.3768 |
+| LLG | Top-down + bottom-up | 0.4487 | 0.4579 | 0.4300 |
 
-Nei risultati salvati la F1 cresce sia per gli HLG sia per gli LLG. Il
-miglioramento deriva soprattutto dalla Precision, mentre la Recall diminuisce
-leggermente. Questo è coerente con una pipeline prudente, orientata soprattutto
-alla rimozione di goal ridondanti o non supportati.
+La fase bottom-up aumenta Precision e F1 macro, ma riduce la Recall. Per gli HLG,
+rispetto alla baseline top-down, la Precision aumenta di `0.1283`, la Recall
+diminuisce di `0.0437` e la F1 aumenta di `0.0795`. Per gli LLG la Precision
+aumenta di `0.1125`, la Recall diminuisce di `0.0308` e la F1 aumenta di
+`0.0531`.
 
-Il miglioramento non è uniforme: per esempio, su Genome Nexus la F1 degli LLG
-diminuisce. La convergenza del ciclo indica quindi che le sue regole interne non
-richiedono altre modifiche, non che ogni metrica sia necessariamente migliorata.
-Nei trace attualmente salvati non rimane alcuna decisione finale
-`MISSING_HIGH_LEVEL_GOALS_FOUND`: il percorso di discovery è implementato, ma
-questo snapshot non dimostra ancora il recupero di un'intenzione davvero assente
-dalla baseline.
+Il miglioramento non è uniforme. Per gli HLG la F1 aumenta in 8 dataset, rimane
+invariata in 3 e diminuisce in 1. Per gli LLG aumenta in 7 dataset, rimane
+invariata in 2 e diminuisce in 3. Il caso Assegno Unico mostra bene il trade-off:
+la F1 HLG aumenta di `0.2045`, mentre la F1 LLG diminuisce di `0.1181` per una
+rigenerazione eccessivamente compatta.
 
-Questi numeri provengono dagli output sperimentali attualmente salvati. Dopo le
-modifiche più recenti, in particolare gli esempi few-shot nei tre prompt, la
-ricerca di due gap e il nuovo audit dopo una modifica strutturale, è necessario
-rieseguire i notebook prima di considerarli risultati definitivi della versione
-corrente.
+Nel complesso il numero di goal passa da 105 a 70 per gli HLG e da 457 a 328 per
+gli LLG. Il ciclo termina con `ALL_BRANCHES_CONFIRMED` in 8 dataset su 12.
+
+Questi numeri provengono dall'ultimo snapshot salvato prima dell'introduzione
+della discovery senza limite numerico, del registro degli HLG ritirati e del
+prompt LLG completo, non ridondante e atomico. Devono quindi essere rigenerati
+prima di essere usati come risultati finali della configurazione corrente. Se
+pipeline, dataset o
+ground truth vengono rieseguiti, anche questa sezione deve essere rigenerata.
 
 I dati completi sono disponibili in:
 
@@ -340,8 +506,7 @@ I dati completi sono disponibili in:
 
 ## File principali
 
-- [`low_level_goal_mapper.py`](./low_level_goal_mapper.py): costruzione dei branch;
+- [`goal_cycle_orchestrator.py`](./goal_cycle_orchestrator.py): costruzione della vista a branch dai parent incorporati e gestione del ciclo;
 - [`goal_reconstructor.py`](./goal_reconstructor.py): ricostruzione diagnostica;
 - [`global_goal_evaluator.py`](./global_goal_evaluator.py): tre critic bottom-up;
-- [`goal_cycle_orchestrator.py`](./goal_cycle_orchestrator.py): ciclo, modifiche e terminazione;
 - [`../data_model.py`](../data_model.py): modelli Pydantic condivisi.

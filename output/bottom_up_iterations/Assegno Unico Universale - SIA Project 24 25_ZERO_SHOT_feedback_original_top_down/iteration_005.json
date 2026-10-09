@@ -1,0 +1,586 @@
+{
+  "iteration": 5,
+  "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Applicant assesses potential AUU benefit entitlement",
+      "rationale": "The low-level goals collectively describe the actions an applicant takes to gather information about the AUU benefit, understand its eligibility rules, and calculate an estimated allowance. These steps are all essential for an applicant to evaluate their potential entitlement to the AUU benefit.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "Retrieve General Benefit Information",
+        "Input Data for Benefit Estimation",
+        "View Estimated Allowance Amount",
+        "Retrieve Detailed Eligibility Criteria"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Manage AUU Benefit Distribution and Payment Arrangements",
+      "rationale": "These operations collectively enable co-parents to propose, view, agree upon, and subsequently manage the practical payment methods for their respective shares of the AUU benefit. They cover the full lifecycle from establishing the distribution to managing its execution.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Propose Benefit Distribution Percentage",
+        "View Current Benefit Distribution Proposal",
+        "Confirm Agreed Benefit Distribution",
+        "Request Change to Co-parent Payment Method"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Manage the Review and Decision Process for AUU Applications",
+      "rationale": "The low-level goals collectively describe the complete set of functionalities required by an INPS Employee to handle AUU applications. This includes initial identification, detailed examination, automated validation, and the subsequent decision-making (accept, reject, suspend) along with the necessary actions for managing suspended applications. They form a coherent workflow for processing these applications from submission to final resolution.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "RetrievePendingAUUApplications",
+        "RetrieveSpecificAUUApplicationDetails",
+        "InitiateAUUApplicationValidation",
+        "ViewAUUApplicationValidationResults",
+        "AcceptAUUApplication",
+        "RejectAUUApplication",
+        "SuspendAUUApplication",
+        "RecordSuspensionReason",
+        "RetrieveSuspendedAUUApplications",
+        "UpdateSuspendedApplicationStatus"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Enable Co-parent to contribute their information to a shared AUU application",
+      "rationale": "The low-level goals collectively describe the complete process for a co-parent to provide their specific set of required information for a shared application. They cover understanding the application status, submitting various categories of personal and child-related data (personal details, children details, household composition, custody arrangements), and finally submitting their complete contribution to finalize their part of the application.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Retrieve Shared Application Details for Co-parent Contribution",
+        "Submit Co-parent's Personal Information",
+        "Submit Child Information for Co-parent Contribution",
+        "Submit Household Information for Co-parent Contribution",
+        "Submit Custody Information for Co-parent Contribution",
+        "Finalize Co-parent's Contribution to Shared Application"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Understand Benefit Information' is supported by the project description, which explicitly states that applicants can 'access general AUU information, and simulate the expected monthly allowance.' The bottom-up reconstruction 'Applicant assesses potential AUU benefit entitlement' captures the same intent. This goal is distinct from the application management workflow (creating, submitting, etc.) and represents an independent pre-application or informational phase. It is not redundant with other HLGs, as no other HLG covers the applicant's ability to gather information and simulate benefits. The granularity is appropriate for a stakeholder outcome (understanding eligibility and potential benefit amount). Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Understand Benefit Information'. The project description explicitly states that applicants can 'access general AUU information' (supported by llg_001 and llg_004) and 'simulate the expected monthly allowance' (supported by llg_002 and llg_003). The distinction between general information and detailed eligibility criteria is a reasonable granularity for 'comprehensive information'. Inputting data for estimation is a necessary step to simulate the allowance. No essential capabilities are missing, and no LLGs are unsupported or misleading. The decomposition is complete and consistent with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Understand Benefit Information' is supported by the project description, which explicitly states that applicants can 'access general AUU information, and simulate the expected monthly allowance.' The bottom-up reconstruction 'Applicant assesses potential AUU benefit entitlement' captures the same intent. This goal is distinct from the application management workflow (creating, submitting, etc.) and represents an independent pre-application or informational phase. It is not redundant with other HLGs, as no other HLG covers the applicant's ability to gather information and simulate benefits. The granularity is appropriate for a stakeholder outcome (understanding eligibility and potential benefit amount).",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Understand Benefit Information'. The project description explicitly states that applicants can 'access general AUU information' (supported by llg_001 and llg_004) and 'simulate the expected monthly allowance' (supported by llg_002 and llg_003). The distinction between general information and detailed eligibility criteria is a reasonable granularity for 'comprehensive information'. Inputting data for estimation is a necessary step to simulate the allowance. No essential capabilities are missing, and no LLGs are unsupported or misleading. The decomposition is complete and consistent with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the project description, which states that a co-parent can 'modify allowance distribution information'. The bottom-up reconstruction 'Manage AUU Benefit Distribution and Payment Arrangements' is semantically equivalent but slightly broader (including payment arrangements). However, the core intention of the original HLG is valid and distinct from 'Complete Shared Application Data' (which focuses on providing missing personal/child/household data to finalize the application). Modifying how the benefit is distributed (e.g., percentages or payment recipients) is a specific, independently satisfiable stakeholder outcome for a co-parent, separate from the initial data completion. It is not redundant with other HLGs. The granularity is appropriate for a stakeholder outcome. Therefore, the original HLG should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The project description states that a co-parent can 'modify allowance distribution information'. It does not explicitly document a multi-step negotiation workflow involving 'proposing' a percentage, 'viewing' a proposal, and 'confirming' agreement (llg_001, llg_002, llg_003). These specific interaction patterns are not entailed by the text; 'modify' implies a direct update capability, not necessarily a proposal-confirmation lifecycle. Furthermore, llg_004 ('Request Change to Co-parent Payment Method') is unsupported. The description mentions specifying 'payment information' during application creation and 'modifying allowance distribution information' for co-parents. It does not explicitly state that co-parents can modify the *payment method* (e.g., bank account) separately from the distribution percentages, nor does it distinguish between 'distribution' and 'payment method' as separate modifiable entities for co-parents in the context of an existing application. The core documented capability is simply 'modify allowance distribution information'. The current LLGs invent specific workflow steps and capabilities (payment method modification) that are not explicitly grounded in the provided description.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the project description, which states that a co-parent can 'modify allowance distribution information'. The bottom-up reconstruction 'Manage AUU Benefit Distribution and Payment Arrangements' is semantically equivalent but slightly broader (including payment arrangements). However, the core intention of the original HLG is valid and distinct from 'Complete Shared Application Data' (which focuses on providing missing personal/child/household data to finalize the application). Modifying how the benefit is distributed (e.g., percentages or payment recipients) is a specific, independently satisfiable stakeholder outcome for a co-parent, separate from the initial data completion. It is not redundant with other HLGs. The granularity is appropriate for a stakeholder outcome. Therefore, the original HLG should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 2,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The project description states that a co-parent can 'modify allowance distribution information'. It does not explicitly document a multi-step negotiation workflow involving 'proposing' a percentage, 'viewing' a proposal, and 'confirming' agreement (llg_001, llg_002, llg_003). These specific interaction patterns are not entailed by the text; 'modify' implies a direct update capability, not necessarily a proposal-confirmation lifecycle. Furthermore, llg_004 ('Request Change to Co-parent Payment Method') is unsupported. The description mentions specifying 'payment information' during application creation and 'modifying allowance distribution information' for co-parents. It does not explicitly state that co-parents can modify the *payment method* (e.g., bank account) separately from the distribution percentages, nor does it distinguish between 'distribution' and 'payment method' as separate modifiable entities for co-parents in the context of an existing application. The core documented capability is simply 'modify allowance distribution information'. The current LLGs invent specific workflow steps and capabilities (payment method modification) that are not explicitly grounded in the provided description.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 1,
+        "regeneration_feedback": "Remove the unsupported proposal/confirmation workflow (llg_001, llg_002, llg_003) and the specific payment method modification (llg_004). Replace with a single LLG or a minimal set that directly supports 'modifying allowance distribution information' as stated in the description.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_001",
+          "llg_002",
+          "llg_003",
+          "llg_004"
+        ],
+        "missing_essential_capabilities": [
+          "Modify allowance distribution information"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Process AUU Applications' accurately captures the end-to-end functional outcome for the INPS Employee actor. The project description explicitly states that INPS employees can 'accept, reject or suspend applications' and that 'Suspended applications may require additional documents'. The original goal's description ('review, validate, make decisions... and manage exceptions') aligns perfectly with these documented capabilities. The bottom-up reconstruction 'Manage the Review and Decision Process for AUU Applications' is semantically equivalent but slightly narrower, potentially excluding the 'management' aspect of suspended applications (e.g., handling additional documents) which is part of the processing workflow. The original goal is well-scoped, supported by the documentation, and does not overlap with other actors' goals. It represents a complete, independently satisfiable stakeholder outcome for the INPS Employee. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Process AUU Applications'. The documentation explicitly states that INPS employees can 'accept, reject or suspend applications' and that 'Suspended applications may require additional documents'. The LLGs cover the necessary workflow: retrieving pending/suspended applications (llg_001, llg_009), reviewing details (llg_002), validating (llg_003, llg_004), making decisions (llg_005, llg_006, llg_007), recording reasons for suspension (llg_008), and updating status after handling exceptions (llg_010). All capabilities are supported by the project description. There are no unsupported LLGs and no missing essential capabilities explicitly required by the parent goal.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Process AUU Applications' accurately captures the end-to-end functional outcome for the INPS Employee actor. The project description explicitly states that INPS employees can 'accept, reject or suspend applications' and that 'Suspended applications may require additional documents'. The original goal's description ('review, validate, make decisions... and manage exceptions') aligns perfectly with these documented capabilities. The bottom-up reconstruction 'Manage the Review and Decision Process for AUU Applications' is semantically equivalent but slightly narrower, potentially excluding the 'management' aspect of suspended applications (e.g., handling additional documents) which is part of the processing workflow. The original goal is well-scoped, supported by the documentation, and does not overlap with other actors' goals. It represents a complete, independently satisfiable stakeholder outcome for the INPS Employee.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Process AUU Applications'. The documentation explicitly states that INPS employees can 'accept, reject or suspend applications' and that 'Suspended applications may require additional documents'. The LLGs cover the necessary workflow: retrieving pending/suspended applications (llg_001, llg_009), reviewing details (llg_002), validating (llg_003, llg_004), making decisions (llg_005, llg_006, llg_007), recording reasons for suspension (llg_008), and updating status after handling exceptions (llg_010). All capabilities are supported by the project description. There are no unsupported LLGs and no missing essential capabilities explicitly required by the parent goal.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Complete Shared Application Data' accurately captures the documented capability for a Co-parent to 'complete an existing application'. The description correctly identifies the specific data types (personal, child, household, custody) that constitute the co-parent's contribution. It is distinct from the sibling goal 'Flexible Allowance Distribution', which specifically covers modifying how the benefit is distributed, whereas this goal covers the submission of the underlying application data required to finalize the co-parent's part of the shared application. The bottom-up reconstruction is semantically equivalent but slightly less precise regarding the specific data domains involved. The original goal is well-scoped, supported by the documentation, and represents an independently satisfiable stakeholder outcome. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Complete Shared Application Data'. The documentation states that a co-parent can 'complete an existing application' and that applicants specify 'child, household, custody and payment information'. The LLGs cover retrieving the application state (llg_001), submitting the specific data categories mentioned in the parent description (personal, child, household, custody) (llg_002-llg_005), and finalizing the contribution (llg_006). All capabilities are supported by the project description. There is no overlap with the sibling goal 'Flexible Allowance Distribution', which specifically handles modifying distribution information, whereas these LLGs focus on the underlying application data required to complete the co-parent's part. The decomposition is complete, precise, and internally consistent.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Complete Shared Application Data' accurately captures the documented capability for a Co-parent to 'complete an existing application'. The description correctly identifies the specific data types (personal, child, household, custody) that constitute the co-parent's contribution. It is distinct from the sibling goal 'Flexible Allowance Distribution', which specifically covers modifying how the benefit is distributed, whereas this goal covers the submission of the underlying application data required to finalize the co-parent's part of the shared application. The bottom-up reconstruction is semantically equivalent but slightly less precise regarding the specific data domains involved. The original goal is well-scoped, supported by the documentation, and represents an independently satisfiable stakeholder outcome.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Complete Shared Application Data'. The documentation states that a co-parent can 'complete an existing application' and that applicants specify 'child, household, custody and payment information'. The LLGs cover retrieving the application state (llg_001), submitting the specific data categories mentioned in the parent description (personal, child, household, custody) (llg_002-llg_005), and finalizing the contribution (llg_006). All capabilities are supported by the project description. There is no overlap with the sibling goal 'Flexible Allowance Distribution', which specifically handles modifying distribution information, whereas these LLGs focus on the underlying application data required to complete the co-parent's part. The decomposition is complete, precise, and internally consistent.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Understand Benefit Information",
+        "description": "To access comprehensive information about the AUU benefit and estimate potential allowance amounts.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals applying for the Assegno Unico Universale benefit."
+        }
+      },
+      {
+        "name": "Process AUU Applications",
+        "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+        "actor": {
+          "name": "INPS Employee",
+          "description": "Staff responsible for processing and managing AUU applications."
+        }
+      },
+      {
+        "name": "Complete Shared Application Data",
+        "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+        "actor": {
+          "name": "Co-parent",
+          "description": "A parent who can complete or modify an existing application initiated by another parent."
+        }
+      },
+      {
+        "name": "Flexible Allowance Distribution",
+        "description": "To modify how the AUU benefit is distributed among eligible parties.",
+        "actor": {
+          "name": "Co-parent",
+          "description": "A parent who can complete or modify an existing application initiated by another parent."
+        }
+      },
+      {
+        "name": "Update Existing Application with New Dependents",
+        "description": "To enable applicants to modify their previously submitted Assegno Unico Universale (AUU) applications by adding new dependent children to the application record, ensuring the application accurately reflects their current family situation and benefit eligibility.",
+        "actor": {
+          "name": "Applicant",
+          "description": "Individuals applying for the Assegno Unico Universale benefit."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Retrieve General Benefit Information",
+        "description": "Applicant sends a request to the system to access general descriptive information about the AUU benefit.",
+        "high_level_associated": {
+          "name": "Understand Benefit Information",
+          "description": "To access comprehensive information about the AUU benefit and estimate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      },
+      {
+        "name": "Input Data for Benefit Estimation",
+        "description": "Applicant inputs specific family income and composition data into the system to calculate an estimated benefit amount.",
+        "high_level_associated": {
+          "name": "Understand Benefit Information",
+          "description": "To access comprehensive information about the AUU benefit and estimate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      },
+      {
+        "name": "View Estimated Allowance Amount",
+        "description": "Applicant sends a request to the system to display the calculated estimated AUU allowance amount based on provided data.",
+        "high_level_associated": {
+          "name": "Understand Benefit Information",
+          "description": "To access comprehensive information about the AUU benefit and estimate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Detailed Eligibility Criteria",
+        "description": "Applicant sends a request to the system to access detailed rules and conditions for AUU benefit eligibility.",
+        "high_level_associated": {
+          "name": "Understand Benefit Information",
+          "description": "To access comprehensive information about the AUU benefit and estimate potential allowance amounts.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      },
+      {
+        "name": "Propose Benefit Distribution Percentage",
+        "description": "Co-parent sends a request to the system to propose a specific percentage for how the AUU benefit should be distributed.",
+        "high_level_associated": {
+          "name": "Flexible Allowance Distribution",
+          "description": "To modify how the AUU benefit is distributed among eligible parties.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "View Current Benefit Distribution Proposal",
+        "description": "Co-parent sends a request to the system to view the currently proposed or agreed-upon distribution of the AUU benefit.",
+        "high_level_associated": {
+          "name": "Flexible Allowance Distribution",
+          "description": "To modify how the AUU benefit is distributed among eligible parties.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Confirm Agreed Benefit Distribution",
+        "description": "Co-parent sends a request to the system to confirm their agreement to the proposed benefit distribution.",
+        "high_level_associated": {
+          "name": "Flexible Allowance Distribution",
+          "description": "To modify how the AUU benefit is distributed among eligible parties.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Request Change to Co-parent Payment Method",
+        "description": "Co-parent sends a request to the system to modify the payment method for their specific share of the AUU benefit.",
+        "high_level_associated": {
+          "name": "Flexible Allowance Distribution",
+          "description": "To modify how the AUU benefit is distributed among eligible parties.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "RetrievePendingAUUApplications",
+        "description": "Allow the INPS Employee to retrieve a list of all AUU applications that are currently pending review.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSpecificAUUApplicationDetails",
+        "description": "Enable the INPS Employee to retrieve all detailed information for a specific AUU application by its identifier.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "InitiateAUUApplicationValidation",
+        "description": "Allow the INPS Employee to trigger an automated compliance and accuracy validation process for a selected AUU application.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "ViewAUUApplicationValidationResults",
+        "description": "Enable the INPS Employee to view the detailed results of the compliance and accuracy validation for an AUU application.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "AcceptAUUApplication",
+        "description": "Allow the INPS Employee to mark a specific AUU application as 'Accepted' after review and validation.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "RejectAUUApplication",
+        "description": "Enable the INPS Employee to mark a specific AUU application as 'Rejected' and provide a reason.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "SuspendAUUApplication",
+        "description": "Allow the INPS Employee to mark a specific AUU application as 'Suspended' for further investigation or clarification.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "RecordSuspensionReason",
+        "description": "Enable the INPS Employee to record the specific reason(s) for suspending an AUU application.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSuspendedAUUApplications",
+        "description": "Allow the INPS Employee to retrieve a list of all AUU applications currently in 'Suspended' status.",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "UpdateSuspendedApplicationStatus",
+        "description": "Enable the INPS Employee to update the processing status of a suspended AUU application (e.g., after receiving additional documentation).",
+        "high_level_associated": {
+          "name": "Process AUU Applications",
+          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "actor": {
+            "name": "INPS Employee",
+            "description": "Staff responsible for processing and managing AUU applications."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Shared Application Details for Co-parent Contribution",
+        "description": "The Co-parent can retrieve the current state of an AUU application initiated by another parent to understand what information is pending for their contribution.",
+        "high_level_associated": {
+          "name": "Complete Shared Application Data",
+          "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Submit Co-parent's Personal Information",
+        "description": "The Co-parent can submit their personal details required for their contribution to the shared AUU application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application Data",
+          "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Submit Child Information for Co-parent Contribution",
+        "description": "The Co-parent can submit or update details for children relevant to their contribution within the shared AUU application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application Data",
+          "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Submit Household Information for Co-parent Contribution",
+        "description": "The Co-parent can submit or update details about their household composition for their contribution to the shared AUU application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application Data",
+          "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Submit Custody Information for Co-parent Contribution",
+        "description": "The Co-parent can submit or update details regarding custody arrangements relevant to their contribution within the shared AUU application.",
+        "high_level_associated": {
+          "name": "Complete Shared Application Data",
+          "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Finalize Co-parent's Contribution to Shared Application",
+        "description": "The Co-parent can submit and finalize all their provided information, marking their contribution to the shared AUU application as complete.",
+        "high_level_associated": {
+          "name": "Complete Shared Application Data",
+          "description": "To provide necessary personal, child, household, and custody information to finalize an AUU application initiated by another parent, ensuring all required data for the co-parent's contribution is accurately submitted.",
+          "actor": {
+            "name": "Co-parent",
+            "description": "A parent who can complete or modify an existing application initiated by another parent."
+          }
+        }
+      },
+      {
+        "name": "Retrieve specific AUU application details",
+        "description": "The system shall allow the applicant to retrieve the full details of a previously submitted Assegno Unico Universale (AUU) application using its unique identifier to prepare for modification.",
+        "high_level_associated": {
+          "name": "Update Existing Application with New Dependents",
+          "description": "To enable applicants to modify their previously submitted Assegno Unico Universale (AUU) applications by adding new dependent children to the application record, ensuring the application accurately reflects their current family situation and benefit eligibility.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      },
+      {
+        "name": "Add new dependent child to an application",
+        "description": "The system shall allow the applicant to input and associate a new dependent child's information (e.g., name, date of birth, tax code) with a specific existing AUU application record.",
+        "high_level_associated": {
+          "name": "Update Existing Application with New Dependents",
+          "description": "To enable applicants to modify their previously submitted Assegno Unico Universale (AUU) applications by adding new dependent children to the application record, ensuring the application accurately reflects their current family situation and benefit eligibility.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      },
+      {
+        "name": "Submit updated AUU application with new dependents",
+        "description": "The system shall allow the applicant to submit the modified Assegno Unico Universale (AUU) application, incorporating the newly added dependent children, to officially update the application record.",
+        "high_level_associated": {
+          "name": "Update Existing Application with New Dependents",
+          "description": "To enable applicants to modify their previously submitted Assegno Unico Universale (AUU) applications by adding new dependent children to the application record, ensuring the application accurately reflects their current family situation and benefit eligibility.",
+          "actor": {
+            "name": "Applicant",
+            "description": "Individuals applying for the Assegno Unico Universale benefit."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "MISSING_HIGH_LEVEL_GOALS_FOUND",
+    "rationale": "Voting result 3/3 for MISSING_HIGH_LEVEL_GOALS_FOUND. The project description explicitly states that 'Applicants can also add children to existing applications'. This is a distinct functional capability for the Applicant actor that is not covered by the current High-Level Goals. The current HLG 'Understand Benefit Information' covers information access and simulation, but does not entail the modification of an existing application's child list. The retired HLG 'Manage Application Progress' was removed, and its specific capability to update application details (including adding children) is not subsumed by the remaining Applicant HLGs. Therefore, a new HLG is required to cover the management of existing application data, specifically the addition of children.",
+    "quality_score": 2,
+    "missing_goal_requests": [
+      {
+        "actor": "Applicant",
+        "generation_project_description": "To update existing AUU applications by adding new dependent children to the application record."
+      }
+    ],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "MISSING_HIGH_LEVEL_GOALS_FOUND": 3
+    }
+  },
+  "missing_hlg_decision": "MISSING_HIGH_LEVEL_GOALS_FOUND",
+  "llg_regeneration_counts": {},
+  "warnings": []
+}

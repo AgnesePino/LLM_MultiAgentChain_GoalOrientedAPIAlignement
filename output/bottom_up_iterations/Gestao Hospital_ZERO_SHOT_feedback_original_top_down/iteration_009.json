@@ -1,0 +1,671 @@
+{
+  "iteration": 9,
+  "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Manage Hospital Information",
+      "rationale": "These low-level goals collectively describe the essential operations required for a Public Health System Administrator to maintain accurate and up-to-date records of hospitals within the system. They cover the full lifecycle of hospital data management, from initial registration to subsequent updates and information retrieval.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "Register New Hospital",
+        "Update Hospital Address",
+        "Update Hospital Bed Capacity",
+        "Retrieve Specific Hospital Details"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Facilitate Patient Hospital Placement",
+      "rationale": "Both low-level goals aim to assist Hospital Admissions Staff in identifying and selecting a suitable hospital for a patient by providing tools to search for hospitals with available beds based on geographical location and proximity. They are different mechanisms (querying by radius vs. recommending the nearest) to achieve the common objective of placing a patient.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Query Hospitals with Available Beds by Location",
+        "Recommend Nearest Hospital with Beds"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Manage Inter-hospital Product Transfers",
+      "rationale": "The low-level goals collectively describe the complete workflow for a Logistics Coordinator to identify a need for a product, find a suitable source hospital, initiate the transfer, and monitor its progress between different hospitals. They cover the entire lifecycle of an inter-hospital product transfer request, from initial specification to tracking its status.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "Specify Product and Quantity for Transfer",
+        "Request List of Hospitals with Available Stock",
+        "Filter Hospitals by Proximity to Requesting Facility",
+        "Initiate Product Transfer Request",
+        "Track Status of Product Transfer"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Monitor Low Stock Levels",
+      "rationale": "The operations together enable the Hospital Inventory Manager to define criteria for low stock and then identify products that meet those criteria, which is essential for effective monitoring of inventory levels to prevent shortages.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Set Product Low Stock Threshold",
+        "Retrieve Products Below Threshold"
+      ]
+    },
+    "branch_005": {
+      "reconstructed_high_level_goal": "Manage Patient Personal Details",
+      "rationale": "The low-level goals collectively describe the full lifecycle of patient personal data management by Hospital Admissions Staff. They cover the creation of new patient records, the initial input and subsequent modification of personal details, and the retrieval of this information for various operational needs such as patient check-out and ongoing care. Therefore, the overarching goal is to effectively manage and maintain accurate patient personal details within the hospital system.",
+      "branch_id": "branch_005",
+      "source_low_level_goal_ids": [
+        "RegisterNewPatient",
+        "RecordPatientPersonalDetails",
+        "UpdatePatientPersonalDetails",
+        "RetrievePatientDetailsForCheckout",
+        "RetrievePatientDetailsForOngoingCare"
+      ]
+    },
+    "branch_006": {
+      "reconstructed_high_level_goal": "Manage Hospital-wide Inventory",
+      "rationale": "The low-level goals collectively describe the comprehensive set of operations required for a Hospital Inventory Manager to oversee and control all items within the hospital's various inventories. This includes the full lifecycle management of general products and specialized blood products, encompassing adding, modifying, and deleting records, tracking incoming and outgoing quantities, querying current stock levels, and monitoring critical thresholds to ensure adequate supply and prevent shortages across the entire hospital.",
+      "branch_id": "branch_006",
+      "source_low_level_goal_ids": [
+        "Add a new product to the inventory system",
+        "Update details of an existing product in the inventory system",
+        "Remove a product from the inventory system",
+        "Record an increase in the quantity of a specific product in the inventory",
+        "Record a decrease in the quantity of a specific product in the inventory",
+        "Retrieve the current stock level for a specific product",
+        "Add a new blood product type to the blood bank inventory",
+        "Update details of an existing blood product type in the blood bank inventory",
+        "Remove a blood product type from the blood bank inventory",
+        "Record an increase in the units of a specific blood product type in the blood bank",
+        "Record a decrease in the units of a specific blood product type in the blood bank",
+        "Retrieve the current unit level for a specific blood product type",
+        "Define a critical stock threshold for a specific product",
+        "Define a critical unit threshold for a specific blood product type",
+        "Query the system for all products whose current stock level is below their defined critical threshold",
+        "Query the system for all blood product types whose current unit level is below their defined critical threshold"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Maintain Comprehensive Hospital Information' is fully supported by the project description, which explicitly requires registering and retrieving detailed hospital information (name, address, available beds). The bottom-up reconstruction 'Manage Hospital Information' is semantically equivalent but slightly less precise regarding the 'comprehensive' and 'retrieval' aspects emphasized in the description. The goal is appropriately scoped for the Public Health System Administrator actor, who is responsible for overseeing hospital data. It is not redundant with other HLGs, as it specifically targets hospital master data rather than inventory, patient records, or logistics. Therefore, the original goal should be kept as it accurately reflects the stakeholder intention with appropriate granularity. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Maintain Comprehensive Hospital Information'. The project description explicitly requires the system to 'register and retrieve detailed information about hospitals, including their name, address, and the number of available beds'. \n\n1. **llg_001 (Register New Hospital)**: Supported by 'register... detailed information about hospitals'.\n2. **llg_002 (Update Hospital Address)**: Supported by the need to maintain 'accurate' information, which implies the ability to update details like address if they change. While 'update' is not explicitly verbed for address in the snippet, maintaining comprehensive information inherently includes keeping it current. However, looking strictly at the text 'register and retrieve', update is a standard implication of 'maintain'. More importantly, there are no unsupported LLGs. \n3. **llg_003 (Update Hospital Bed Capacity)**: Supported by 'maintain... number of available beds'. Bed availability changes dynamically, so updating this field is essential to maintaining accurate information for the recommendation system. \n4. **llg_004 (Retrieve Specific Hospital Details)**: Supported by 'retrieve detailed information about hospitals'.\n\nAll LLGs are grounded in the parent goal's requirement to maintain accurate and retrievable hospital data. There are no missing essential capabilities explicitly required by the parent HLG that are absent. The sibling HLGs cover inventory, patient management, and logistics, so there is no duplication. The decomposition is complete and precise.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Maintain Comprehensive Hospital Information' is fully supported by the project description, which explicitly requires registering and retrieving detailed hospital information (name, address, available beds). The bottom-up reconstruction 'Manage Hospital Information' is semantically equivalent but slightly less precise regarding the 'comprehensive' and 'retrieval' aspects emphasized in the description. The goal is appropriately scoped for the Public Health System Administrator actor, who is responsible for overseeing hospital data. It is not redundant with other HLGs, as it specifically targets hospital master data rather than inventory, patient records, or logistics. Therefore, the original goal should be kept as it accurately reflects the stakeholder intention with appropriate granularity.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Maintain Comprehensive Hospital Information'. The project description explicitly requires the system to 'register and retrieve detailed information about hospitals, including their name, address, and the number of available beds'. \n\n1. **llg_001 (Register New Hospital)**: Supported by 'register... detailed information about hospitals'.\n2. **llg_002 (Update Hospital Address)**: Supported by the need to maintain 'accurate' information, which implies the ability to update details like address if they change. While 'update' is not explicitly verbed for address in the snippet, maintaining comprehensive information inherently includes keeping it current. However, looking strictly at the text 'register and retrieve', update is a standard implication of 'maintain'. More importantly, there are no unsupported LLGs. \n3. **llg_003 (Update Hospital Bed Capacity)**: Supported by 'maintain... number of available beds'. Bed availability changes dynamically, so updating this field is essential to maintaining accurate information for the recommendation system. \n4. **llg_004 (Retrieve Specific Hospital Details)**: Supported by 'retrieve detailed information about hospitals'.\n\nAll LLGs are grounded in the parent goal's requirement to maintain accurate and retrievable hospital data. There are no missing essential capabilities explicitly required by the parent HLG that are absent. The sibling HLGs cover inventory, patient management, and logistics, so there is no duplication. The decomposition is complete and precise.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Provide Timely Patient Placement Recommendations' is supported by the project description, which explicitly states the system must 'recommend the nearest hospital with available beds to a patient based on their location'. The actor 'Hospital Admissions Staff' is correctly identified as the user of this feature. The goal is distinct from 'Manage Patient Registration and Personal Information' (which focuses on data entry/retrieval of patient details) and 'Maintain Comprehensive Hospital Information' (which focuses on hospital data integrity). It represents a specific, independently satisfiable stakeholder outcome: finding the right hospital for a patient. The bottom-up reconstruction 'Facilitate Patient Hospital Placement' is semantically equivalent but slightly less precise regarding the 'recommendation' aspect which is a key feature. The original goal is well-scoped, supported, and not redundant with siblings. Therefore, it should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Provide Timely Patient Placement Recommendations' is explicitly supported by the project description: 'A key feature is the ability to recommend the nearest hospital with available beds to a patient based on their location.' The two current LLGs, 'Query Hospitals with Available Beds by Location' and 'Recommend Nearest Hospital with Beds', are both valid decompositions of this capability. LLG_001 represents the underlying query mechanism (finding hospitals within a radius/location), and LLG_002 represents the specific recommendation output (nearest hospital). Both are directly entailed by the requirement to recommend the nearest hospital based on location. There are no unsupported capabilities, and no essential capabilities are missing. The sibling HLGs do not cover this specific patient placement recommendation function (they cover hospital info maintenance, inventory, patient registration, and product transfers). Therefore, the decomposition is correct and complete.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Provide Timely Patient Placement Recommendations' is supported by the project description, which explicitly states the system must 'recommend the nearest hospital with available beds to a patient based on their location'. The actor 'Hospital Admissions Staff' is correctly identified as the user of this feature. The goal is distinct from 'Manage Patient Registration and Personal Information' (which focuses on data entry/retrieval of patient details) and 'Maintain Comprehensive Hospital Information' (which focuses on hospital data integrity). It represents a specific, independently satisfiable stakeholder outcome: finding the right hospital for a patient. The bottom-up reconstruction 'Facilitate Patient Hospital Placement' is semantically equivalent but slightly less precise regarding the 'recommendation' aspect which is a key feature. The original goal is well-scoped, supported, and not redundant with siblings. Therefore, it should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Provide Timely Patient Placement Recommendations' is explicitly supported by the project description: 'A key feature is the ability to recommend the nearest hospital with available beds to a patient based on their location.' The two current LLGs, 'Query Hospitals with Available Beds by Location' and 'Recommend Nearest Hospital with Beds', are both valid decompositions of this capability. LLG_001 represents the underlying query mechanism (finding hospitals within a radius/location), and LLG_002 represents the specific recommendation output (nearest hospital). Both are directly entailed by the requirement to recommend the nearest hospital based on location. There are no unsupported capabilities, and no essential capabilities are missing. The sibling HLGs do not cover this specific patient placement recommendation function (they cover hospital info maintenance, inventory, patient registration, and product transfers). Therefore, the decomposition is correct and complete.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Facilitate Inter-Hospital Product Transfers' is fully supported by the project description, which explicitly states the system should 'facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock.' The actor 'Logistics Coordinator' is defined specifically for this purpose. The goal is independently scoped from the other HLGs: 'Optimize Hospital Inventory Management' and 'Monitor Critical Stock Levels' focus on internal inventory tracking and thresholds for a single hospital, whereas this HLG focuses on the cross-hospital coordination and transfer workflow. The bottom-up reconstruction 'Manage Inter-hospital Product Transfers' is semantically equivalent to the original, just using slightly different verb phrasing ('Manage' vs 'Facilitate'). The original description is precise, captures the stakeholder intention (efficient coordination based on proximity and stock), and is not a mere workflow fragment of another goal. Therefore, the original HLG should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect. While llg_001, llg_002, and llg_003 are supported by the documentation's requirement to 'identify the closest facility with available stock', llg_004 ('Initiate Product Transfer Request') and llg_005 ('Track Status of Product Transfer') are unsupported. The project description explicitly limits the system's scope regarding transfers to 'identifying the closest facility with available stock'. It does not mention the system managing the actual transfer workflow, sending formal requests, or tracking the status of transfers (pending, in transit, etc.). These capabilities imply a logistics management system beyond the documented scope of identification and recommendation. Therefore, these LLGs are unsupported and must be removed.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Facilitate Inter-Hospital Product Transfers' is fully supported by the project description, which explicitly states the system should 'facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock.' The actor 'Logistics Coordinator' is defined specifically for this purpose. The goal is independently scoped from the other HLGs: 'Optimize Hospital Inventory Management' and 'Monitor Critical Stock Levels' focus on internal inventory tracking and thresholds for a single hospital, whereas this HLG focuses on the cross-hospital coordination and transfer workflow. The bottom-up reconstruction 'Manage Inter-hospital Product Transfers' is semantically equivalent to the original, just using slightly different verb phrasing ('Manage' vs 'Facilitate'). The original description is precise, captures the stakeholder intention (efficient coordination based on proximity and stock), and is not a mere workflow fragment of another goal. Therefore, the original HLG should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect. While llg_001, llg_002, and llg_003 are supported by the documentation's requirement to 'identify the closest facility with available stock', llg_004 ('Initiate Product Transfer Request') and llg_005 ('Track Status of Product Transfer') are unsupported. The project description explicitly limits the system's scope regarding transfers to 'identifying the closest facility with available stock'. It does not mention the system managing the actual transfer workflow, sending formal requests, or tracking the status of transfers (pending, in transit, etc.). These capabilities imply a logistics management system beyond the documented scope of identification and recommendation. Therefore, these LLGs are unsupported and must be removed.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Keep llg_001, llg_002, and llg_003 as they align with the requirement to identify the closest facility with available stock. Remove llg_004 and llg_005 because the documentation only supports identifying facilities with stock, not managing the subsequent transfer request initiation or status tracking.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_004",
+          "llg_005"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Critical Stock Levels' is supported by the documentation, which explicitly mentions considering inventory thresholds (four or fewer items) to determine if a hospital has enough for its own needs. However, the hierarchy currently contains a sibling HLG 'Optimize Hospital Inventory Management' for the same actor, which explicitly includes 'proactively monitoring critical stock levels' in its description. According to the consolidation audit rules, if a broader sibling already entails the original goal, the original should be removed to avoid redundancy and fragmentation. 'Monitoring critical stock levels' is a specific capability within the broader intention of optimizing inventory management, not an independently satisfiable stakeholder outcome distinct from the overall management goal.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Critical Stock Levels' is supported by the documentation, which explicitly mentions considering inventory thresholds (four or fewer items) to determine if a hospital has enough for its own needs. However, the hierarchy currently contains a sibling HLG 'Optimize Hospital Inventory Management' for the same actor, which explicitly includes 'proactively monitoring critical stock levels' in its description. According to the consolidation audit rules, if a broader sibling already entails the original goal, the original should be removed to avoid redundancy and fragmentation. 'Monitoring critical stock levels' is a specific capability within the broader intention of optimizing inventory management, not an independently satisfiable stakeholder outcome distinct from the overall management goal.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 1,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Patient Registration and Personal Information' is well-supported by the documentation, which explicitly mentions patient check-in/check-out and access to patient details. The bottom-up reconstruction 'Manage Patient Personal Details' is semantically equivalent but slightly less comprehensive regarding the registration/check-in aspect. The original HLG is distinct from the sibling 'Provide Timely Patient Placement Recommendations' as it focuses on data management rather than location-based decision support. There is no redundancy or fragmentation issue; the goal represents a complete, independently satisfiable stakeholder outcome for the actor. Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Manage Patient Registration and Personal Information'. LLG_001 and LLG_002 cover the registration and initial recording of details (check-in). LLG_003 covers the updating of personal details, which is entailed by the goal of maintaining accurate records. LLG_004 and LLG_005 cover the retrieval of details for check-out and ongoing care, respectively, which are explicitly mentioned in the parent description and project documentation ('support patient check-in and check-out processes', 'provide access to patient details'). All LLGs are supported by the documentation and do not duplicate responsibilities of sibling HLGs (e.g., hospital bed recommendation is a separate HLG). There are no unsupported or missing essential capabilities.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Patient Registration and Personal Information' is well-supported by the documentation, which explicitly mentions patient check-in/check-out and access to patient details. The bottom-up reconstruction 'Manage Patient Personal Details' is semantically equivalent but slightly less comprehensive regarding the registration/check-in aspect. The original HLG is distinct from the sibling 'Provide Timely Patient Placement Recommendations' as it focuses on data management rather than location-based decision support. There is no redundancy or fragmentation issue; the goal represents a complete, independently satisfiable stakeholder outcome for the actor.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Manage Patient Registration and Personal Information'. LLG_001 and LLG_002 cover the registration and initial recording of details (check-in). LLG_003 covers the updating of personal details, which is entailed by the goal of maintaining accurate records. LLG_004 and LLG_005 cover the retrieval of details for check-out and ongoing care, respectively, which are explicitly mentioned in the parent description and project documentation ('support patient check-in and check-out processes', 'provide access to patient details'). All LLGs are supported by the documentation and do not duplicate responsibilities of sibling HLGs (e.g., hospital bed recommendation is a separate HLG). There are no unsupported or missing essential capabilities.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 1,
+          "KEEP_LOW_LEVEL_GOALS": 2
+        }
+      }
+    },
+    "branch_006": {
+      "branch_id": "branch_006",
+      "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Optimize Hospital Inventory Management' is overly broad and semantically overlaps with the sibling HLG 'Monitor Critical Stock Levels'. The project description distinguishes between managing inventory records (adding, updating, retrieving products/blood) and monitoring thresholds. The sibling HLG specifically covers the threshold monitoring aspect. The original HLG's description includes 'proactively monitoring critical stock levels', which is already covered by the sibling. Therefore, the original HLG should be rewritten to focus strictly on the CRUD and record-keeping aspects of inventory management (adding, updating, removing, and retrieving product/blood records) to avoid redundancy with the monitoring goal and to align with the bottom-up reconstruction's focus on managing the inventory data itself.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Optimize Hospital Inventory Management' is overly broad and semantically overlaps with the sibling HLG 'Monitor Critical Stock Levels'. The project description distinguishes between managing inventory records (adding, updating, retrieving products/blood) and monitoring thresholds. The sibling HLG specifically covers the threshold monitoring aspect. The original HLG's description includes 'proactively monitoring critical stock levels', which is already covered by the sibling. Therefore, the original HLG should be rewritten to focus strictly on the CRUD and record-keeping aspects of inventory management (adding, updating, removing, and retrieving product/blood records) to avoid redundancy with the monitoring goal and to align with the bottom-up reconstruction's focus on managing the inventory data itself.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 2,
+        "rewriting_focus": "Focus on the management of inventory records (adding, updating, removing, and retrieving products and blood bank supplies) without including threshold monitoring, which is covered by the sibling HLG 'Monitor Critical Stock Levels'.",
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": {
+        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Optimize Hospital Inventory Management' is overly broad and semantically overlaps with the sibling HLG 'Monitor Critical Stock Levels'. The project description distinguishes between managing inventory records (adding, updating, retrieving products/blood) and monitoring thresholds. The sibling HLG specifically covers the threshold monitoring aspect. The original HLG's description includes 'proactively monitoring critical stock levels', which is already covered by the sibling. Therefore, the original HLG should be rewritten to focus strictly on the CRUD and record-keeping aspects of inventory management (adding, updating, removing, and retrieving product/blood records) to avoid redundancy with the monitoring goal and to align with the bottom-up reconstruction's focus on managing the inventory data itself.",
+        "generation_project_description": "We need to develop an API to organize and manage a public health system, specifically to support the Sistema Único de Saúde (SUS). The primary goal is to create a tool that helps optimize resources and reduce waste by improving the management of hospitals and their assets. The system should allow us to register and retrieve detailed information about hospitals, including their name, address, and the number of available beds. It must also manage hospital inventories, tracking various products and their quantities, including blood bank supplies. A key feature is the ability to recommend the nearest hospital with available beds to a patient based on their location. Furthermore, the system needs to support patient check-in and check-out processes, and provide access to patient details such as full name, CPF, date of birth, sex, and admission date. It should also facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock. Finally, the system should consider inventory thresholds, where hospitals with four or fewer items or liters of a product are deemed to have just enough for their own needs.\n\nRewrite the functional intention for actor 'Hospital Inventory Manager' using this focus: Focus on the management of inventory records (adding, updating, removing, and retrieving products and blood bank supplies) without including threshold monitoring, which is covered by the sibling HLG 'Monitor Critical Stock Levels'.",
+        "actor": {
+          "name": "Hospital Inventory Manager",
+          "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+        }
+      },
+      "low_level_evaluation": null
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Maintain Comprehensive Hospital Information",
+        "description": "To ensure that all relevant details about hospitals, including their name, address, and available beds, are accurately registered and easily retrievable for system-wide management.",
+        "actor": {
+          "name": "Public Health System Administrator",
+          "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+        }
+      },
+      {
+        "name": "Manage Hospital Inventory Records",
+        "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+        "actor": {
+          "name": "Hospital Inventory Manager",
+          "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+        }
+      },
+      {
+        "name": "Monitor Critical Stock Levels",
+        "description": "To effectively track inventory thresholds for all products, identifying when stock levels are low (e.g., four or fewer items/liters) to prevent shortages and ensure hospitals have sufficient supplies for their immediate needs.",
+        "actor": {
+          "name": "Hospital Inventory Manager",
+          "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+        }
+      },
+      {
+        "name": "Provide Timely Patient Placement Recommendations",
+        "description": "To quickly identify and recommend the nearest hospital with available beds to a patient based on their current location, optimizing patient care and resource utilization.",
+        "actor": {
+          "name": "Hospital Admissions Staff",
+          "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+        }
+      },
+      {
+        "name": "Manage Patient Registration and Personal Information",
+        "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+        "actor": {
+          "name": "Hospital Admissions Staff",
+          "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+        }
+      },
+      {
+        "name": "Facilitate Inter-Hospital Product Transfers",
+        "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+        "actor": {
+          "name": "Logistics Coordinator",
+          "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Register New Hospital",
+        "description": "The system shall allow the Public Health System Administrator to register a new hospital by providing its name, address, and initial total bed capacity.",
+        "high_level_associated": {
+          "name": "Maintain Comprehensive Hospital Information",
+          "description": "To ensure that all relevant details about hospitals, including their name, address, and available beds, are accurately registered and easily retrievable for system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Update Hospital Address",
+        "description": "The system shall allow the Public Health System Administrator to update the physical address of an existing hospital record.",
+        "high_level_associated": {
+          "name": "Maintain Comprehensive Hospital Information",
+          "description": "To ensure that all relevant details about hospitals, including their name, address, and available beds, are accurately registered and easily retrievable for system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Update Hospital Bed Capacity",
+        "description": "The system shall allow the Public Health System Administrator to update the total number of available beds for an existing hospital.",
+        "high_level_associated": {
+          "name": "Maintain Comprehensive Hospital Information",
+          "description": "To ensure that all relevant details about hospitals, including their name, address, and available beds, are accurately registered and easily retrievable for system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Specific Hospital Details",
+        "description": "The system shall allow the Public Health System Administrator to retrieve all detailed information for a specific hospital using its unique identifier.",
+        "high_level_associated": {
+          "name": "Maintain Comprehensive Hospital Information",
+          "description": "To ensure that all relevant details about hospitals, including their name, address, and available beds, are accurately registered and easily retrievable for system-wide management.",
+          "actor": {
+            "name": "Public Health System Administrator",
+            "description": "Manages the registration and detailed information of hospitals, overseeing the overall system for resource optimization."
+          }
+        }
+      },
+      {
+        "name": "Query Hospitals with Available Beds by Location",
+        "description": "The system shall allow the Hospital Admissions Staff to query for hospitals with available beds within a specified geographical radius of a given patient location.",
+        "high_level_associated": {
+          "name": "Provide Timely Patient Placement Recommendations",
+          "description": "To quickly identify and recommend the nearest hospital with available beds to a patient based on their current location, optimizing patient care and resource utilization.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "Recommend Nearest Hospital with Beds",
+        "description": "The system shall provide the Hospital Admissions Staff with a recommendation for the nearest hospital that has available beds, based on a patient's current coordinates.",
+        "high_level_associated": {
+          "name": "Provide Timely Patient Placement Recommendations",
+          "description": "To quickly identify and recommend the nearest hospital with available beds to a patient based on their current location, optimizing patient care and resource utilization.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "Specify Product and Quantity for Transfer",
+        "description": "Allow the Logistics Coordinator to input the specific product type (e.g., blood type, component) and the exact quantity required for an inter-hospital transfer request.",
+        "high_level_associated": {
+          "name": "Facilitate Inter-Hospital Product Transfers",
+          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "actor": {
+            "name": "Logistics Coordinator",
+            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+          }
+        }
+      },
+      {
+        "name": "Request List of Hospitals with Available Stock",
+        "description": "Enable the Logistics Coordinator to query the system to retrieve a list of hospitals that currently possess the specified product and quantity in their inventory.",
+        "high_level_associated": {
+          "name": "Facilitate Inter-Hospital Product Transfers",
+          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "actor": {
+            "name": "Logistics Coordinator",
+            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+          }
+        }
+      },
+      {
+        "name": "Filter Hospitals by Proximity to Requesting Facility",
+        "description": "Allow the Logistics Coordinator to filter or sort the list of hospitals with available stock based on their geographical proximity to the hospital making the transfer request.",
+        "high_level_associated": {
+          "name": "Facilitate Inter-Hospital Product Transfers",
+          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "actor": {
+            "name": "Logistics Coordinator",
+            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+          }
+        }
+      },
+      {
+        "name": "Initiate Product Transfer Request",
+        "description": "Enable the Logistics Coordinator to formally send a request to transfer a specified product and quantity from a selected source hospital to a destination hospital.",
+        "high_level_associated": {
+          "name": "Facilitate Inter-Hospital Product Transfers",
+          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "actor": {
+            "name": "Logistics Coordinator",
+            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+          }
+        }
+      },
+      {
+        "name": "Track Status of Product Transfer",
+        "description": "Allow the Logistics Coordinator to view the current status (e.g., pending, approved, in transit, delivered) of an initiated inter-hospital product transfer request.",
+        "high_level_associated": {
+          "name": "Facilitate Inter-Hospital Product Transfers",
+          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "actor": {
+            "name": "Logistics Coordinator",
+            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+          }
+        }
+      },
+      {
+        "name": "Set Product Low Stock Threshold",
+        "description": "The Hospital Inventory Manager can define a specific low stock threshold (e.g., 4 items/liters) for a given product to trigger monitoring.",
+        "high_level_associated": {
+          "name": "Monitor Critical Stock Levels",
+          "description": "To effectively track inventory thresholds for all products, identifying when stock levels are low (e.g., four or fewer items/liters) to prevent shortages and ensure hospitals have sufficient supplies for their immediate needs.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Products Below Threshold",
+        "description": "The Hospital Inventory Manager can query the system to get a list of all products whose current stock level is at or below their defined low stock threshold.",
+        "high_level_associated": {
+          "name": "Monitor Critical Stock Levels",
+          "description": "To effectively track inventory thresholds for all products, identifying when stock levels are low (e.g., four or fewer items/liters) to prevent shortages and ensure hospitals have sufficient supplies for their immediate needs.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "RegisterNewPatient",
+        "description": "The Hospital Admissions Staff can initiate the registration process for a new patient, creating a new patient record in the system.",
+        "high_level_associated": {
+          "name": "Manage Patient Registration and Personal Information",
+          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "RecordPatientPersonalDetails",
+        "description": "The Hospital Admissions Staff can input and save the initial personal details for a newly registered patient, such as name, date of birth, contact information, and address.",
+        "high_level_associated": {
+          "name": "Manage Patient Registration and Personal Information",
+          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "UpdatePatientPersonalDetails",
+        "description": "The Hospital Admissions Staff can modify and save changes to an existing patient's personal details, ensuring the patient record is current and accurate.",
+        "high_level_associated": {
+          "name": "Manage Patient Registration and Personal Information",
+          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "RetrievePatientDetailsForCheckout",
+        "description": "The Hospital Admissions Staff can search for and retrieve a specific patient's personal details to facilitate the patient check-out process.",
+        "high_level_associated": {
+          "name": "Manage Patient Registration and Personal Information",
+          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "RetrievePatientDetailsForOngoingCare",
+        "description": "The Hospital Admissions Staff can search for and retrieve a specific patient's personal details to support ongoing patient care processes, such as appointment scheduling or medical record access.",
+        "high_level_associated": {
+          "name": "Manage Patient Registration and Personal Information",
+          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "actor": {
+            "name": "Hospital Admissions Staff",
+            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
+          }
+        }
+      },
+      {
+        "name": "Add New Product Record",
+        "description": "The system shall allow the Hospital Inventory Manager to add a new product record to the inventory, including its name, description, initial quantity, and other relevant details.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Add New Blood Bank Supply Record",
+        "description": "The system shall allow the Hospital Inventory Manager to add a new blood bank supply record to the inventory, including its type, blood group, initial quantity, expiration date, and other relevant details.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update Product Quantity",
+        "description": "The system shall allow the Hospital Inventory Manager to update the quantity of an existing product in the inventory.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update Blood Bank Supply Quantity",
+        "description": "The system shall allow the Hospital Inventory Manager to update the quantity of an existing blood bank supply in the inventory.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update Product Details",
+        "description": "The system shall allow the Hospital Inventory Manager to modify the details (e.g., name, description, location) of an existing product record, excluding its quantity.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update Blood Bank Supply Details",
+        "description": "The system shall allow the Hospital Inventory Manager to modify the details (e.g., type, blood group, expiration date) of an existing blood bank supply record, excluding its quantity.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Remove Product Record",
+        "description": "The system shall allow the Hospital Inventory Manager to remove a product record from the inventory when it is no longer in stock or tracked.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Remove Blood Bank Supply Record",
+        "description": "The system shall allow the Hospital Inventory Manager to remove a blood bank supply record from the inventory when it is no longer in stock or tracked.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Retrieve All Product Inventory Information",
+        "description": "The system shall allow the Hospital Inventory Manager to retrieve a list of all tracked products, including their current quantities and details.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Retrieve All Blood Bank Supply Inventory Information",
+        "description": "The system shall allow the Hospital Inventory Manager to retrieve a list of all tracked blood bank supplies, including their current quantities and details.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Records",
+          "description": "Enable the comprehensive management of hospital inventory records, including the ability to add new products and blood bank supplies, update existing quantities and details, remove items no longer in stock, and retrieve current inventory information for all tracked items.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description's functional requirements are fully covered by the current High-Level Goals. 1) Hospital registration/retrieval is covered by 'Maintain Comprehensive Hospital Information'. 2) Inventory management (products, quantities, blood bank) is covered by 'Optimize Hospital Inventory Management' (which handles the CRUD/record-keeping aspect) and 'Monitor Critical Stock Levels' (which handles the threshold monitoring aspect). The retired goal 'Ensure Accurate Inventory Management' is effectively split and covered by these two current goals. 3) Patient check-in/out and details are covered by 'Manage Patient Registration and Personal Information'. 4) Hospital recommendation based on location/beds is covered by 'Provide Timely Patient Placement Recommendations'. 5) Inter-hospital product transfers are covered by 'Facilitate Inter-Hospital Product Transfers'. No explicit functional requirements remain uncovered.",
+    "quality_score": 5,
+    "missing_goal_requests": [],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "NO_MISSING_HIGH_LEVEL_GOALS": 3
+    }
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "hospital inventory manager::monitor critical stock levels": 1,
+    "hospital admissions staff::streamline patient admission and discharge": 1
+  },
+  "warnings": []
+}

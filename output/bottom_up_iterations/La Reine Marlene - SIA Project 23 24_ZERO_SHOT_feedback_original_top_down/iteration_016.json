@@ -1,0 +1,1112 @@
+{
+  "iteration": 16,
+  "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Manage Warehouse Inventory Operations",
+      "rationale": "The low-level goals collectively describe the essential functions required for a warehouse to effectively handle incoming goods (llg_001-llg_004), maintain accurate records of items in stock through monitoring and auditing (llg_005-llg_008), and ensure timely replenishment of inventory by identifying needs and initiating procurement (llg_009-llg_012). These operations are all integral components of comprehensive warehouse inventory management.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "RecordIncomingShipmentDetails",
+        "ScanReceivedItemBarcode",
+        "UpdateStockQuantityForReceivedItems",
+        "MarkPurchaseOrderAsReceived",
+        "RetrieveCurrentItemStockLevel",
+        "GenerateInventoryStatusReport",
+        "InitiateInventoryCycleCount",
+        "RecordInventoryCountDiscrepancy",
+        "IdentifyItemsBelowReorderPoint",
+        "GenerateReplenishmentOrderProposal",
+        "SubmitApprovedReplenishmentOrder",
+        "TrackReplenishmentOrderStatus"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Administer Supplier Proposal Selection",
+      "rationale": "The low-level goals collectively describe the comprehensive process an Administrator undertakes to review, evaluate, compare, and make final decisions (approve or reject) regarding supplier proposals. These operations are all essential steps in the overall workflow of selecting suitable suppliers.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "Retrieve all submitted supplier proposals",
+        "Retrieve details for a specific supplier proposal",
+        "Submit an evaluation score for a supplier proposal",
+        "Mark a supplier proposal as approved",
+        "Mark a supplier proposal as rejected",
+        "Generate a comparative analysis report of supplier proposals"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Manage System Configuration and Operational Parameters",
+      "rationale": "The low-level goals collectively describe the Administrator's ability to control and maintain the fundamental aspects of the system's operation. This includes defining system-wide parameters, managing user access roles and permissions, setting up criteria for specific business processes (like supplier evaluation), and ensuring system stability and recoverability through configuration backups and restoration. All these operations are essential for configuring, adapting, and maintaining the system's overall behavior and integrity.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Retrieve all configurable system parameters",
+        "Update a specific system parameter value",
+        "Create a new user role with specified permissions",
+        "Update permissions for an existing user role",
+        "Retrieve all defined evaluation criteria for proposals",
+        "Add a new evaluation criterion for supplier proposals",
+        "Modify an existing evaluation criterion for supplier proposals",
+        "Initiate a system configuration backup",
+        "Restore system configuration from a specified backup point"
+      ]
+    },
+    "branch_009": {
+      "reconstructed_high_level_goal": "Manage Supplier Product Proposals",
+      "rationale": "The low-level goals collectively describe the complete lifecycle of a product proposal from the Supplier's perspective, encompassing its creation, detailed population, formal submission, and subsequent tracking of its status. These operations are all essential for a Supplier to effectively manage their product proposals within the system.",
+      "branch_id": "branch_009",
+      "source_low_level_goal_ids": [
+        "Create a new product proposal draft",
+        "Add product details to a proposal draft",
+        "Submit a product proposal for evaluation",
+        "Retrieve a list of all submitted product proposals",
+        "Retrieve the detailed status of a specific product proposal"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Warehouse Inventory' accurately captures the end-to-end functional outcome for the Warehouse Staff actor as described in the project documentation. The actor's description explicitly lists 'Verifies incoming goods, monitors inventory, and manages replenishment,' which are the three core components detailed in the HLG description. The bottom-up reconstruction 'Manage Warehouse Inventory Operations' is semantically equivalent and does not introduce a materially different scope or intention. There are no other HLGs for the Warehouse Staff actor that would make this goal redundant or fragmented. The goal is supported, correctly scoped at the stakeholder outcome level, and internally consistent with the project description. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Manage Warehouse Inventory' into its three documented components: verifying incoming goods (llg_001-llg_004), monitoring inventory (llg_005-llg_008), and managing replenishment (llg_009-llg_012). Each LLG is supported by the project description which states that 'Goods are verified when they arrive at stores. Inventory is monitored and automatic replenishment can be configured.' The specific actions (recording shipments, scanning barcodes, updating stock, generating reports, identifying reorder points, submitting orders) are standard and necessary operationalizations of these high-level verbs. There are no unsupported LLGs (e.g., no arbitrary notifications or undocumented CRUD variants) and no essential capabilities from the parent HLG are missing. The decomposition is complete, precise, and internally consistent.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Warehouse Inventory' accurately captures the end-to-end functional outcome for the Warehouse Staff actor as described in the project documentation. The actor's description explicitly lists 'Verifies incoming goods, monitors inventory, and manages replenishment,' which are the three core components detailed in the HLG description. The bottom-up reconstruction 'Manage Warehouse Inventory Operations' is semantically equivalent and does not introduce a materially different scope or intention. There are no other HLGs for the Warehouse Staff actor that would make this goal redundant or fragmented. The goal is supported, correctly scoped at the stakeholder outcome level, and internally consistent with the project description.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Manage Warehouse Inventory' into its three documented components: verifying incoming goods (llg_001-llg_004), monitoring inventory (llg_005-llg_008), and managing replenishment (llg_009-llg_012). Each LLG is supported by the project description which states that 'Goods are verified when they arrive at stores. Inventory is monitored and automatic replenishment can be configured.' The specific actions (recording shipments, scanning barcodes, updating stock, generating reports, identifying reorder points, submitting orders) are standard and necessary operationalizations of these high-level verbs. There are no unsupported LLGs (e.g., no arbitrary notifications or undocumented CRUD variants) and no essential capabilities from the parent HLG are missing. The decomposition is complete, precise, and internally consistent.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Ensure optimal supplier selection' is supported by the project description, which states that 'Suppliers submit proposals that are evaluated by the administration department.' The Administrator's description explicitly includes 'Evaluates supplier proposals.' The goal accurately captures the end-to-end functional outcome for this specific aspect of the Administrator's role. It is distinct from the other Administrator HLG, 'Manage System Configurations,' and does not overlap with the Supplier's HLG 'Manage Product Proposals' (which focuses on creation/submission from the supplier side). The bottom-up reconstruction 'Administer Supplier Proposal Selection' is semantically equivalent but slightly less precise regarding the strategic intent ('optimal selection') implied by the evaluation process. The original goal is well-scoped, supported, and internally consistent. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect. LLG llg_006 ('Generate a comparative analysis report of supplier proposals') is unsupported by the project description. The documentation states that 'Suppliers submit proposals that are evaluated by the administration department' and that the Administrator 'Evaluates supplier proposals.' It does not mention the generation of reports, comparative analyses, or side-by-side comparisons. While comparison is a logical part of evaluation, the specific capability of generating a report is an invented functionality not entailed by the text. Additionally, the core action of 'evaluating' is partially covered by scoring (llg_003), but the explicit act of evaluating based on criteria is better represented by the scoring/decision workflow. The primary issue is the unsupported report generation capability.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Ensure optimal supplier selection' is supported by the project description, which states that 'Suppliers submit proposals that are evaluated by the administration department.' The Administrator's description explicitly includes 'Evaluates supplier proposals.' The goal accurately captures the end-to-end functional outcome for this specific aspect of the Administrator's role. It is distinct from the other Administrator HLG, 'Manage System Configurations,' and does not overlap with the Supplier's HLG 'Manage Product Proposals' (which focuses on creation/submission from the supplier side). The bottom-up reconstruction 'Administer Supplier Proposal Selection' is semantically equivalent but slightly less precise regarding the strategic intent ('optimal selection') implied by the evaluation process. The original goal is well-scoped, supported, and internally consistent.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect. LLG llg_006 ('Generate a comparative analysis report of supplier proposals') is unsupported by the project description. The documentation states that 'Suppliers submit proposals that are evaluated by the administration department' and that the Administrator 'Evaluates supplier proposals.' It does not mention the generation of reports, comparative analyses, or side-by-side comparisons. While comparison is a logical part of evaluation, the specific capability of generating a report is an invented functionality not entailed by the text. Additionally, the core action of 'evaluating' is partially covered by scoring (llg_003), but the explicit act of evaluating based on criteria is better represented by the scoring/decision workflow. The primary issue is the unsupported report generation capability.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove the unsupported capability to generate comparative analysis reports (llg_006). The remaining LLGs (retrieving proposals, viewing details, scoring, approving, rejecting) are supported by the description of the Administrator evaluating supplier proposals.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_006"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage System Configurations' is supported by the Actor description ('manages system configurations') and the general scope of the information system. The bottom-up reconstruction 'Manage System Configuration and Operational Parameters' is semantically equivalent but slightly more specific. The original goal is appropriately scoped as an independent administrative function distinct from 'Ensure optimal supplier selection'. It is not a fragment of another goal. The description is clear and aligns with the stakeholder intention of maintaining system integrity and setup. Therefore, the original goal is kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) include several capabilities that are not explicitly supported by the project description or the Actor description. Specifically, 'Create a new user role' (llg_003), 'Update permissions' (llg_004), 'Initiate a system configuration backup' (llg_008), and 'Restore system configuration' (llg_009) are standard IT administration tasks but are not mentioned in the provided documentation. The description states the Administrator 'manages system configurations' and 'evaluates supplier proposals'. While managing evaluation criteria (llg_005, llg_006, llg_007) is a reasonable interpretation of configuring the evaluation process, the specific mention of 'automatic replenishment can be configured' in the project description suggests that configuring replenishment rules is a key part of system configuration, which is missing from the current LLGs. The inclusion of unsupported user role management and backup/restore operations constitutes a material defect as they are not entailed by the text. Therefore, the LLGs need to be regenerated to remove unsupported items and include documented configuration capabilities like replenishment settings.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage System Configurations' is supported by the Actor description ('manages system configurations') and the general scope of the information system. The bottom-up reconstruction 'Manage System Configuration and Operational Parameters' is semantically equivalent but slightly more specific. The original goal is appropriately scoped as an independent administrative function distinct from 'Ensure optimal supplier selection'. It is not a fragment of another goal. The description is clear and aligns with the stakeholder intention of maintaining system integrity and setup. Therefore, the original goal is kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) include several capabilities that are not explicitly supported by the project description or the Actor description. Specifically, 'Create a new user role' (llg_003), 'Update permissions' (llg_004), 'Initiate a system configuration backup' (llg_008), and 'Restore system configuration' (llg_009) are standard IT administration tasks but are not mentioned in the provided documentation. The description states the Administrator 'manages system configurations' and 'evaluates supplier proposals'. While managing evaluation criteria (llg_005, llg_006, llg_007) is a reasonable interpretation of configuring the evaluation process, the specific mention of 'automatic replenishment can be configured' in the project description suggests that configuring replenishment rules is a key part of system configuration, which is missing from the current LLGs. The inclusion of unsupported user role management and backup/restore operations constitutes a material defect as they are not entailed by the text. Therefore, the LLGs need to be regenerated to remove unsupported items and include documented configuration capabilities like replenishment settings.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove unsupported LLGs regarding user role management (llg_003, llg_004) and backup/restore (llg_008, llg_009). Keep LLGs related to general system parameters and evaluation criteria if supported, but ensure they are grounded. Add LLGs for configuring automatic replenishment rules, as this is explicitly mentioned in the project description ('automatic replenishment can be configured').",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_003",
+          "llg_004",
+          "llg_008",
+          "llg_009"
+        ],
+        "missing_essential_capabilities": [
+          "Configure automatic replenishment rules"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_009": {
+      "branch_id": "branch_009",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The Supplier's primary and only documented interaction with the system is submitting product proposals. The original High-Level Goal 'Manage Product Proposals' accurately captures the end-to-end lifecycle of this interaction from the Supplier's perspective: creating the proposal, submitting it, and monitoring its status (evaluation/acceptance). This aligns with the project description stating 'Suppliers submit proposals that are evaluated by the administration department.' The goal is appropriately scoped as a single, coherent stakeholder outcome. It is not fragmented into unnecessary sub-goals, nor is it redundant with other goals (which belong to different actors). The bottom-up reconstruction 'Manage Supplier Product Proposals' is semantically equivalent to the original. Therefore, the original goal is supported, precise, and correctly granular. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Manage Product Proposals' for the Supplier actor. The project description states that 'Suppliers submit proposals that are evaluated by the administration department.' The LLGs cover the essential lifecycle steps implied by this interaction: creating the proposal (llg_001), populating it with details (llg_002), submitting it for evaluation (llg_003), and monitoring its status (llg_004, llg_005). The HLG description explicitly mentions 'monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process,' which directly supports llg_004 and llg_005. There are no unsupported capabilities (such as editing after submission, which is not documented, or deleting proposals, which is not documented). The decomposition is complete, precise, and aligned with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The Supplier's primary and only documented interaction with the system is submitting product proposals. The original High-Level Goal 'Manage Product Proposals' accurately captures the end-to-end lifecycle of this interaction from the Supplier's perspective: creating the proposal, submitting it, and monitoring its status (evaluation/acceptance). This aligns with the project description stating 'Suppliers submit proposals that are evaluated by the administration department.' The goal is appropriately scoped as a single, coherent stakeholder outcome. It is not fragmented into unnecessary sub-goals, nor is it redundant with other goals (which belong to different actors). The bottom-up reconstruction 'Manage Supplier Product Proposals' is semantically equivalent to the original. Therefore, the original goal is supported, precise, and correctly granular.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Manage Product Proposals' for the Supplier actor. The project description states that 'Suppliers submit proposals that are evaluated by the administration department.' The LLGs cover the essential lifecycle steps implied by this interaction: creating the proposal (llg_001), populating it with details (llg_002), submitting it for evaluation (llg_003), and monitoring its status (llg_004, llg_005). The HLG description explicitly mentions 'monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process,' which directly supports llg_004 and llg_005. There are no unsupported capabilities (such as editing after submission, which is not documented, or deleting proposals, which is not documented). The decomposition is complete, precise, and aligned with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Manage Product Proposals",
+        "description": "To effectively create, submit, and monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process by La Reine Marlene.",
+        "actor": {
+          "name": "Supplier",
+          "description": "Submits product proposals to the company."
+        }
+      },
+      {
+        "name": "Manage Warehouse Inventory",
+        "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+        "actor": {
+          "name": "Warehouse Staff",
+          "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+        }
+      },
+      {
+        "name": "Conveniently purchase products online",
+        "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+        "actor": {
+          "name": "Customer",
+          "description": "Purchases products online, makes payments, and tracks deliveries."
+        }
+      },
+      {
+        "name": "Accurately track order deliveries",
+        "description": "The Customer aims to monitor the real-time status and expected delivery time of their purchased items.",
+        "actor": {
+          "name": "Customer",
+          "description": "Purchases products online, makes payments, and tracks deliveries."
+        }
+      },
+      {
+        "name": "Efficiently manage customer support requests",
+        "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+        "actor": {
+          "name": "Customer Support Agent",
+          "description": "Manages customer support requests and tickets."
+        }
+      },
+      {
+        "name": "Gain comprehensive business insights",
+        "description": "The Manager aims to access and analyze detailed data on orders, sales, inventory, and customer support to understand overall business performance.",
+        "actor": {
+          "name": "Manager",
+          "description": "Analyzes business data concerning orders, sales, inventory, and customer support."
+        }
+      },
+      {
+        "name": "Efficiently manage complete in-store sales transactions",
+        "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+        "actor": {
+          "name": "Store Clerk",
+          "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+        }
+      },
+      {
+        "name": "Ensure optimal supplier selection",
+        "description": "The Administrator aims to effectively evaluate all submitted supplier proposals to identify and select the most suitable and advantageous product offerings for the company, aligning with strategic objectives and ensuring value for money.",
+        "actor": {
+          "name": "Administrator",
+          "description": "Evaluates supplier proposals and manages system configurations."
+        }
+      },
+      {
+        "name": "Manage System Configurations",
+        "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+        "actor": {
+          "name": "Administrator",
+          "description": "Evaluates supplier proposals and manages system configurations."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "RecordIncomingShipmentDetails",
+        "description": "The system shall allow the Warehouse Staff to record the details of an incoming shipment, including supplier information, manifest ID, and expected items.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "ScanReceivedItemBarcode",
+        "description": "The system shall allow the Warehouse Staff to scan the barcode of an individual item upon its physical receipt to log its arrival and quantity.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "UpdateStockQuantityForReceivedItems",
+        "description": "The system shall allow the Warehouse Staff to update the system's recorded stock quantity for specific items based on the verified count of incoming goods.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "MarkPurchaseOrderAsReceived",
+        "description": "The system shall allow the Warehouse Staff to mark a specific purchase order as fully or partially received after goods verification.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "RetrieveCurrentItemStockLevel",
+        "description": "The system shall allow the Warehouse Staff to retrieve the current stock level for a specified item using its ID or name.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "GenerateInventoryStatusReport",
+        "description": "The system shall allow the Warehouse Staff to generate a detailed inventory status report, filterable by location, item category, or supplier.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "InitiateInventoryCycleCount",
+        "description": "The system shall allow the Warehouse Staff to initiate a cycle count for a specific inventory location or a defined group of items.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "RecordInventoryCountDiscrepancy",
+        "description": "The system shall allow the Warehouse Staff to record a discrepancy between the physically counted stock and the system's recorded stock for an item.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "IdentifyItemsBelowReorderPoint",
+        "description": "The system shall allow the Warehouse Staff to identify items whose current stock levels have fallen below their predefined reorder points.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "GenerateReplenishmentOrderProposal",
+        "description": "The system shall allow the Warehouse Staff to generate a proposal for a replenishment order, suggesting items and quantities based on demand and stock levels.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "SubmitApprovedReplenishmentOrder",
+        "description": "The system shall allow the Warehouse Staff to submit an approved replenishment order to the procurement system for processing.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "TrackReplenishmentOrderStatus",
+        "description": "The system shall allow the Warehouse Staff to track the current status of outstanding replenishment orders, from submission to expected delivery.",
+        "high_level_associated": {
+          "name": "Manage Warehouse Inventory",
+          "description": "To ensure accurate and sufficient stock levels by verifying incoming goods, continuously monitoring inventory, and managing replenishment processes efficiently.",
+          "actor": {
+            "name": "Warehouse Staff",
+            "description": "Verifies incoming goods, monitors inventory, and manages replenishment."
+          }
+        }
+      },
+      {
+        "name": "Search for a product by identifier",
+        "description": "Allow the Store Clerk to search for a product using its ID, SKU, or name to identify items for a sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Retrieve detailed information for a specific product",
+        "description": "Enable the Store Clerk to view comprehensive details (e.g., price, stock, description) for a selected product to assist customers with their selection.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Add a product to the current sales transaction",
+        "description": "Enable the Store Clerk to add a specified product and quantity to the customer's current sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Adjust the quantity of a product in the current sales transaction",
+        "description": "Enable the Store Clerk to modify the quantity of an existing product within the current sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Remove a product from the current sales transaction",
+        "description": "Enable the Store Clerk to remove a specified product from the current sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Apply a discount to an item or the entire sales transaction",
+        "description": "Allow the Store Clerk to apply a percentage or fixed amount discount to a specific product or the total sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Initiate payment processing for the current sales transaction",
+        "description": "Enable the Store Clerk to begin the process of collecting payment for the current sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Process a cash payment for a sales transaction",
+        "description": "Allow the Store Clerk to record and finalize a cash payment for the outstanding balance of a sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Process a credit or debit card payment for a sales transaction",
+        "description": "Enable the Store Clerk to process a payment using a credit or debit card, integrating with a payment gateway.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Process a gift card payment for a sales transaction",
+        "description": "Enable the Store Clerk to apply a gift card balance towards the payment of a sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Finalize a completed sales transaction",
+        "description": "Allow the Store Clerk to mark the current sales transaction as complete after all items are added and payment is processed.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Generate a receipt for a completed sales transaction",
+        "description": "Enable the Store Clerk to print or email a receipt for a finalized sales transaction.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Void the current sales transaction",
+        "description": "Allow the Store Clerk to cancel and clear the current sales transaction before finalization, if the customer decides not to proceed.",
+        "high_level_associated": {
+          "name": "Efficiently manage complete in-store sales transactions",
+          "description": "To enable Store Clerks to efficiently handle all aspects of an in-store purchase, from assisting with product selection to accurately processing various payment methods, ensuring a smooth and complete sales experience for customers.",
+          "actor": {
+            "name": "Store Clerk",
+            "description": "Assists customers with in-store purchases, processes payments, and handles immediate sales."
+          }
+        }
+      },
+      {
+        "name": "Retrieve all configurable system parameters",
+        "description": "The Administrator fetches a list of all available system parameters that can be configured.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Update a specific system parameter value",
+        "description": "The Administrator modifies the value of an existing system parameter to adjust system behavior.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Create a new user role with specified permissions",
+        "description": "The Administrator defines and adds a new user role to the system, assigning a set of specific permissions to it.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Update permissions for an existing user role",
+        "description": "The Administrator modifies the access rights and capabilities associated with an already defined user role.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Retrieve all defined evaluation criteria for proposals",
+        "description": "The Administrator fetches the list of criteria currently used to evaluate supplier proposals.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Add a new evaluation criterion for supplier proposals",
+        "description": "The Administrator defines and adds a new criterion to be used when evaluating future supplier proposals.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Modify an existing evaluation criterion for supplier proposals",
+        "description": "The Administrator updates the details or parameters of an already defined evaluation criterion.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Initiate a system configuration backup",
+        "description": "The Administrator triggers a process to create a backup of the current system configuration settings.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Restore system configuration from a specified backup point",
+        "description": "The Administrator selects a previous backup and initiates the restoration of the system's configuration to that state.",
+        "high_level_associated": {
+          "name": "Manage System Configurations",
+          "description": "Ensure the information system is correctly set up, maintained, and operates efficiently to support all business processes and user needs.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Browse products by category or keyword",
+        "description": "The Customer interacts with the system to filter or search for products based on specified categories or keywords.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "View detailed product information",
+        "description": "The Customer interacts with the system to retrieve and display comprehensive details for a specific product, including images, descriptions, and specifications.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Add product to shopping cart",
+        "description": "The Customer interacts with the system to add a selected product, along with a specified quantity, to their virtual shopping cart.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Update item quantity in cart",
+        "description": "The Customer interacts with the system to modify the quantity of a specific product already present in their shopping cart.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Remove product from shopping cart",
+        "description": "The Customer interacts with the system to delete a specific product entry from their shopping cart.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Proceed to checkout",
+        "description": "The Customer interacts with the system to initiate the checkout process, transitioning from the shopping cart to the order finalization steps.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Select shipping address",
+        "description": "The Customer interacts with the system to choose or input the desired address for the delivery of their order.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Select a payment method for the order",
+        "description": "The Customer interacts with the system to choose from available payment options (e.g., credit card, digital wallet) for the current order.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Complete payment for the order",
+        "description": "The Customer interacts with the system to finalize the transaction by submitting payment details and confirming the purchase.",
+        "high_level_associated": {
+          "name": "Conveniently purchase products online",
+          "description": "The Customer aims to easily browse, select, and buy desired products through the online platform.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "View order history",
+        "description": "The system should allow the Customer to retrieve a list of all their past and current orders, including basic order identifiers and dates.",
+        "high_level_associated": {
+          "name": "Accurately track order deliveries",
+          "description": "The Customer aims to monitor the real-time status and expected delivery time of their purchased items.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "Track specific order status",
+        "description": "The system should allow the Customer to query the current processing or shipping status for a specific order using its unique identifier.",
+        "high_level_associated": {
+          "name": "Accurately track order deliveries",
+          "description": "The Customer aims to monitor the real-time status and expected delivery time of their purchased items.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "View delivery details",
+        "description": "The system should allow the Customer to retrieve detailed delivery information for a specific order, including the estimated delivery time, current location of the package, and carrier information.",
+        "high_level_associated": {
+          "name": "Accurately track order deliveries",
+          "description": "The Customer aims to monitor the real-time status and expected delivery time of their purchased items.",
+          "actor": {
+            "name": "Customer",
+            "description": "Purchases products online, makes payments, and tracks deliveries."
+          }
+        }
+      },
+      {
+        "name": "View new support tickets",
+        "description": "The system shall allow the Customer Support Agent to retrieve and display a list of newly submitted customer support tickets that are unassigned or pending review.",
+        "high_level_associated": {
+          "name": "Efficiently manage customer support requests",
+          "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+          "actor": {
+            "name": "Customer Support Agent",
+            "description": "Manages customer support requests and tickets."
+          }
+        }
+      },
+      {
+        "name": "Categorize support ticket",
+        "description": "The system shall allow the Customer Support Agent to assign a specific category or type to an existing support ticket, based on the nature of the customer inquiry.",
+        "high_level_associated": {
+          "name": "Efficiently manage customer support requests",
+          "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+          "actor": {
+            "name": "Customer Support Agent",
+            "description": "Manages customer support requests and tickets."
+          }
+        }
+      },
+      {
+        "name": "Assign ticket to self",
+        "description": "The system shall allow the Customer Support Agent to claim ownership of an unassigned support ticket, thereby assigning it to themselves for resolution.",
+        "high_level_associated": {
+          "name": "Efficiently manage customer support requests",
+          "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+          "actor": {
+            "name": "Customer Support Agent",
+            "description": "Manages customer support requests and tickets."
+          }
+        }
+      },
+      {
+        "name": "Update ticket status",
+        "description": "The system shall allow the Customer Support Agent to change the current status of a support ticket (e.g., 'Open', 'In Progress', 'Resolved', 'Closed', 'Pending Customer Reply').",
+        "high_level_associated": {
+          "name": "Efficiently manage customer support requests",
+          "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+          "actor": {
+            "name": "Customer Support Agent",
+            "description": "Manages customer support requests and tickets."
+          }
+        }
+      },
+      {
+        "name": "Reassign support ticket",
+        "description": "The system shall allow the Customer Support Agent to transfer an assigned support ticket to another Customer Support Agent or a different support team.",
+        "high_level_associated": {
+          "name": "Efficiently manage customer support requests",
+          "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+          "actor": {
+            "name": "Customer Support Agent",
+            "description": "Manages customer support requests and tickets."
+          }
+        }
+      },
+      {
+        "name": "Manage response deadlines",
+        "description": "The system shall allow the Customer Support Agent to view, set, or modify the response deadline for a specific support ticket.",
+        "high_level_associated": {
+          "name": "Efficiently manage customer support requests",
+          "description": "The Customer Support Agent aims to effectively receive, categorize, and process customer inquiries and issues through a ticketing system.",
+          "actor": {
+            "name": "Customer Support Agent",
+            "description": "Manages customer support requests and tickets."
+          }
+        }
+      },
+      {
+        "name": "Generate sales report",
+        "description": "Allows the Manager to initiate the creation of a detailed report on sales performance, including revenue, volume, and trends.",
+        "high_level_associated": {
+          "name": "Gain comprehensive business insights",
+          "description": "The Manager aims to access and analyze detailed data on orders, sales, inventory, and customer support to understand overall business performance.",
+          "actor": {
+            "name": "Manager",
+            "description": "Analyzes business data concerning orders, sales, inventory, and customer support."
+          }
+        }
+      },
+      {
+        "name": "View inventory report",
+        "description": "Allows the Manager to access and display a report showing current inventory levels, stock movements, and availability.",
+        "high_level_associated": {
+          "name": "Gain comprehensive business insights",
+          "description": "The Manager aims to access and analyze detailed data on orders, sales, inventory, and customer support to understand overall business performance.",
+          "actor": {
+            "name": "Manager",
+            "description": "Analyzes business data concerning orders, sales, inventory, and customer support."
+          }
+        }
+      },
+      {
+        "name": "Retrieve customer support metrics",
+        "description": "Allows the Manager to fetch key performance indicators related to customer support operations, such as response times, resolution rates, and ticket volumes.",
+        "high_level_associated": {
+          "name": "Gain comprehensive business insights",
+          "description": "The Manager aims to access and analyze detailed data on orders, sales, inventory, and customer support to understand overall business performance.",
+          "actor": {
+            "name": "Manager",
+            "description": "Analyzes business data concerning orders, sales, inventory, and customer support."
+          }
+        }
+      },
+      {
+        "name": "Generate orders report",
+        "description": "Allows the Manager to initiate the creation of a detailed report on order processing, status, and fulfillment metrics.",
+        "high_level_associated": {
+          "name": "Gain comprehensive business insights",
+          "description": "The Manager aims to access and analyze detailed data on orders, sales, inventory, and customer support to understand overall business performance.",
+          "actor": {
+            "name": "Manager",
+            "description": "Analyzes business data concerning orders, sales, inventory, and customer support."
+          }
+        }
+      },
+      {
+        "name": "View orders report",
+        "description": "Allows the Manager to access and display a report showing current and historical order data, including status, items, and customer information.",
+        "high_level_associated": {
+          "name": "Gain comprehensive business insights",
+          "description": "The Manager aims to access and analyze detailed data on orders, sales, inventory, and customer support to understand overall business performance.",
+          "actor": {
+            "name": "Manager",
+            "description": "Analyzes business data concerning orders, sales, inventory, and customer support."
+          }
+        }
+      },
+      {
+        "name": "Create a new product proposal draft",
+        "description": "The Supplier initiates the creation of a new product proposal, generating a unique identifier for the draft.",
+        "high_level_associated": {
+          "name": "Manage Product Proposals",
+          "description": "To effectively create, submit, and monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process by La Reine Marlene.",
+          "actor": {
+            "name": "Supplier",
+            "description": "Submits product proposals to the company."
+          }
+        }
+      },
+      {
+        "name": "Add product details to a proposal draft",
+        "description": "The Supplier populates a specific product proposal draft with detailed information such as product name, description, pricing, and specifications.",
+        "high_level_associated": {
+          "name": "Manage Product Proposals",
+          "description": "To effectively create, submit, and monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process by La Reine Marlene.",
+          "actor": {
+            "name": "Supplier",
+            "description": "Submits product proposals to the company."
+          }
+        }
+      },
+      {
+        "name": "Submit a product proposal for evaluation",
+        "description": "The Supplier formally submits a completed product proposal draft to La Reine Marlene for review and evaluation.",
+        "high_level_associated": {
+          "name": "Manage Product Proposals",
+          "description": "To effectively create, submit, and monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process by La Reine Marlene.",
+          "actor": {
+            "name": "Supplier",
+            "description": "Submits product proposals to the company."
+          }
+        }
+      },
+      {
+        "name": "Retrieve a list of all submitted product proposals",
+        "description": "The Supplier requests and receives a comprehensive list of all product proposals they have submitted, including their current high-level status.",
+        "high_level_associated": {
+          "name": "Manage Product Proposals",
+          "description": "To effectively create, submit, and monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process by La Reine Marlene.",
+          "actor": {
+            "name": "Supplier",
+            "description": "Submits product proposals to the company."
+          }
+        }
+      },
+      {
+        "name": "Retrieve the detailed status of a specific product proposal",
+        "description": "The Supplier queries the system to obtain the detailed current status and any relevant updates for a particular submitted product proposal.",
+        "high_level_associated": {
+          "name": "Manage Product Proposals",
+          "description": "To effectively create, submit, and monitor the status of product proposals, ensuring visibility into the evaluation and acceptance process by La Reine Marlene.",
+          "actor": {
+            "name": "Supplier",
+            "description": "Submits product proposals to the company."
+          }
+        }
+      },
+      {
+        "name": "Retrieve all submitted supplier proposals",
+        "description": "The Administrator needs to retrieve a list of all supplier proposals that have been submitted to the system for evaluation.",
+        "high_level_associated": {
+          "name": "Ensure optimal supplier selection",
+          "description": "The Administrator aims to effectively evaluate all submitted supplier proposals to identify and select the most suitable and advantageous product offerings for the company, aligning with strategic objectives and ensuring value for money.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Retrieve details for a specific supplier proposal",
+        "description": "The Administrator needs to retrieve and view the comprehensive details of a particular supplier proposal to perform a thorough evaluation.",
+        "high_level_associated": {
+          "name": "Ensure optimal supplier selection",
+          "description": "The Administrator aims to effectively evaluate all submitted supplier proposals to identify and select the most suitable and advantageous product offerings for the company, aligning with strategic objectives and ensuring value for money.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Submit an evaluation score for a supplier proposal",
+        "description": "The Administrator needs to submit a numerical or qualitative evaluation score for a specific supplier proposal based on predefined criteria.",
+        "high_level_associated": {
+          "name": "Ensure optimal supplier selection",
+          "description": "The Administrator aims to effectively evaluate all submitted supplier proposals to identify and select the most suitable and advantageous product offerings for the company, aligning with strategic objectives and ensuring value for money.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Mark a supplier proposal as approved",
+        "description": "The Administrator needs to formally mark a specific supplier proposal as approved, indicating its selection for further processing.",
+        "high_level_associated": {
+          "name": "Ensure optimal supplier selection",
+          "description": "The Administrator aims to effectively evaluate all submitted supplier proposals to identify and select the most suitable and advantageous product offerings for the company, aligning with strategic objectives and ensuring value for money.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      },
+      {
+        "name": "Mark a supplier proposal as rejected",
+        "description": "The Administrator needs to formally mark a specific supplier proposal as rejected, indicating it will not be considered.",
+        "high_level_associated": {
+          "name": "Ensure optimal supplier selection",
+          "description": "The Administrator aims to effectively evaluate all submitted supplier proposals to identify and select the most suitable and advantageous product offerings for the company, aligning with strategic objectives and ensuring value for money.",
+          "actor": {
+            "name": "Administrator",
+            "description": "Evaluates supplier proposals and manages system configurations."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description outlines functional requirements for Suppliers, Administrators, Warehouse Staff, Customers, Customer Support Agents, Managers, and Store Clerks. All explicit actor-level responsibilities are covered by the current High-Level Goals. Specifically: Supplier proposal submission and monitoring is covered by 'Manage Product Proposals'; Administrator evaluation and configuration are covered by 'Ensure optimal supplier selection' and 'Manage System Configurations'; Warehouse inventory, verification, and replenishment are covered by 'Manage Warehouse Inventory'; Customer online purchasing and delivery tracking are covered by 'Conveniently purchase products online' and 'Accurately track order deliveries'; Support ticket management is covered by 'Efficiently manage customer support requests'; Manager analytics are covered by 'Gain comprehensive business insights'; and Store Clerk in-store sales are covered by 'Efficiently manage complete in-store sales transactions'. No documented functional requirement is left uncovered.",
+    "quality_score": 5,
+    "missing_goal_requests": [],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "NO_MISSING_HIGH_LEVEL_GOALS": 3
+    }
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "administrator::effectively evaluate supplier proposals": 1,
+    "administrator::maintain optimal system configuration": 1,
+    "customer::conveniently purchase products online": 1,
+    "customer::accurately track order deliveries": 1,
+    "customer support agent::efficiently manage customer support requests": 1,
+    "manager::gain comprehensive business insights": 1,
+    "supplier::manage product proposals": 1,
+    "administrator::ensure optimal supplier selection": 1
+  },
+  "warnings": []
+}

@@ -55,12 +55,6 @@ class Critique(BaseModel):
     comment: str
 
 
-class ConfidenceLevel(str, Enum):
-    HIGH = "HIGH"
-    MEDIUM = "MEDIUM"
-    LOW = "LOW"
-
-
 class GoalBranch(BaseModel):
     branch_id: str
     high_level_goal: HighLevelGoal
@@ -86,8 +80,12 @@ class HighLevelGoalDecision(str, Enum):
 class HighLevelGoalEvaluation(BaseModel):
     rationale: str
     decision: HighLevelGoalDecision
+    quality_score: int = Field(ge=0, le=5)
     rewriting_focus: str | None = None
-    confidence: ConfidenceLevel
+    voter_count: int = 1
+    valid_vote_count: int = 1
+    winning_vote_count: int = 1
+    vote_distribution: dict[str, int] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def check_rewriting_focus(self):
@@ -110,10 +108,14 @@ class LowLevelGoalDecision(str, Enum):
 class LowLevelGoalEvaluation(BaseModel):
     rationale: str
     decision: LowLevelGoalDecision
+    quality_score: int = Field(ge=0, le=5)
     regeneration_feedback: str | None = None
     unsupported_or_misleading_llg_ids: list[str] = Field(default_factory=list)
     missing_essential_capabilities: list[str] = Field(default_factory=list)
-    confidence: ConfidenceLevel
+    voter_count: int = 1
+    valid_vote_count: int = 1
+    winning_vote_count: int = 1
+    vote_distribution: dict[str, int] = Field(default_factory=dict)
 
     @field_validator("unsupported_or_misleading_llg_ids", mode="before")
     @classmethod
@@ -129,6 +131,7 @@ class LowLevelGoalEvaluation(BaseModel):
 class MissingHighLevelGoalDecision(str, Enum):
     NO_MISSING = "NO_MISSING_HIGH_LEVEL_GOALS"
     FOUND = "MISSING_HIGH_LEVEL_GOALS_FOUND"
+    INCONCLUSIVE = "MISSING_HIGH_LEVEL_GOAL_EVALUATION_INCONCLUSIVE"
 
 
 class MissingHighLevelGoalRequest(BaseModel):
@@ -139,9 +142,14 @@ class MissingHighLevelGoalRequest(BaseModel):
 class MissingHighLevelGoalEvaluation(BaseModel):
     decision: MissingHighLevelGoalDecision
     rationale: str
+    quality_score: int = Field(ge=0, le=5)
     missing_goal_requests: list[MissingHighLevelGoalRequest] = Field(
         default_factory=list
     )
+    voter_count: int = 1
+    valid_vote_count: int = 1
+    winning_vote_count: int = 1
+    vote_distribution: dict[str, int] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def validate_requests(self):
@@ -152,6 +160,10 @@ class MissingHighLevelGoalEvaluation(BaseModel):
         if self.decision == MissingHighLevelGoalDecision.NO_MISSING and self.missing_goal_requests:
             raise ValueError(
                 "NO_MISSING_HIGH_LEVEL_GOALS cannot contain requests."
+            )
+        if self.decision == MissingHighLevelGoalDecision.INCONCLUSIVE and self.missing_goal_requests:
+            raise ValueError(
+                "An inconclusive coverage vote cannot contain requests."
             )
         return self
 
@@ -203,7 +215,6 @@ class LowLevelGoalRegenerationRequest(BaseModel):
     existing_low_level_goals: LowLevelGoals = Field(
         default_factory=lambda: LowLevelGoals(low_level_goals=[])
     )
-    max_goals_by_parent_name: dict[str, int] = Field(default_factory=dict)
 
 
 class GlobalGoalCycleStopReason(str, Enum):

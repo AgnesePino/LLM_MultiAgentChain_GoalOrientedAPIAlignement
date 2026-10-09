@@ -1,0 +1,475 @@
+{
+  "iteration": 1,
+  "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Enable the App User to comprehensively manage their physical activity records.",
+      "rationale": "The low-level goals collectively describe the full lifecycle of managing physical activity data within the application. This includes initiating, pausing, resuming, and ending real-time activity tracking, as well as manually adding, modifying, removing, and retrieving historical activity entries. All operations are centered around the user's ability to control and review their personal activity data.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "InitiateActivityRecording",
+        "PauseActivityRecording",
+        "ResumeActivityRecording",
+        "StopActivityRecording",
+        "ManuallyAddPastActivity",
+        "EditRecordedActivityDetails",
+        "DeleteRecordedActivity",
+        "RetrieveActivityHistory"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Enable Users to Analyze and Visualize Their Fitness Performance",
+      "rationale": "The low-level goals collectively aim to provide the App User with comprehensive tools to process, display, and interpret their fitness data. They allow users to retrieve aggregated metrics, visualize trends, compare performance against historical data, and filter information, all of which are essential for understanding and evaluating their fitness progress and performance over time.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "GetAggregatedActivityMetrics",
+        "GeneratePerformanceTrendGraph",
+        "ComparePerformanceData",
+        "FilterActivityDataByType"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Enable App Users to Manage Their Fitness Goals",
+      "rationale": "The low-level goals collectively describe the full lifecycle management of fitness goals for an App User. They cover creating new goals, modifying existing ones, removing them, tracking progress towards them, and manually marking them as achieved. All these operations are fundamental to providing a comprehensive fitness goal management capability.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "CreateFitnessGoal",
+        "UpdateFitnessGoal",
+        "DeleteFitnessGoal",
+        "RetrieveGoalProgress",
+        "MarkGoalAsAchieved"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Enable Users to Obtain and Manage Personalized Workout Recommendations",
+      "rationale": "The low-level goals collectively describe a comprehensive process for users to receive workout recommendations tailored to their needs (llg_001, llg_002), provide feedback to refine future suggestions (llg_003), and save and access preferred routines (llg_004, llg_005). All these operations are essential for a user to effectively find, personalize, and retain suitable workout plans.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "RequestWorkoutRecommendationsByGoal",
+        "RequestWorkoutRecommendationsByHistory",
+        "ProvideRecommendationFeedback",
+        "SaveRecommendedWorkoutRoutine",
+        "RetrieveSavedWorkoutRoutines"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original goal 'Track Physical Activities' is supported by the project description and the bottom-up reconstruction. It represents a distinct, independently satisfiable stakeholder outcome (recording and managing activity data) that is separate from monitoring progress (analyzing trends), setting goals (defining targets), or receiving recommendations (getting advice). The other HLGs do not entail this specific data management intention. The scope is appropriate for a high-level goal in this domain. Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include several specific lifecycle operations (Pause, Resume, Delete, Edit) that are not explicitly stated or necessarily entailed by the project description or the parent HLG description. The parent goal is to 'accurately record and log' activities to maintain a 'comprehensive history'. While 'record' implies creation (Initiate/Manual Add) and 'history' implies retrieval (Retrieve), it does not explicitly authorize the complex state management of pausing/resuming real-time sessions, nor does it explicitly authorize the modification (Edit) or removal (Delete) of records. In strict requirements engineering, CRUD operations like Edit and Delete are distinct capabilities that must be explicitly documented to be included; they are not automatically entailed by the ability to 'record' or 'maintain history'. Similarly, Pause/Resume are specific implementation details of 'recording' that are not documented. Therefore, these LLGs are considered unsupported additions.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original goal 'Track Physical Activities' is supported by the project description and the bottom-up reconstruction. It represents a distinct, independently satisfiable stakeholder outcome (recording and managing activity data) that is separate from monitoring progress (analyzing trends), setting goals (defining targets), or receiving recommendations (getting advice). The other HLGs do not entail this specific data management intention. The scope is appropriate for a high-level goal in this domain.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include several specific lifecycle operations (Pause, Resume, Delete, Edit) that are not explicitly stated or necessarily entailed by the project description or the parent HLG description. The parent goal is to 'accurately record and log' activities to maintain a 'comprehensive history'. While 'record' implies creation (Initiate/Manual Add) and 'history' implies retrieval (Retrieve), it does not explicitly authorize the complex state management of pausing/resuming real-time sessions, nor does it explicitly authorize the modification (Edit) or removal (Delete) of records. In strict requirements engineering, CRUD operations like Edit and Delete are distinct capabilities that must be explicitly documented to be included; they are not automatically entailed by the ability to 'record' or 'maintain history'. Similarly, Pause/Resume are specific implementation details of 'recording' that are not documented. Therefore, these LLGs are considered unsupported additions.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove unsupported LLGs for Pause, Resume, Edit, and Delete. Retain Initiate, Manually Add, and Retrieve as they are directly supported by 'record', 'log', and 'history'.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_002",
+          "llg_003",
+          "llg_006",
+          "llg_007"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 2,
+          "KEEP_LOW_LEVEL_GOALS": 1
+        }
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Monitor Fitness Progress' is explicitly supported by the project description ('monitor progress') and the actor description. It represents a distinct stakeholder outcome (analyzing and visualizing trends/improvements) that is separate from 'Track Physical Activities' (data entry/logging), 'Set and Manage Fitness Goals' (target definition), and 'Receive Personalized Workout Recommendations' (advice generation). The bottom-up reconstruction 'Enable Users to Analyze and Visualize Their Fitness Performance' aligns semantically with the original goal, confirming its validity and appropriate granularity. There is no redundancy with sibling goals, as monitoring progress is the analytical layer built upon the data from tracking activities. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Monitor Fitness Progress'. 'GetAggregatedActivityMetrics' supports understanding performance over time; 'GeneratePerformanceTrendGraph' directly addresses the need to visualize trends; 'ComparePerformanceData' enables identifying improvements against historical baselines; and 'FilterActivityDataByType' allows for focused analysis of specific activity types. All LLGs are supported by the parent goal's description ('visualize and understand their fitness journey over time, identifying trends and improvements') and the project description ('monitor progress'). There are no unsupported capabilities (e.g., notifications or external sharing) and no essential capabilities explicitly required by the parent are missing. The decomposition is precise and consistent with the sibling goals, avoiding duplication of data entry (Track Physical Activities) or goal setting (Set and Manage Fitness Goals).",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Monitor Fitness Progress' is explicitly supported by the project description ('monitor progress') and the actor description. It represents a distinct stakeholder outcome (analyzing and visualizing trends/improvements) that is separate from 'Track Physical Activities' (data entry/logging), 'Set and Manage Fitness Goals' (target definition), and 'Receive Personalized Workout Recommendations' (advice generation). The bottom-up reconstruction 'Enable Users to Analyze and Visualize Their Fitness Performance' aligns semantically with the original goal, confirming its validity and appropriate granularity. There is no redundancy with sibling goals, as monitoring progress is the analytical layer built upon the data from tracking activities.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Monitor Fitness Progress'. 'GetAggregatedActivityMetrics' supports understanding performance over time; 'GeneratePerformanceTrendGraph' directly addresses the need to visualize trends; 'ComparePerformanceData' enables identifying improvements against historical baselines; and 'FilterActivityDataByType' allows for focused analysis of specific activity types. All LLGs are supported by the parent goal's description ('visualize and understand their fitness journey over time, identifying trends and improvements') and the project description ('monitor progress'). There are no unsupported capabilities (e.g., notifications or external sharing) and no essential capabilities explicitly required by the parent are missing. The decomposition is precise and consistent with the sibling goals, avoiding duplication of data entry (Track Physical Activities) or goal setting (Set and Manage Fitness Goals).",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Set and Manage Fitness Goals' is explicitly supported by the project description ('set fitness goals') and the actor description. It represents a distinct stakeholder outcome (defining and managing targets) that is separate from 'Track Physical Activities' (data logging), 'Monitor Fitness Progress' (analyzing trends), and 'Receive Personalized Workout Recommendations' (advice). The bottom-up reconstruction 'Enable App Users to Manage Their Fitness Goals' aligns semantically with the original goal, confirming its validity. The goal is not a mere workflow fragment of another goal but an independent capability area. Therefore, it should be kept. Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect. 'MarkGoalAsAchieved' (llg_005) is unsupported because the documentation does not entail a manual override mechanism to mark goals as achieved when the system has not detected full completion; this is an invented functionality not grounded in the parent HLG or project description. Additionally, the parent HLG explicitly requires the user to 'define specific, measurable fitness objectives,' but there is no LLG for viewing or retrieving the list of existing goals (distinct from viewing progress of a specific goal). Without a way to view the list of defined goals, the user cannot effectively manage them or select which one to update/delete, making this an essential missing capability for the 'Manage' aspect of the HLG.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Set and Manage Fitness Goals' is explicitly supported by the project description ('set fitness goals') and the actor description. It represents a distinct stakeholder outcome (defining and managing targets) that is separate from 'Track Physical Activities' (data logging), 'Monitor Fitness Progress' (analyzing trends), and 'Receive Personalized Workout Recommendations' (advice). The bottom-up reconstruction 'Enable App Users to Manage Their Fitness Goals' aligns semantically with the original goal, confirming its validity. The goal is not a mere workflow fragment of another goal but an independent capability area. Therefore, it should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect. 'MarkGoalAsAchieved' (llg_005) is unsupported because the documentation does not entail a manual override mechanism to mark goals as achieved when the system has not detected full completion; this is an invented functionality not grounded in the parent HLG or project description. Additionally, the parent HLG explicitly requires the user to 'define specific, measurable fitness objectives,' but there is no LLG for viewing or retrieving the list of existing goals (distinct from viewing progress of a specific goal). Without a way to view the list of defined goals, the user cannot effectively manage them or select which one to update/delete, making this an essential missing capability for the 'Manage' aspect of the HLG.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove 'MarkGoalAsAchieved' as it is unsupported. Add a capability to 'ViewListOfFitnessGoals' to allow users to see their defined objectives, which is essential for managing them.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_005"
+        ],
+        "missing_essential_capabilities": [
+          "View list of existing fitness goals"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 1,
+          "REGENERATE_LOW_LEVEL_GOALS": 2
+        }
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Receive Personalized Workout Recommendations' is explicitly supported by the project description ('receive personalized workout recommendations') and the actor description. It represents a distinct stakeholder outcome (obtaining tailored advice) that is separate from tracking activities, monitoring progress, or setting goals. The bottom-up reconstruction 'Enable Users to Obtain and Manage Personalized Workout Recommendations' aligns semantically with the original goal, confirming its validity. The goal is not a mere workflow fragment of another goal but an independent capability area. Therefore, it should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain material defects. Specifically, 'ProvideRecommendationFeedback' (llg_003), 'SaveRecommendedWorkoutRoutine' (llg_004), and 'RetrieveSavedWorkoutRoutines' (llg_005) are unsupported by the documentation. The project description and parent HLG only state that users 'receive personalized workout recommendations' tailored to their level, preferences, and goals. There is no mention of a feedback mechanism, a personal library, or saving/retrieving routines. These are conventional features but not entailed by the supplied text. Furthermore, the parent HLG explicitly mentions alignment with 'preferences', but there is no LLG for specifying or updating user preferences (e.g., exercise types, equipment availability, time constraints) which is essential for the personalization aspect distinct from goal or history-based requests.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Receive Personalized Workout Recommendations' is explicitly supported by the project description ('receive personalized workout recommendations') and the actor description. It represents a distinct stakeholder outcome (obtaining tailored advice) that is separate from tracking activities, monitoring progress, or setting goals. The bottom-up reconstruction 'Enable Users to Obtain and Manage Personalized Workout Recommendations' aligns semantically with the original goal, confirming its validity. The goal is not a mere workflow fragment of another goal but an independent capability area. Therefore, it should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain material defects. Specifically, 'ProvideRecommendationFeedback' (llg_003), 'SaveRecommendedWorkoutRoutine' (llg_004), and 'RetrieveSavedWorkoutRoutines' (llg_005) are unsupported by the documentation. The project description and parent HLG only state that users 'receive personalized workout recommendations' tailored to their level, preferences, and goals. There is no mention of a feedback mechanism, a personal library, or saving/retrieving routines. These are conventional features but not entailed by the supplied text. Furthermore, the parent HLG explicitly mentions alignment with 'preferences', but there is no LLG for specifying or updating user preferences (e.g., exercise types, equipment availability, time constraints) which is essential for the personalization aspect distinct from goal or history-based requests.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove the unsupported LLGs for feedback, saving, and retrieving routines. Add an LLG for 'SpecifyUserFitnessPreferences' to support the 'preferences' aspect of personalization mentioned in the parent HLG.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_003",
+          "llg_004",
+          "llg_005"
+        ],
+        "missing_essential_capabilities": [
+          "Specify user fitness preferences"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Track Physical Activities",
+        "description": "The App User aims to accurately record and log various physical activities to maintain a comprehensive history of their workouts.",
+        "actor": {
+          "name": "App User",
+          "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+        }
+      },
+      {
+        "name": "Monitor Fitness Progress",
+        "description": "The App User seeks to visualize and understand their fitness journey over time, identifying trends and improvements in their performance.",
+        "actor": {
+          "name": "App User",
+          "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+        }
+      },
+      {
+        "name": "Set and Manage Fitness Goals",
+        "description": "The App User desires to define specific, measurable fitness objectives and track their advancement towards achieving these targets.",
+        "actor": {
+          "name": "App User",
+          "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+        }
+      },
+      {
+        "name": "Receive Personalized Workout Recommendations",
+        "description": "The App User expects to get tailored suggestions for exercises and routines that align with their fitness level, preferences, and goals.",
+        "actor": {
+          "name": "App User",
+          "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "GetAggregatedActivityMetrics",
+        "description": "The App User can retrieve aggregated fitness metrics (e.g., total distance, average pace) for a specified period (e.g., week, month).",
+        "high_level_associated": {
+          "name": "Monitor Fitness Progress",
+          "description": "The App User seeks to visualize and understand their fitness journey over time, identifying trends and improvements in their performance.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "GeneratePerformanceTrendGraph",
+        "description": "The App User can request the generation of a visual graph showing the trend of a specific fitness metric (e.g., running pace) over a selected time frame.",
+        "high_level_associated": {
+          "name": "Monitor Fitness Progress",
+          "description": "The App User seeks to visualize and understand their fitness journey over time, identifying trends and improvements in their performance.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "ComparePerformanceData",
+        "description": "The App User can compare their current performance for a specific metric against historical averages or previous periods.",
+        "high_level_associated": {
+          "name": "Monitor Fitness Progress",
+          "description": "The App User seeks to visualize and understand their fitness journey over time, identifying trends and improvements in their performance.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "FilterActivityDataByType",
+        "description": "The App User can filter their activity history and aggregated data to display only specific types of activities (e.g., 'running', 'cycling').",
+        "high_level_associated": {
+          "name": "Monitor Fitness Progress",
+          "description": "The App User seeks to visualize and understand their fitness journey over time, identifying trends and improvements in their performance.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "CreateFitnessGoal",
+        "description": "The App User can define a new fitness goal, specifying the target metric, value, and an optional deadline.",
+        "high_level_associated": {
+          "name": "Set and Manage Fitness Goals",
+          "description": "The App User desires to define specific, measurable fitness objectives and track their advancement towards achieving these targets.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "UpdateFitnessGoal",
+        "description": "The App User can modify the details (e.g., target value, deadline) of an existing fitness goal.",
+        "high_level_associated": {
+          "name": "Set and Manage Fitness Goals",
+          "description": "The App User desires to define specific, measurable fitness objectives and track their advancement towards achieving these targets.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "DeleteFitnessGoal",
+        "description": "The App User can remove an existing fitness goal from their profile.",
+        "high_level_associated": {
+          "name": "Set and Manage Fitness Goals",
+          "description": "The App User desires to define specific, measurable fitness objectives and track their advancement towards achieving these targets.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "RetrieveGoalProgress",
+        "description": "The App User can view their current progress towards a specific fitness goal, including percentage completion and remaining target.",
+        "high_level_associated": {
+          "name": "Set and Manage Fitness Goals",
+          "description": "The App User desires to define specific, measurable fitness objectives and track their advancement towards achieving these targets.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "MarkGoalAsAchieved",
+        "description": "The App User can manually mark a fitness goal as achieved, even if the target has not been fully met by the system.",
+        "high_level_associated": {
+          "name": "Set and Manage Fitness Goals",
+          "description": "The App User desires to define specific, measurable fitness objectives and track their advancement towards achieving these targets.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "RequestWorkoutRecommendationsByGoal",
+        "description": "The App User can request workout recommendations tailored to help them achieve a specific, active fitness goal.",
+        "high_level_associated": {
+          "name": "Receive Personalized Workout Recommendations",
+          "description": "The App User expects to get tailored suggestions for exercises and routines that align with their fitness level, preferences, and goals.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "RequestWorkoutRecommendationsByHistory",
+        "description": "The App User can request workout recommendations based on their past activity history and performance data.",
+        "high_level_associated": {
+          "name": "Receive Personalized Workout Recommendations",
+          "description": "The App User expects to get tailored suggestions for exercises and routines that align with their fitness level, preferences, and goals.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "ProvideRecommendationFeedback",
+        "description": "The App User can submit feedback on a received workout recommendation (e.g., 'too easy', 'too hard', 'irrelevant').",
+        "high_level_associated": {
+          "name": "Receive Personalized Workout Recommendations",
+          "description": "The App User expects to get tailored suggestions for exercises and routines that align with their fitness level, preferences, and goals.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "SaveRecommendedWorkoutRoutine",
+        "description": "The App User can save a specific recommended workout routine to their personal library for future access.",
+        "high_level_associated": {
+          "name": "Receive Personalized Workout Recommendations",
+          "description": "The App User expects to get tailored suggestions for exercises and routines that align with their fitness level, preferences, and goals.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSavedWorkoutRoutines",
+        "description": "The App User can access and view a list of all workout routines they have previously saved.",
+        "high_level_associated": {
+          "name": "Receive Personalized Workout Recommendations",
+          "description": "The App User expects to get tailored suggestions for exercises and routines that align with their fitness level, preferences, and goals.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "InitiateActivityRecording",
+        "description": "The App User initiates the recording of a new physical activity session.",
+        "high_level_associated": {
+          "name": "Track Physical Activities",
+          "description": "The App User aims to accurately record and log various physical activities to maintain a comprehensive history of their workouts.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "StopActivityRecording",
+        "description": "The App User concludes the active recording of a physical activity session, finalizing its data.",
+        "high_level_associated": {
+          "name": "Track Physical Activities",
+          "description": "The App User aims to accurately record and log various physical activities to maintain a comprehensive history of their workouts.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "ManuallyAddPastActivity",
+        "description": "The App User manually inputs details for a physical activity that was not recorded in real-time.",
+        "high_level_associated": {
+          "name": "Track Physical Activities",
+          "description": "The App User aims to accurately record and log various physical activities to maintain a comprehensive history of their workouts.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      },
+      {
+        "name": "RetrieveActivityHistory",
+        "description": "The App User requests to view a chronological list or summary of all their recorded and manually logged physical activities.",
+        "high_level_associated": {
+          "name": "Track Physical Activities",
+          "description": "The App User aims to accurately record and log various physical activities to maintain a comprehensive history of their workouts.",
+          "actor": {
+            "name": "App User",
+            "description": "An individual utilizing the fitness application to track activities, monitor progress, set goals, and receive personalized recommendations, catering to both beginners and enthusiasts."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description explicitly lists four core capabilities: tracking physical activities, monitoring progress, setting fitness goals, and receiving personalized workout recommendations. The current High-Level Goals list contains exactly one HLG for each of these capabilities, with descriptions that semantically entail the outcomes described in the project text. There are no other actors mentioned, and no additional functional requirements or responsibilities are documented in the description that are not covered by the existing HLGs.",
+    "quality_score": 5,
+    "missing_goal_requests": [],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "NO_MISSING_HIGH_LEVEL_GOALS": 3
+    }
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "app user::track physical activities": 1
+  },
+  "warnings": []
+}

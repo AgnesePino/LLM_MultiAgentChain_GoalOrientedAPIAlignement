@@ -57,18 +57,20 @@ that description: README sections, OpenAPI evidence, issues, interviews, or
 other artifacts that were not included in it cannot currently produce new
 requirements.
 
-Each HLG defines one branch and every LLG is assigned to its parent HLG by
-normalized actor and HLG name. A unique name-only fallback handles a paraphrased
-actor reference. The top-down baseline is never overwritten; the combined result
-and the complete iteration trace are stored separately under
+Each LLG already contains the structured `high_level_associated` parent emitted
+by the original top-down pipeline. The bottom-up phase groups LLGs by that
+embedded object without matching names, applying actor fallbacks, or rewriting
+the relationship. Before the cycle starts, it rejects a baseline if an embedded
+parent is not an exact member of `structuredHighLevelGoals`. The top-down
+baseline is never overwritten; the combined result and the complete iteration
+trace are stored separately under
 `output/top_down_bottom_up/` and `output/bottom_up_iterations/`.
 
 ### Execution algorithm
 
 During each iteration, the orchestrator performs the following operations:
 
-1. removes HLGs that have no associated LLG and deduplicates HLGs by normalized
-   actor/name identity;
+1. builds the branch view directly from each LLG's embedded top-down parent;
 2. reconstructs one diagnostic HLG from the LLGs of every active branch, without
    showing the original parent HLG to the reconstructor;
 3. evaluates the original HLG with a dedicated prompt using the reconstruction,
@@ -78,7 +80,8 @@ During each iteration, the orchestrator performs the following operations:
 5. runs a third, project-wide coverage prompt over the description and current
    HLG set, considering explicit and workflow-implied intentions for existing
    actors;
-6. applies a bounded state change and starts a new iteration;
+6. applies a bounded set of corrections to the current goal hierarchy and
+   starts a new iteration;
 7. stops when all branches are confirmed and no missing HLG is reported, when no
    executable action remains, or when the iteration limit is reached.
 
@@ -86,18 +89,35 @@ The three bottom-up evaluator prompts share one bounded critic conversation per
 project. After each iteration, the orchestrator records the HLG additions,
 removals or replacements and the LLG additions or removals that were actually
 applied for each parent.
-From iteration two onward, that previous-iteration state is included explicitly
-in every critic request. The first iteration receives only the initial state.
+From iteration two onward, that previous-iteration hierarchy summary is included
+explicitly in every critic request. The first iteration receives only a summary
+of the initial hierarchy.
 Generators, reconstruction, top-down evaluation, and different projects do not
 share this memory. The retained context is compact: it contains at most four
-recent evaluator exchanges, two state updates, and 2,500 characters of critic
-history rather than replaying complete earlier prompts.
+recent evaluator exchanges, two hierarchy-update summaries, and 2,500
+characters of critic history rather than replaying complete earlier prompts.
 
 Each of the three critic prompts includes task-specific few-shot examples. The
 HLG prompt calibrates `KEEP`, `REWRITE`, and `REMOVE`; the LLG prompt contrasts
 valid API-mappable decompositions with material coverage defects; the global
 prompt distinguishes genuinely missing actor intentions from narrower variants
 of goals that are already covered.
+
+Every bottom-up evaluator decision uses three independent parallel calls and a
+2-of-3 majority. Each voter also assigns the current artifact a quality score
+from 0 to 5 using task-specific examples: scores 3, 4, and 5 pass, while scores
+0, 1, and 2 require a corrective decision. A vote whose score conflicts with
+its decision is discarded before aggregation. Five voters with a 3-of-5 quorum
+can be selected through `BOTTOM_UP_EVALUATOR_VOTERS=5`. All voters see the same
+immutable conversation snapshot, and only the aggregated verdict is written to
+memory and to the iteration trace. An invalid individual response is retried
+once by default; `BOTTOM_UP_EVALUATOR_VOTE_ATTEMPTS` accepts values from 1 to 3.
+
+Bottom-up HLG rewrites and discoveries, and bottom-up LLG regenerations, use
+Zero-shot generation followed by the enabled Few-shot top-down critic. Actor
+extraction is not repeated during this phase; the actors persisted by the
+baseline are reused. The bottom-up generation setting is explicit and does not
+inherit an older baseline's extraction profile.
 
 The orchestrator default is 5 iterations, while the current bottom-up notebook
 sets an explicit experimental limit of 25. A confirmed branch is skipped while
@@ -106,27 +126,34 @@ those confirmations and triggers a complete branch audit in the next iteration.
 Branches are identified by stable actor/HLG identity rather than positional
 `branch_NNN` identifiers.
 
-| Evaluator decision | Current state transition | Creates a new branch? |
+| Evaluator decision | Current hierarchy update | Creates a new branch? |
 |---|---|---|
 | `CONFIRM_BRANCH` | Preserves the branch until the HLG structure changes | No |
 | `REWRITE_ORIGINAL_HIGH_LEVEL_GOAL` | Calls the top-down HLG generator, replaces one HLG, and regenerates its LLGs | Replacement, not net discovery |
 | `REMOVE_ORIGINAL_HIGH_LEVEL_GOAL` | Removes the HLG and all its LLGs | No; deletes one branch |
 | `REGENERATE_LOW_LEVEL_GOALS` | Calls the top-down LLG generator for the same parent HLG | No |
 | `MISSING_HIGH_LEVEL_GOALS_FOUND` | Calls the top-down HLG generator and then the top-down LLG generator | Yes |
-| `EVALUATION_INCONCLUSIVE` | Preserves the current state and records a warning | No |
+| `EVALUATION_INCONCLUSIVE` | Leaves the current goal hierarchy unchanged and records a warning | No |
 
-State changes are deliberately bounded: at most one HLG rewrite and up to two
-missing-HLG additions are generated per iteration, at most five HLG removals are
-applied together, and one branch receives LLG regeneration at a time. An
-existing branch may be regenerated or rewritten at most twice, and a newly
-discovered HLG may receive at most six LLGs. Rewrite and removal actions take
-precedence over missing-HLG additions because they change the goal space against
-which global coverage is judged.
+Corrections to the goal hierarchy are deliberately ordered: at most one HLG
+rewrite and five HLG removals are applied in an iteration, and one branch
+receives LLG regeneration at a time. Missing-HLG discovery has no numerical
+cap: every distinct documented gap returned by the coverage critic is generated
+once the hierarchy is stable. An
+existing branch may be regenerated or rewritten at most twice. These bounds are
+engineering safeguards against repeated repair loops, rather than empirically
+optimized thresholds. LLG decompositions, whether generated for a new HLG or
+regenerated for an existing branch, have no fixed numerical cap: the generator
+is asked for a complete, non-redundant decomposition of distinct documented
+functional interactions, which is then checked for empty, duplicate, or
+incorrectly associated goals. Rewrite and removal actions
+take precedence over missing-HLG additions because they change the goal space
+against which global coverage is judged.
 
 ### Does it currently perform discovery?
 
-**Yes, but only in a bounded form.** Every iteration contains a global coverage
-query that can return up to two distinct, documented actor-level gaps. A gap may
+**Yes.** Every iteration contains a global coverage query that can return all
+distinct, documented actor-level gaps. A gap may
 be explicit or inferred from at least two coherent workflow passages or actor
 responsibilities. When accepted, the normal top-down HLG and LLG generators
 create a new branch. The bottom-up process is therefore not restricted to
@@ -134,26 +161,25 @@ deleting or rewriting the baseline.
 
 The present implementation nevertheless has important discovery limitations:
 
-- at most two missing intentions can be proposed per iteration;
 - discovery is based on one consolidated project description rather than an
   indexed collection of source passages;
 - discovery is restricted to actors already represented by the current HLG set;
-- duplicate prevention is primarily normalized actor/name matching, not semantic
-  equivalence with evidence-aware clustering;
-- regenerated LLGs are accepted when non-empty and within the numerical growth
-  bound; there is no before/after semantic coverage gate;
-- HLG rewrite and removal can reduce coverage before discovery is evaluated on a
-  stable state;
+- duplicate and overlap judgments depend on the HLG critic; there is no
+  deterministic semantic-equivalence gate after generation;
+- regenerated LLGs are accepted when non-empty; there is no deterministic
+  before/after semantic coverage gate;
+- removed and replaced HLGs are re-audited from a retained checklist, but the
+  final coverage judgment remains model-based;
 - the three specialized evaluator calls increase cost as the number of active
   branches grows.
 
-The currently saved evaluation therefore demonstrates stronger **precision**,
-not higher overall coverage. Macro HLG F1 rises from `0.4323` to `0.4823` and
-macro LLG F1 from `0.5998` to `0.6346`. HLG recall changes from `0.7479` to
-`0.7432`, while LLG recall changes from `0.7453` to `0.7317`. HLG count decreases
-from 106 to 91 and LLG count from 356 to 314. These files predate the latest
-two-gap coverage prompt and post-change branch re-audit, so they must be
-regenerated before being treated as final results for the current code.
+The currently saved evaluation demonstrates stronger precision with a smaller
+recall reduction. Macro HLG F1 rises from `0.5504` to `0.6299` and macro LLG F1
+from `0.3768` to `0.4300`. HLG recall changes from `0.7507` to `0.7070`, while
+LLG recall changes from `0.4888` to `0.4579`. HLG count decreases from 105 to 70
+and LLG count from 457 to 328. These files predate the uncapped discovery audit
+and the complete, atomic LLG regeneration prompt, so they must be regenerated
+before being treated as final results for the current code.
 
 None of the currently saved traces contains a final
 `MISSING_HIGH_LEVEL_GOALS_FOUND` decision. The discovery path is implemented and
@@ -278,14 +304,15 @@ for details.
 
 ## Adopted Pipeline Configuration
 
-The experiments in this repository use the original top-down execution flow
-with the following stage-specific configuration:
+The experiments in this repository use the best-performing complete-architecture
+configuration reported in the reference study: the original top-down execution
+flow with the following stage-specific settings:
 
 | Stage | Generator prompting | Critic | Execution |
 |---|---|---|---|
-| Actors | Zero-shot | Enabled | Generator-critic loop |
-| High-Level Goals | Few-shot | Disabled | One generation |
-| Low-Level Goals | Few-shot | Disabled | One generation over all HLGs |
+| Actors | Zero-shot | Few-shot, enabled | Generator-critic loop |
+| High-Level Goals | Zero-shot | Few-shot, enabled | Generator-critic loop |
+| Low-Level Goals | Zero-shot | Few-shot, enabled | Generator-critic loop over all HLGs |
 
 The top-down critic uses four few-shot evaluation examples, a quality threshold
 of `8.5/10`, and at most three generator-critic iterations. These parameters are
@@ -297,10 +324,9 @@ appropriate for the current execution environment. The pipeline now uses:
 - **Gemini 2.5 Flash** as the structured-output generator;
 - **Qwen 3.8 27B through Groq** as the critic.
 
-This configuration retains critic-based validation for zero-shot actor
-identification, where role omissions can propagate to every downstream stage.
-For HLG and LLG extraction, Few-shot generation is used without the critic to
-preserve the benefit of the curated examples and avoid unnecessary feedback
-iterations. Generating all LLGs from the complete HLG collection also preserves
-the original pipeline semantics and prevents each individual branch from being
-incorrectly evaluated as if it had to represent the whole software system.
+Actor, HLG, and LLG extraction starts from zero-shot generation, then uses the
+Few-shot critic to score the result and provide feedback for another attempt
+when the quality threshold is not reached. Generating and evaluating all LLGs
+from the complete HLG collection preserves the original pipeline semantics and
+prevents each individual branch from being incorrectly evaluated as if it had
+to represent the whole software system.

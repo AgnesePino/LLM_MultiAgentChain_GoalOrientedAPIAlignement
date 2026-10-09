@@ -154,6 +154,7 @@ def generate_evaluator_response(
     prompt,
     sys_prompt,
     conversation: EvaluatorConversation | None = None,
+    temperature: float = 0,
 ):
     """Run Qwen on Groq, optionally replaying a bounded conversation."""
     global GROQ_EVALUATOR_MODEL
@@ -185,7 +186,7 @@ def generate_evaluator_response(
                     ]
                 ),
                 "model": model,
-                "temperature": 0,
+                "temperature": temperature,
             }
 
             if model == GROQ_EVALUATOR_FALLBACK_MODEL:
