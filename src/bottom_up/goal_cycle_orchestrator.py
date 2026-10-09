@@ -18,6 +18,7 @@ from src.data_model import (
     GlobalGoalEvaluationResult,
     GoalBranch,
     HighLevelGoal,
+    HighLevelGoalRemovalBasis,
     HighLevelGoalGenerationAction,
     HighLevelGoalGenerationRequest,
     HighLevelGoalGeneratorInput,
@@ -43,7 +44,7 @@ from src.llm_clients import EvaluatorConversation
 DEFAULT_GLOBAL_CYCLE_MAX_ITERATIONS = 5
 MAX_LLG_REGENERATIONS_PER_BRANCH = 2
 MAX_HLG_REWRITES_PER_BRANCH = 2
-MAX_HLG_REMOVALS_PER_ITERATION = 5
+MAX_HLG_REMOVALS_PER_ITERATION = 2
 MAX_REPLACEMENT_HLGS_PER_REWRITE = 1
 BOTTOM_UP_CRITIC_MEMORY_TURNS = 4
 BOTTOM_UP_CRITIC_STATE_UPDATES = 2
@@ -73,11 +74,95 @@ def _stable_hlg_key(goal: HighLevelGoal) -> str:
     return f"{_key(goal.actor.name)}::{_key(goal.name)}"
 
 
+def _duplicate_hlg_keys(high_level_goals: HighLevelGoals) -> set[str]:
+    seen: set[str] = set()
+    duplicates: set[str] = set()
+    for goal in high_level_goals.goals:
+        goal_key = _stable_hlg_key(goal)
+        if goal_key in seen:
+            duplicates.add(goal_key)
+        seen.add(goal_key)
+    return duplicates
+
+
+def _consolidate_duplicate_hlgs(
+    high_level_goals: HighLevelGoals,
+    low_level_goals: LowLevelGoals,
+) -> tuple[HighLevelGoals, LowLevelGoals, set[str]]:
+    """Merge duplicate HLG identities and preserve all distinct child LLGs."""
+    canonical_by_key: dict[str, HighLevelGoal] = {}
+    canonical_goals: list[HighLevelGoal] = []
+    duplicate_keys: set[str] = set()
+
+    for goal in high_level_goals.goals:
+        goal_key = _stable_hlg_key(goal)
+        if goal_key in canonical_by_key:
+            duplicate_keys.add(goal_key)
+            continue
+        canonical_by_key[goal_key] = goal
+        canonical_goals.append(goal)
+
+    if not duplicate_keys:
+        return high_level_goals, low_level_goals, set()
+
+    remapped_llgs = []
+    for llg in low_level_goals.low_level_goals:
+        canonical_parent = canonical_by_key[
+            _stable_hlg_key(llg.high_level_associated)
+        ]
+        remapped_llgs.append(
+            llg.model_copy(update={"high_level_associated": canonical_parent})
+        )
+
+    return (
+        HighLevelGoals(goals=canonical_goals),
+        LowLevelGoals(
+            low_level_goals=_deduplicate_llg_candidates(remapped_llgs)
+        ),
+        duplicate_keys,
+    )
+
+
+def _prune_orphan_hlgs(
+    high_level_goals: HighLevelGoals,
+    low_level_goals: LowLevelGoals,
+) -> tuple[HighLevelGoals, list[HighLevelGoal]]:
+    """Remove HLGs that have no LLG with that exact embedded parent."""
+    parents_with_children = [
+        goal.high_level_associated
+        for goal in low_level_goals.low_level_goals
+    ]
+    orphaned = [
+        goal for goal in high_level_goals.goals
+        if goal not in parents_with_children
+    ]
+    if not orphaned:
+        return high_level_goals, []
+
+    return (
+        HighLevelGoals(
+            goals=[
+                goal for goal in high_level_goals.goals
+                if goal in parents_with_children
+            ]
+        ),
+        orphaned,
+    )
+
+
 def _branches_from_embedded_parents(
+    high_level_goals: HighLevelGoals,
     low_level_goals: LowLevelGoals,
 ) -> list[GoalBranch]:
-    """Group LLGs by the parent objects emitted by the top-down pipeline."""
-    branches: list[GoalBranch] = []
+    """Build one branch per HLG, including HLGs with no generated children."""
+    branches = [
+        GoalBranch(
+            branch_id=f"branch_{index:03d}",
+            high_level_goal=goal,
+            low_level_goals=[],
+        )
+        for index, goal in enumerate(high_level_goals.goals, start=1)
+    ]
     for llg in low_level_goals.low_level_goals:
         parent = llg.high_level_associated
         branch = next(
@@ -85,12 +170,10 @@ def _branches_from_embedded_parents(
             None,
         )
         if branch is None:
-            branch = GoalBranch(
-                branch_id=f"branch_{len(branches) + 1:03d}",
-                high_level_goal=parent,
-                low_level_goals=[],
+            raise ValueError(
+                "An LLG references a parent that is absent from the current "
+                f"HLG state: {parent.actor.name}::{parent.name}."
             )
-            branches.append(branch)
         branch.low_level_goals.append(llg)
     return branches
 
@@ -379,6 +462,51 @@ def _with_decision(
     )
 
 
+def _select_safe_hlg_removals(
+    removal_branches: list[GoalBranch],
+    evaluations: dict[str, GlobalGoalEvaluationResult],
+) -> tuple[set[str], list[str]]:
+    """Select a small removal batch while preserving every named cover HLG."""
+    selected: set[str] = set()
+    protected: set[str] = set()
+    warnings: list[str] = []
+
+    for branch in removal_branches:
+        if len(selected) >= MAX_HLG_REMOVALS_PER_ITERATION:
+            break
+        branch_key = _stable_hlg_key(branch.high_level_goal)
+        hlg_evaluation = evaluations[branch.branch_id].high_level_evaluation
+        if branch_key in protected:
+            warnings.append(
+                f"{branch.branch_id}: HLG_REMOVAL_SKIPPED_COVER_TARGET"
+            )
+            continue
+
+        if (
+            hlg_evaluation.removal_basis
+            == HighLevelGoalRemovalBasis.FULLY_REDUNDANT
+        ):
+            target_key = (
+                f"{_key(branch.high_level_goal.actor.name)}::"
+                f"{_key(hlg_evaluation.covered_by_high_level_goal_name or '')}"
+            )
+            if target_key in selected:
+                warnings.append(
+                    f"{branch.branch_id}: HLG_REMOVAL_SKIPPED_CIRCULAR_COVER"
+                )
+                continue
+            protected.add(target_key)
+
+        selected.add(branch_key)
+
+    if len(removal_branches) > len(selected):
+        warnings.append(
+            "HLG_REMOVAL_BATCH_LIMIT_OR_DEPENDENCY_GUARD "
+            f"({len(removal_branches)} requested, {len(selected)} applied)"
+        )
+    return selected, warnings
+
+
 def _llg_names_by_parent(
     low_level_goals: LowLevelGoals,
 ) -> dict[str, set[str]]:
@@ -465,7 +593,6 @@ def run_global_goal_cycle(
         f"Total LLGs: {len(current_llgs.low_level_goals)}."
     )
     llg_regeneration_counts: dict[str, int] = {}
-    stabilized_llg_keys: set[str] = set()
     confirmed_branch_keys: set[str] = set()
     hlg_rewrite_counts: dict[str, int] = {}
     retired_hlgs: dict[str, HighLevelGoal] = {}
@@ -476,12 +603,36 @@ def run_global_goal_cycle(
     for iteration in range(1, max_iterations + 1):
         iteration_start_hlgs = current_hlgs.model_copy(deep=True)
         iteration_start_llgs = current_llgs.model_copy(deep=True)
+        iteration_warnings: list[str] = []
         print(
             f"[bottom-up] iteration {iteration}/{max_iterations} starting",
             flush=True,
         )
-        branches = _branches_from_embedded_parents(current_llgs)
-        iteration_warnings: list[str] = []
+        current_hlgs, current_llgs, consolidated_duplicate_keys = (
+            _consolidate_duplicate_hlgs(current_hlgs, current_llgs)
+        )
+        if consolidated_duplicate_keys:
+            confirmed_branch_keys.clear()
+            iteration_warnings.append(
+                "DUPLICATE_HIGH_LEVEL_GOALS_CONSOLIDATED: "
+                + ", ".join(sorted(consolidated_duplicate_keys))
+            )
+        current_hlgs, orphaned_hlgs = _prune_orphan_hlgs(
+            current_hlgs,
+            current_llgs,
+        )
+        if orphaned_hlgs:
+            for goal in orphaned_hlgs:
+                retired_hlgs[_stable_hlg_key(goal)] = goal
+            confirmed_branch_keys.clear()
+            iteration_warnings.append(
+                "ORPHAN_HIGH_LEVEL_GOALS_REMOVED: "
+                + ", ".join(
+                    f"{goal.actor.name}::{goal.name}"
+                    for goal in orphaned_hlgs
+                )
+            )
+        branches = _branches_from_embedded_parents(current_hlgs, current_llgs)
 
         # A confirmed branch is skipped while the HLG structure is unchanged.
         # Structural changes clear this set after the iteration and trigger a
@@ -507,7 +658,6 @@ def run_global_goal_cycle(
             active_branches,
             reconstructions,
             current_hlgs,
-            stabilized_llg_keys,
             critic_conversation,
         )
         evaluations = {
@@ -566,6 +716,11 @@ def run_global_goal_cycle(
         for branch in rewrite_branches:
             evaluation = evaluations[branch.branch_id]
             original_key = _stable_hlg_key(branch.high_level_goal)
+            sibling_goals_by_key = {
+                _stable_hlg_key(goal): goal
+                for goal in current_hlgs.goals
+                if _stable_hlg_key(goal) != original_key
+            }
             rewrite_count = hlg_rewrite_counts.get(original_key, 0)
             if rewrite_count >= MAX_HLG_REWRITES_PER_BRANCH:
                 evaluations[branch.branch_id] = _with_decision(
@@ -592,21 +747,46 @@ def run_global_goal_cycle(
                 evaluator_ablation,
             )
             replacement_goals = []
+            rewrite_consolidated = False
             # A focused rewrite request yields one candidate at most;
             # accepting every candidate here caused HLG proliferation.
             for goal in generated.goals[:MAX_REPLACEMENT_HLGS_PER_REWRITE]:
                 if not goal.name.strip():
                     continue
                 goal_key = _stable_hlg_key(goal)
+                existing_sibling = sibling_goals_by_key.get(goal_key)
+                if existing_sibling is not None:
+                    sibling_llgs = [
+                        llg for llg in current_llgs.low_level_goals
+                        if _stable_hlg_key(llg.high_level_associated) == goal_key
+                    ]
+                    replacements[original_key] = []
+                    llg_regenerations[goal_key] = (
+                        existing_sibling,
+                        (
+                            f"{request.rationale} The rewrite resolved to the "
+                            "existing sibling HLG; preserve the documented "
+                            "capabilities from both decompositions while "
+                            "returning one non-redundant LLG set."
+                        ),
+                        [*sibling_llgs, *branch.low_level_goals],
+                    )
+                    rewrite_consolidated = True
+                    iteration_warnings.append(
+                        f"{branch.branch_id}: DUPLICATE_REWRITE_CONSOLIDATED_INTO "
+                        f"'{existing_sibling.name}'"
+                    )
+                    break
                 replacement_goals.append(goal)
                 llg_regenerations[goal_key] = (
                     goal,
                     request.rationale,
                     list(branch.low_level_goals),
                 )
-            if replacement_goals:
+            if replacement_goals or rewrite_consolidated:
                 hlg_rewrite_counts[original_key] = rewrite_count + 1
-                replacements[original_key] = replacement_goals
+                if replacement_goals:
+                    replacements[original_key] = replacement_goals
             else:
                 iteration_warnings.append(
                     f"{branch.branch_id}: HLG_REGENERATION_EMPTY_IGNORED"
@@ -614,21 +794,21 @@ def run_global_goal_cycle(
             rewrite_handled = True
             break
 
-        if not rewrite_handled:
+        if (
+            not rewrite_handled
+            and missing_hlg_evaluation.decision
+            != MissingHighLevelGoalDecision.FOUND
+        ):
             removal_branches = [
                 branch for branch in active_branches
                 if evaluations[branch.branch_id].final_decision
                 == GlobalGoalEvaluationDecision.REMOVE_ORIGINAL_HIGH_LEVEL_GOAL
             ]
-            for branch in removal_branches[:MAX_HLG_REMOVALS_PER_ITERATION]:
-                original_key = _stable_hlg_key(branch.high_level_goal)
-                removed_names.add(original_key)
-            if len(removal_branches) > MAX_HLG_REMOVALS_PER_ITERATION:
-                iteration_warnings.append(
-                    "HLG_REMOVAL_BATCH_LIMIT_REACHED "
-                    f"({len(removal_branches)} requested, "
-                    f"{MAX_HLG_REMOVALS_PER_ITERATION} applied)"
-                )
+            removed_names, removal_warnings = _select_safe_hlg_removals(
+                removal_branches,
+                evaluations,
+            )
+            iteration_warnings.extend(removal_warnings)
 
         if not rewrite_handled and not removed_names:
             regeneration_branches = [
@@ -648,19 +828,27 @@ def run_global_goal_cycle(
                 stable_key = _stable_hlg_key(branch.high_level_goal)
                 count = llg_regeneration_counts.get(stable_key, 0)
                 if count >= MAX_LLG_REGENERATIONS_PER_BRANCH:
-                    stabilized_llg_keys.add(stable_key)
                     evaluations[branch.branch_id] = _with_decision(
                         evaluation,
                         GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED,
                         "LLG regeneration limit reached; keeping the latest LLGs.",
                     )
+                    llg_evaluation = evaluation.low_level_evaluation
+                    unsupported = (
+                        llg_evaluation.unsupported_or_misleading_llg_ids
+                        if llg_evaluation else []
+                    )
+                    missing = (
+                        llg_evaluation.missing_essential_capabilities
+                        if llg_evaluation else []
+                    )
                     iteration_warnings.append(
-                        f"{branch.branch_id}: LLG_REGENERATION_LIMIT_REACHED"
+                        f"{branch.branch_id}: LLG_REGENERATION_LIMIT_REACHED "
+                        f"(unsupported={unsupported or ['none']}; "
+                        f"missing={missing or ['none']})"
                     )
                     continue
                 llg_regeneration_counts[stable_key] = count + 1
-                if count + 1 >= MAX_LLG_REGENERATIONS_PER_BRANCH:
-                    stabilized_llg_keys.add(stable_key)
                 llg_regenerations[stable_key] = (
                     branch.high_level_goal,
                     evaluation.low_level_evaluation.regeneration_feedback
@@ -886,11 +1074,32 @@ def run_global_goal_cycle(
             missing_hlg_evaluation.decision
             == MissingHighLevelGoalDecision.INCONCLUSIVE
         )
+        llg_parent_keys = {
+            _stable_hlg_key(goal.high_level_associated)
+            for goal in current_llgs.low_level_goals
+        }
+        orphan_hlgs = [
+            goal for goal in current_hlgs.goals
+            if _stable_hlg_key(goal) not in llg_parent_keys
+        ]
+        if orphan_hlgs:
+            iteration_warnings.append(
+                "HLGS_WITHOUT_LOW_LEVEL_GOALS: "
+                + ", ".join(
+                    f"{goal.actor.name}::{goal.name}" for goal in orphan_hlgs
+                )
+            )
+        duplicate_hlg_keys = _duplicate_hlg_keys(current_hlgs)
+        if duplicate_hlg_keys:
+            iteration_warnings.append(
+                "DUPLICATE_HIGH_LEVEL_GOALS: "
+                + ", ".join(sorted(duplicate_hlg_keys))
+            )
         all_confirmed = all(
             evaluation.final_decision
             == GlobalGoalEvaluationDecision.CONFIRM_BRANCH
             for evaluation in evaluations.values()
-        )
+        ) and not orphan_hlgs and not duplicate_hlg_keys
         no_missing = (
             missing_hlg_evaluation.decision
             == MissingHighLevelGoalDecision.NO_MISSING

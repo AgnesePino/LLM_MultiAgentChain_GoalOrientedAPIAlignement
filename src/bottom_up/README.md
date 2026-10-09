@@ -189,6 +189,13 @@ Voter 3: REMOVE
 Risultato aggregato: REMOVE (2/3)
 ```
 
+La maggioranza `2/3` resta sufficiente per le decisioni non distruttive. Una
+rimozione HLG viene invece applicata soltanto con voto unanime `3/3` (o `5/5`
+quando sono configurati cinque voter). Il critic deve inoltre classificare la
+rimozione come `UNSUPPORTED` oppure `FULLY_REDUNDANT`; nel secondo caso deve
+indicare un singolo HLG sibling dello stesso attore che preserva integralmente
+le capacità del goal eliminato. Senza queste evidenze il goal viene mantenuto.
+
 Se le risposte valide non producono una maggioranza, la valutazione è
 inconcludente:
 
@@ -293,9 +300,9 @@ usato per valutare gli altri branch.
 L'ordine è:
 
 1. riscrittura di un HLG, al massimo una per iterazione;
-2. rimozione degli HLG giudicati non validi, entro il limite configurato;
-3. aggiunta di tutti gli HLG mancanti distinti e documentati, se non è stata
-   applicata una riscrittura o una rimozione;
+2. aggiunta degli HLG mancanti già rilevati dal controllo globale;
+3. in assenza di gap rilevati, rimozione conservativa degli HLG giudicati non
+   validi, entro il limite configurato;
 4. rigenerazione degli LLG di un solo branch, soltanto quando il controllo
    globale non segnala HLG mancanti.
 
@@ -312,12 +319,25 @@ Iterazione 4: REGENERATE degli LLG incompleti o non supportati
 Iterazione 5: conferma finale della gerarchia
 ```
 
-`REWRITE` e `REMOVE` precedono la discovery perché modificano l'insieme rispetto
-al quale viene misurata la copertura. Una richiesta di discovery calcolata prima
-di tali modifiche potrebbe non essere più valida. Gli HLG rimossi o sostituiti
-vengono quindi mantenuti in un registro di audit: nell'iterazione successiva il
-critic globale verifica esplicitamente se ciascuna responsabilità è coperta da
-un HLG corrente oppure deve essere riscoperta.
+`REWRITE` precede la discovery perché modifica l'insieme rispetto al quale viene
+misurata la copertura. Una rimozione non viene invece applicata nella stessa
+iterazione in cui il controllo globale ha già trovato un gap: prima viene
+ripristinata la copertura, poi i candidati alla rimozione vengono rivalutati.
+Inoltre un HLG indicato come copertura di un altro goal viene protetto dalla
+rimozione nello stesso batch; questo impedisce eliminazioni circolari del tipo
+`A` coperto da `B` e `B` coperto da `A`. Gli HLG rimossi o sostituiti restano nel
+registro usato dal successivo audit globale.
+
+La gestione dei duplicati appartiene interamente al bottom-up e usa l'identità
+globale normalizzata `attore::nome HLG`. All'inizio di ogni iterazione, eventuali
+duplicati già presenti nella baseline vengono consolidati nel primo parent: gli
+LLG di tutte le copie vengono ricondotti a quel parent e vengono eliminati solo
+gli LLG esattamente duplicati. La discovery ignora un candidato già presente.
+Se un rewrite produce l'identità di un sibling esistente, non viene aggiunta una
+seconda copia: l'HLG originale viene consolidato nel sibling e il generatore
+ricostruisce un'unica decomposizione usando gli LLG di entrambi i branch. Come
+ultima protezione, `ALL_BRANCHES_CONFIRMED` è vietato se un duplicato dovesse
+comunque restare nello stato corrente. La pipeline top-down non viene modificata.
 
 Le operazioni di generazione riusano le funzioni top-down già esistenti. Una
 riscrittura rigenera anche gli LLG del nuovo parent; un HLG scoperto dal
@@ -327,6 +347,15 @@ Un branch confermato viene congelato finché la struttura degli HLG non cambia.
 Dopo un'aggiunta, una rimozione o una riscrittura, tutti i branch vengono riaperti
 per un nuovo audit nell'iterazione successiva. L'identità stabile `attore::nome
 HLG` evita che la rinumerazione dei branch faccia perdere il loro stato.
+
+All'inizio di ogni iterazione bottom-up, gli HLG che non hanno alcun LLG con lo
+stesso parent incorporato vengono rimossi prima della costruzione dei branch.
+La rimozione viene registrata nel warning `ORPHAN_HIGH_LEVEL_GOALS_REMOVED` e
+l'HLG entra nel registro dei goal ritirati, così il successivo audit globale può
+riscoprirne la capacità soltanto se è realmente supportata dalla documentazione;
+in quel caso la discovery genera anche la nuova decomposizione LLG. Come
+invariante difensiva, la convergenza resta vietata se un HLG senza figli dovesse
+comunque ricomparire nello stato corrente.
 
 Non è presente un pre-pass di cleanup degli LLG: eventuali problemi vengono
 gestiti dal critic LLG all'interno del normale ciclo.
@@ -356,6 +385,12 @@ Gli altri motivi di arresto sono:
 La chiusura dei client dopo un dataset è indipendente dal motivo di arresto e
 avviene anche quando il ciclo converge correttamente.
 
+Dopo l'ultima rigenerazione LLG consentita, il branch viene sempre sottoposto a
+un nuovo voto. Se i nuovi LLG ricevono `KEEP`, il branch può convergere. Il
+warning `LLG_REGENERATION_LIMIT_REACHED` viene prodotto soltanto quando il
+critic richiede ancora una correzione dopo avere valutato l'ultimo risultato;
+il trace riporta allora gli ID non supportati e le capacità ancora mancanti.
+
 ## Limiti del ciclo
 
 I limiti e i valori operativi correnti sono:
@@ -366,7 +401,7 @@ I limiti e i valori operativi correnti sono:
 | `GLOBAL_CYCLE_MAX_ITERATIONS_OVERRIDE` | 25 | Limite usato dal notebook bottom-up corrente |
 | `MAX_LLG_REGENERATIONS_PER_BRANCH` | 2 | Rigenerazioni LLG per branch |
 | `MAX_HLG_REWRITES_PER_BRANCH` | 2 | Riscritture dello stesso HLG |
-| `MAX_HLG_REMOVALS_PER_ITERATION` | 5 | Rimozioni applicabili insieme |
+| `MAX_HLG_REMOVALS_PER_ITERATION` | 2 | Rimozioni applicabili insieme |
 | `MAX_REPLACEMENT_HLGS_PER_REWRITE` | 1 | HLG accettati da una singola riscrittura |
 | `BOTTOM_UP_EVALUATOR_VOTERS` | 3 | Voter paralleli; valori ammessi: 3 o 5 |
 | `EVALUATOR_VOTING_QUORUM` | 2 | Maggioranza richiesta con 3 voter |

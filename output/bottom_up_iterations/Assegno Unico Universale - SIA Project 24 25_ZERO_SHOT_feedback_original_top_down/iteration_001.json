@@ -29,8 +29,8 @@
       ]
     },
     "branch_003": {
-      "reconstructed_high_level_goal": "Applicant to evaluate potential AUU benefit",
-      "rationale": "The low-level goals collectively enable an applicant to gather comprehensive information about the AUU benefit, understand its eligibility criteria, and calculate a personalized estimated allowance. This integrated set of operations supports the applicant in assessing their potential entitlement and the financial implications of the benefit.",
+      "reconstructed_high_level_goal": "Applicant assesses potential AUU benefit entitlement",
+      "rationale": "The low-level goals collectively describe the actions an applicant takes to gather information about the AUU benefit, understand its eligibility rules, and calculate an estimated allowance. These steps are all essential for an applicant to evaluate their potential entitlement to the AUU benefit.",
       "branch_id": "branch_003",
       "source_low_level_goal_ids": [
         "Retrieve General Benefit Information",
@@ -40,8 +40,8 @@
       ]
     },
     "branch_004": {
-      "reconstructed_high_level_goal": "Applicant Track Submitted AUU Applications",
-      "rationale": "These low-level goals collectively enable an applicant to comprehensively monitor and stay informed about the status, progress, and related communications for all their previously submitted AUU applications. They cover retrieving a list of applications, checking individual application status, receiving alerts, and accessing official documents, all of which are essential for tracking.",
+      "reconstructed_high_level_goal": "Monitor Submitted Applications",
+      "rationale": "The low-level goals collectively describe various ways an applicant can keep track of, check the progress of, and retrieve information and documents pertaining to their previously submitted applications. This holistic view of tracking applications is encapsulated by the high-level goal of monitoring.",
       "branch_id": "branch_004",
       "source_low_level_goal_ids": [
         "Retrieve List of Submitted Applications",
@@ -52,7 +52,7 @@
     },
     "branch_005": {
       "reconstructed_high_level_goal": "Process AUU Applications",
-      "rationale": "The low-level goals collectively describe the necessary actions for an INPS Employee to effectively process AUU applications. This includes retrieving lists, viewing details, making approval or rejection decisions, suspending applications for further information, and reassigning them, all of which are integral steps in the application processing workflow.",
+      "rationale": "The low-level goals collectively describe the various actions an INPS employee performs to review, make decisions on, and manage the workflow of AUU applications. These actions, including listing, viewing details, approving, rejecting, suspending, and reassigning, are all integral steps in the overall processing of applications.",
       "branch_id": "branch_005",
       "source_low_level_goal_ids": [
         "Retrieve Pending Applications for Review",
@@ -76,8 +76,8 @@
       ]
     },
     "branch_007": {
-      "reconstructed_high_level_goal": "Handle Application Deficiencies and Exceptions",
-      "rationale": "The low-level goals collectively describe the actions an INPS employee takes to address incomplete applications or those with identified issues. This involves requesting and uploading necessary additional information, adding internal notes for context or special attention, and ultimately resolving any outstanding exceptions or deficiencies to progress the application.",
+      "reconstructed_high_level_goal": "Ensure Application Completeness and Resolve Exceptions",
+      "rationale": "These operations collectively describe the actions an INPS Employee performs to gather all necessary information for an application, document relevant context, and address any identified issues or exceptions, thereby ensuring the application is complete and ready for further processing.",
       "branch_id": "branch_007",
       "source_low_level_goal_ids": [
         "Request Additional Documentation from Applicant",
@@ -114,31 +114,72 @@
   "evaluations": {
     "branch_001": {
       "branch_id": "branch_001",
-      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Secure AUU Benefit Application' is a valid, high-level stakeholder intention. However, the hierarchy is fragmented. The sibling HLG 'Manage Application Progress' covers the creation, saving, and updating of the application, while 'Monitor Application Status' covers post-submission tracking. The original HLG focuses on the final act of submission and the overall success of the application process. In Goal-Oriented Requirements Engineering, the end-to-end process of applying (creating, filling, submitting) is often treated as a single high-level goal or a tightly coupled set. Here, 'Manage Application Progress' and 'Secure AUU Benefit Application' are distinct phases of the same primary workflow: the former is the preparation/drafting phase, the latter is the finalization/submission phase. While they are distinct, 'Secure AUU Benefit Application' is slightly ambiguous ('Secure' can imply security or obtaining). The bottom-up reconstruction 'Applicant Successfully Submits AUU Benefit Application' is more precise. However, looking at the other goals, 'Manage Application Progress' is about the *process* of managing the draft. 'Secure AUU Benefit Application' is the *outcome* of that process. Is it redundant? No, because one is about the flexibility of the draft state, the other is about the successful completion. Is it fragmented? Yes, but they represent different states. However, a better consolidation would be to have one HLG for 'Apply for AUU Benefit' which encompasses both managing progress and submitting. Since 'Manage Application Progress' exists, and 'Secure AUU Benefit Application' exists, they are somewhat overlapping in scope regarding the 'application' artifact. But 'Manage Application Progress' explicitly mentions 'create, save, resume, update', while 'Secure' implies the final 'submit'. Given the rubric, if a broader sibling entails the original, remove it. 'Manage Application Progress' does not entail submission. 'Monitor Application Status' is post-submission. Therefore, 'Secure AUU Benefit Application' is a distinct, supported goal representing the finalization of the application. It is not a mere workflow step of 'Manage Application Progress' because submission is a state change that ends the 'progress' phase and begins the 'status' phase. It is a valid independent HLG. The name 'Secure' is slightly weak but acceptable in the context of 'securing a benefit'. The reconstruction is clearer. I will keep the original as it is supported and distinct from the siblings, though a rewrite to 'Submit AUU Benefit Application' might be better, the current one is not materially defective enough to require a rewrite under strict criteria unless 'Secure' is considered misleading. 'Secure' is a common term for 'obtain'. I will keep it. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs cover the core data entry steps (identification, children, ISEE, payment) and the final submission. However, the project description explicitly states that applicants must 'accept declarations and privacy notices' as part of the application process. This is a mandatory legal step for 'successfully applying' that is absent from the current LLGs. Additionally, the description mentions specifying 'custody' information, which is a distinct data category from general child details or household info, and is not explicitly covered by llg_003 (which focuses on child details) or llg_002 (applicant ID). While 'household' might be inferred, 'custody' is specific to the AUU context (shared custody affects allowance calculation/distribution) and is explicitly listed in the description ('specify child, household, custody and payment information'). The absence of the declaration/privacy acceptance step is a material omission for a 'secure' and compliant application.",
+      "rationale": "Voting result 2/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original goal 'Secure AUU Benefit Application' is supported by the project description, which details the process of creating, filling, and submitting applications. However, it is materially over-fragmented relative to the sibling goal 'Manage Application Progress'. The description indicates that creating, saving, resuming, and updating are part of the same continuous workflow leading to submission. 'Manage Application Progress' explicitly covers the flexibility to create, save, resume, and update, which encompasses the preparatory phases of 'Secure AUU Benefit Application'. Since 'Manage Application Progress' is a broader, more accurate umbrella for the applicant's control over the application lifecycle (from initiation to the point of submission readiness), and 'Secure AUU Benefit Application' does not represent an independently satisfiable stakeholder outcome distinct from managing the progress of that same application, it is considered redundant. The submission action is the culmination of the progress management workflow. Destructive-action gate: REMOVE was not unanimous; the HLG is retained in this state. Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs cover the core data entry and submission steps (initiation, identification, child details, ISEE, payment method, review, and submission). However, the project description explicitly states that applicants must 'accept declarations and privacy notices' as part of the application process. This is a mandatory step for a valid submission and is not covered by any of the current LLGs. Additionally, while 'Manage Application Progress' covers saving/resuming, the act of accepting legal/privacy terms is a distinct compliance requirement for the 'Secure' (finalize/submit) goal that is currently missing. Therefore, the decomposition has a material omission.",
       "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Secure AUU Benefit Application' is a valid, high-level stakeholder intention. However, the hierarchy is fragmented. The sibling HLG 'Manage Application Progress' covers the creation, saving, and updating of the application, while 'Monitor Application Status' covers post-submission tracking. The original HLG focuses on the final act of submission and the overall success of the application process. In Goal-Oriented Requirements Engineering, the end-to-end process of applying (creating, filling, submitting) is often treated as a single high-level goal or a tightly coupled set. Here, 'Manage Application Progress' and 'Secure AUU Benefit Application' are distinct phases of the same primary workflow: the former is the preparation/drafting phase, the latter is the finalization/submission phase. While they are distinct, 'Secure AUU Benefit Application' is slightly ambiguous ('Secure' can imply security or obtaining). The bottom-up reconstruction 'Applicant Successfully Submits AUU Benefit Application' is more precise. However, looking at the other goals, 'Manage Application Progress' is about the *process* of managing the draft. 'Secure AUU Benefit Application' is the *outcome* of that process. Is it redundant? No, because one is about the flexibility of the draft state, the other is about the successful completion. Is it fragmented? Yes, but they represent different states. However, a better consolidation would be to have one HLG for 'Apply for AUU Benefit' which encompasses both managing progress and submitting. Since 'Manage Application Progress' exists, and 'Secure AUU Benefit Application' exists, they are somewhat overlapping in scope regarding the 'application' artifact. But 'Manage Application Progress' explicitly mentions 'create, save, resume, update', while 'Secure' implies the final 'submit'. Given the rubric, if a broader sibling entails the original, remove it. 'Manage Application Progress' does not entail submission. 'Monitor Application Status' is post-submission. Therefore, 'Secure AUU Benefit Application' is a distinct, supported goal representing the finalization of the application. It is not a mere workflow step of 'Manage Application Progress' because submission is a state change that ends the 'progress' phase and begins the 'status' phase. It is a valid independent HLG. The name 'Secure' is slightly weak but acceptable in the context of 'securing a benefit'. The reconstruction is clearer. I will keep the original as it is supported and distinct from the siblings, though a rewrite to 'Submit AUU Benefit Application' might be better, the current one is not materially defective enough to require a rewrite under strict criteria unless 'Secure' is considered misleading. 'Secure' is a common term for 'obtain'. I will keep it.",
+        "rationale": "Voting result 2/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original goal 'Secure AUU Benefit Application' is supported by the project description, which details the process of creating, filling, and submitting applications. However, it is materially over-fragmented relative to the sibling goal 'Manage Application Progress'. The description indicates that creating, saving, resuming, and updating are part of the same continuous workflow leading to submission. 'Manage Application Progress' explicitly covers the flexibility to create, save, resume, and update, which encompasses the preparatory phases of 'Secure AUU Benefit Application'. Since 'Manage Application Progress' is a broader, more accurate umbrella for the applicant's control over the application lifecycle (from initiation to the point of submission readiness), and 'Secure AUU Benefit Application' does not represent an independently satisfiable stakeholder outcome distinct from managing the progress of that same application, it is considered redundant. The submission action is the culmination of the progress management workflow. Destructive-action gate: REMOVE was not unanimous; the HLG is retained in this state.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 4,
+        "quality_score": 3,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 2,
         "vote_distribution": {
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2,
-          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 1
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 2,
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 1
         }
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs cover the core data entry steps (identification, children, ISEE, payment) and the final submission. However, the project description explicitly states that applicants must 'accept declarations and privacy notices' as part of the application process. This is a mandatory legal step for 'successfully applying' that is absent from the current LLGs. Additionally, the description mentions specifying 'custody' information, which is a distinct data category from general child details or household info, and is not explicitly covered by llg_003 (which focuses on child details) or llg_002 (applicant ID). While 'household' might be inferred, 'custody' is specific to the AUU context (shared custody affects allowance calculation/distribution) and is explicitly listed in the description ('specify child, household, custody and payment information'). The absence of the declaration/privacy acceptance step is a material omission for a 'secure' and compliant application.",
+        "rationale": "Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs cover the core data entry and submission steps (initiation, identification, child details, ISEE, payment method, review, and submission). However, the project description explicitly states that applicants must 'accept declarations and privacy notices' as part of the application process. This is a mandatory step for a valid submission and is not covered by any of the current LLGs. Additionally, while 'Manage Application Progress' covers saving/resuming, the act of accepting legal/privacy terms is a distinct compliance requirement for the 'Secure' (finalize/submit) goal that is currently missing. Therefore, the decomposition has a material omission.",
         "decision": "REGENERATE_LOW_LEVEL_GOALS",
         "quality_score": 2,
-        "regeneration_feedback": "Add an LLG for accepting declarations and privacy notices. Consider adding or expanding an LLG to explicitly cover custody information specification, as it is distinct from basic child details in the AUU context.",
+        "regeneration_feedback": "Add a low-level goal for accepting declarations and privacy notices, which is explicitly required by the documentation before submission.",
         "unsupported_or_misleading_llg_ids": [],
         "missing_essential_capabilities": [
-          "Accept declarations and privacy notices",
-          "Specify custody information"
+          "Accept declarations and privacy notices"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 2,
+          "KEEP_LOW_LEVEL_GOALS": 1
+        }
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Progress' is supported by the documentation, which explicitly mentions the ability to 'save drafts, resume applications' and 'add children to existing applications'. However, the current hierarchy is fragmented. 'Secure AUU Benefit Application' covers the creation and submission of the initial application, while 'Manage Application Progress' covers the lifecycle management (saving, resuming, updating) of that application. These are distinct stakeholder outcomes: one is about successfully initiating the benefit claim, the other is about the flexibility to manage the application state over time. The reconstruction 'Manage AUU Application by Applicant' is too generic and overlaps significantly with 'Secure AUU Benefit Application'. The original name 'Manage Application Progress' is slightly ambiguous (could be confused with 'Monitor Application Status'), but the description clarifies it refers to the applicant's control over the application's content and state (create, save, resume, update). To improve clarity and distinguish it from 'Monitor Application Status' (which is about tracking INPS decisions) and 'Secure AUU Benefit Application' (which is about the initial successful submission), the goal should be rewritten to focus on the lifecycle management of the application draft and updates, rather than just 'progress'. However, looking at the sibling 'Secure AUU Benefit Application', it already covers 'create applications'. The 'Manage Application Progress' goal covers 'save drafts, resume, update'. These are closely related. Is 'Manage Application Progress' a distinct outcome? Yes, the ability to save and resume is a distinct flexibility requirement. But is it better to merge it? The prompt asks to judge if it should be kept, rewritten, or removed. The original goal is supported. The reconstruction is worse (too generic). The original goal is a valid, distinct capability (lifecycle management vs initial submission vs status monitoring). However, 'Manage Application Progress' is a bit vague. A better name might be 'Manage AUU Application Lifecycle' or 'Manage Application Drafts and Updates'. Let's look at the options. KEEP is possible if the name is acceptable. REWRITE is possible if the name is too vague. The name 'Manage Application Progress' could be confused with 'Monitor Application Status'. The description clarifies it, but the name is the primary identifier. Rewriting it to 'Manage AUU Application Lifecycle' or similar would be clearer. However, the instructions say 'Do not rewrite a supported HLG merely because its LLGs use API-like wording.' The name is not API-like. Is it materially defective? It is somewhat ambiguous. But 'Secure AUU Benefit Application' is also a bit action-oriented. Let's consider if it is redundant. 'Secure AUU Benefit Application' includes 'create'. 'Manage Application Progress' includes 'save, resume, update'. These are distinct phases. I will KEEP it, as it is supported and distinct, and the name is acceptable in the context of the description. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent HLG 'Manage Application Progress' is defined as having the flexibility to create, save, resume, and update applications. The current LLGs cover saving (llg_001), retrieving/resuming (llg_002), updating (llg_003), adding children (llg_004), uploading documents for suspended apps (llg_005), and deleting drafts (llg_006). However, the project description explicitly states that applicants can 'create applications'. While 'Update Specific Application Section' implies modification, the initial creation of the application entity (starting a new draft) is a distinct capability from saving an existing one or updating a section. More critically, the description mentions applicants can 'consult submitted applications'. While this might seem like 'Monitor Application Status', the act of viewing the content of a submitted application is part of managing the application's lifecycle and progress from the applicant's perspective, distinct from just tracking status flags. However, looking closer at the sibling HLG 'Monitor Application Status', it covers tracking progress. The most significant gap is the explicit 'create' action. The LLGs assume an application exists to be saved or updated. There is no LLG for 'Initiate New Application' or 'Create Application Draft'. Without this, the 'create' part of the parent HLG is not covered. Additionally, 'Delete Application Draft' (llg_006) is not explicitly mentioned in the project description ('save drafts, resume applications...'). The description does not state that users can delete drafts. It only mentions saving and resuming. Therefore, llg_006 is unsupported. The missing capability is 'Create New Application Draft'.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Progress' is supported by the documentation, which explicitly mentions the ability to 'save drafts, resume applications' and 'add children to existing applications'. However, the current hierarchy is fragmented. 'Secure AUU Benefit Application' covers the creation and submission of the initial application, while 'Manage Application Progress' covers the lifecycle management (saving, resuming, updating) of that application. These are distinct stakeholder outcomes: one is about successfully initiating the benefit claim, the other is about the flexibility to manage the application state over time. The reconstruction 'Manage AUU Application by Applicant' is too generic and overlaps significantly with 'Secure AUU Benefit Application'. The original name 'Manage Application Progress' is slightly ambiguous (could be confused with 'Monitor Application Status'), but the description clarifies it refers to the applicant's control over the application's content and state (create, save, resume, update). To improve clarity and distinguish it from 'Monitor Application Status' (which is about tracking INPS decisions) and 'Secure AUU Benefit Application' (which is about the initial successful submission), the goal should be rewritten to focus on the lifecycle management of the application draft and updates, rather than just 'progress'. However, looking at the sibling 'Secure AUU Benefit Application', it already covers 'create applications'. The 'Manage Application Progress' goal covers 'save drafts, resume, update'. These are closely related. Is 'Manage Application Progress' a distinct outcome? Yes, the ability to save and resume is a distinct flexibility requirement. But is it better to merge it? The prompt asks to judge if it should be kept, rewritten, or removed. The original goal is supported. The reconstruction is worse (too generic). The original goal is a valid, distinct capability (lifecycle management vs initial submission vs status monitoring). However, 'Manage Application Progress' is a bit vague. A better name might be 'Manage AUU Application Lifecycle' or 'Manage Application Drafts and Updates'. Let's look at the options. KEEP is possible if the name is acceptable. REWRITE is possible if the name is too vague. The name 'Manage Application Progress' could be confused with 'Monitor Application Status'. The description clarifies it, but the name is the primary identifier. Rewriting it to 'Manage AUU Application Lifecycle' or similar would be clearer. However, the instructions say 'Do not rewrite a supported HLG merely because its LLGs use API-like wording.' The name is not API-like. Is it materially defective? It is somewhat ambiguous. But 'Secure AUU Benefit Application' is also a bit action-oriented. Let's consider if it is redundant. 'Secure AUU Benefit Application' includes 'create'. 'Manage Application Progress' includes 'save, resume, update'. These are distinct phases. I will KEEP it, as it is supported and distinct, and the name is acceptable in the context of the description.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent HLG 'Manage Application Progress' is defined as having the flexibility to create, save, resume, and update applications. The current LLGs cover saving (llg_001), retrieving/resuming (llg_002), updating (llg_003), adding children (llg_004), uploading documents for suspended apps (llg_005), and deleting drafts (llg_006). However, the project description explicitly states that applicants can 'create applications'. While 'Update Specific Application Section' implies modification, the initial creation of the application entity (starting a new draft) is a distinct capability from saving an existing one or updating a section. More critically, the description mentions applicants can 'consult submitted applications'. While this might seem like 'Monitor Application Status', the act of viewing the content of a submitted application is part of managing the application's lifecycle and progress from the applicant's perspective, distinct from just tracking status flags. However, looking closer at the sibling HLG 'Monitor Application Status', it covers tracking progress. The most significant gap is the explicit 'create' action. The LLGs assume an application exists to be saved or updated. There is no LLG for 'Initiate New Application' or 'Create Application Draft'. Without this, the 'create' part of the parent HLG is not covered. Additionally, 'Delete Application Draft' (llg_006) is not explicitly mentioned in the project description ('save drafts, resume applications...'). The description does not state that users can delete drafts. It only mentions saving and resuming. Therefore, llg_006 is unsupported. The missing capability is 'Create New Application Draft'.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove 'Delete Application Draft' as it is not explicitly supported by the documentation. Add a low-level goal for 'Create New Application Draft' to cover the 'create' aspect of the parent HLG.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_006"
+        ],
+        "missing_essential_capabilities": [
+          "Create New Application Draft"
         ],
         "voter_count": 3,
         "valid_vote_count": 3,
@@ -148,35 +189,17 @@
         }
       }
     },
-    "branch_002": {
-      "branch_id": "branch_002",
-      "rationale": "Voting result 2/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Progress' is supported by the description (create, save, resume, update). However, it is semantically redundant with 'Secure AUU Benefit Application'. The description presents the application process as a single end-to-end workflow: creating, specifying details, saving drafts, accepting declarations, and submitting. 'Manage Application Progress' covers the pre-submission lifecycle (drafting/resuming), while 'Secure AUU Benefit Application' covers the successful completion (submission). In Goal-Oriented Requirements Engineering, these are typically consolidated into a single high-level goal for the actor to 'Apply for AUU' or 'Manage AUU Application', as the ability to save/resume is a means to the end of submitting a valid application, not an independently satisfiable stakeholder outcome distinct from the application itself. Keeping them separate fragments the workflow. Since 'Secure AUU Benefit Application' is the more outcome-oriented goal (successful application), 'Manage Application Progress' should be removed to avoid fragmentation, or the hierarchy should be consolidated. Given the instruction to remove if another HLG covers the intention or if it's a workflow phase, and 'Secure AUU Benefit Application' implies the full process of getting the benefit (which includes managing the progress to get there), removing the narrower 'Manage Application Progress' is the correct consolidation step. Alternatively, one could argue 'Secure AUU Benefit Application' is the umbrella. The prompt asks to decide for the *original* HLG. If 'Secure AUU Benefit Application' is kept, 'Manage Application Progress' is a subset/phase. Therefore, REMOVE is appropriate to consolidate under the broader application goal.",
-      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-      "high_level_evaluation": {
-        "rationale": "Voting result 2/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Progress' is supported by the description (create, save, resume, update). However, it is semantically redundant with 'Secure AUU Benefit Application'. The description presents the application process as a single end-to-end workflow: creating, specifying details, saving drafts, accepting declarations, and submitting. 'Manage Application Progress' covers the pre-submission lifecycle (drafting/resuming), while 'Secure AUU Benefit Application' covers the successful completion (submission). In Goal-Oriented Requirements Engineering, these are typically consolidated into a single high-level goal for the actor to 'Apply for AUU' or 'Manage AUU Application', as the ability to save/resume is a means to the end of submitting a valid application, not an independently satisfiable stakeholder outcome distinct from the application itself. Keeping them separate fragments the workflow. Since 'Secure AUU Benefit Application' is the more outcome-oriented goal (successful application), 'Manage Application Progress' should be removed to avoid fragmentation, or the hierarchy should be consolidated. Given the instruction to remove if another HLG covers the intention or if it's a workflow phase, and 'Secure AUU Benefit Application' implies the full process of getting the benefit (which includes managing the progress to get there), removing the narrower 'Manage Application Progress' is the correct consolidation step. Alternatively, one could argue 'Secure AUU Benefit Application' is the umbrella. The prompt asks to decide for the *original* HLG. If 'Secure AUU Benefit Application' is kept, 'Manage Application Progress' is a subset/phase. Therefore, REMOVE is appropriate to consolidate under the broader application goal.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 1,
-        "rewriting_focus": null,
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 2,
-        "vote_distribution": {
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 1,
-          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 2
-        }
-      },
-      "replacement_request": null,
-      "low_level_evaluation": null
-    },
     "branch_003": {
       "branch_id": "branch_003",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Understand Benefit Information' is supported by the description ('access general AUU information, and simulate the expected monthly allowance'). It represents a distinct stakeholder intention from 'Secure AUU Benefit Application' (which is about the transactional process of applying) and 'Monitor Application Status' (which is about post-submission tracking). Understanding the benefit and simulating the allowance are pre-application or parallel activities that allow the applicant to make an informed decision about applying. They are not merely workflow phases of the application submission itself, but a separate informational/evaluative outcome. Therefore, it should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Understand Benefit Information'. 'Retrieve General Benefit Information' and 'Retrieve Detailed Eligibility Criteria' cover the requirement to 'access general AUU information' and understand eligibility. 'Input Data for Benefit Estimation' and 'View Estimated Allowance Amount' cover the requirement to 'simulate the expected monthly allowance'. All capabilities are explicitly supported by the project description ('access general AUU information, and simulate the expected monthly allowance'). There are no unsupported additions or missing essential capabilities.",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Understand Benefit Information' is supported by the project description, which states that applicants can 'access general AUU information, and simulate the expected monthly allowance.' This represents a distinct stakeholder outcome (pre-application assessment/information gathering) separate from the application lifecycle goals ('Secure AUU Benefit Application', 'Manage Application Progress', 'Monitor Application Status'). The bottom-up reconstruction 'Applicant assesses potential AUU benefit entitlement' captures the same intention but uses slightly different phrasing. The original name is clear and standard for this type of goal. The goal is not redundant with siblings as it deals with information access and simulation, not the creation or tracking of an actual application instance. Therefore, it should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Understand Benefit Information'. The project description explicitly states that applicants can 'access general AUU information' (covered by llg_001 and llg_004) and 'simulate the expected monthly allowance' (covered by llg_002 and llg_003). The decomposition correctly separates the information retrieval from the simulation process (inputting data and viewing results). There are no unsupported capabilities, and no essential capabilities explicitly required by the parent HLG are missing. The goals do not overlap with sibling HLGs like 'Secure AUU Benefit Application' or 'Manage Application Progress' as they focus on pre-application assessment and information access rather than the application lifecycle itself.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Understand Benefit Information' is supported by the description ('access general AUU information, and simulate the expected monthly allowance'). It represents a distinct stakeholder intention from 'Secure AUU Benefit Application' (which is about the transactional process of applying) and 'Monitor Application Status' (which is about post-submission tracking). Understanding the benefit and simulating the allowance are pre-application or parallel activities that allow the applicant to make an informed decision about applying. They are not merely workflow phases of the application submission itself, but a separate informational/evaluative outcome. Therefore, it should be kept.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Understand Benefit Information' is supported by the project description, which states that applicants can 'access general AUU information, and simulate the expected monthly allowance.' This represents a distinct stakeholder outcome (pre-application assessment/information gathering) separate from the application lifecycle goals ('Secure AUU Benefit Application', 'Manage Application Progress', 'Monitor Application Status'). The bottom-up reconstruction 'Applicant assesses potential AUU benefit entitlement' captures the same intention but uses slightly different phrasing. The original name is clear and standard for this type of goal. The goal is not redundant with siblings as it deals with information access and simulation, not the creation or tracking of an actual application instance. Therefore, it should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 4,
+        "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -186,7 +209,7 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Understand Benefit Information'. 'Retrieve General Benefit Information' and 'Retrieve Detailed Eligibility Criteria' cover the requirement to 'access general AUU information' and understand eligibility. 'Input Data for Benefit Estimation' and 'View Estimated Allowance Amount' cover the requirement to 'simulate the expected monthly allowance'. All capabilities are explicitly supported by the project description ('access general AUU information, and simulate the expected monthly allowance'). There are no unsupported additions or missing essential capabilities.",
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Understand Benefit Information'. The project description explicitly states that applicants can 'access general AUU information' (covered by llg_001 and llg_004) and 'simulate the expected monthly allowance' (covered by llg_002 and llg_003). The decomposition correctly separates the information retrieval from the simulation process (inputting data and viewing results). There are no unsupported capabilities, and no essential capabilities explicitly required by the parent HLG are missing. The goals do not overlap with sibling HLGs like 'Secure AUU Benefit Application' or 'Manage Application Progress' as they focus on pre-application assessment and information access rather than the application lifecycle itself.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "quality_score": 5,
         "regeneration_feedback": null,
@@ -202,13 +225,15 @@
     },
     "branch_004": {
       "branch_id": "branch_004",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Application Status' is supported by the description ('consult submitted applications'). It represents a distinct stakeholder intention from 'Manage Application Progress' (which focuses on the pre-submission lifecycle: create, save, resume, update) and 'Secure AUU Benefit Application' (the act of submitting). Monitoring the status of already submitted applications is a separate outcome that allows the applicant to track the processing phase (e.g., pending, approved, rejected, suspended). It is not merely a workflow phase of the application creation, but a post-submission informational need. Therefore, it should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent HLG 'Monitor Application Status' is supported by the description's statement that applicants can 'consult submitted applications'. LLG_001 (Retrieve List) and LLG_002 (View Specific Application Status) are directly entailed by this capability. However, LLG_003 (Retrieve Application Notifications) and LLG_004 (Download Official Application Documents) are not explicitly supported by the project description. The description does not mention a notification system, alerts, or the ability to download documents/communications. While these are common in such systems, they are not entailed by the provided text. According to the strict evaluation criteria, conventional but undocumented additions must be removed.",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Application Status' is supported by the project description, which states that applicants can 'consult submitted applications'. This represents a distinct stakeholder outcome from 'Manage Application Progress' (which covers creation, saving, resuming, and updating drafts/pre-submission states) and 'Secure AUU Benefit Application' (which covers the successful submission and acceptance of the application). Monitoring the status of an already submitted application (e.g., checking if it is accepted, rejected, or suspended) is a separate concern from managing the application content before submission. The bottom-up reconstruction 'Monitor Submitted Applications' aligns well with this intention. The goal is not redundant with siblings as it focuses on post-submission tracking rather than pre-submission management or the initial application act itself. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include 'Retrieve Application Notifications' (llg_003) and 'Download Official Application Documents' (llg_004). The project description explicitly states that applicants can 'consult submitted applications' and 'access general AUU information'. It does not mention any capability to receive notifications/alerts or to download documents. While 'consulting' an application implies viewing its status and details, it does not necessarily entail a separate notification system or a document download feature. These are conventional but undocumented additions. The core capability of monitoring status is covered by llg_001 and llg_002, but the presence of unsupported LLGs requires regeneration to align strictly with the documentation.",
       "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Application Status' is supported by the description ('consult submitted applications'). It represents a distinct stakeholder intention from 'Manage Application Progress' (which focuses on the pre-submission lifecycle: create, save, resume, update) and 'Secure AUU Benefit Application' (the act of submitting). Monitoring the status of already submitted applications is a separate outcome that allows the applicant to track the processing phase (e.g., pending, approved, rejected, suspended). It is not merely a workflow phase of the application creation, but a post-submission informational need. Therefore, it should be kept.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Application Status' is supported by the project description, which states that applicants can 'consult submitted applications'. This represents a distinct stakeholder outcome from 'Manage Application Progress' (which covers creation, saving, resuming, and updating drafts/pre-submission states) and 'Secure AUU Benefit Application' (which covers the successful submission and acceptance of the application). Monitoring the status of an already submitted application (e.g., checking if it is accepted, rejected, or suspended) is a separate concern from managing the application content before submission. The bottom-up reconstruction 'Monitor Submitted Applications' aligns well with this intention. The goal is not redundant with siblings as it focuses on post-submission tracking rather than pre-submission management or the initial application act itself.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 4,
+        "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -218,10 +243,10 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent HLG 'Monitor Application Status' is supported by the description's statement that applicants can 'consult submitted applications'. LLG_001 (Retrieve List) and LLG_002 (View Specific Application Status) are directly entailed by this capability. However, LLG_003 (Retrieve Application Notifications) and LLG_004 (Download Official Application Documents) are not explicitly supported by the project description. The description does not mention a notification system, alerts, or the ability to download documents/communications. While these are common in such systems, they are not entailed by the provided text. According to the strict evaluation criteria, conventional but undocumented additions must be removed.",
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include 'Retrieve Application Notifications' (llg_003) and 'Download Official Application Documents' (llg_004). The project description explicitly states that applicants can 'consult submitted applications' and 'access general AUU information'. It does not mention any capability to receive notifications/alerts or to download documents. While 'consulting' an application implies viewing its status and details, it does not necessarily entail a separate notification system or a document download feature. These are conventional but undocumented additions. The core capability of monitoring status is covered by llg_001 and llg_002, but the presence of unsupported LLGs requires regeneration to align strictly with the documentation.",
         "decision": "REGENERATE_LOW_LEVEL_GOALS",
         "quality_score": 2,
-        "regeneration_feedback": "Keep LLG_001 and LLG_002 which are supported by 'consult submitted applications'. Remove LLG_003 and LLG_004 as notifications and document downloads are not explicitly mentioned in the project description.",
+        "regeneration_feedback": "Remove llg_003 (notifications) and llg_004 (document downloads) as they are not supported by the project description. Keep llg_001 and llg_002 which align with 'consult submitted applications'.",
         "unsupported_or_misleading_llg_ids": [
           "llg_003",
           "llg_004"
@@ -237,40 +262,52 @@
     },
     "branch_005": {
       "branch_id": "branch_005",
-      "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Efficient Application Processing' is supported by the description, which states that INPS employees can 'accept, reject or suspend applications'. However, it is a workflow fragment of the broader end-to-end intention to 'Process AUU Applications'. The sibling HLG 'Ensure Application Compliance and Accuracy' covers the validation aspect, and 'Manage Application Exceptions' covers the suspension/follow-up aspect. 'Efficient Application Processing' specifically covers the decision-making phase (accept/reject/suspend). While these are distinct operational steps, they are all part of the single stakeholder outcome of processing the application. The bottom-up reconstruction 'Process AUU Applications' is a more accurate umbrella goal that encompasses the review, decision, and exception handling steps. Keeping 'Efficient Application Processing' as a separate HLG alongside 'Ensure Application Compliance' and 'Manage Application Exceptions' fragments the employee's primary duty. The most appropriate action is to rewrite the broadest suitable goal to serve as the umbrella. Since 'Efficient Application Processing' is the core action (deciding on the application), it is the best candidate to be rewritten into the umbrella goal 'Process AUU Applications', which would then encompass the compliance checks and exception handling as sub-goals or related aspects, or alternatively, the hierarchy should be consolidated. Given the options, rewriting this goal to be the comprehensive 'Process AUU Applications' aligns with the bottom-up reconstruction and resolves the fragmentation.",
-      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Efficient Application Processing' is supported by the project description, which states that INPS employees can 'accept, reject or suspend applications'. However, the hierarchy for the INPS Employee actor is fragmented. The sibling HLGs 'Ensure Application Compliance and Accuracy' and 'Manage Application Exceptions' cover specific aspects of the processing workflow (validation and exception handling). The original HLG covers the core decision-making actions (accept, reject, suspend). These three goals together constitute the end-to-end intention of processing an application. Since 'Efficient Application Processing' is a valid, supported, and distinct stakeholder outcome (making the decision on the application) that is not fully subsumed by the other siblings (which focus on compliance/validation and exceptions respectively), it should be kept. The name 'Efficient Application Processing' is slightly vague but the description clarifies the intent. The reconstruction 'Process AUU Applications' is a good umbrella, but since the other siblings exist, keeping the specific decision-making goal is appropriate to maintain granularity, or it could be rewritten to be the umbrella. However, looking at the siblings, 'Ensure Application Compliance' and 'Manage Application Exceptions' are distinct phases. 'Efficient Application Processing' (decision) is the core outcome. It is not redundant. It is supported. It is at the right granularity for a key stakeholder outcome (getting a decision). Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs cover the core decision-making actions (approve, reject, suspend) and the necessary review steps (retrieve, view). However, llg_006 'Assign Application to Another Employee' is unsupported by the project description. The description states that INPS employees can 'accept, reject or suspend applications' but does not mention reassignment, delegation, or workflow routing between employees. This is a conventional feature but not explicitly entailed by the provided text. Additionally, the sibling HLG 'Manage Application Exceptions' covers 'applications requiring additional documentation', which overlaps with the suspension action in llg_005, but the primary defect is the unsupported reassignment capability in llg_006.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Efficient Application Processing' is supported by the description, which states that INPS employees can 'accept, reject or suspend applications'. However, it is a workflow fragment of the broader end-to-end intention to 'Process AUU Applications'. The sibling HLG 'Ensure Application Compliance and Accuracy' covers the validation aspect, and 'Manage Application Exceptions' covers the suspension/follow-up aspect. 'Efficient Application Processing' specifically covers the decision-making phase (accept/reject/suspend). While these are distinct operational steps, they are all part of the single stakeholder outcome of processing the application. The bottom-up reconstruction 'Process AUU Applications' is a more accurate umbrella goal that encompasses the review, decision, and exception handling steps. Keeping 'Efficient Application Processing' as a separate HLG alongside 'Ensure Application Compliance' and 'Manage Application Exceptions' fragments the employee's primary duty. The most appropriate action is to rewrite the broadest suitable goal to serve as the umbrella. Since 'Efficient Application Processing' is the core action (deciding on the application), it is the best candidate to be rewritten into the umbrella goal 'Process AUU Applications', which would then encompass the compliance checks and exception handling as sub-goals or related aspects, or alternatively, the hierarchy should be consolidated. Given the options, rewriting this goal to be the comprehensive 'Process AUU Applications' aligns with the bottom-up reconstruction and resolves the fragmentation.",
-        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 2,
-        "rewriting_focus": "Rewrite to 'Process AUU Applications' to serve as the umbrella goal for reviewing, validating, deciding (accept/reject/suspend), and managing exceptions for AUU applications.",
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Efficient Application Processing' is supported by the project description, which states that INPS employees can 'accept, reject or suspend applications'. However, the hierarchy for the INPS Employee actor is fragmented. The sibling HLGs 'Ensure Application Compliance and Accuracy' and 'Manage Application Exceptions' cover specific aspects of the processing workflow (validation and exception handling). The original HLG covers the core decision-making actions (accept, reject, suspend). These three goals together constitute the end-to-end intention of processing an application. Since 'Efficient Application Processing' is a valid, supported, and distinct stakeholder outcome (making the decision on the application) that is not fully subsumed by the other siblings (which focus on compliance/validation and exceptions respectively), it should be kept. The name 'Efficient Application Processing' is slightly vague but the description clarifies the intent. The reconstruction 'Process AUU Applications' is a good umbrella, but since the other siblings exist, keeping the specific decision-making goal is appropriate to maintain granularity, or it could be rewritten to be the umbrella. However, looking at the siblings, 'Ensure Application Compliance' and 'Manage Application Exceptions' are distinct phases. 'Efficient Application Processing' (decision) is the core outcome. It is not redundant. It is supported. It is at the right granularity for a key stakeholder outcome (getting a decision).",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 2,
         "vote_distribution": {
-          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 2,
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 1
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2,
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 1
         }
       },
-      "replacement_request": {
-        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Efficient Application Processing' is supported by the description, which states that INPS employees can 'accept, reject or suspend applications'. However, it is a workflow fragment of the broader end-to-end intention to 'Process AUU Applications'. The sibling HLG 'Ensure Application Compliance and Accuracy' covers the validation aspect, and 'Manage Application Exceptions' covers the suspension/follow-up aspect. 'Efficient Application Processing' specifically covers the decision-making phase (accept/reject/suspend). While these are distinct operational steps, they are all part of the single stakeholder outcome of processing the application. The bottom-up reconstruction 'Process AUU Applications' is a more accurate umbrella goal that encompasses the review, decision, and exception handling steps. Keeping 'Efficient Application Processing' as a separate HLG alongside 'Ensure Application Compliance' and 'Manage Application Exceptions' fragments the employee's primary duty. The most appropriate action is to rewrite the broadest suitable goal to serve as the umbrella. Since 'Efficient Application Processing' is the core action (deciding on the application), it is the best candidate to be rewritten into the umbrella goal 'Process AUU Applications', which would then encompass the compliance checks and exception handling as sub-goals or related aspects, or alternatively, the hierarchy should be consolidated. Given the options, rewriting this goal to be the comprehensive 'Process AUU Applications' aligns with the bottom-up reconstruction and resolves the fragmentation.",
-        "generation_project_description": "The system supports the online management of applications for the Italian Assegno Unico Universale (AUU), a financial benefit provided by INPS to families with dependent children. Authenticated applicants can create applications, specify child, household, custody and payment information, save drafts, resume applications, accept declarations and privacy notices, and submit applications. The system validates fiscal codes, handles ISEE information, calculates payments, and allows INPS employees to accept, reject or suspend applications. Suspended applications may require additional documents. Another parent can complete an existing application and modify allowance distribution information. Applicants can also add children to existing applications, consult submitted applications, access general AUU information, and simulate the expected monthly allowance.\n\nRewrite the functional intention for actor 'INPS Employee' using this focus: Rewrite to 'Process AUU Applications' to serve as the umbrella goal for reviewing, validating, deciding (accept/reject/suspend), and managing exceptions for AUU applications.",
-        "actor": {
-          "name": "INPS Employee",
-          "description": "Staff responsible for processing and managing AUU applications."
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs cover the core decision-making actions (approve, reject, suspend) and the necessary review steps (retrieve, view). However, llg_006 'Assign Application to Another Employee' is unsupported by the project description. The description states that INPS employees can 'accept, reject or suspend applications' but does not mention reassignment, delegation, or workflow routing between employees. This is a conventional feature but not explicitly entailed by the provided text. Additionally, the sibling HLG 'Manage Application Exceptions' covers 'applications requiring additional documentation', which overlaps with the suspension action in llg_005, but the primary defect is the unsupported reassignment capability in llg_006.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove llg_006 (Assign Application to Another Employee) as it is not supported by the project description. Keep the other LLGs which cover the documented actions of reviewing, approving, rejecting, and suspending applications.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_006"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
         }
-      },
-      "low_level_evaluation": null
+      }
     },
     "branch_006": {
       "branch_id": "branch_006",
-      "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Ensure Application Compliance and Accuracy' describes a validation and verification step (checking data validity and calculation correctness). The bottom-up reconstruction 'Process AUU Benefit Application Data' and the sibling HLG 'Efficient Application Processing' (which covers reviewing, approving, rejecting, or suspending) indicate that the employee's primary end-to-end intention is to process the application. Validation is an integral sub-step of processing, not an independently satisfiable stakeholder outcome. The hierarchy is fragmented, splitting the processing workflow into 'Compliance/Accuracy', 'Efficient Processing' (decision), and 'Exceptions'. 'Efficient Application Processing' is the broader goal that encompasses the review and decision-making phase. 'Ensure Application Compliance and Accuracy' is a workflow fragment (validation) that is entailed by the broader processing intention. Therefore, it should be removed to consolidate the hierarchy under the broader processing goal.",
+      "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Ensure Application Compliance and Accuracy' is supported by the project description, which states that the system 'validates fiscal codes, handles ISEE information, calculates payments' and that employees must 'ensure correct benefit calculations'. However, this goal is a workflow phase (validation/verification) that is integral to the broader stakeholder outcome of processing applications. The sibling HLG 'Efficient Application Processing' explicitly covers the end-to-end intention of reviewing and making decisions (approve/reject/suspend) on applications. Validation and calculation are necessary steps to enable these decisions and do not constitute an independently satisfiable stakeholder outcome distinct from the processing workflow. Therefore, the original goal is fragmented and should be rewritten to serve as the umbrella for the complete processing intention, or removed if 'Efficient Application Processing' is deemed sufficient. Given the instruction to prefer REWRITE for fragmented workflows where no single sibling perfectly captures the full scope including the data verification aspect as a primary driver, and 'Efficient Application Processing' focuses on the decision outcome, rewriting the original to encompass the full processing lifecycle (including validation) is the most robust corrective action to ensure the hierarchy is not fragmented. However, looking at the sibling 'Efficient Application Processing', it already covers 'review, approve, reject, or suspend'. The validation is part of the review. Thus, 'Ensure Application Compliance and Accuracy' is largely redundant with the review phase of 'Efficient Application Processing'. But since 'Efficient Application Processing' is the primary processing goal, and 'Ensure Application Compliance' is a specific aspect of it, it is better to REMOVE it as FULLY_REDUNDANT if 'Efficient Application Processing' is considered the umbrella. Let's re-evaluate. 'Efficient Application Processing' description: 'To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.' This covers the decision. The validation is part of the review. Is there a distinct outcome? No. The employee's goal is to process the application. Validation is a means. Therefore, 'Ensure Application Compliance and Accuracy' is a sub-goal of 'Efficient Application Processing'. It should be removed as redundant to the broader processing goal.",
       "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Ensure Application Compliance and Accuracy' describes a validation and verification step (checking data validity and calculation correctness). The bottom-up reconstruction 'Process AUU Benefit Application Data' and the sibling HLG 'Efficient Application Processing' (which covers reviewing, approving, rejecting, or suspending) indicate that the employee's primary end-to-end intention is to process the application. Validation is an integral sub-step of processing, not an independently satisfiable stakeholder outcome. The hierarchy is fragmented, splitting the processing workflow into 'Compliance/Accuracy', 'Efficient Processing' (decision), and 'Exceptions'. 'Efficient Application Processing' is the broader goal that encompasses the review and decision-making phase. 'Ensure Application Compliance and Accuracy' is a workflow fragment (validation) that is entailed by the broader processing intention. Therefore, it should be removed to consolidate the hierarchy under the broader processing goal.",
+        "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Ensure Application Compliance and Accuracy' is supported by the project description, which states that the system 'validates fiscal codes, handles ISEE information, calculates payments' and that employees must 'ensure correct benefit calculations'. However, this goal is a workflow phase (validation/verification) that is integral to the broader stakeholder outcome of processing applications. The sibling HLG 'Efficient Application Processing' explicitly covers the end-to-end intention of reviewing and making decisions (approve/reject/suspend) on applications. Validation and calculation are necessary steps to enable these decisions and do not constitute an independently satisfiable stakeholder outcome distinct from the processing workflow. Therefore, the original goal is fragmented and should be rewritten to serve as the umbrella for the complete processing intention, or removed if 'Efficient Application Processing' is deemed sufficient. Given the instruction to prefer REWRITE for fragmented workflows where no single sibling perfectly captures the full scope including the data verification aspect as a primary driver, and 'Efficient Application Processing' focuses on the decision outcome, rewriting the original to encompass the full processing lifecycle (including validation) is the most robust corrective action to ensure the hierarchy is not fragmented. However, looking at the sibling 'Efficient Application Processing', it already covers 'review, approve, reject, or suspend'. The validation is part of the review. Thus, 'Ensure Application Compliance and Accuracy' is largely redundant with the review phase of 'Efficient Application Processing'. But since 'Efficient Application Processing' is the primary processing goal, and 'Ensure Application Compliance' is a specific aspect of it, it is better to REMOVE it as FULLY_REDUNDANT if 'Efficient Application Processing' is considered the umbrella. Let's re-evaluate. 'Efficient Application Processing' description: 'To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.' This covers the decision. The validation is part of the review. Is there a distinct outcome? No. The employee's goal is to process the application. Validation is a means. Therefore, 'Ensure Application Compliance and Accuracy' is a sub-goal of 'Efficient Application Processing'. It should be removed as redundant to the broader processing goal.",
         "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
         "quality_score": 1,
         "rewriting_focus": null,
+        "removal_basis": "FULLY_REDUNDANT",
+        "covered_by_high_level_goal_name": "Efficient Application Processing",
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -283,73 +320,88 @@
     },
     "branch_007": {
       "branch_id": "branch_007",
-      "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Exceptions' describes the handling of suspended applications or those requiring additional documentation. The sibling HLG 'Efficient Application Processing' explicitly includes the action to 'suspend' applications and covers the review/approval/rejection workflow. Handling exceptions (requesting docs, resolving deficiencies) is an integral part of the processing lifecycle for suspended or incomplete cases, not an independently satisfiable stakeholder outcome distinct from the overall processing intention. The hierarchy is fragmented by splitting the processing workflow into 'Compliance/Accuracy', 'Efficient Processing', and 'Exceptions'. 'Efficient Application Processing' is the broader goal that encompasses the decision-making and subsequent management of those decisions (including suspensions and their resolution). Therefore, 'Manage Application Exceptions' is a workflow fragment entailed by the broader processing goal and should be removed.",
-      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Exceptions' is supported by the description ('Suspended applications may require additional documents'). However, it is a workflow phase (exception handling) that is tightly coupled with the core processing workflow. The sibling HLG 'Efficient Application Processing' explicitly includes 'suspend' as a core action. In requirements engineering, the decision to suspend and the subsequent handling of that suspension (requesting docs) are part of the same end-to-end processing outcome for the employee. Keeping them separate fragments the employee's primary task. The reconstructed goal 'Ensure Application Completeness and Resolve Exceptions' is broader and better captures the intent of handling incomplete or problematic applications as part of the overall processing lifecycle. Therefore, the original goal should be rewritten to align with this broader, more coherent scope that encompasses the exception handling within the processing workflow.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Exceptions' describes the handling of suspended applications or those requiring additional documentation. The sibling HLG 'Efficient Application Processing' explicitly includes the action to 'suspend' applications and covers the review/approval/rejection workflow. Handling exceptions (requesting docs, resolving deficiencies) is an integral part of the processing lifecycle for suspended or incomplete cases, not an independently satisfiable stakeholder outcome distinct from the overall processing intention. The hierarchy is fragmented by splitting the processing workflow into 'Compliance/Accuracy', 'Efficient Processing', and 'Exceptions'. 'Efficient Application Processing' is the broader goal that encompasses the decision-making and subsequent management of those decisions (including suspensions and their resolution). Therefore, 'Manage Application Exceptions' is a workflow fragment entailed by the broader processing goal and should be removed.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 1,
-        "rewriting_focus": null,
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 3
-        }
-      },
-      "replacement_request": null,
-      "low_level_evaluation": null
-    },
-    "branch_008": {
-      "branch_id": "branch_008",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Collaborative Application Management' accurately captures the end-to-end intention of the Co-parent actor, which is to engage with and finalize an application initiated by another parent. The bottom-up reconstruction confirms that the low-level goals cover the complete workflow (accepting invitation, providing data, modifying, confirming). While there is a sibling HLG 'Flexible Allowance Distribution', the project description explicitly states that a co-parent can 'complete an existing application AND modify allowance distribution information'. Completing the application (providing personal info, documents, etc.) is a distinct and substantial part of the collaboration that is not fully entailed by the narrower goal of modifying distribution. Therefore, 'Collaborative Application Management' serves as the appropriate umbrella for the co-parent's primary interaction with the shared application, encompassing the completion steps. It is supported, correctly scoped, and not redundant with the other co-parent goal. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Collaborative Application Management'. The project description states that a co-parent can 'complete an existing application'. The LLGs cover the necessary steps to achieve this: accepting the collaboration (llg_001), viewing details (llg_002), providing identification (llg_003), uploading documents (llg_004), updating/completing sections (llg_005), and confirming the contribution (llg_006). These actions are explicitly entailed by the requirement to 'complete' an application. The sibling HLG 'Flexible Allowance Distribution' covers the specific aspect of modifying distribution, which is distinct from the general completion of the application data. No essential capabilities are missing, and no LLGs are unsupported.",
-      "final_decision": "CONFIRM_BRANCH",
-      "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Collaborative Application Management' accurately captures the end-to-end intention of the Co-parent actor, which is to engage with and finalize an application initiated by another parent. The bottom-up reconstruction confirms that the low-level goals cover the complete workflow (accepting invitation, providing data, modifying, confirming). While there is a sibling HLG 'Flexible Allowance Distribution', the project description explicitly states that a co-parent can 'complete an existing application AND modify allowance distribution information'. Completing the application (providing personal info, documents, etc.) is a distinct and substantial part of the collaboration that is not fully entailed by the narrower goal of modifying distribution. Therefore, 'Collaborative Application Management' serves as the appropriate umbrella for the co-parent's primary interaction with the shared application, encompassing the completion steps. It is supported, correctly scoped, and not redundant with the other co-parent goal.",
-        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 5,
-        "rewriting_focus": null,
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
-        }
-      },
-      "replacement_request": null,
-      "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Collaborative Application Management'. The project description states that a co-parent can 'complete an existing application'. The LLGs cover the necessary steps to achieve this: accepting the collaboration (llg_001), viewing details (llg_002), providing identification (llg_003), uploading documents (llg_004), updating/completing sections (llg_005), and confirming the contribution (llg_006). These actions are explicitly entailed by the requirement to 'complete' an application. The sibling HLG 'Flexible Allowance Distribution' covers the specific aspect of modifying distribution, which is distinct from the general completion of the application data. No essential capabilities are missing, and no LLGs are unsupported.",
-        "decision": "KEEP_LOW_LEVEL_GOALS",
-        "quality_score": 5,
-        "regeneration_feedback": null,
-        "unsupported_or_misleading_llg_ids": [],
-        "missing_essential_capabilities": [],
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "KEEP_LOW_LEVEL_GOALS": 3
-        }
-      }
-    },
-    "branch_009": {
-      "branch_id": "branch_009",
-      "rationale": "Voting result 2/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the description ('modify allowance distribution information'). However, it is a narrow workflow fragment of the broader Co-parent intention to 'complete or modify an existing application'. The sibling HLG 'Collaborative Application Management' already covers the end-to-end outcome of contributing to and finalizing the application. Modifying distribution is a specific capability within that collaborative process, not an independently satisfiable stakeholder outcome distinct from the application completion itself. Therefore, it should be removed to avoid fragmentation, as its intention is entailed by 'Collaborative Application Management'.",
-      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-      "high_level_evaluation": {
-        "rationale": "Voting result 2/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the description ('modify allowance distribution information'). However, it is a narrow workflow fragment of the broader Co-parent intention to 'complete or modify an existing application'. The sibling HLG 'Collaborative Application Management' already covers the end-to-end outcome of contributing to and finalizing the application. Modifying distribution is a specific capability within that collaborative process, not an independently satisfiable stakeholder outcome distinct from the application completion itself. Therefore, it should be removed to avoid fragmentation, as its intention is entailed by 'Collaborative Application Management'.",
-        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 1,
-        "rewriting_focus": null,
+        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Exceptions' is supported by the description ('Suspended applications may require additional documents'). However, it is a workflow phase (exception handling) that is tightly coupled with the core processing workflow. The sibling HLG 'Efficient Application Processing' explicitly includes 'suspend' as a core action. In requirements engineering, the decision to suspend and the subsequent handling of that suspension (requesting docs) are part of the same end-to-end processing outcome for the employee. Keeping them separate fragments the employee's primary task. The reconstructed goal 'Ensure Application Completeness and Resolve Exceptions' is broader and better captures the intent of handling incomplete or problematic applications as part of the overall processing lifecycle. Therefore, the original goal should be rewritten to align with this broader, more coherent scope that encompasses the exception handling within the processing workflow.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 2,
+        "rewriting_focus": "Broaden the scope to encompass the full lifecycle of handling incomplete or problematic applications, including suspension and document requests, to align with the end-to-end processing outcome.",
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 2,
         "vote_distribution": {
-          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 2,
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 2,
           "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 1
         }
       },
-      "replacement_request": null,
+      "replacement_request": {
+        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Manage Application Exceptions' is supported by the description ('Suspended applications may require additional documents'). However, it is a workflow phase (exception handling) that is tightly coupled with the core processing workflow. The sibling HLG 'Efficient Application Processing' explicitly includes 'suspend' as a core action. In requirements engineering, the decision to suspend and the subsequent handling of that suspension (requesting docs) are part of the same end-to-end processing outcome for the employee. Keeping them separate fragments the employee's primary task. The reconstructed goal 'Ensure Application Completeness and Resolve Exceptions' is broader and better captures the intent of handling incomplete or problematic applications as part of the overall processing lifecycle. Therefore, the original goal should be rewritten to align with this broader, more coherent scope that encompasses the exception handling within the processing workflow.",
+        "generation_project_description": "The system supports the online management of applications for the Italian Assegno Unico Universale (AUU), a financial benefit provided by INPS to families with dependent children. Authenticated applicants can create applications, specify child, household, custody and payment information, save drafts, resume applications, accept declarations and privacy notices, and submit applications. The system validates fiscal codes, handles ISEE information, calculates payments, and allows INPS employees to accept, reject or suspend applications. Suspended applications may require additional documents. Another parent can complete an existing application and modify allowance distribution information. Applicants can also add children to existing applications, consult submitted applications, access general AUU information, and simulate the expected monthly allowance.\n\nRewrite the functional intention for actor 'INPS Employee' using this focus: Broaden the scope to encompass the full lifecycle of handling incomplete or problematic applications, including suspension and document requests, to align with the end-to-end processing outcome.",
+        "actor": {
+          "name": "INPS Employee",
+          "description": "Staff responsible for processing and managing AUU applications."
+        }
+      },
+      "low_level_evaluation": null
+    },
+    "branch_008": {
+      "branch_id": "branch_008",
+      "rationale": "Voting result 3/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Collaborative Application Management' is supported by the project description, which states that 'Another parent can complete an existing application and modify allowance distribution information.' However, the hierarchy for the Co-parent actor is fragmented. The sibling HLG 'Flexible Allowance Distribution' covers the modification aspect, while 'Collaborative Application Management' covers the completion aspect. These two capabilities are tightly coupled in the workflow of a co-parent engaging with a shared application: they must accept the invitation, view details, provide information/documents, and confirm their contribution, which inherently involves managing the distribution details as part of finalizing their portion. Splitting 'completing' and 'modifying distribution' into separate HLGs fragments the single end-to-end stakeholder outcome of collaborating on a shared application. Therefore, the original goal should be rewritten to serve as the umbrella for the entire co-parent collaboration workflow, encompassing both the completion of the application and the management of allowance distribution within that context.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Collaborative Application Management' is supported by the project description, which states that 'Another parent can complete an existing application and modify allowance distribution information.' However, the hierarchy for the Co-parent actor is fragmented. The sibling HLG 'Flexible Allowance Distribution' covers the modification aspect, while 'Collaborative Application Management' covers the completion aspect. These two capabilities are tightly coupled in the workflow of a co-parent engaging with a shared application: they must accept the invitation, view details, provide information/documents, and confirm their contribution, which inherently involves managing the distribution details as part of finalizing their portion. Splitting 'completing' and 'modifying distribution' into separate HLGs fragments the single end-to-end stakeholder outcome of collaborating on a shared application. Therefore, the original goal should be rewritten to serve as the umbrella for the entire co-parent collaboration workflow, encompassing both the completion of the application and the management of allowance distribution within that context.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 2,
+        "rewriting_focus": "Broaden the scope to encompass the entire end-to-end workflow of a co-parent collaborating on a shared AUU application, including accepting invitations, providing required information, and managing allowance distribution as part of finalizing their contribution.",
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": {
+        "rationale": "Voting result 3/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Collaborative Application Management' is supported by the project description, which states that 'Another parent can complete an existing application and modify allowance distribution information.' However, the hierarchy for the Co-parent actor is fragmented. The sibling HLG 'Flexible Allowance Distribution' covers the modification aspect, while 'Collaborative Application Management' covers the completion aspect. These two capabilities are tightly coupled in the workflow of a co-parent engaging with a shared application: they must accept the invitation, view details, provide information/documents, and confirm their contribution, which inherently involves managing the distribution details as part of finalizing their portion. Splitting 'completing' and 'modifying distribution' into separate HLGs fragments the single end-to-end stakeholder outcome of collaborating on a shared application. Therefore, the original goal should be rewritten to serve as the umbrella for the entire co-parent collaboration workflow, encompassing both the completion of the application and the management of allowance distribution within that context.",
+        "generation_project_description": "The system supports the online management of applications for the Italian Assegno Unico Universale (AUU), a financial benefit provided by INPS to families with dependent children. Authenticated applicants can create applications, specify child, household, custody and payment information, save drafts, resume applications, accept declarations and privacy notices, and submit applications. The system validates fiscal codes, handles ISEE information, calculates payments, and allows INPS employees to accept, reject or suspend applications. Suspended applications may require additional documents. Another parent can complete an existing application and modify allowance distribution information. Applicants can also add children to existing applications, consult submitted applications, access general AUU information, and simulate the expected monthly allowance.\n\nRewrite the functional intention for actor 'Co-parent' using this focus: Broaden the scope to encompass the entire end-to-end workflow of a co-parent collaborating on a shared AUU application, including accepting invitations, providing required information, and managing allowance distribution as part of finalizing their contribution.",
+        "actor": {
+          "name": "Co-parent",
+          "description": "A parent who can complete or modify an existing application initiated by another parent."
+        }
+      },
+      "low_level_evaluation": null
+    },
+    "branch_009": {
+      "branch_id": "branch_009",
+      "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the project description, which states that a co-parent can 'modify allowance distribution information'. However, the hierarchy for the Co-parent actor is fragmented. The sibling HLG 'Collaborative Application Management' covers the completion of the application, while 'Flexible Allowance Distribution' covers the modification of distribution details. These capabilities are tightly coupled in the workflow of a co-parent engaging with a shared application: they must accept the invitation, view details, provide information/documents, and confirm their contribution, which inherently involves managing the distribution details as part of finalizing their portion. Splitting 'completing' and 'modifying distribution' into separate HLGs fragments the single end-to-end stakeholder outcome of collaborating on a shared application. Therefore, the original goal should be rewritten to serve as the umbrella for the entire co-parent collaboration workflow, encompassing both the completion of the application and the management of allowance distribution within that context.",
+      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the project description, which states that a co-parent can 'modify allowance distribution information'. However, the hierarchy for the Co-parent actor is fragmented. The sibling HLG 'Collaborative Application Management' covers the completion of the application, while 'Flexible Allowance Distribution' covers the modification of distribution details. These capabilities are tightly coupled in the workflow of a co-parent engaging with a shared application: they must accept the invitation, view details, provide information/documents, and confirm their contribution, which inherently involves managing the distribution details as part of finalizing their portion. Splitting 'completing' and 'modifying distribution' into separate HLGs fragments the single end-to-end stakeholder outcome of collaborating on a shared application. Therefore, the original goal should be rewritten to serve as the umbrella for the entire co-parent collaboration workflow, encompassing both the completion of the application and the management of allowance distribution within that context.",
+        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 2,
+        "rewriting_focus": "Broaden the scope to encompass the entire end-to-end workflow of a co-parent collaborating on a shared AUU application, including accepting invitations, providing required information, and managing allowance distribution as part of finalizing their contribution.",
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": {
+        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Flexible Allowance Distribution' is supported by the project description, which states that a co-parent can 'modify allowance distribution information'. However, the hierarchy for the Co-parent actor is fragmented. The sibling HLG 'Collaborative Application Management' covers the completion of the application, while 'Flexible Allowance Distribution' covers the modification of distribution details. These capabilities are tightly coupled in the workflow of a co-parent engaging with a shared application: they must accept the invitation, view details, provide information/documents, and confirm their contribution, which inherently involves managing the distribution details as part of finalizing their portion. Splitting 'completing' and 'modifying distribution' into separate HLGs fragments the single end-to-end stakeholder outcome of collaborating on a shared application. Therefore, the original goal should be rewritten to serve as the umbrella for the entire co-parent collaboration workflow, encompassing both the completion of the application and the management of allowance distribution within that context.",
+        "generation_project_description": "The system supports the online management of applications for the Italian Assegno Unico Universale (AUU), a financial benefit provided by INPS to families with dependent children. Authenticated applicants can create applications, specify child, household, custody and payment information, save drafts, resume applications, accept declarations and privacy notices, and submit applications. The system validates fiscal codes, handles ISEE information, calculates payments, and allows INPS employees to accept, reject or suspend applications. Suspended applications may require additional documents. Another parent can complete an existing application and modify allowance distribution information. Applicants can also add children to existing applications, consult submitted applications, access general AUU information, and simulate the expected monthly allowance.\n\nRewrite the functional intention for actor 'Co-parent' using this focus: Broaden the scope to encompass the entire end-to-end workflow of a co-parent collaborating on a shared AUU application, including accepting invitations, providing required information, and managing allowance distribution as part of finalizing their contribution.",
+        "actor": {
+          "name": "Co-parent",
+          "description": "A parent who can complete or modify an existing application initiated by another parent."
+        }
+      },
       "low_level_evaluation": null
     }
   },
@@ -388,8 +440,8 @@
         }
       },
       {
-        "name": "Process AUU Applications",
-        "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+        "name": "Efficient Application Processing",
+        "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
         "actor": {
           "name": "INPS Employee",
           "description": "Staff responsible for processing and managing AUU applications."
@@ -398,14 +450,6 @@
       {
         "name": "Ensure Application Compliance and Accuracy",
         "description": "To verify the validity of applicant data and ensure correct benefit calculations according to regulations.",
-        "actor": {
-          "name": "INPS Employee",
-          "description": "Staff responsible for processing and managing AUU applications."
-        }
-      },
-      {
-        "name": "Manage Application Exceptions",
-        "description": "To handle applications requiring additional documentation or special attention.",
         "actor": {
           "name": "INPS Employee",
           "description": "Staff responsible for processing and managing AUU applications."
@@ -744,54 +788,6 @@
         }
       },
       {
-        "name": "Request Additional Documentation from Applicant",
-        "description": "INPS Employee sends a request to the system to formally ask an applicant for specific additional documents for their application.",
-        "high_level_associated": {
-          "name": "Manage Application Exceptions",
-          "description": "To handle applications requiring additional documentation or special attention.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "Upload Supplementary Documents to Application",
-        "description": "INPS Employee uploads supplementary documents received from an applicant or other sources to a specific application in the system.",
-        "high_level_associated": {
-          "name": "Manage Application Exceptions",
-          "description": "To handle applications requiring additional documentation or special attention.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "Add Internal Notes to Application",
-        "description": "INPS Employee adds internal, private notes or comments to an application for tracking special attention or context.",
-        "high_level_associated": {
-          "name": "Manage Application Exceptions",
-          "description": "To handle applications requiring additional documentation or special attention.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "Mark Application Exception as Resolved",
-        "description": "INPS Employee sends a request to the system to mark an application's exception status as resolved after all issues have been addressed.",
-        "high_level_associated": {
-          "name": "Manage Application Exceptions",
-          "description": "To handle applications requiring additional documentation or special attention.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
         "name": "Accept Collaboration Invitation",
         "description": "Co-parent sends a request to the system to accept an invitation to collaborate on an existing AUU application initiated by another parent.",
         "high_level_associated": {
@@ -912,11 +908,11 @@
         }
       },
       {
-        "name": "RetrievePendingAUUApplications",
-        "description": "Allow the INPS Employee to retrieve a list of all AUU applications that are currently pending review.",
+        "name": "Retrieve Pending Applications for Review",
+        "description": "Allow the INPS Employee to fetch a list of all AUU applications currently awaiting review.",
         "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "name": "Efficient Application Processing",
+          "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
           "actor": {
             "name": "INPS Employee",
             "description": "Staff responsible for processing and managing AUU applications."
@@ -924,11 +920,11 @@
         }
       },
       {
-        "name": "RetrieveSpecificAUUApplicationDetails",
-        "description": "Enable the INPS Employee to retrieve all detailed information for a specific AUU application by its identifier.",
+        "name": "View Detailed Application Information",
+        "description": "Enable the INPS Employee to access and display all detailed information for a specific AUU application.",
         "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "name": "Efficient Application Processing",
+          "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
           "actor": {
             "name": "INPS Employee",
             "description": "Staff responsible for processing and managing AUU applications."
@@ -936,11 +932,11 @@
         }
       },
       {
-        "name": "InitiateAUUApplicationValidation",
-        "description": "Allow the INPS Employee to trigger an automated compliance and accuracy validation process for a selected AUU application.",
+        "name": "Approve AUU Application",
+        "description": "Allow the INPS Employee to formally approve a selected AUU application, marking it as eligible for benefits.",
         "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "name": "Efficient Application Processing",
+          "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
           "actor": {
             "name": "INPS Employee",
             "description": "Staff responsible for processing and managing AUU applications."
@@ -948,11 +944,11 @@
         }
       },
       {
-        "name": "ViewAUUApplicationValidationResults",
-        "description": "Enable the INPS Employee to view the detailed results of the compliance and accuracy validation for an AUU application.",
+        "name": "Reject AUU Application with Reason",
+        "description": "Enable the INPS Employee to formally reject a selected AUU application and provide a mandatory reason for the rejection.",
         "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "name": "Efficient Application Processing",
+          "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
           "actor": {
             "name": "INPS Employee",
             "description": "Staff responsible for processing and managing AUU applications."
@@ -960,11 +956,11 @@
         }
       },
       {
-        "name": "AcceptAUUApplication",
-        "description": "Allow the INPS Employee to mark a specific AUU application as 'Accepted' after review and validation.",
+        "name": "Suspend AUU Application for More Information",
+        "description": "Allow the INPS Employee to temporarily suspend a selected AUU application, indicating that additional information or documents are required from the applicant.",
         "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "name": "Efficient Application Processing",
+          "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
           "actor": {
             "name": "INPS Employee",
             "description": "Staff responsible for processing and managing AUU applications."
@@ -972,59 +968,11 @@
         }
       },
       {
-        "name": "RejectAUUApplication",
-        "description": "Enable the INPS Employee to mark a specific AUU application as 'Rejected' and provide a reason.",
+        "name": "Assign Application to Another Employee",
+        "description": "Enable the INPS Employee to reassign a selected AUU application to another specific INPS Employee for further processing.",
         "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "SuspendAUUApplication",
-        "description": "Allow the INPS Employee to mark a specific AUU application as 'Suspended' for further investigation or clarification.",
-        "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "RecordSuspensionReason",
-        "description": "Enable the INPS Employee to record the specific reason(s) for suspending an AUU application.",
-        "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "RetrieveSuspendedAUUApplications",
-        "description": "Allow the INPS Employee to retrieve a list of all AUU applications currently in 'Suspended' status.",
-        "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
-          "actor": {
-            "name": "INPS Employee",
-            "description": "Staff responsible for processing and managing AUU applications."
-          }
-        }
-      },
-      {
-        "name": "UpdateSuspendedApplicationStatus",
-        "description": "Enable the INPS Employee to update the processing status of a suspended AUU application (e.g., after receiving additional documentation).",
-        "high_level_associated": {
-          "name": "Process AUU Applications",
-          "description": "To efficiently review, validate, make decisions (accept, reject, or suspend), and manage exceptions for Assegno Unico Universale (AUU) applications, ensuring compliance and accuracy in benefit distribution.",
+          "name": "Efficient Application Processing",
+          "description": "To effectively review, approve, reject, or suspend AUU applications to ensure timely benefit decisions.",
           "actor": {
             "name": "INPS Employee",
             "description": "Staff responsible for processing and managing AUU applications."
@@ -1035,7 +983,7 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description explicitly states that a co-parent can 'complete an existing application and modify allowance distribution information'. The current HLG 'Collaborative Application Management' is defined as 'To contribute to and finalize an AUU application initiated by another parent'. This HLG semantically entails the outcome of completing the application, which includes the necessary steps to modify distribution information as part of finalizing the collaborative submission. The separate HLG 'Flexible Allowance Distribution' was previously evaluated and recommended for removal as a fragment of the broader collaborative management outcome. No other actor-level functional requirements are left uncovered; Applicant and INPS Employee responsibilities are fully covered by their respective HLGs.",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description explicitly states that a co-parent can 'complete an existing application and modify allowance distribution information'. The current HLG 'Collaborative Application Management' covers the completion of the application, and 'Flexible Allowance Distribution' covers the modification of allowance distribution. While these are closely related, they represent distinct functional capabilities (finalizing the application vs. adjusting payment distribution) that are both explicitly supported by the text. No other actor-level functional requirements are left uncovered; all Applicant and INPS Employee responsibilities are mapped to existing HLGs.",
     "quality_score": 5,
     "missing_goal_requests": [],
     "voter_count": 3,
@@ -1047,5 +995,7 @@
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
   "llg_regeneration_counts": {},
-  "warnings": []
+  "warnings": [
+    "branch_007: DUPLICATE_REWRITE_CONSOLIDATED_INTO 'Efficient Application Processing'"
+  ]
 }

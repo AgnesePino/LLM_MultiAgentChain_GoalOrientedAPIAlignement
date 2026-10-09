@@ -16,7 +16,20 @@ hidden parent goal. Return only the requested JSON."""
 
 def reconstruct_high_level_goal(branch: GoalBranch) -> BottomUpHighLevelGoal:
     if not branch.low_level_goals:
-        raise ValueError(f"{branch.branch_id} has no Low-Level Goals.")
+        return BottomUpHighLevelGoal(
+            branch_id=branch.branch_id,
+            reconstructed_high_level_goal=(
+                "No High-Level Goal can be reconstructed because this branch "
+                "has no Low-Level Goals."
+            ),
+            rationale=(
+                "The empty decomposition is a material coverage gap. Evaluate "
+                "the original HLG normally; if it is valid, generate its "
+                "required Low-Level Goals instead of removing it merely because "
+                "the branch is empty."
+            ),
+            source_low_level_goal_ids=[],
+        )
 
     lines = [
         f"- llg_{index:03d}: {goal.description}"

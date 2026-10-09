@@ -1,53 +1,220 @@
 {
   "iteration": 7,
   "reconstructions": {
+    "branch_001": {
+      "reconstructed_high_level_goal": "Submit Task Estimates",
+      "rationale": "The low-level goal explicitly describes the action of a team member submitting an estimate for a task. The high-level goal encapsulates this core activity of providing task estimates to the system.",
+      "branch_id": "branch_001",
+      "source_low_level_goal_ids": [
+        "Submit Task Estimate"
+      ]
+    },
+    "branch_002": {
+      "reconstructed_high_level_goal": "Enable Team Member to View Final Aggregated Task Estimate",
+      "rationale": "The low-level goal describes the action of a team member viewing the consolidated estimate for a task after a collaborative estimation process. The high-level goal encapsulates the intention to make this final, agreed-upon estimate transparent and accessible to the team member, ensuring they are aware of the outcome of the estimation discussion.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "View Aggregated Task Estimate"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Facilitate unbiased task estimation",
+      "rationale": "The low-level goal describes a mechanism where individual estimates are submitted confidentially and revealed simultaneously by a facilitator. This process is specifically designed to prevent anchoring bias and groupthink, ensuring that each team member's initial estimate is independent and unbiased before collective discussion, which is essential for fair and accurate task estimation.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "Submit Anonymous Estimate"
+      ]
+    },
     "branch_004": {
-      "reconstructed_high_level_goal": "Facilitate Task Estimation Sessions",
-      "rationale": "These low-level goals collectively describe the complete set of actions a Facilitator performs to guide a team through the process of estimating tasks. They cover initiating estimation rounds, reviewing results, requesting re-estimation, finalizing estimates for a task, and progressing to subsequent tasks, all of which are integral to managing an estimation session.",
+      "reconstructed_high_level_goal": "Facilitate a Planning Poker Session",
+      "rationale": "The low-level goals collectively describe the complete lifecycle of a Planning Poker session, from its creation and initiation of voting rounds to the recording of final estimates and the session's conclusion. All actions are performed by a facilitator to guide the team through the estimation process for user stories.",
       "branch_id": "branch_004",
       "source_low_level_goal_ids": [
-        "Start Estimation Round",
-        "Reveal Task Estimates",
-        "Request Task Re-estimation",
+        "CreatePlanningPokerSession",
+        "StartVotingPhase",
+        "RevealEstimates",
+        "TriggerNewVotingRound",
+        "SetFinalStoryEstimate",
+        "EndPlanningPokerSession"
+      ]
+    },
+    "branch_005": {
+      "reconstructed_high_level_goal": "Finalize Task Estimation",
+      "rationale": "Both low-level goals are essential, sequential steps in concluding the estimation process for a task. The first goal focuses on recording the agreed-upon final estimate, while the second ensures the task's status is updated to reflect that its estimation phase is complete, making the recorded estimate official and signaling readiness for subsequent stages.",
+      "branch_id": "branch_005",
+      "source_low_level_goal_ids": [
         "Record Final Task Estimate",
-        "Advance to Next Task"
+        "Mark Task as Estimated"
       ]
     }
   },
   "evaluations": {
-    "branch_004": {
-      "branch_id": "branch_004",
-      "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Maintain Game Integrity' is a mechanism-focused goal describing the enforcement of rules and process flow. The bottom-up reconstruction 'Facilitate Task Estimation Sessions' correctly identifies the stakeholder intention: the Facilitator's primary outcome is to guide the team through the estimation process to reach a consensus. The sibling HLG 'Achieve Team Consensus' describes the *result* (agreement), while 'Facilitate Task Estimation Sessions' describes the *activity* (managing the flow, revealing cards, guiding discussion) that leads to that result. 'Maintain Game Integrity' is too narrow and procedural; it does not capture the full scope of facilitating the session (which includes starting rounds, managing re-estimations, and progressing tasks). Therefore, the original HLG should be rewritten to reflect the broader, outcome-oriented intention of facilitating the estimation sessions, which encompasses maintaining integrity as a sub-concern.",
-      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
+    "branch_001": {
+      "branch_id": "branch_001",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Contribute to Task Estimation' is supported by the project description, which states that team members participate to 'estimate tasks'. However, the hierarchy is fragmented. The sibling HLG 'Ensure Fair and Unbiased Input' specifically addresses the *method* of estimation (anonymous pointing) to prevent bias, while 'Contribute to Task Estimation' addresses the *act* of providing the estimate itself. Although related, they represent distinct stakeholder intentions: one is about the content/value of the input (the estimate), and the other is about the integrity/process of the input (anonymity). They are not fully redundant because a team member could theoretically contribute to estimation without the specific concern for bias (e.g., in a non-anonymous context, though the project specifies anonymous, the goals address different aspects of the user experience). More importantly, 'Influence Sprint Goals' is a higher-level outcome resulting from the estimation. 'Contribute to Task Estimation' is a valid, independently scoped goal that captures the primary functional action of the Team Member. It is not a mere workflow phase of 'Influence Sprint Goals' because one can contribute estimates without necessarily influencing the final goal if the estimates are rejected or if the goal is set differently, but in the context of Planning Poker, the estimation is the direct contribution. The reconstruction 'Submit Task Estimates' is narrower and more mechanical than the original 'Contribute to Task Estimation', which better captures the intent of providing 'best estimates' for 'accurate and realistic sprint planning'. Therefore, the original is preferred. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The single LLG 'Submit Task Estimate' accurately captures the core functional action required by the parent HLG 'Contribute to Task Estimation'. The project description explicitly states that team members participate to 'estimate tasks' using 'anonymous pointing'. Submitting the estimate is the direct mechanism for contributing to the estimation process. The aspect of anonymity is handled by the sibling HLG 'Ensure Fair and Unbiased Input', so it is correctly excluded from this LLG to avoid duplication. There are no unsupported capabilities, and no essential capabilities explicitly required by the parent HLG are missing. The decomposition is precise and aligned with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Maintain Game Integrity' is a mechanism-focused goal describing the enforcement of rules and process flow. The bottom-up reconstruction 'Facilitate Task Estimation Sessions' correctly identifies the stakeholder intention: the Facilitator's primary outcome is to guide the team through the estimation process to reach a consensus. The sibling HLG 'Achieve Team Consensus' describes the *result* (agreement), while 'Facilitate Task Estimation Sessions' describes the *activity* (managing the flow, revealing cards, guiding discussion) that leads to that result. 'Maintain Game Integrity' is too narrow and procedural; it does not capture the full scope of facilitating the session (which includes starting rounds, managing re-estimations, and progressing tasks). Therefore, the original HLG should be rewritten to reflect the broader, outcome-oriented intention of facilitating the estimation sessions, which encompasses maintaining integrity as a sub-concern.",
-        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 2,
-        "rewriting_focus": "Express the Facilitator's intention to guide and manage the end-to-end task estimation process, including initiating rounds, revealing estimates, and managing the flow to support consensus.",
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Contribute to Task Estimation' is supported by the project description, which states that team members participate to 'estimate tasks'. However, the hierarchy is fragmented. The sibling HLG 'Ensure Fair and Unbiased Input' specifically addresses the *method* of estimation (anonymous pointing) to prevent bias, while 'Contribute to Task Estimation' addresses the *act* of providing the estimate itself. Although related, they represent distinct stakeholder intentions: one is about the content/value of the input (the estimate), and the other is about the integrity/process of the input (anonymity). They are not fully redundant because a team member could theoretically contribute to estimation without the specific concern for bias (e.g., in a non-anonymous context, though the project specifies anonymous, the goals address different aspects of the user experience). More importantly, 'Influence Sprint Goals' is a higher-level outcome resulting from the estimation. 'Contribute to Task Estimation' is a valid, independently scoped goal that captures the primary functional action of the Team Member. It is not a mere workflow phase of 'Influence Sprint Goals' because one can contribute estimates without necessarily influencing the final goal if the estimates are rejected or if the goal is set differently, but in the context of Planning Poker, the estimation is the direct contribution. The reconstruction 'Submit Task Estimates' is narrower and more mechanical than the original 'Contribute to Task Estimation', which better captures the intent of providing 'best estimates' for 'accurate and realistic sprint planning'. Therefore, the original is preferred.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 2,
         "vote_distribution": {
-          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 2,
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 1
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2
         }
       },
-      "replacement_request": {
-        "rationale": "Voting result 2/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Maintain Game Integrity' is a mechanism-focused goal describing the enforcement of rules and process flow. The bottom-up reconstruction 'Facilitate Task Estimation Sessions' correctly identifies the stakeholder intention: the Facilitator's primary outcome is to guide the team through the estimation process to reach a consensus. The sibling HLG 'Achieve Team Consensus' describes the *result* (agreement), while 'Facilitate Task Estimation Sessions' describes the *activity* (managing the flow, revealing cards, guiding discussion) that leads to that result. 'Maintain Game Integrity' is too narrow and procedural; it does not capture the full scope of facilitating the session (which includes starting rounds, managing re-estimations, and progressing tasks). Therefore, the original HLG should be rewritten to reflect the broader, outcome-oriented intention of facilitating the estimation sessions, which encompasses maintaining integrity as a sub-concern.",
-        "generation_project_description": "This project describes 'Planning Poker' a digital card game designed to help empower agile and scrum development teams to collectively set their sprint goals. Using anonymous pointing, Planning Poker helps to elicit productive conversations across the team to create shared ownership, knowledge, and understanding.\n\nRewrite the functional intention for actor 'Facilitator' using this focus: Express the Facilitator's intention to guide and manage the end-to-end task estimation process, including initiating rounds, revealing estimates, and managing the flow to support consensus.",
-        "actor": {
-          "name": "Facilitator",
-          "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The single LLG 'Submit Task Estimate' accurately captures the core functional action required by the parent HLG 'Contribute to Task Estimation'. The project description explicitly states that team members participate to 'estimate tasks' using 'anonymous pointing'. Submitting the estimate is the direct mechanism for contributing to the estimation process. The aspect of anonymity is handled by the sibling HLG 'Ensure Fair and Unbiased Input', so it is correctly excluded from this LLG to avoid duplication. There are no unsupported capabilities, and no essential capabilities explicitly required by the parent HLG are missing. The decomposition is precise and aligned with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Influence Sprint Goals' is supported by the project description, which states that Planning Poker helps teams 'collectively set their sprint goals' and that team members 'contribute to sprint goal setting'. The bottom-up reconstruction 'Enable Team Member to View Final Aggregated Task Estimate' is a narrow workflow step (viewing a result) rather than the stakeholder outcome (influencing the final goals). The original HLG captures the broader intentional outcome of the team member's participation. It is distinct from 'Contribute to Task Estimation' (the act of estimating) and 'Ensure Fair and Unbiased Input' (the method of anonymity). While 'Influence Sprint Goals' is the ultimate outcome, it is a valid high-level goal for the actor as it represents the value they seek from the process. It is not redundant with the Facilitator's goals because the actor is different. Therefore, the original HLG should be kept as it accurately reflects the stakeholder's intention to shape the sprint goals through their participation. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Influence Sprint Goals' describes the high-level intention of Team Members to have their input shape the final sprint goals. The current LLG 'View Aggregated Task Estimate' is a specific, low-level capability that supports this intention by allowing the member to see the outcome of the collective estimation process. While 'Influence' is an outcome-oriented goal, in the context of a digital tool, the user's actionable capability that contributes to this influence is participating in the estimation and seeing the result. The LLG is supported by the project description which mentions 'collectively set their sprint goals' and 'elicit productive conversations'. The LLG does not duplicate the Facilitator's goals (orchestration/consensus) or the other Team Member goals (providing estimates/anonymity). It is a valid, supported low-level goal that contributes to the parent. There are no unsupported LLGs and no explicitly missing essential capabilities that are strictly required by the parent HLG wording and documentation but absent. The decomposition is acceptable.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Influence Sprint Goals' is supported by the project description, which states that Planning Poker helps teams 'collectively set their sprint goals' and that team members 'contribute to sprint goal setting'. The bottom-up reconstruction 'Enable Team Member to View Final Aggregated Task Estimate' is a narrow workflow step (viewing a result) rather than the stakeholder outcome (influencing the final goals). The original HLG captures the broader intentional outcome of the team member's participation. It is distinct from 'Contribute to Task Estimation' (the act of estimating) and 'Ensure Fair and Unbiased Input' (the method of anonymity). While 'Influence Sprint Goals' is the ultimate outcome, it is a valid high-level goal for the actor as it represents the value they seek from the process. It is not redundant with the Facilitator's goals because the actor is different. Therefore, the original HLG should be kept as it accurately reflects the stakeholder's intention to shape the sprint goals through their participation.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
         }
       },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Influence Sprint Goals' describes the high-level intention of Team Members to have their input shape the final sprint goals. The current LLG 'View Aggregated Task Estimate' is a specific, low-level capability that supports this intention by allowing the member to see the outcome of the collective estimation process. While 'Influence' is an outcome-oriented goal, in the context of a digital tool, the user's actionable capability that contributes to this influence is participating in the estimation and seeing the result. The LLG is supported by the project description which mentions 'collectively set their sprint goals' and 'elicit productive conversations'. The LLG does not duplicate the Facilitator's goals (orchestration/consensus) or the other Team Member goals (providing estimates/anonymity). It is a valid, supported low-level goal that contributes to the parent. There are no unsupported LLGs and no explicitly missing essential capabilities that are strictly required by the parent HLG wording and documentation but absent. The decomposition is acceptable.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 4,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Ensure Fair and Unbiased Input' is supported by the project description, which explicitly mentions 'anonymous pointing' to 'prevent bias' and 'encourage honest contributions'. However, it is currently scoped as a mechanism or quality attribute rather than a distinct stakeholder outcome. The sibling HLG 'Contribute to Task Estimation' covers the act of providing estimates. The anonymity and fairness aspect is a critical constraint and enabler for that contribution, ensuring the estimates are valid. In Goal-Oriented Requirements Engineering, 'Fairness' or 'Unbiased Input' is often a soft goal or a constraint on the primary functional goal. Given the existing hierarchy, 'Contribute to Task Estimation' is the primary functional goal. 'Ensure Fair and Unbiased Input' is a distinct intention (protecting the integrity of the input) that is not fully subsumed by 'Contribute' (which focuses on the act/value of the estimate) or 'Influence Sprint Goals' (which focuses on the outcome). However, the phrasing 'Ensure Fair and Unbiased Input' is slightly passive/mechanistic. The reconstruction 'Facilitate unbiased task estimation' is also slightly off-actor (Team Members don't facilitate, the system/facilitator does). A better phrasing for the Team Member would be 'Provide Anonymous Estimates' or 'Protect Estimation Integrity'. But looking at the rubric, is it redundant? 'Contribute to Task Estimation' implies providing the estimate. The *anonymity* is the specific value add here. If we remove it, we lose the explicit requirement for anonymity/fairness. If we keep it, it is a valid, distinct stakeholder concern (fairness). It is not a workflow phase. It is a quality goal. It is supported. It is not fully redundant because 'Contribute' doesn't explicitly mandate anonymity. Therefore, it should be kept, but perhaps the name could be slightly more active. However, the prompt asks to decide on the *original* HLG. The original is 'Ensure Fair and Unbiased Input'. This is a valid stakeholder goal. It is distinct from 'Contribute' (which is about the content) and 'Influence' (which is about the impact). It is about the *process integrity*. I will keep it, but note that it is a soft goal. Wait, looking at the other HLGs, 'Contribute to Task Estimation' is the functional goal. 'Ensure Fair and Unbiased Input' is the quality goal. They are distinct. I will keep it. The quality score is 4 because it is supported and distinct, though the name is slightly abstract. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Ensure Fair and Unbiased Input' focuses on the mechanism of anonymity to prevent bias. The single LLG 'Submit Anonymous Estimate' accurately captures the essential capability required by this parent: the team member submits an estimate that is hidden from others until revealed. This is directly supported by the project description ('Using anonymous pointing... prevent bias'). The LLG does not duplicate the sibling 'Contribute to Task Estimation' (which focuses on the accuracy/value of the estimate) or the Facilitator's goals (which focus on the reveal/orchestration). There are no unsupported LLGs and no missing essential capabilities explicitly required by the parent HLG wording and documentation. The decomposition is precise and supported.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Ensure Fair and Unbiased Input' is supported by the project description, which explicitly mentions 'anonymous pointing' to 'prevent bias' and 'encourage honest contributions'. However, it is currently scoped as a mechanism or quality attribute rather than a distinct stakeholder outcome. The sibling HLG 'Contribute to Task Estimation' covers the act of providing estimates. The anonymity and fairness aspect is a critical constraint and enabler for that contribution, ensuring the estimates are valid. In Goal-Oriented Requirements Engineering, 'Fairness' or 'Unbiased Input' is often a soft goal or a constraint on the primary functional goal. Given the existing hierarchy, 'Contribute to Task Estimation' is the primary functional goal. 'Ensure Fair and Unbiased Input' is a distinct intention (protecting the integrity of the input) that is not fully subsumed by 'Contribute' (which focuses on the act/value of the estimate) or 'Influence Sprint Goals' (which focuses on the outcome). However, the phrasing 'Ensure Fair and Unbiased Input' is slightly passive/mechanistic. The reconstruction 'Facilitate unbiased task estimation' is also slightly off-actor (Team Members don't facilitate, the system/facilitator does). A better phrasing for the Team Member would be 'Provide Anonymous Estimates' or 'Protect Estimation Integrity'. But looking at the rubric, is it redundant? 'Contribute to Task Estimation' implies providing the estimate. The *anonymity* is the specific value add here. If we remove it, we lose the explicit requirement for anonymity/fairness. If we keep it, it is a valid, distinct stakeholder concern (fairness). It is not a workflow phase. It is a quality goal. It is supported. It is not fully redundant because 'Contribute' doesn't explicitly mandate anonymity. Therefore, it should be kept, but perhaps the name could be slightly more active. However, the prompt asks to decide on the *original* HLG. The original is 'Ensure Fair and Unbiased Input'. This is a valid stakeholder goal. It is distinct from 'Contribute' (which is about the content) and 'Influence' (which is about the impact). It is about the *process integrity*. I will keep it, but note that it is a soft goal. Wait, looking at the other HLGs, 'Contribute to Task Estimation' is the functional goal. 'Ensure Fair and Unbiased Input' is the quality goal. They are distinct. I will keep it. The quality score is 4 because it is supported and distinct, though the name is slightly abstract.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2,
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 1
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Ensure Fair and Unbiased Input' focuses on the mechanism of anonymity to prevent bias. The single LLG 'Submit Anonymous Estimate' accurately captures the essential capability required by this parent: the team member submits an estimate that is hidden from others until revealed. This is directly supported by the project description ('Using anonymous pointing... prevent bias'). The LLG does not duplicate the sibling 'Contribute to Task Estimation' (which focuses on the accuracy/value of the estimate) or the Facilitator's goals (which focus on the reveal/orchestration). There are no unsupported LLGs and no missing essential capabilities explicitly required by the parent HLG wording and documentation. The decomposition is precise and supported.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Orchestrate Planning Poker Sessions to Achieve Team Consensus' is supported by the project description, which explicitly states the Facilitator 'manages the flow of the Planning Poker game, reveals cards, and facilitates discussion... to achieve shared understanding and consensus.' The bottom-up reconstruction 'Facilitate a Planning Poker Session' is a valid summary of the workflow actions (creating sessions, starting voting, revealing estimates, etc.) but is slightly narrower than the original because it omits the explicit outcome of 'achieving team consensus' which is a key part of the Facilitator's role. However, the sibling HLG 'Achieve Team Consensus' exists for the Facilitator. This creates a potential redundancy. 'Orchestrate...' covers the *process* (managing flow, revealing, guiding), while 'Achieve Team Consensus' covers the *outcome*. In Goal-Oriented RE, these are often distinct: one is the means (orchestration) and the other is the end (consensus). However, looking at the LLGs provided in the state (CreatePlanningPokerSession, StartVotingPhase, RevealEstimates, etc.), these are all orchestration steps. The goal 'Achieve Team Consensus' likely relies on the orchestration to be achieved. If 'Achieve Team Consensus' is a separate HLG, does it have its own LLGs? The state shows 'facilitator::achieve team consensus' is a current HLG. If 'Orchestrate...' is kept, it represents the operational control of the session. 'Achieve Team Consensus' represents the strategic outcome. They are distinct enough: one is about *how* the session is run, the other about *what* is achieved. The original HLG is precise and supported. The reconstruction is acceptable but the original is more faithful to the 'consensus' aspect mentioned in the description. However, the prompt asks to evaluate the *original* HLG. The original is well-scoped. It is not redundant because 'Achieve Team Consensus' is an outcome, not a process. The process (orchestration) is a distinct stakeholder intention (managing the game flow). Therefore, KEEP is appropriate. Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Orchestrate Planning Poker Sessions to Achieve Team Consensus'. The parent description explicitly mentions managing the flow, revealing estimates, and guiding discussions to reach agreement. The LLGs cover the essential lifecycle: creating the session (llg_001), initiating voting (llg_002), revealing estimates (llg_003), triggering new rounds after discussion (llg_004), setting the final estimate (llg_005), and ending the session (llg_006). These actions are directly supported by the project description of a digital card game for collective estimation and the specific responsibilities of the Facilitator. There are no unsupported LLGs, and no essential capabilities explicitly required by the parent HLG are missing. The decomposition is precise and internally consistent.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Orchestrate Planning Poker Sessions to Achieve Team Consensus' is supported by the project description, which explicitly states the Facilitator 'manages the flow of the Planning Poker game, reveals cards, and facilitates discussion... to achieve shared understanding and consensus.' The bottom-up reconstruction 'Facilitate a Planning Poker Session' is a valid summary of the workflow actions (creating sessions, starting voting, revealing estimates, etc.) but is slightly narrower than the original because it omits the explicit outcome of 'achieving team consensus' which is a key part of the Facilitator's role. However, the sibling HLG 'Achieve Team Consensus' exists for the Facilitator. This creates a potential redundancy. 'Orchestrate...' covers the *process* (managing flow, revealing, guiding), while 'Achieve Team Consensus' covers the *outcome*. In Goal-Oriented RE, these are often distinct: one is the means (orchestration) and the other is the end (consensus). However, looking at the LLGs provided in the state (CreatePlanningPokerSession, StartVotingPhase, RevealEstimates, etc.), these are all orchestration steps. The goal 'Achieve Team Consensus' likely relies on the orchestration to be achieved. If 'Achieve Team Consensus' is a separate HLG, does it have its own LLGs? The state shows 'facilitator::achieve team consensus' is a current HLG. If 'Orchestrate...' is kept, it represents the operational control of the session. 'Achieve Team Consensus' represents the strategic outcome. They are distinct enough: one is about *how* the session is run, the other about *what* is achieved. The original HLG is precise and supported. The reconstruction is acceptable but the original is more faithful to the 'consensus' aspect mentioned in the description. However, the prompt asks to evaluate the *original* HLG. The original is well-scoped. It is not redundant because 'Achieve Team Consensus' is an outcome, not a process. The process (orchestration) is a distinct stakeholder intention (managing the game flow). Therefore, KEEP is appropriate.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Orchestrate Planning Poker Sessions to Achieve Team Consensus'. The parent description explicitly mentions managing the flow, revealing estimates, and guiding discussions to reach agreement. The LLGs cover the essential lifecycle: creating the session (llg_001), initiating voting (llg_002), revealing estimates (llg_003), triggering new rounds after discussion (llg_004), setting the final estimate (llg_005), and ending the session (llg_006). These actions are directly supported by the project description of a digital card game for collective estimation and the specific responsibilities of the Facilitator. There are no unsupported LLGs, and no essential capabilities explicitly required by the parent HLG are missing. The decomposition is precise and internally consistent.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 2,
+          "REGENERATE_LOW_LEVEL_GOALS": 1
+        }
+      }
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Achieve Team Consensus' is fully redundant with the sibling HLG 'Orchestrate Planning Poker Sessions to Achieve Team Consensus'. The sibling explicitly includes 'to achieve team consensus' in its name and description, covering the management of flow, revealing estimates, and guiding discussions to reach shared understanding. The original HLG describes the same outcome (reaching collective agreement) without adding any distinct stakeholder intention or capability not already encompassed by the more specific orchestration goal. Keeping both creates unnecessary fragmentation of the same Facilitator intention.",
+      "final_decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for REMOVE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Achieve Team Consensus' is fully redundant with the sibling HLG 'Orchestrate Planning Poker Sessions to Achieve Team Consensus'. The sibling explicitly includes 'to achieve team consensus' in its name and description, covering the management of flow, revealing estimates, and guiding discussions to reach shared understanding. The original HLG describes the same outcome (reaching collective agreement) without adding any distinct stakeholder intention or capability not already encompassed by the more specific orchestration goal. Keeping both creates unnecessary fragmentation of the same Facilitator intention.",
+        "decision": "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 1,
+        "rewriting_focus": null,
+        "removal_basis": "FULLY_REDUNDANT",
+        "covered_by_high_level_goal_name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
       "low_level_evaluation": null
     }
   },
   "high_level_goals": {
     "goals": [
       {
-        "name": "Achieve Shared Understanding",
-        "description": "Team Members seek to gain a common understanding of task requirements and scope through discussion and collaboration.",
+        "name": "Contribute to Task Estimation",
+        "description": "Team Members aim to provide their best estimates for tasks to ensure accurate and realistic sprint planning.",
         "actor": {
           "name": "Team Member",
           "description": "An individual member of an agile or scrum development team who participates in the Planning Poker game to estimate tasks and contribute to sprint goal setting."
@@ -62,16 +229,16 @@
         }
       },
       {
-        "name": "Achieve Team Consensus",
-        "description": "The Facilitator's goal is to help the team reach a collective agreement on task estimates, leading to finalized sprint commitments.",
+        "name": "Ensure Fair and Unbiased Input",
+        "description": "Team Members desire to provide their estimates anonymously to prevent bias and encourage honest contributions.",
         "actor": {
-          "name": "Facilitator",
-          "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
+          "name": "Team Member",
+          "description": "An individual member of an agile or scrum development team who participates in the Planning Poker game to estimate tasks and contribute to sprint goal setting."
         }
       },
       {
-        "name": "Facilitate Task Estimation Sessions",
-        "description": "To guide and manage the entire Planning Poker process, from initiating estimation rounds and revealing estimates to facilitating discussions, ensuring a structured and effective path towards team consensus on task effort.",
+        "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+        "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
         "actor": {
           "name": "Facilitator",
           "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -82,35 +249,11 @@
   "low_level_goals": {
     "low_level_goals": [
       {
-        "name": "View Current Task Details",
-        "description": "The Team Member retrieves and displays the detailed description, requirements, and any associated artifacts for the current task being estimated.",
+        "name": "Submit Task Estimate",
+        "description": "The Team Member submits their chosen estimate value for the current task to the system.",
         "high_level_associated": {
-          "name": "Achieve Shared Understanding",
-          "description": "Team Members seek to gain a common understanding of task requirements and scope through discussion and collaboration.",
-          "actor": {
-            "name": "Team Member",
-            "description": "An individual member of an agile or scrum development team who participates in the Planning Poker game to estimate tasks and contribute to sprint goal setting."
-          }
-        }
-      },
-      {
-        "name": "View Own Estimate",
-        "description": "The Team Member retrieves and displays their previously submitted estimate for the current task, allowing them to compare it with the team's revealed estimates.",
-        "high_level_associated": {
-          "name": "Achieve Shared Understanding",
-          "description": "Team Members seek to gain a common understanding of task requirements and scope through discussion and collaboration.",
-          "actor": {
-            "name": "Team Member",
-            "description": "An individual member of an agile or scrum development team who participates in the Planning Poker game to estimate tasks and contribute to sprint goal setting."
-          }
-        }
-      },
-      {
-        "name": "View All Team Estimates",
-        "description": "The Team Member retrieves and displays the estimates submitted by all other team members for the current task, typically after all estimates have been revealed.",
-        "high_level_associated": {
-          "name": "Achieve Shared Understanding",
-          "description": "Team Members seek to gain a common understanding of task requirements and scope through discussion and collaboration.",
+          "name": "Contribute to Task Estimation",
+          "description": "Team Members aim to provide their best estimates for tasks to ensure accurate and realistic sprint planning.",
           "actor": {
             "name": "Team Member",
             "description": "An individual member of an agile or scrum development team who participates in the Planning Poker game to estimate tasks and contribute to sprint goal setting."
@@ -119,7 +262,7 @@
       },
       {
         "name": "View Aggregated Task Estimate",
-        "description": "The Team Member views the combined estimates from all team members for a specific task.",
+        "description": "The Team Member views the calculated aggregated estimate for a task after all individual estimates have been revealed and discussed.",
         "high_level_associated": {
           "name": "Influence Sprint Goals",
           "description": "Team Members want their collective input and estimates to directly inform and shape the final sprint goals, fostering ownership.",
@@ -130,11 +273,11 @@
         }
       },
       {
-        "name": "Submit Individual Task Estimate",
-        "description": "The Team Member provides their individual estimate for a specific task during the planning poker session.",
+        "name": "Submit Anonymous Estimate",
+        "description": "The Team Member submits their estimate for a task, ensuring it remains hidden from other team members until explicitly revealed by the Facilitator.",
         "high_level_associated": {
-          "name": "Influence Sprint Goals",
-          "description": "Team Members want their collective input and estimates to directly inform and shape the final sprint goals, fostering ownership.",
+          "name": "Ensure Fair and Unbiased Input",
+          "description": "Team Members desire to provide their estimates anonymously to prevent bias and encourage honest contributions.",
           "actor": {
             "name": "Team Member",
             "description": "An individual member of an agile or scrum development team who participates in the Planning Poker game to estimate tasks and contribute to sprint goal setting."
@@ -142,11 +285,11 @@
         }
       },
       {
-        "name": "Reveal Team Estimates",
-        "description": "The Facilitator invokes a system function to display all individual task estimates submitted by team members.",
+        "name": "CreatePlanningPokerSession",
+        "description": "The Facilitator creates a new Planning Poker session instance for a specified user story, making it ready for team participation.",
         "high_level_associated": {
-          "name": "Achieve Team Consensus",
-          "description": "The Facilitator's goal is to help the team reach a collective agreement on task estimates, leading to finalized sprint commitments.",
+          "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+          "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
           "actor": {
             "name": "Facilitator",
             "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -154,11 +297,11 @@
         }
       },
       {
-        "name": "Initiate Estimate Discussion",
-        "description": "The Facilitator triggers a system state change to enable and manage a discussion phase among team members regarding the revealed task estimates.",
+        "name": "StartVotingPhase",
+        "description": "The Facilitator initiates the voting phase for the current user story within an active Planning Poker session, allowing team members to submit their estimates.",
         "high_level_associated": {
-          "name": "Achieve Team Consensus",
-          "description": "The Facilitator's goal is to help the team reach a collective agreement on task estimates, leading to finalized sprint commitments.",
+          "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+          "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
           "actor": {
             "name": "Facilitator",
             "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -166,11 +309,11 @@
         }
       },
       {
-        "name": "Record Final Task Estimate",
-        "description": "The Facilitator inputs the agreed-upon final estimate for a task into the system.",
+        "name": "RevealEstimates",
+        "description": "The Facilitator commands the system to display all submitted estimates from participating team members for the current story.",
         "high_level_associated": {
-          "name": "Achieve Team Consensus",
-          "description": "The Facilitator's goal is to help the team reach a collective agreement on task estimates, leading to finalized sprint commitments.",
+          "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+          "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
           "actor": {
             "name": "Facilitator",
             "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -178,11 +321,11 @@
         }
       },
       {
-        "name": "Mark Task as Estimated",
-        "description": "The Facilitator updates the task's status in the system to indicate that an estimate has been finalized.",
+        "name": "TriggerNewVotingRound",
+        "description": "After discussion, the Facilitator initiates a new round of voting for the current story, prompting team members to submit revised estimates.",
         "high_level_associated": {
-          "name": "Achieve Team Consensus",
-          "description": "The Facilitator's goal is to help the team reach a collective agreement on task estimates, leading to finalized sprint commitments.",
+          "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+          "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
           "actor": {
             "name": "Facilitator",
             "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -190,11 +333,11 @@
         }
       },
       {
-        "name": "Initiate Estimation Round for Task",
-        "description": "The Facilitator initiates a new voting round for a specific task within the active estimation session, making it available for team members to submit their estimates.",
+        "name": "SetFinalStoryEstimate",
+        "description": "The Facilitator records the team's agreed-upon final estimate for the current user story in the system, concluding its estimation process.",
         "high_level_associated": {
-          "name": "Facilitate Task Estimation Sessions",
-          "description": "To guide and manage the entire Planning Poker process, from initiating estimation rounds and revealing estimates to facilitating discussions, ensuring a structured and effective path towards team consensus on task effort.",
+          "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+          "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
           "actor": {
             "name": "Facilitator",
             "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -202,47 +345,11 @@
         }
       },
       {
-        "name": "Reveal Task Estimates",
-        "description": "The Facilitator triggers the system to display all submitted estimates for the current task to all participants in the estimation session.",
+        "name": "EndPlanningPokerSession",
+        "description": "The Facilitator formally concludes the entire Planning Poker session, archiving its details and estimates.",
         "high_level_associated": {
-          "name": "Facilitate Task Estimation Sessions",
-          "description": "To guide and manage the entire Planning Poker process, from initiating estimation rounds and revealing estimates to facilitating discussions, ensuring a structured and effective path towards team consensus on task effort.",
-          "actor": {
-            "name": "Facilitator",
-            "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
-          }
-        }
-      },
-      {
-        "name": "Request Re-estimation for Task",
-        "description": "After discussion, the Facilitator explicitly requests the team to perform another estimation round for the current task, clearing previous votes and allowing new submissions.",
-        "high_level_associated": {
-          "name": "Facilitate Task Estimation Sessions",
-          "description": "To guide and manage the entire Planning Poker process, from initiating estimation rounds and revealing estimates to facilitating discussions, ensuring a structured and effective path towards team consensus on task effort.",
-          "actor": {
-            "name": "Facilitator",
-            "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
-          }
-        }
-      },
-      {
-        "name": "Conclude Task Estimation",
-        "description": "The Facilitator marks the current task as having reached a consensus on its estimate and progresses the estimation session to the next task in the backlog.",
-        "high_level_associated": {
-          "name": "Facilitate Task Estimation Sessions",
-          "description": "To guide and manage the entire Planning Poker process, from initiating estimation rounds and revealing estimates to facilitating discussions, ensuring a structured and effective path towards team consensus on task effort.",
-          "actor": {
-            "name": "Facilitator",
-            "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
-          }
-        }
-      },
-      {
-        "name": "Skip Task Estimation",
-        "description": "The Facilitator decides to skip the estimation process for the current task, moving directly to the next task in the backlog without recording an estimate for the skipped task.",
-        "high_level_associated": {
-          "name": "Facilitate Task Estimation Sessions",
-          "description": "To guide and manage the entire Planning Poker process, from initiating estimation rounds and revealing estimates to facilitating discussions, ensuring a structured and effective path towards team consensus on task effort.",
+          "name": "Orchestrate Planning Poker Sessions to Achieve Team Consensus",
+          "description": "The Facilitator aims to manage the entire flow of Planning Poker sessions, including revealing estimates and guiding discussions, to ensure the team reaches a shared understanding and collective agreement on story estimates.",
           "actor": {
             "name": "Facilitator",
             "description": "Manages the flow of the Planning Poker game, reveals cards, and facilitates discussion among team members to achieve shared understanding and consensus."
@@ -253,7 +360,7 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description explicitly defines the core functional requirements for two actors: Team Members and Facilitators. For Team Members, the requirements are to participate in estimation, contribute to sprint goals, and achieve shared understanding. These are fully covered by the current HLGs 'Achieve Shared Understanding' and 'Influence Sprint Goals'. The retired HLGs 'Contribute to Task Estimation' and 'Ensure Fair and Unbiased Input' are semantically entailed by 'Influence Sprint Goals' (providing input) and the mechanism of 'Achieve Shared Understanding' (anonymous pointing is the method to ensure unbiased input for shared understanding). For the Facilitator, the requirements are to manage the flow, reveal cards, and facilitate discussion to achieve consensus. These are covered by 'Achieve Team Consensus' (the outcome of facilitating discussion) and 'Maintain Game Integrity' (managing flow and revealing cards appropriately). The retired HLGs 'Guide the Estimation Process' and 'Promote Productive Discussion' are sub-components of 'Maintain Game Integrity' (managing flow) and 'Achieve Team Consensus' (facilitating discussion to reach agreement). No explicit functional requirement in the description remains uncovered by the current HLG set.",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description explicitly defines the roles and responsibilities of the Facilitator (managing flow, revealing cards, facilitating discussion to achieve consensus) and Team Members (estimating tasks, contributing to sprint goals, anonymous input). The current HLGs fully cover these documented intentions: 'Orchestrate Planning Poker Sessions to Achieve Team Consensus' covers the Facilitator's management and consensus-building duties; 'Contribute to Task Estimation', 'Influence Sprint Goals', and 'Ensure Fair and Unbiased Input' cover the Team Member's estimation, ownership, and anonymity requirements. The redundant 'Achieve Team Consensus' HLG is already flagged for removal in the previous step but does not represent a missing capability. No other explicit functional requirements or actor-level outcomes are present in the description that are not entailed by the current HLGs.",
     "quality_score": 5,
     "missing_goal_requests": [],
     "voter_count": 3,
@@ -265,10 +372,8 @@
   },
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
   "llg_regeneration_counts": {
-    "team member::achieve shared understanding": 1,
-    "team member::influence sprint goals": 1,
-    "facilitator::achieve team consensus": 1,
-    "facilitator::maintain game integrity": 1
+    "facilitator::maintain game integrity": 1,
+    "team member::achieve shared understanding": 1
   },
   "warnings": []
 }

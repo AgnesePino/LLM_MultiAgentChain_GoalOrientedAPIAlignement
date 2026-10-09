@@ -164,8 +164,9 @@ The present implementation nevertheless has important discovery limitations:
 - discovery is based on one consolidated project description rather than an
   indexed collection of source passages;
 - discovery is restricted to actors already represented by the current HLG set;
-- duplicate and overlap judgments depend on the HLG critic; there is no
-  deterministic semantic-equivalence gate after generation;
+- exact normalized duplicates (`actor::HLG name`) are blocked deterministically
+  by the bottom-up cycle, while semantic overlaps with different names still
+  depend on the HLG critic;
 - regenerated LLGs are accepted when non-empty; there is no deterministic
   before/after semantic coverage gate;
 - removed and replaced HLGs are re-audited from a retained checklist, but the

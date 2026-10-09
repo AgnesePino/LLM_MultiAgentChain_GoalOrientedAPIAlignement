@@ -42,8 +42,8 @@
       ]
     },
     "branch_004": {
-      "reconstructed_high_level_goal": "Enable Customers to Manage Their Account and Service Interactions",
-      "rationale": "The low-level goals collectively describe functionalities that empower customers to independently oversee and control various aspects of their engagement with the service. This includes managing their financial wallet, monitoring and receiving reminders for scheduled activities, viewing personal performance metrics like a fair-play score, and customizing communication preferences. All these operations are integral to providing a comprehensive self-service experience within a customer's personal account.",
+      "reconstructed_high_level_goal": "Enable Customer to Manage Their Account and Activities",
+      "rationale": "The low-level goals collectively describe various functionalities that allow a customer to independently monitor and control different aspects of their engagement with a service. This includes managing their payment wallet, tracking reservations and associated notifications, and reviewing their fair-play score, all of which are core components of a customer's self-service account management.",
       "branch_id": "branch_004",
       "source_low_level_goal_ids": [
         "RetrieveWalletBalance",
@@ -100,13 +100,15 @@
   "evaluations": {
     "branch_001": {
       "branch_id": "branch_001",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Product Offerings' accurately captures the farmer's primary responsibility in the system: entering and updating product availability, quantities, and prices. The bottom-up reconstruction confirms this scope. There are no other High-Level Goals for the Farmer actor that would make this redundant or fragmented. The goal is supported by the project description ('Farmers periodically enter product availability') and represents a distinct, independently satisfiable stakeholder outcome (managing the supply side of the marketplace). It is not a mere workflow phase of a broader goal, as it is the root intention for the farmer's interaction with the system. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Manage Product Offerings'. The project description states that 'Farmers periodically enter product availability'. This entails creating new offerings (llg_001) and updating existing ones regarding quantity (llg_002) and availability status (llg_004). Updating price (llg_003) is a standard part of managing product offerings in a purchasing context, allowing the farmer to communicate the cost of the produce. Retrieving offerings (llg_005) is necessary to manage them. All LLGs are supported by the general intent of managing the supply side of the marketplace and do not overlap with customer or store employee goals. There are no unsupported operations or missing essential capabilities explicitly required by the documentation.",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The goal 'Manage Product Offerings' is fully supported by the project description, which states that farmers 'periodically enter product availability' and the system manages this data. The actor description explicitly confirms the farmer's role in entering availability. The goal correctly captures the end-to-end intention of the farmer to communicate and update their inventory status (quantity, price, availability) to the purchasing group. It is not redundant with other goals, as it is the only High-Level Goal for the Farmer actor and addresses a distinct stakeholder outcome (supply side) compared to the customer and store employee goals (demand and logistics sides). The granularity is appropriate for a High-Level Goal, encompassing the creation and updating of product offers without fragmenting into lower-level CRUD operations. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Manage Product Offerings'. The project description states that farmers 'periodically enter product availability' and the system manages 'availability constraints'. The actor description confirms the farmer 'Enters product availability'. The LLGs cover the essential aspects of this: creating offers (llg_001), updating quantity (llg_002), updating price (llg_003, implied by 'offers' and standard commerce context, though 'availability' is the primary keyword, price is part of the offer definition), setting availability status (llg_004, directly supported by 'availability constraints' and 'enter product availability'), and retrieving offerings (llg_005, necessary to manage existing items). There are no unsupported LLGs (e.g., no notifications or complex analytics) and no missing essential capabilities explicitly required by the parent goal's wording ('communicate and update availability and quantity'). The decomposition is precise and supported.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Product Offerings' accurately captures the farmer's primary responsibility in the system: entering and updating product availability, quantities, and prices. The bottom-up reconstruction confirms this scope. There are no other High-Level Goals for the Farmer actor that would make this redundant or fragmented. The goal is supported by the project description ('Farmers periodically enter product availability') and represents a distinct, independently satisfiable stakeholder outcome (managing the supply side of the marketplace). It is not a mere workflow phase of a broader goal, as it is the root intention for the farmer's interaction with the system.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The goal 'Manage Product Offerings' is fully supported by the project description, which states that farmers 'periodically enter product availability' and the system manages this data. The actor description explicitly confirms the farmer's role in entering availability. The goal correctly captures the end-to-end intention of the farmer to communicate and update their inventory status (quantity, price, availability) to the purchasing group. It is not redundant with other goals, as it is the only High-Level Goal for the Farmer actor and addresses a distinct stakeholder outcome (supply side) compared to the customer and store employee goals (demand and logistics sides). The granularity is appropriate for a High-Level Goal, encompassing the creation and updating of product offers without fragmenting into lower-level CRUD operations.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -116,7 +118,7 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Manage Product Offerings'. The project description states that 'Farmers periodically enter product availability'. This entails creating new offerings (llg_001) and updating existing ones regarding quantity (llg_002) and availability status (llg_004). Updating price (llg_003) is a standard part of managing product offerings in a purchasing context, allowing the farmer to communicate the cost of the produce. Retrieving offerings (llg_005) is necessary to manage them. All LLGs are supported by the general intent of managing the supply side of the marketplace and do not overlap with customer or store employee goals. There are no unsupported operations or missing essential capabilities explicitly required by the documentation.",
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Manage Product Offerings'. The project description states that farmers 'periodically enter product availability' and the system manages 'availability constraints'. The actor description confirms the farmer 'Enters product availability'. The LLGs cover the essential aspects of this: creating offers (llg_001), updating quantity (llg_002), updating price (llg_003, implied by 'offers' and standard commerce context, though 'availability' is the primary keyword, price is part of the offer definition), setting availability status (llg_004, directly supported by 'availability constraints' and 'enter product availability'), and retrieving offerings (llg_005, necessary to manage existing items). There are no unsupported LLGs (e.g., no notifications or complex analytics) and no missing essential capabilities explicitly required by the parent goal's wording ('communicate and update availability and quantity'). The decomposition is precise and supported.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "quality_score": 5,
         "regeneration_feedback": null,
@@ -132,13 +134,15 @@
     },
     "branch_002": {
       "branch_id": "branch_002",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Access Product Offers' is supported by the project description, which states that 'customers browse offers'. The bottom-up reconstruction 'Enable Customer to Discover and Evaluate Product Offers' aligns semantically with the original goal, capturing the intent of finding and viewing available products. This goal is distinct from 'Place and Manage Orders' (which focuses on the transaction and post-order management) and 'Manage Personal Account' (which focuses on wallet and profile settings). Browsing/discovering offers is a prerequisite and independent stakeholder outcome from placing orders, as a customer may browse without ordering. Therefore, it is not a redundant workflow fragment of another HLG but a distinct phase of the customer's interaction with the system. The granularity is appropriate for a High-Level Goal. Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs (List, Filter, Search, View Details) accurately decompose the parent goal 'Access Product Offers'. The project description states that 'customers browse offers'. Browsing inherently involves retrieving a list of items and viewing their details. Filtering and searching are standard, necessary mechanisms to 'easily discover' products in a list, and are directly entailed by the goal description 'To easily discover and view...'. There are no unsupported operations (like notifications or downloads) and no essential capabilities explicitly required by the parent are missing. The decomposition is complete and supported by the documentation.",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Access Product Offers' is supported by the project description ('customers browse offers') and the actor description ('Browses offers'). It represents a distinct stakeholder outcome (discovery and evaluation) that is separate from 'Place and Manage Orders' (transactional execution) and 'Manage Personal Account' (wallet/score management). The bottom-up reconstruction 'Enable Customer to Discover and Evaluate Product Offers' is semantically equivalent to the original but slightly more precise in capturing the 'evaluation' aspect implied by browsing and viewing details. However, the original goal is already clear, supported, and appropriately scoped as an independent intention. It is not redundant with 'Place and Manage Orders' because browsing/discovery is a prerequisite but distinct activity from placing/managing the order itself. The granularity is correct for a High-Level Goal. Therefore, it should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) provide a standard and logical decomposition of the High-Level Goal 'Access Product Offers'. 'ListAllProductOffers' covers the initial discovery phase. 'FilterProductOffersByCategory' and 'SearchProductOffersByKeyword' are standard mechanisms for refining the list to find specific items, which is necessarily entailed by the goal to 'easily discover' products in a store context. 'ViewProductOfferDetails' covers the 'view' aspect of the HLG, allowing the customer to inspect specific offers. All these capabilities are supported by the project description ('customers browse offers') and the actor description ('Browses offers'). There are no unsupported LLGs (e.g., no notifications or downloads) and no essential capabilities explicitly required by the HLG are missing. The decomposition is complete and precise for the scope of browsing/discovery.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Access Product Offers' is supported by the project description, which states that 'customers browse offers'. The bottom-up reconstruction 'Enable Customer to Discover and Evaluate Product Offers' aligns semantically with the original goal, capturing the intent of finding and viewing available products. This goal is distinct from 'Place and Manage Orders' (which focuses on the transaction and post-order management) and 'Manage Personal Account' (which focuses on wallet and profile settings). Browsing/discovering offers is a prerequisite and independent stakeholder outcome from placing orders, as a customer may browse without ordering. Therefore, it is not a redundant workflow fragment of another HLG but a distinct phase of the customer's interaction with the system. The granularity is appropriate for a High-Level Goal.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Access Product Offers' is supported by the project description ('customers browse offers') and the actor description ('Browses offers'). It represents a distinct stakeholder outcome (discovery and evaluation) that is separate from 'Place and Manage Orders' (transactional execution) and 'Manage Personal Account' (wallet/score management). The bottom-up reconstruction 'Enable Customer to Discover and Evaluate Product Offers' is semantically equivalent to the original but slightly more precise in capturing the 'evaluation' aspect implied by browsing and viewing details. However, the original goal is already clear, supported, and appropriately scoped as an independent intention. It is not redundant with 'Place and Manage Orders' because browsing/discovery is a prerequisite but distinct activity from placing/managing the order itself. The granularity is correct for a High-Level Goal. Therefore, it should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -148,40 +152,7 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs (List, Filter, Search, View Details) accurately decompose the parent goal 'Access Product Offers'. The project description states that 'customers browse offers'. Browsing inherently involves retrieving a list of items and viewing their details. Filtering and searching are standard, necessary mechanisms to 'easily discover' products in a list, and are directly entailed by the goal description 'To easily discover and view...'. There are no unsupported operations (like notifications or downloads) and no essential capabilities explicitly required by the parent are missing. The decomposition is complete and supported by the documentation.",
-        "decision": "KEEP_LOW_LEVEL_GOALS",
-        "quality_score": 5,
-        "regeneration_feedback": null,
-        "unsupported_or_misleading_llg_ids": [],
-        "missing_essential_capabilities": [],
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 2,
-        "vote_distribution": {
-          "KEEP_LOW_LEVEL_GOALS": 2,
-          "REGENERATE_LOW_LEVEL_GOALS": 1
-        }
-      }
-    },
-    "branch_003": {
-      "branch_id": "branch_003",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Place and Manage Orders' is supported by the project description, which states that customers 'place orders' and the system manages 'pickup reservations' and 'automatic payment'. The bottom-up reconstruction 'Enable Customer to Shop and Manage Orders' aligns semantically with the original goal. This goal is distinct from 'Access Product Offers' (which focuses on browsing/discovery) and 'Manage Personal Account' (which focuses on wallet balance, fair-play score, and general account settings). While 'Manage Personal Account' mentions pickup reservations, the context of 'Place and Manage Orders' specifically ties payment and pickup to the transactional lifecycle of a specific order, which is a separate stakeholder outcome from general account management. The granularity is appropriate for a High-Level Goal representing the core transactional intent of the customer. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Place and Manage Orders'. The shopping cart operations (llg_001-llg_004) support 'conveniently select products'. Placing the order (llg_005) and authorizing payment (llg_006) are directly supported by the description 'customers... place orders' and 'automatic payment through customer wallets'. Selecting a pickup slot (llg_007) is supported by 'pickup reservations'. Managing order details includes viewing status (llg_009) and history (llg_010), which are standard and necessary for 'managing' orders. Canceling an order (llg_008) is a standard part of order management and is implied by the ability to manage order details and the system's handling of refunds/allocations. There are no unsupported LLGs and no missing essential capabilities explicitly required by the parent HLG that are not covered. The decomposition is complete and consistent with the project description.",
-      "final_decision": "CONFIRM_BRANCH",
-      "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Place and Manage Orders' is supported by the project description, which states that customers 'place orders' and the system manages 'pickup reservations' and 'automatic payment'. The bottom-up reconstruction 'Enable Customer to Shop and Manage Orders' aligns semantically with the original goal. This goal is distinct from 'Access Product Offers' (which focuses on browsing/discovery) and 'Manage Personal Account' (which focuses on wallet balance, fair-play score, and general account settings). While 'Manage Personal Account' mentions pickup reservations, the context of 'Place and Manage Orders' specifically ties payment and pickup to the transactional lifecycle of a specific order, which is a separate stakeholder outcome from general account management. The granularity is appropriate for a High-Level Goal representing the core transactional intent of the customer.",
-        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 5,
-        "rewriting_focus": null,
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
-        }
-      },
-      "replacement_request": null,
-      "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent goal 'Place and Manage Orders'. The shopping cart operations (llg_001-llg_004) support 'conveniently select products'. Placing the order (llg_005) and authorizing payment (llg_006) are directly supported by the description 'customers... place orders' and 'automatic payment through customer wallets'. Selecting a pickup slot (llg_007) is supported by 'pickup reservations'. Managing order details includes viewing status (llg_009) and history (llg_010), which are standard and necessary for 'managing' orders. Canceling an order (llg_008) is a standard part of order management and is implied by the ability to manage order details and the system's handling of refunds/allocations. There are no unsupported LLGs and no missing essential capabilities explicitly required by the parent HLG that are not covered. The decomposition is complete and consistent with the project description.",
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) provide a standard and logical decomposition of the High-Level Goal 'Access Product Offers'. 'ListAllProductOffers' covers the initial discovery phase. 'FilterProductOffersByCategory' and 'SearchProductOffersByKeyword' are standard mechanisms for refining the list to find specific items, which is necessarily entailed by the goal to 'easily discover' products in a store context. 'ViewProductOfferDetails' covers the 'view' aspect of the HLG, allowing the customer to inspect specific offers. All these capabilities are supported by the project description ('customers browse offers') and the actor description ('Browses offers'). There are no unsupported LLGs (e.g., no notifications or downloads) and no essential capabilities explicitly required by the HLG are missing. The decomposition is complete and precise for the scope of browsing/discovery.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "quality_score": 5,
         "regeneration_feedback": null,
@@ -195,68 +166,17 @@
         }
       }
     },
-    "branch_004": {
-      "branch_id": "branch_004",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Personal Account' is supported by the project description, which mentions the system maintains a fair-play score, manages automatic payment through customer wallets, and handles pickup reservations. The actor description explicitly states customers 'manage their wallet and pickup reservations'. The bottom-up reconstruction 'Enable Customers to Manage Their Account and Service Interactions' is broader and potentially overlaps with 'Place and Manage Orders' (which covers pickup arrangements) and 'Receive Fair Product Allocation' (which covers the fair-play score). However, 'Manage Personal Account' is a standard, distinct stakeholder intention for overseeing persistent account state (wallet balance, score, preferences) separate from the transactional act of placing an order. The original goal is appropriately scoped to the non-transactional management of the customer's profile and financial standing. It is not a mere workflow phase of another goal but a distinct area of responsibility for the customer. Therefore, it should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent goal 'Manage Personal Account' is described as overseeing the payment wallet, pickup reservations, and understanding the fair-play score. The project description explicitly mentions 'reminders' as a system feature. While 'RetrieveWalletBalance' (llg_001), 'RetrieveUpcomingPickupReservations' (llg_003), and 'RetrieveFairPlayScore' (llg_005) are directly supported by the parent description, 'InitiateWalletTopUp' (llg_002) is not explicitly documented as a customer action in the provided text (which only mentions 'automatic payment through customer wallets'). More critically, 'ReceivePickupReminderNotification' (llg_004) and 'ConfigureReminderPreferences' (llg_006) are unsupported. The documentation states the system provides 'reminders', but does not state that customers can *configure* preferences for them, nor does it explicitly frame 'receiving' them as a distinct management capability separate from the system's automatic operation. Furthermore, 'InitiateWalletTopUp' is a specific transactional action not explicitly entailed by 'oversee their payment wallet' or 'manages their wallet' in the context of the provided description which focuses on automatic payment. The inclusion of configuration and specific top-up initiation goes beyond the explicit scope of 'overseeing' and 'understanding' provided in the parent description and project text. Therefore, these LLGs are unsupported or misleading.",
-      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
-      "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Personal Account' is supported by the project description, which mentions the system maintains a fair-play score, manages automatic payment through customer wallets, and handles pickup reservations. The actor description explicitly states customers 'manage their wallet and pickup reservations'. The bottom-up reconstruction 'Enable Customers to Manage Their Account and Service Interactions' is broader and potentially overlaps with 'Place and Manage Orders' (which covers pickup arrangements) and 'Receive Fair Product Allocation' (which covers the fair-play score). However, 'Manage Personal Account' is a standard, distinct stakeholder intention for overseeing persistent account state (wallet balance, score, preferences) separate from the transactional act of placing an order. The original goal is appropriately scoped to the non-transactional management of the customer's profile and financial standing. It is not a mere workflow phase of another goal but a distinct area of responsibility for the customer. Therefore, it should be kept.",
-        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 4,
-        "rewriting_focus": null,
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
-        }
-      },
-      "replacement_request": null,
-      "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent goal 'Manage Personal Account' is described as overseeing the payment wallet, pickup reservations, and understanding the fair-play score. The project description explicitly mentions 'reminders' as a system feature. While 'RetrieveWalletBalance' (llg_001), 'RetrieveUpcomingPickupReservations' (llg_003), and 'RetrieveFairPlayScore' (llg_005) are directly supported by the parent description, 'InitiateWalletTopUp' (llg_002) is not explicitly documented as a customer action in the provided text (which only mentions 'automatic payment through customer wallets'). More critically, 'ReceivePickupReminderNotification' (llg_004) and 'ConfigureReminderPreferences' (llg_006) are unsupported. The documentation states the system provides 'reminders', but does not state that customers can *configure* preferences for them, nor does it explicitly frame 'receiving' them as a distinct management capability separate from the system's automatic operation. Furthermore, 'InitiateWalletTopUp' is a specific transactional action not explicitly entailed by 'oversee their payment wallet' or 'manages their wallet' in the context of the provided description which focuses on automatic payment. The inclusion of configuration and specific top-up initiation goes beyond the explicit scope of 'overseeing' and 'understanding' provided in the parent description and project text. Therefore, these LLGs are unsupported or misleading.",
-        "decision": "REGENERATE_LOW_LEVEL_GOALS",
-        "quality_score": 2,
-        "regeneration_feedback": "Remove 'InitiateWalletTopUp', 'ReceivePickupReminderNotification', and 'ConfigureReminderPreferences' as they are not explicitly supported by the documentation for this specific goal. Keep the retrieval/viewing capabilities for wallet balance, pickup reservations, and fair-play score.",
-        "unsupported_or_misleading_llg_ids": [
-          "llg_002",
-          "llg_004",
-          "llg_006"
-        ],
-        "missing_essential_capabilities": [],
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "REGENERATE_LOW_LEVEL_GOALS": 3
-        }
-      }
-    },
-    "branch_005": {
-      "branch_id": "branch_005",
-      "rationale": "HLG evaluation failed: No HighLevelGoalEvaluation voting quorum: {'REWRITE_ORIGINAL_HIGH_LEVEL_GOAL': 1, 'KEEP_ORIGINAL_HIGH_LEVEL_GOAL': 1}; required 2/3. Rejected votes: 1x ValueError: quality_score conflicts with the selected decision.",
-      "final_decision": "EVALUATION_INCONCLUSIVE",
-      "high_level_evaluation": {
-        "rationale": "HLG evaluation failed: No HighLevelGoalEvaluation voting quorum: {'REWRITE_ORIGINAL_HIGH_LEVEL_GOAL': 1, 'KEEP_ORIGINAL_HIGH_LEVEL_GOAL': 1}; required 2/3. Rejected votes: 1x ValueError: quality_score conflicts with the selected decision.",
-        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 0,
-        "rewriting_focus": null,
-        "voter_count": 3,
-        "valid_vote_count": 0,
-        "winning_vote_count": 0,
-        "vote_distribution": {}
-      },
-      "replacement_request": null,
-      "low_level_evaluation": null
-    },
-    "branch_006": {
-      "branch_id": "branch_006",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Facilitate Customer Orders' is supported by the project description, which states that 'store employees may enter orders on behalf of customers'. The bottom-up reconstruction 'Manage Customer Orders' is semantically equivalent and arguably more precise, as it covers the full lifecycle of handling these orders (searching, creating, modifying, finalizing) rather than just the initial facilitation. However, the original goal is not incorrect or unsupported; it accurately reflects the stakeholder intention of assisting customers with their orders. The other Store Employee goal, 'Manage Store Logistics', covers operational aspects like deliveries and refunds, which are distinct from the direct interaction of entering/managing customer orders. Therefore, the original goal is valid, supported, and independently scoped from the logistics goal. While 'Manage Customer Orders' is a slightly better phrasing, the original is acceptable and captures the core intention. Given the rubric, a score of 4 is appropriate as it is good coverage with negligible issues, and the decision is to keep it as it is not materially defective. Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Facilitate Customer Orders' for the Store Employee. The project description explicitly states that 'store employees may enter orders on behalf of customers'. The LLGs cover the necessary steps to perform this action: identifying the customer (llg_001), creating the order (llg_002), modifying the order contents (llg_003, llg_004, llg_005), finalizing the order (llg_006), and reviewing past orders (llg_007). All these capabilities are essential for an employee to effectively place and manage orders on behalf of a customer. There are no unsupported LLGs, as all are directly entailed by the need to 'enter orders' and 'manage' them for a specific customer. There are no missing essential capabilities for this specific HLG, as payment and pickup are handled by the customer or logistics, and product availability is managed by farmers. The decomposition is precise and supported by the documentation.",
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Place and Manage Orders' is supported by the project description, which states that customers 'place orders' and the system manages 'pickup reservations' and 'automatic payment'. The goal correctly captures the end-to-end transactional workflow for the customer: selecting products (implied by placing an order), finalizing the purchase (payment), and arranging fulfillment (pickup). It is distinct from 'Access Product Offers' (discovery/browsing) and 'Manage Personal Account' (wallet/score management, which are prerequisites or separate administrative tasks rather than the act of ordering itself). The bottom-up reconstruction 'Enable Customer to Shop and Manage Orders' is semantically equivalent but slightly less precise regarding the specific 'order' artifact. The original goal is well-scoped, not redundant with siblings, and represents a valid, independently satisfiable stakeholder outcome. Therefore, it should be kept. Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Place and Manage Orders' based on the project description. The description explicitly states that customers 'place orders', the system manages 'automatic payment through customer wallets', and 'pickup reservations'. The LLGs cover the necessary steps: managing the selection (cart operations llg_001-llg_004), finalizing the transaction (placing order llg_005, authorizing payment llg_006, selecting pickup llg_007), and post-order management (cancelling llg_008, viewing status llg_009, viewing history llg_010). All these capabilities are either explicitly stated or necessarily entailed by the requirement to 'place and manage orders' including 'payment and pickup arrangements'. There are no unsupported LLGs (e.g., no notifications or downloads are included) and no essential capabilities are missing. The decomposition is precise and consistent with the documentation.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Facilitate Customer Orders' is supported by the project description, which states that 'store employees may enter orders on behalf of customers'. The bottom-up reconstruction 'Manage Customer Orders' is semantically equivalent and arguably more precise, as it covers the full lifecycle of handling these orders (searching, creating, modifying, finalizing) rather than just the initial facilitation. However, the original goal is not incorrect or unsupported; it accurately reflects the stakeholder intention of assisting customers with their orders. The other Store Employee goal, 'Manage Store Logistics', covers operational aspects like deliveries and refunds, which are distinct from the direct interaction of entering/managing customer orders. Therefore, the original goal is valid, supported, and independently scoped from the logistics goal. While 'Manage Customer Orders' is a slightly better phrasing, the original is acceptable and captures the core intention. Given the rubric, a score of 4 is appropriate as it is good coverage with negligible issues, and the decision is to keep it as it is not materially defective.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Place and Manage Orders' is supported by the project description, which states that customers 'place orders' and the system manages 'pickup reservations' and 'automatic payment'. The goal correctly captures the end-to-end transactional workflow for the customer: selecting products (implied by placing an order), finalizing the purchase (payment), and arranging fulfillment (pickup). It is distinct from 'Access Product Offers' (discovery/browsing) and 'Manage Personal Account' (wallet/score management, which are prerequisites or separate administrative tasks rather than the act of ordering itself). The bottom-up reconstruction 'Enable Customer to Shop and Manage Orders' is semantically equivalent but slightly less precise regarding the specific 'order' artifact. The original goal is well-scoped, not redundant with siblings, and represents a valid, independently satisfiable stakeholder outcome. Therefore, it should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 4,
+        "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -266,7 +186,7 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Facilitate Customer Orders' for the Store Employee. The project description explicitly states that 'store employees may enter orders on behalf of customers'. The LLGs cover the necessary steps to perform this action: identifying the customer (llg_001), creating the order (llg_002), modifying the order contents (llg_003, llg_004, llg_005), finalizing the order (llg_006), and reviewing past orders (llg_007). All these capabilities are essential for an employee to effectively place and manage orders on behalf of a customer. There are no unsupported LLGs, as all are directly entailed by the need to 'enter orders' and 'manage' them for a specific customer. There are no missing essential capabilities for this specific HLG, as payment and pickup are handled by the customer or logistics, and product availability is managed by farmers. The decomposition is precise and supported by the documentation.",
+        "rationale": "Voting result 2/3 for KEEP_LOW_LEVEL_GOALS. The current Low-Level Goals (LLGs) accurately decompose the High-Level Goal 'Place and Manage Orders' based on the project description. The description explicitly states that customers 'place orders', the system manages 'automatic payment through customer wallets', and 'pickup reservations'. The LLGs cover the necessary steps: managing the selection (cart operations llg_001-llg_004), finalizing the transaction (placing order llg_005, authorizing payment llg_006, selecting pickup llg_007), and post-order management (cancelling llg_008, viewing status llg_009, viewing history llg_010). All these capabilities are either explicitly stated or necessarily entailed by the requirement to 'place and manage orders' including 'payment and pickup arrangements'. There are no unsupported LLGs (e.g., no notifications or downloads are included) and no essential capabilities are missing. The decomposition is precise and consistent with the documentation.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "quality_score": 5,
         "regeneration_feedback": null,
@@ -281,15 +201,17 @@
         }
       }
     },
-    "branch_007": {
-      "branch_id": "branch_007",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Store Logistics' is well-supported by the project description, which explicitly mentions 'farmer deliveries', 'pickup reservations', and 'refunds' as system features. The Store Employee actor is described as managing 'store operations', which encompasses these logistical and transactional resolution tasks. The bottom-up reconstruction 'Manage Store Inventory Flow and Customer Transaction Resolution' is semantically equivalent but arguably less precise regarding the 'logistics' aspect (deliveries/pickups) and more focused on the internal flow. However, the original goal is not fragmented; it correctly groups the operational duties (deliveries, pickups, refunds) that are distinct from the transactional duty of 'Facilitate Customer Orders' (entering orders). These are two distinct aspects of the Store Employee's role: one is the front-line service of order entry, and the other is the back-office/operational management of the physical and financial flow. Therefore, the original goal is independently scoped, supported, and appropriately granular for a High-Level Goal. It does not overlap with 'Facilitate Customer Orders' in a way that makes it redundant, as entering an order is distinct from managing the subsequent logistics and refunds. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain several unsupported capabilities. Specifically, llg_003 and llg_006 refer to 'automated reminders' for deliveries and pickups. While the project description mentions 'reminders' as a system feature, it does not explicitly state that the Store Employee views these reminders as part of managing logistics; typically, reminders are sent to the actors involved (Farmers/Customers). More critically, llg_004 ('ConfirmFarmerDelivery') and llg_007 ('MarkOrderAsPickedUp') imply specific status transition actions that are not explicitly documented as employee tasks. The description states the system manages 'farmer deliveries' and 'pickup reservations', but does not explicitly assign the task of confirming receipt or marking pickup to the Store Employee. While plausible, these are inferred operational details not strictly entailed by the text. Furthermore, the decomposition is overly granular with multiple 'View' LLGs (llg_002, llg_003, llg_005, llg_006, llg_010) which are standard CRUD/read operations rather than distinct high-level capabilities. The core documented capabilities are scheduling deliveries, managing pickups, and processing refunds. The current LLGs introduce unsupported 'reminder viewing' and specific 'confirmation' actions that lack explicit documentary support for the Store Employee actor.",
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Personal Account' is supported by the project description, which explicitly states that customers 'manage their wallet and pickup reservations' and that the system 'maintains a fair-play score for customers'. The goal correctly identifies a distinct stakeholder intention separate from 'Place and Manage Orders' (transactional) and 'Access Product Offers' (discovery). While the bottom-up reconstruction suggests a broader 'Manage Their Account and Activities', the original goal's scope (wallet, reservations, fair-play score) is precise, supported, and not fully redundant with siblings. It represents a valid, independently satisfiable outcome for the customer to oversee their standing and financial/logistical commitments outside of the active order placement workflow. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain two unsupported capabilities. 'InitiateWalletTopUp' (llg_002) is not supported by the documentation, which only mentions 'automatic payment through customer wallets' and managing the wallet, but does not explicitly state that customers can top up funds within the system (this is often an external banking action or not specified). More critically, 'ConfigureReminderPreferences' (llg_006) is unsupported; the documentation mentions 'reminders' exist, but does not state that customers can configure their preferences for them. Additionally, 'ReceivePickupReminderNotification' (llg_004) is a passive system action rather than a customer goal, though it is borderline. The primary defect is the inclusion of undocumented configuration and top-up functionalities. The essential capability of 'managing' pickup reservations (e.g., viewing details, potentially canceling if allowed, though 'Place and Manage Orders' covers order details) is partially covered by retrieval, but the unsupported LLGs require regeneration to ensure strict adherence to the provided description.",
       "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Store Logistics' is well-supported by the project description, which explicitly mentions 'farmer deliveries', 'pickup reservations', and 'refunds' as system features. The Store Employee actor is described as managing 'store operations', which encompasses these logistical and transactional resolution tasks. The bottom-up reconstruction 'Manage Store Inventory Flow and Customer Transaction Resolution' is semantically equivalent but arguably less precise regarding the 'logistics' aspect (deliveries/pickups) and more focused on the internal flow. However, the original goal is not fragmented; it correctly groups the operational duties (deliveries, pickups, refunds) that are distinct from the transactional duty of 'Facilitate Customer Orders' (entering orders). These are two distinct aspects of the Store Employee's role: one is the front-line service of order entry, and the other is the back-office/operational management of the physical and financial flow. Therefore, the original goal is independently scoped, supported, and appropriately granular for a High-Level Goal. It does not overlap with 'Facilitate Customer Orders' in a way that makes it redundant, as entering an order is distinct from managing the subsequent logistics and refunds.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Manage Personal Account' is supported by the project description, which explicitly states that customers 'manage their wallet and pickup reservations' and that the system 'maintains a fair-play score for customers'. The goal correctly identifies a distinct stakeholder intention separate from 'Place and Manage Orders' (transactional) and 'Access Product Offers' (discovery). While the bottom-up reconstruction suggests a broader 'Manage Their Account and Activities', the original goal's scope (wallet, reservations, fair-play score) is precise, supported, and not fully redundant with siblings. It represents a valid, independently satisfiable outcome for the customer to oversee their standing and financial/logistical commitments outside of the active order placement workflow.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -299,15 +221,13 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain several unsupported capabilities. Specifically, llg_003 and llg_006 refer to 'automated reminders' for deliveries and pickups. While the project description mentions 'reminders' as a system feature, it does not explicitly state that the Store Employee views these reminders as part of managing logistics; typically, reminders are sent to the actors involved (Farmers/Customers). More critically, llg_004 ('ConfirmFarmerDelivery') and llg_007 ('MarkOrderAsPickedUp') imply specific status transition actions that are not explicitly documented as employee tasks. The description states the system manages 'farmer deliveries' and 'pickup reservations', but does not explicitly assign the task of confirming receipt or marking pickup to the Store Employee. While plausible, these are inferred operational details not strictly entailed by the text. Furthermore, the decomposition is overly granular with multiple 'View' LLGs (llg_002, llg_003, llg_005, llg_006, llg_010) which are standard CRUD/read operations rather than distinct high-level capabilities. The core documented capabilities are scheduling deliveries, managing pickups, and processing refunds. The current LLGs introduce unsupported 'reminder viewing' and specific 'confirmation' actions that lack explicit documentary support for the Store Employee actor.",
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain two unsupported capabilities. 'InitiateWalletTopUp' (llg_002) is not supported by the documentation, which only mentions 'automatic payment through customer wallets' and managing the wallet, but does not explicitly state that customers can top up funds within the system (this is often an external banking action or not specified). More critically, 'ConfigureReminderPreferences' (llg_006) is unsupported; the documentation mentions 'reminders' exist, but does not state that customers can configure their preferences for them. Additionally, 'ReceivePickupReminderNotification' (llg_004) is a passive system action rather than a customer goal, though it is borderline. The primary defect is the inclusion of undocumented configuration and top-up functionalities. The essential capability of 'managing' pickup reservations (e.g., viewing details, potentially canceling if allowed, though 'Place and Manage Orders' covers order details) is partially covered by retrieval, but the unsupported LLGs require regeneration to ensure strict adherence to the provided description.",
         "decision": "REGENERATE_LOW_LEVEL_GOALS",
         "quality_score": 2,
-        "regeneration_feedback": "Remove unsupported LLGs regarding viewing automated reminders (llg_003, llg_006) and specific confirmation/status transition actions (llg_004, llg_007) unless explicitly supported. Focus on the core documented capabilities: scheduling farmer deliveries, managing customer pickup reservations, and processing refunds. Consolidate view operations into broader management goals if appropriate.",
+        "regeneration_feedback": "Remove 'InitiateWalletTopUp' and 'ConfigureReminderPreferences' as they are not explicitly supported by the project description. Keep 'RetrieveWalletBalance', 'RetrieveUpcomingPickupReservations', and 'RetrieveFairPlayScore'. Consider if 'ReceivePickupReminderNotification' should be rephrased as a customer goal (e.g., 'View Pickup Reminders') or removed if it is purely a system background process not directly interacted with by the customer in the context of 'managing' their account.",
         "unsupported_or_misleading_llg_ids": [
-          "llg_003",
-          "llg_004",
-          "llg_006",
-          "llg_007"
+          "llg_002",
+          "llg_006"
         ],
         "missing_essential_capabilities": [],
         "voter_count": 3,
@@ -317,6 +237,102 @@
           "REGENERATE_LOW_LEVEL_GOALS": 3
         }
       }
+    },
+    "branch_005": {
+      "branch_id": "branch_005",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Receive Fair Product Allocation' is supported by the project description, which explicitly states that the system 'manages... priority-based allocation' and 'maintains a fair-play score for customers, which influences priority when available product quantities are insufficient.' The bottom-up reconstruction 'Ensure Fair and Transparent Product Allocation' captures the same core intention but adds 'Transparent' which is supported by the notification of allocated quantities. However, the original goal is already sufficiently precise and supported. The goal represents a distinct stakeholder outcome (receiving a fair share of limited goods) that is not fully covered by 'Place and Manage Orders' (which focuses on the act of ordering and managing details) or 'Manage Personal Account' (which focuses on viewing the score and wallet). While there is overlap, the specific outcome of the allocation mechanism itself is a distinct value proposition for the customer. The original goal is acceptable, though 'Receive' is slightly passive; however, it accurately reflects the customer's role in the allocation process. The reconstruction is slightly better phrased but the original is not defective enough to require a rewrite for correctness or support. It is a valid, independently scoped goal. Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The parent goal 'Receive Fair Product Allocation' is supported by the project description which mentions 'priority-based allocation' and a 'fair-play score... which influences priority'. The LLGs llg_003 (CalculateFairPlayScore) and llg_004 (PrioritizeAllocationByFairPlayScore) directly address the mechanism of fair allocation based on the score. However, llg_001 (ReceiveProductAllocationNotification) and llg_002 (ViewOrderAllocatedQuantities) are problematic. The project description mentions 'reminders' but does not explicitly state that customers receive notifications of their *allocated quantities* or that they can *view* these specific allocation details as a distinct capability from managing the order. While 'Place and Manage Orders' covers managing order details, the specific act of viewing the *result* of the allocation (which quantities were actually granted vs requested) is not explicitly documented as a separate customer-facing feature in the provided text. More critically, the 'fair-play score' calculation (llg_003) is described as being based on 'historical order behavior, including order cancellations and pickup adherence'. The project description only states the system 'maintains a fair-play score' and that it 'influences priority'. It does not specify the inputs (cancellations, pickup adherence) for this score. Therefore, llg_003 contains unsupported details about the calculation logic. Furthermore, the sibling HLG 'Manage Personal Account' explicitly includes 'understand their fair-play score', which suggests that the *viewing* or *understanding* of the score belongs there, not necessarily the calculation logic which is a system backend process. However, the most significant issue is that llg_001 and llg_002 assume a transparency/notification feature for allocation results that is not explicitly in the description. The description says the system 'manages... priority-based allocation', but doesn't explicitly promise a notification or a specific view for the *allocated* quantities distinct from the order status. Given the strict requirement that capabilities must be explicitly stated or necessarily entailed, the specific notification and viewing of allocated quantities are not clearly entailed. The calculation inputs in llg_003 are also unsupported. Thus, regeneration is required to remove unsupported details and ensure the LLGs strictly align with the documented 'priority-based allocation' and 'fair-play score' maintenance without inventing specific calculation inputs or notification mechanisms.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Receive Fair Product Allocation' is supported by the project description, which explicitly states that the system 'manages... priority-based allocation' and 'maintains a fair-play score for customers, which influences priority when available product quantities are insufficient.' The bottom-up reconstruction 'Ensure Fair and Transparent Product Allocation' captures the same core intention but adds 'Transparent' which is supported by the notification of allocated quantities. However, the original goal is already sufficiently precise and supported. The goal represents a distinct stakeholder outcome (receiving a fair share of limited goods) that is not fully covered by 'Place and Manage Orders' (which focuses on the act of ordering and managing details) or 'Manage Personal Account' (which focuses on viewing the score and wallet). While there is overlap, the specific outcome of the allocation mechanism itself is a distinct value proposition for the customer. The original goal is acceptable, though 'Receive' is slightly passive; however, it accurately reflects the customer's role in the allocation process. The reconstruction is slightly better phrased but the original is not defective enough to require a rewrite for correctness or support. It is a valid, independently scoped goal.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2,
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 1
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The parent goal 'Receive Fair Product Allocation' is supported by the project description which mentions 'priority-based allocation' and a 'fair-play score... which influences priority'. The LLGs llg_003 (CalculateFairPlayScore) and llg_004 (PrioritizeAllocationByFairPlayScore) directly address the mechanism of fair allocation based on the score. However, llg_001 (ReceiveProductAllocationNotification) and llg_002 (ViewOrderAllocatedQuantities) are problematic. The project description mentions 'reminders' but does not explicitly state that customers receive notifications of their *allocated quantities* or that they can *view* these specific allocation details as a distinct capability from managing the order. While 'Place and Manage Orders' covers managing order details, the specific act of viewing the *result* of the allocation (which quantities were actually granted vs requested) is not explicitly documented as a separate customer-facing feature in the provided text. More critically, the 'fair-play score' calculation (llg_003) is described as being based on 'historical order behavior, including order cancellations and pickup adherence'. The project description only states the system 'maintains a fair-play score' and that it 'influences priority'. It does not specify the inputs (cancellations, pickup adherence) for this score. Therefore, llg_003 contains unsupported details about the calculation logic. Furthermore, the sibling HLG 'Manage Personal Account' explicitly includes 'understand their fair-play score', which suggests that the *viewing* or *understanding* of the score belongs there, not necessarily the calculation logic which is a system backend process. However, the most significant issue is that llg_001 and llg_002 assume a transparency/notification feature for allocation results that is not explicitly in the description. The description says the system 'manages... priority-based allocation', but doesn't explicitly promise a notification or a specific view for the *allocated* quantities distinct from the order status. Given the strict requirement that capabilities must be explicitly stated or necessarily entailed, the specific notification and viewing of allocated quantities are not clearly entailed. The calculation inputs in llg_003 are also unsupported. Thus, regeneration is required to remove unsupported details and ensure the LLGs strictly align with the documented 'priority-based allocation' and 'fair-play score' maintenance without inventing specific calculation inputs or notification mechanisms.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove unsupported details from llg_003 regarding specific calculation inputs (cancellations, pickup adherence) as they are not in the description. Re-evaluate llg_001 and llg_002: the description does not explicitly state that customers receive notifications of allocated quantities or have a specific view for allocated quantities distinct from order management. Focus the LLGs on the system applying the fair-play score to prioritize allocation when quantities are limited, as explicitly stated. If viewing the score is needed, it is covered by 'Manage Personal Account'.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_001",
+          "llg_002",
+          "llg_003"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 1,
+          "REGENERATE_LOW_LEVEL_GOALS": 2
+        }
+      }
+    },
+    "branch_006": {
+      "branch_id": "branch_006",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Facilitate Customer Orders' is supported by the project description, which states that 'store employees may enter orders on behalf of customers.' The bottom-up reconstruction 'Manage Customer Orders' is semantically equivalent and captures the same stakeholder intention. The goal is distinct from 'Manage Store Logistics' (which covers deliveries, pickups, and refunds) and 'Manage Product Offerings' (Farmer). It represents a specific, independently satisfiable outcome for the Store Employee actor: handling the order entry process for customers. The phrasing 'Facilitate Customer Orders' is slightly less precise than 'Manage Customer Orders' but is not materially defective. However, 'Manage Customer Orders' is a clearer, more standard expression of the intent to handle the order lifecycle on behalf of the customer. Given the choice, the original is acceptable, but the reconstruction is slightly better. Since the original is supported and not redundant, and the difference is minor, KEEP is appropriate. Wait, looking at the rubric, if the reconstruction is 'less faithful' or 'more precise', we might rewrite. But 'Facilitate' vs 'Manage' is a minor stylistic difference. The core intent is the same. The goal is not fragmented. It is a distinct capability. I will keep it. Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The parent goal 'Facilitate Customer Orders' is supported by the description stating that 'store employees may enter orders on behalf of customers.' The current LLGs cover the essential steps of this process: identifying the customer (llg_001), creating the order (llg_002), modifying the order contents (llg_003, llg_004, llg_005), and finalizing it (llg_006). These are all necessary to 'enter' an order. However, llg_007 'ViewCustomerOrderHistory' is not explicitly supported by the documentation for the Store Employee's role in *facilitating* orders. While a store employee might view history, the description specifically highlights 'entering orders' and 'managing store operations' (which is covered by the sibling HLG 'Manage Store Logistics' for pickups/refunds/deliveries). Viewing history is not explicitly stated as a capability for the Store Employee in the context of placing orders, nor is it necessarily entailed by 'entering orders'. It is a plausible but unsupported addition. Therefore, llg_007 should be removed.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Facilitate Customer Orders' is supported by the project description, which states that 'store employees may enter orders on behalf of customers.' The bottom-up reconstruction 'Manage Customer Orders' is semantically equivalent and captures the same stakeholder intention. The goal is distinct from 'Manage Store Logistics' (which covers deliveries, pickups, and refunds) and 'Manage Product Offerings' (Farmer). It represents a specific, independently satisfiable outcome for the Store Employee actor: handling the order entry process for customers. The phrasing 'Facilitate Customer Orders' is slightly less precise than 'Manage Customer Orders' but is not materially defective. However, 'Manage Customer Orders' is a clearer, more standard expression of the intent to handle the order lifecycle on behalf of the customer. Given the choice, the original is acceptable, but the reconstruction is slightly better. Since the original is supported and not redundant, and the difference is minor, KEEP is appropriate. Wait, looking at the rubric, if the reconstruction is 'less faithful' or 'more precise', we might rewrite. But 'Facilitate' vs 'Manage' is a minor stylistic difference. The core intent is the same. The goal is not fragmented. It is a distinct capability. I will keep it.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 4,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. The parent goal 'Facilitate Customer Orders' is supported by the description stating that 'store employees may enter orders on behalf of customers.' The current LLGs cover the essential steps of this process: identifying the customer (llg_001), creating the order (llg_002), modifying the order contents (llg_003, llg_004, llg_005), and finalizing it (llg_006). These are all necessary to 'enter' an order. However, llg_007 'ViewCustomerOrderHistory' is not explicitly supported by the documentation for the Store Employee's role in *facilitating* orders. While a store employee might view history, the description specifically highlights 'entering orders' and 'managing store operations' (which is covered by the sibling HLG 'Manage Store Logistics' for pickups/refunds/deliveries). Viewing history is not explicitly stated as a capability for the Store Employee in the context of placing orders, nor is it necessarily entailed by 'entering orders'. It is a plausible but unsupported addition. Therefore, llg_007 should be removed.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove llg_007 (ViewCustomerOrderHistory) as it is not explicitly supported by the documentation for the Store Employee's role in facilitating orders. Keep the other LLGs which cover the order entry process.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_007"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 2,
+          "KEEP_LOW_LEVEL_GOALS": 1
+        }
+      }
+    },
+    "branch_007": {
+      "branch_id": "branch_007",
+      "rationale": "HLG evaluation failed: No HighLevelGoalEvaluation voting quorum: {'KEEP_ORIGINAL_HIGH_LEVEL_GOAL': 1}; required 2/3. Rejected votes: 2x ValueError: quality_score conflicts with the selected decision.",
+      "final_decision": "EVALUATION_INCONCLUSIVE",
+      "high_level_evaluation": {
+        "rationale": "HLG evaluation failed: No HighLevelGoalEvaluation voting quorum: {'KEEP_ORIGINAL_HIGH_LEVEL_GOAL': 1}; required 2/3. Rejected votes: 2x ValueError: quality_score conflicts with the selected decision.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 0,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 0,
+        "winning_vote_count": 0,
+        "vote_distribution": {}
+      },
+      "replacement_request": null,
+      "low_level_evaluation": null
     }
   },
   "high_level_goals": {
@@ -863,7 +879,7 @@
       },
       {
         "name": "RetrieveWalletBalance",
-        "description": "The Customer can query the system to view their current payment wallet balance.",
+        "description": "The Customer retrieves their current payment wallet balance from the system.",
         "high_level_associated": {
           "name": "Manage Personal Account",
           "description": "To oversee their payment wallet, pickup reservations, and understand their fair-play score.",
@@ -875,7 +891,19 @@
       },
       {
         "name": "RetrieveUpcomingPickupReservations",
-        "description": "The Customer can query the system to view a list of their scheduled pickup reservations.",
+        "description": "The Customer retrieves a list of their upcoming pickup reservations from the system.",
+        "high_level_associated": {
+          "name": "Manage Personal Account",
+          "description": "To oversee their payment wallet, pickup reservations, and understand their fair-play score.",
+          "actor": {
+            "name": "Customer",
+            "description": "Browses offers, places orders, and manages their wallet and pickup reservations."
+          }
+        }
+      },
+      {
+        "name": "ViewPickupReminders",
+        "description": "The Customer views any active reminders associated with their pickup reservations.",
         "high_level_associated": {
           "name": "Manage Personal Account",
           "description": "To oversee their payment wallet, pickup reservations, and understand their fair-play score.",
@@ -887,7 +915,7 @@
       },
       {
         "name": "RetrieveFairPlayScore",
-        "description": "The Customer can query the system to view their current fair-play score.",
+        "description": "The Customer retrieves their current fair-play score from the system.",
         "high_level_associated": {
           "name": "Manage Personal Account",
           "description": "To oversee their payment wallet, pickup reservations, and understand their fair-play score.",
@@ -901,7 +929,7 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description outlines the following functional responsibilities: Farmers entering availability (covered by 'Manage Product Offerings'), Customers browsing offers (covered by 'Access Product Offers'), placing orders (covered by 'Place and Manage Orders'), managing wallets/pickups/scores (covered by 'Manage Personal Account' and 'Receive Fair Product Allocation'), Store Employees entering orders (covered by 'Facilitate Customer Orders'), and managing logistics including deliveries, pickups, and refunds (covered by 'Manage Store Logistics'). All explicit actor-level capabilities and outcomes are semantically entailed by the current High-Level Goals. No distinct, uncovered functional requirements remain.",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description outlines three main actors: Farmers, Customers, and Store Employees. \n1. Farmers: 'Enter product availability' is covered by 'Manage Product Offerings'.\n2. Customers: 'Browse offers' is covered by 'Access Product Offers'. 'Place orders' is covered by 'Place and Manage Orders'. 'Manage wallet and pickup reservations' is covered by 'Manage Personal Account'. 'Fair-play score influencing priority' is covered by 'Receive Fair Product Allocation'.\n3. Store Employees: 'Enter orders on behalf of customers' is covered by 'Facilitate Customer Orders'. 'Manage store operations' (including scheduling farmer deliveries, managing customer pickups, and processing refunds) is covered by 'Manage Store Logistics'.\n\nAll explicit functional requirements and actor responsibilities are semantically entailed by the current High-Level Goals. No missing goals were identified.",
     "quality_score": 5,
     "missing_goal_requests": [],
     "voter_count": 3,

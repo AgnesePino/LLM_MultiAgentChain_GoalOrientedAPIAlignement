@@ -1,0 +1,412 @@
+{
+  "iteration": 8,
+  "reconstructions": {
+    "branch_002": {
+      "reconstructed_high_level_goal": "Track Ambulance Dispatch Progress",
+      "rationale": "Both low-level goals involve the Ambulance Staff transmitting critical timestamp and location data to the CAD system at key stages of a dispatch (departure and arrival). This collective action is essential for continuously monitoring and understanding the real-time progress of an ambulance's journey during an emergency call.",
+      "branch_id": "branch_002",
+      "source_low_level_goal_ids": [
+        "Transmit departure timestamp and location",
+        "Transmit arrival timestamp and location"
+      ]
+    },
+    "branch_003": {
+      "reconstructed_high_level_goal": "Manage and Monitor Ambulance Fleet Operational Status and Location",
+      "rationale": "The low-level goals collectively describe the actions required for a Radio Operator to both update and record (manage) as well as retrieve and analyze (monitor) the operational status and location data of individual ambulances and the entire fleet. This comprehensive set of operations ensures that the Radio Operator maintains complete and current situational awareness of all ambulance resources for effective dispatch, resource allocation, and operational oversight.",
+      "branch_id": "branch_003",
+      "source_low_level_goal_ids": [
+        "UpdateAmbulanceOperationalStatus",
+        "RecordAmbulanceDepartureLocation",
+        "RecordAmbulanceDestinationLocation",
+        "RetrieveAllAmbulanceOperationalStatuses",
+        "RetrieveAllAmbulanceCurrentLocations",
+        "RetrieveSpecificAmbulanceOperationalAndLocationHistory"
+      ]
+    },
+    "branch_004": {
+      "reconstructed_high_level_goal": "Successfully Report an Emergency",
+      "rationale": "These low-level goals collectively describe the complete process an Emergency Caller undertakes to initiate an emergency response. They cover placing the call, providing all necessary incident details (location, nature, severity), and receiving confirmation that the report has been successfully registered and is being processed by the system.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Initiate emergency call",
+        "Provide incident location details",
+        "Describe emergency incident",
+        "Receive emergency call registration confirmation"
+      ]
+    }
+  },
+  "evaluations": {
+    "branch_002": {
+      "branch_id": "branch_002",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Adhere to operational communication protocols' is a supported and independently scoped goal for the Ambulance Staff. The project description explicitly states that ambulance staff must 'follow standard routes and communicate departure and destination information so that radio operators and the CAD can accurately record the corresponding data.' This is a distinct actor-level intention (compliance and transmission) separate from the Radio Operator's goal of 'Maintain and Monitor Ambulance Operational Status and Location' (reception and recording). While the reconstructed goal 'Track Ambulance Dispatch Progress' is semantically related, it is less precise regarding the actor's specific responsibility (adherence to protocols/communication) compared to the original, which accurately reflects the documented requirement for staff to follow routes and communicate data. The original goal is not redundant because it captures the active compliance behavior of the Ambulance Staff, whereas the sibling goal captures the passive/monitoring behavior of the Radio Operator. Therefore, the original goal should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Adhere to operational communication protocols'. The project description explicitly states that ambulance staff must 'communicate departure and destination information'. LLG llg_001 covers the transmission of departure information (timestamp and location), and llg_002 covers the transmission of destination/arrival information (timestamp and location). These are the specific, documented actions required of the Ambulance Staff to support the Radio Operator's goal of maintaining status. There are no unsupported additions (e.g., no invented notifications or status updates beyond the communicated data) and no essential documented capabilities are missing. The goals are precise and aligned with the documentation.",
+      "final_decision": "CONFIRM_BRANCH",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Adhere to operational communication protocols' is a supported and independently scoped goal for the Ambulance Staff. The project description explicitly states that ambulance staff must 'follow standard routes and communicate departure and destination information so that radio operators and the CAD can accurately record the corresponding data.' This is a distinct actor-level intention (compliance and transmission) separate from the Radio Operator's goal of 'Maintain and Monitor Ambulance Operational Status and Location' (reception and recording). While the reconstructed goal 'Track Ambulance Dispatch Progress' is semantically related, it is less precise regarding the actor's specific responsibility (adherence to protocols/communication) compared to the original, which accurately reflects the documented requirement for staff to follow routes and communicate data. The original goal is not redundant because it captures the active compliance behavior of the Ambulance Staff, whereas the sibling goal captures the passive/monitoring behavior of the Radio Operator. Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs accurately decompose the parent HLG 'Adhere to operational communication protocols'. The project description explicitly states that ambulance staff must 'communicate departure and destination information'. LLG llg_001 covers the transmission of departure information (timestamp and location), and llg_002 covers the transmission of destination/arrival information (timestamp and location). These are the specific, documented actions required of the Ambulance Staff to support the Radio Operator's goal of maintaining status. There are no unsupported additions (e.g., no invented notifications or status updates beyond the communicated data) and no essential documented capabilities are missing. The goals are precise and aligned with the documentation.",
+        "decision": "KEEP_LOW_LEVEL_GOALS",
+        "quality_score": 5,
+        "regeneration_feedback": null,
+        "unsupported_or_misleading_llg_ids": [],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_003": {
+      "branch_id": "branch_003",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Maintain and Monitor Ambulance Operational Status and Location' is fully supported by the project description, which states that 'radio operators... can accurately record the corresponding data' and that 'The exact location of moving ambulances must be tracked'. The goal correctly captures the Radio Operator's distinct responsibility to record (maintain) and monitor this data, which is separate from the Dispatcher's allocation goal and the Ambulance Staff's communication goal. The bottom-up reconstruction 'Manage and Monitor Ambulance Fleet Operational Status and Location' is semantically equivalent and confirms the validity of the intention. The goal is appropriately scoped at the High-Level granularity, representing the end-to-end outcome of having accurate situational awareness data in the CAD system. There are no redundancy issues with sibling goals, as each actor has a distinct primary responsibility. Therefore, the original goal should be kept. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect due to an unsupported capability. LLG llg_006 ('RetrieveSpecificAmbulanceOperationalAndLocationHistory') requires the retrieval of a 'detailed historical log' to 'analyze its past movements'. The project description explicitly states that 'The exact location of moving ambulances must be tracked' and that radio operators 'accurately record the corresponding data' based on communication. It does not mention the storage, retrieval, or analysis of historical logs or past movement data. While recording current status and location is supported, inferring a historical analysis capability is not entailed by the documentation. Therefore, llg_006 is unsupported and must be removed. The other LLGs (llg_001 to llg_005) correctly cover the essential capabilities of updating/recording status and location (Maintain) and retrieving current status/location for monitoring (Monitor).",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Maintain and Monitor Ambulance Operational Status and Location' is fully supported by the project description, which states that 'radio operators... can accurately record the corresponding data' and that 'The exact location of moving ambulances must be tracked'. The goal correctly captures the Radio Operator's distinct responsibility to record (maintain) and monitor this data, which is separate from the Dispatcher's allocation goal and the Ambulance Staff's communication goal. The bottom-up reconstruction 'Manage and Monitor Ambulance Fleet Operational Status and Location' is semantically equivalent and confirms the validity of the intention. The goal is appropriately scoped at the High-Level granularity, representing the end-to-end outcome of having accurate situational awareness data in the CAD system. There are no redundancy issues with sibling goals, as each actor has a distinct primary responsibility. Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs contain a material defect due to an unsupported capability. LLG llg_006 ('RetrieveSpecificAmbulanceOperationalAndLocationHistory') requires the retrieval of a 'detailed historical log' to 'analyze its past movements'. The project description explicitly states that 'The exact location of moving ambulances must be tracked' and that radio operators 'accurately record the corresponding data' based on communication. It does not mention the storage, retrieval, or analysis of historical logs or past movement data. While recording current status and location is supported, inferring a historical analysis capability is not entailed by the documentation. Therefore, llg_006 is unsupported and must be removed. The other LLGs (llg_001 to llg_005) correctly cover the essential capabilities of updating/recording status and location (Maintain) and retrieving current status/location for monitoring (Monitor).",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove llg_006 as historical log retrieval and analysis are not supported by the project description. Keep llg_001 through llg_005 which correctly cover the maintenance (recording/updating) and monitoring (retrieving current status/location) aspects of the parent goal.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_006"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_004": {
+      "branch_id": "branch_004",
+      "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Receive prompt emergency assistance' accurately captures the primary stakeholder intention of the Emergency Caller, which is to get help quickly. The bottom-up reconstruction 'Successfully Report an Emergency' is too narrow, as it only covers the input phase of the interaction and ignores the core outcome (receiving the ambulance) and the critical constraint (promptness/timeliness) emphasized in the project description. The original goal is supported, independently scoped to the caller's perspective, and not redundant with the Dispatcher's goal (which focuses on the allocation mechanism). Therefore, the original goal should be kept. Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include 'Receive emergency call registration confirmation' (llg_004), which is not explicitly supported by the project description. The documentation states that the caller initiates a call and provides details, but does not mention any system feedback, confirmation, or status notification to the caller. This is an unsupported addition. Additionally, the parent goal 'Receive prompt emergency assistance' implies the outcome of receiving help, but the LLGs only cover the input phase (reporting). However, the primary defect is the unsupported confirmation LLG. The missing capability is not strictly 'receiving the ambulance' as that is the outcome of the Dispatcher's goal, but the caller's role ends with providing the necessary information for dispatch. The unsupported LLG must be removed.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 2/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Receive prompt emergency assistance' accurately captures the primary stakeholder intention of the Emergency Caller, which is to get help quickly. The bottom-up reconstruction 'Successfully Report an Emergency' is too narrow, as it only covers the input phase of the interaction and ignores the core outcome (receiving the ambulance) and the critical constraint (promptness/timeliness) emphasized in the project description. The original goal is supported, independently scoped to the caller's perspective, and not redundant with the Dispatcher's goal (which focuses on the allocation mechanism). Therefore, the original goal should be kept.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 1,
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 2
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 2/3 for REGENERATE_LOW_LEVEL_GOALS. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include 'Receive emergency call registration confirmation' (llg_004), which is not explicitly supported by the project description. The documentation states that the caller initiates a call and provides details, but does not mention any system feedback, confirmation, or status notification to the caller. This is an unsupported addition. Additionally, the parent goal 'Receive prompt emergency assistance' implies the outcome of receiving help, but the LLGs only cover the input phase (reporting). However, the primary defect is the unsupported confirmation LLG. The missing capability is not strictly 'receiving the ambulance' as that is the outcome of the Dispatcher's goal, but the caller's role ends with providing the necessary information for dispatch. The unsupported LLG must be removed.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove the unsupported confirmation LLG (llg_004). Keep the LLGs for initiating the call, providing location, and describing the incident, as these are the documented actions of the Emergency Caller.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_004"
+        ],
+        "missing_essential_capabilities": [],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 2,
+        "vote_distribution": {
+          "KEEP_LOW_LEVEL_GOALS": 1,
+          "REGENERATE_LOW_LEVEL_GOALS": 2
+        }
+      }
+    }
+  },
+  "high_level_goals": {
+    "goals": [
+      {
+        "name": "Ensure timely ambulance allocation",
+        "description": "The Dispatcher aims to allocate an available ambulance for every emergency call to ensure it reaches the scene within the target response time of 11 minutes.",
+        "actor": {
+          "name": "Dispatcher",
+          "description": "Allocates available ambulances to emergency calls and uses the Computer Aided Despatch (CAD) system."
+        }
+      },
+      {
+        "name": "Adhere to operational communication protocols",
+        "description": "Ambulance Staff aim to follow standard routes and communicate necessary information to ensure data consistency for radio operators and the CAD system.",
+        "actor": {
+          "name": "Ambulance Staff",
+          "description": "Follows routes and communicates departure and destination information for tracking purposes."
+        }
+      },
+      {
+        "name": "Maintain and Monitor Ambulance Operational Status and Location",
+        "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+        "actor": {
+          "name": "Radio Operator",
+          "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+        }
+      },
+      {
+        "name": "Receive prompt emergency assistance",
+        "description": "The Emergency Caller's primary goal is to receive a dispatched ambulance quickly and efficiently in response to their emergency call.",
+        "actor": {
+          "name": "Emergency Caller",
+          "description": "Initiates an emergency call for ambulance services."
+        }
+      }
+    ]
+  },
+  "low_level_goals": {
+    "low_level_goals": [
+      {
+        "name": "Initiate emergency call",
+        "description": "The Emergency Caller places a call to the emergency services system to report an incident.",
+        "high_level_associated": {
+          "name": "Receive prompt emergency assistance",
+          "description": "The Emergency Caller's primary goal is to receive a dispatched ambulance quickly and efficiently in response to their emergency call.",
+          "actor": {
+            "name": "Emergency Caller",
+            "description": "Initiates an emergency call for ambulance services."
+          }
+        }
+      },
+      {
+        "name": "Provide incident location details",
+        "description": "The Emergency Caller communicates the precise location of the emergency to the system, either verbally or through automated location services.",
+        "high_level_associated": {
+          "name": "Receive prompt emergency assistance",
+          "description": "The Emergency Caller's primary goal is to receive a dispatched ambulance quickly and efficiently in response to their emergency call.",
+          "actor": {
+            "name": "Emergency Caller",
+            "description": "Initiates an emergency call for ambulance services."
+          }
+        }
+      },
+      {
+        "name": "Describe emergency incident",
+        "description": "The Emergency Caller verbally provides details about the nature and severity of the emergency to the system operator.",
+        "high_level_associated": {
+          "name": "Receive prompt emergency assistance",
+          "description": "The Emergency Caller's primary goal is to receive a dispatched ambulance quickly and efficiently in response to their emergency call.",
+          "actor": {
+            "name": "Emergency Caller",
+            "description": "Initiates an emergency call for ambulance services."
+          }
+        }
+      },
+      {
+        "name": "Receive emergency call registration confirmation",
+        "description": "The Emergency Caller receives an audible or visual confirmation from the system that their emergency call has been successfully registered and is being processed.",
+        "high_level_associated": {
+          "name": "Receive prompt emergency assistance",
+          "description": "The Emergency Caller's primary goal is to receive a dispatched ambulance quickly and efficiently in response to their emergency call.",
+          "actor": {
+            "name": "Emergency Caller",
+            "description": "Initiates an emergency call for ambulance services."
+          }
+        }
+      },
+      {
+        "name": "Retrieve emergency call details",
+        "description": "The Dispatcher retrieves the details of a new emergency call from the CAD system to understand the incident requirements.",
+        "high_level_associated": {
+          "name": "Ensure timely ambulance allocation",
+          "description": "The Dispatcher aims to allocate an available ambulance for every emergency call to ensure it reaches the scene within the target response time of 11 minutes.",
+          "actor": {
+            "name": "Dispatcher",
+            "description": "Allocates available ambulances to emergency calls and uses the Computer Aided Despatch (CAD) system."
+          }
+        }
+      },
+      {
+        "name": "Retrieve list of available ambulances",
+        "description": "The Dispatcher retrieves a list of currently available ambulances, including their status and location, from the CAD system.",
+        "high_level_associated": {
+          "name": "Ensure timely ambulance allocation",
+          "description": "The Dispatcher aims to allocate an available ambulance for every emergency call to ensure it reaches the scene within the target response time of 11 minutes.",
+          "actor": {
+            "name": "Dispatcher",
+            "description": "Allocates available ambulances to emergency calls and uses the Computer Aided Despatch (CAD) system."
+          }
+        }
+      },
+      {
+        "name": "Assign available ambulance to emergency incident",
+        "description": "The Dispatcher assigns a selected available ambulance to a specific emergency incident within the CAD system.",
+        "high_level_associated": {
+          "name": "Ensure timely ambulance allocation",
+          "description": "The Dispatcher aims to allocate an available ambulance for every emergency call to ensure it reaches the scene within the target response time of 11 minutes.",
+          "actor": {
+            "name": "Dispatcher",
+            "description": "Allocates available ambulances to emergency calls and uses the Computer Aided Despatch (CAD) system."
+          }
+        }
+      },
+      {
+        "name": "Transmit departure timestamp and location",
+        "description": "Ambulance Staff transmits the current timestamp and their departure location to the CAD system upon leaving for a call, updating their status.",
+        "high_level_associated": {
+          "name": "Adhere to operational communication protocols",
+          "description": "Ambulance Staff aim to follow standard routes and communicate necessary information to ensure data consistency for radio operators and the CAD system.",
+          "actor": {
+            "name": "Ambulance Staff",
+            "description": "Follows routes and communicates departure and destination information for tracking purposes."
+          }
+        }
+      },
+      {
+        "name": "Transmit arrival timestamp and location",
+        "description": "Ambulance Staff transmits the current timestamp and their arrival location to the CAD system upon reaching the destination, updating their status.",
+        "high_level_associated": {
+          "name": "Adhere to operational communication protocols",
+          "description": "Ambulance Staff aim to follow standard routes and communicate necessary information to ensure data consistency for radio operators and the CAD system.",
+          "actor": {
+            "name": "Ambulance Staff",
+            "description": "Follows routes and communicates departure and destination information for tracking purposes."
+          }
+        }
+      },
+      {
+        "name": "UpdateAmbulanceOperationalStatus",
+        "description": "Allow the Radio Operator to update the operational status of a specific ambulance (e.g., 'en route to scene', 'at scene', 'en route to hospital', 'available') within the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "RecordAmbulanceDepartureLocation",
+        "description": "Allow the Radio Operator to record the departure location (e.g., scene address, hospital name) for a specific ambulance within the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "RecordAmbulanceDestinationLocation",
+        "description": "Allow the Radio Operator to record the destination location (e.g., hospital name, base station) for a specific ambulance within the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "UpdateAmbulanceCurrentLocation",
+        "description": "Allow the Radio Operator to update the current geographical location of a specific ambulance within the CAD system, based on real-time updates from ambulance staff.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "RetrieveAllAmbulanceOperationalStatuses",
+        "description": "Allow the Radio Operator to retrieve a list of all ambulances and their current operational statuses from the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "RetrieveAllAmbulanceCurrentLocations",
+        "description": "Allow the Radio Operator to retrieve a list of all ambulances and their current geographical locations from the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSpecificAmbulanceOperationalStatus",
+        "description": "Allow the Radio Operator to retrieve the current operational status of a specific ambulance from the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      },
+      {
+        "name": "RetrieveSpecificAmbulanceCurrentLocation",
+        "description": "Allow the Radio Operator to retrieve the current geographical location of a specific ambulance from the CAD system.",
+        "high_level_associated": {
+          "name": "Maintain and Monitor Ambulance Operational Status and Location",
+          "description": "To ensure accurate recording and continuous monitoring of ambulance operational status and location data within the CAD system, enabling effective dispatch and situational awareness.",
+          "actor": {
+            "name": "Radio Operator",
+            "description": "Records and monitors ambulance movement data based on communication from ambulance staff."
+          }
+        }
+      }
+    ]
+  },
+  "missing_hlg_evaluation": {
+    "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description outlines four main actor responsibilities: Dispatcher (allocate ambulance within time limits), Ambulance Staff (follow routes/communicate for tracking), Radio Operator (record/monitor status/location), and Emergency Caller (initiate call/receive assistance). The current HLGs cover all these responsibilities. 'Ensure timely ambulance allocation' covers the Dispatcher's goal including the 11-minute target and process time limits. 'Adhere to operational communication protocols' covers the Ambulance Staff's duty to communicate for tracking. 'Maintain and Monitor Ambulance Operational Status and Location' covers the Radio Operator's duty to record and monitor. 'Receive prompt emergency assistance' covers the Emergency Caller's goal. The retired HLGs were refinements or duplicates of these core goals and their outcomes are fully entailed by the current set.",
+    "quality_score": 5,
+    "missing_goal_requests": [],
+    "voter_count": 3,
+    "valid_vote_count": 3,
+    "winning_vote_count": 3,
+    "vote_distribution": {
+      "NO_MISSING_HIGH_LEVEL_GOALS": 3
+    }
+  },
+  "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
+  "llg_regeneration_counts": {
+    "dispatcher::ensure timely ambulance allocation": 1,
+    "ambulance staff::adhere to operational communication protocols": 2,
+    "radio operator::maintain and monitor ambulance operational status and location": 1
+  },
+  "warnings": []
+}

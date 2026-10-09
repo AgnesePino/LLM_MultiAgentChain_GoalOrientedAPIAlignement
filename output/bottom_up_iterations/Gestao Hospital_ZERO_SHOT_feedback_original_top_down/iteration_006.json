@@ -2,70 +2,47 @@
   "iteration": 6,
   "reconstructions": {
     "branch_004": {
+      "reconstructed_high_level_goal": "Manage Patient Hospital Stays",
+      "rationale": "Both low-level goals describe the essential administrative processes for tracking a patient's presence in the hospital, from their arrival (admission) to their departure (discharge). They collectively define the lifecycle of a patient's stay within the hospital system.",
+      "branch_id": "branch_004",
+      "source_low_level_goal_ids": [
+        "Register Patient Admission",
+        "Record Patient Discharge"
+      ]
+    },
+    "branch_006": {
       "reconstructed_high_level_goal": "Manage Patient Registration and Personal Information",
       "rationale": "The low-level goals collectively describe the essential operations for handling a patient's initial entry into the system (registration) and subsequent maintenance of their core personal details. They cover creating a new patient record, accessing existing records, and modifying those records, all of which are fundamental aspects of managing patient information within a hospital admissions context.",
-      "branch_id": "branch_004",
+      "branch_id": "branch_006",
       "source_low_level_goal_ids": [
         "Register New Patient Details",
         "Retrieve Patient Details by CPF",
         "Update Patient Personal Information"
       ]
     },
-    "branch_006": {
-      "reconstructed_high_level_goal": "Monitor Low Stock Levels",
-      "rationale": "The operations together enable the Hospital Inventory Manager to define criteria for low stock and then identify products that meet those criteria, which is essential for effective monitoring of inventory levels to prevent shortages.",
-      "branch_id": "branch_006",
-      "source_low_level_goal_ids": [
-        "Set Product Low Stock Threshold",
-        "Retrieve Products Below Threshold"
-      ]
-    },
     "branch_007": {
-      "reconstructed_high_level_goal": "Manage Patient Admissions and Discharges",
-      "rationale": "These operations collectively cover the entire lifecycle of a patient's stay within the hospital, from their initial entry (admission) to their final departure (discharge). They are fundamental to tracking and managing patient presence and status in a healthcare facility.",
+      "reconstructed_high_level_goal": "Manage Inter-Hospital Product Transfers",
+      "rationale": "The low-level goals collectively describe the complete workflow for a Logistics Coordinator to manage the movement of products between different hospital locations, encompassing the initiation of a transfer request, tracking its status, and confirming its successful receipt.",
       "branch_id": "branch_007",
       "source_low_level_goal_ids": [
-        "Register Patient Admission",
-        "Record Patient Discharge"
+        "Initiate Product Transfer Request",
+        "Confirm Product Transfer Receipt",
+        "Track Product Transfer Status"
       ]
     }
   },
   "evaluations": {
     "branch_004": {
       "branch_id": "branch_004",
-      "rationale": "Voting result 3/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Access Comprehensive Patient Details' is a supported capability but represents a fragmented workflow phase (retrieval/consultation) rather than an independent end-to-end stakeholder outcome. The bottom-up reconstruction 'Manage Patient Registration and Personal Information' correctly identifies the broader intention, which encompasses both the creation (registration) and maintenance (access/modification) of patient records. Since the project description explicitly requires registering patients and accessing their details, and these operations jointly realize the outcome of managing patient identity and status, the original HLG is too narrow. It should be rewritten to serve as the umbrella goal for patient data management, covering both registration and access.",
-      "final_decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-      "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Access Comprehensive Patient Details' is a supported capability but represents a fragmented workflow phase (retrieval/consultation) rather than an independent end-to-end stakeholder outcome. The bottom-up reconstruction 'Manage Patient Registration and Personal Information' correctly identifies the broader intention, which encompasses both the creation (registration) and maintenance (access/modification) of patient records. Since the project description explicitly requires registering patients and accessing their details, and these operations jointly realize the outcome of managing patient identity and status, the original HLG is too narrow. It should be rewritten to serve as the umbrella goal for patient data management, covering both registration and access.",
-        "decision": "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 2,
-        "rewriting_focus": "Express the end-to-end management of patient records, including registration and access to personal details.",
-        "voter_count": 3,
-        "valid_vote_count": 3,
-        "winning_vote_count": 3,
-        "vote_distribution": {
-          "REWRITE_ORIGINAL_HIGH_LEVEL_GOAL": 3
-        }
-      },
-      "replacement_request": {
-        "rationale": "Voting result 3/3 for REWRITE_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Access Comprehensive Patient Details' is a supported capability but represents a fragmented workflow phase (retrieval/consultation) rather than an independent end-to-end stakeholder outcome. The bottom-up reconstruction 'Manage Patient Registration and Personal Information' correctly identifies the broader intention, which encompasses both the creation (registration) and maintenance (access/modification) of patient records. Since the project description explicitly requires registering patients and accessing their details, and these operations jointly realize the outcome of managing patient identity and status, the original HLG is too narrow. It should be rewritten to serve as the umbrella goal for patient data management, covering both registration and access.",
-        "generation_project_description": "We need to develop an API to organize and manage a public health system, specifically to support the Sistema Único de Saúde (SUS). The primary goal is to create a tool that helps optimize resources and reduce waste by improving the management of hospitals and their assets. The system should allow us to register and retrieve detailed information about hospitals, including their name, address, and the number of available beds. It must also manage hospital inventories, tracking various products and their quantities, including blood bank supplies. A key feature is the ability to recommend the nearest hospital with available beds to a patient based on their location. Furthermore, the system needs to support patient check-in and check-out processes, and provide access to patient details such as full name, CPF, date of birth, sex, and admission date. It should also facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock. Finally, the system should consider inventory thresholds, where hospitals with four or fewer items or liters of a product are deemed to have just enough for their own needs.\n\nRewrite the functional intention for actor 'Hospital Admissions Staff' using this focus: Express the end-to-end management of patient records, including registration and access to personal details.",
-        "actor": {
-          "name": "Hospital Admissions Staff",
-          "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
-        }
-      },
-      "low_level_evaluation": null
-    },
-    "branch_006": {
-      "branch_id": "branch_006",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Critical Stock Levels' is supported by the project description, which explicitly mentions considering inventory thresholds (four or fewer items) to determine if a hospital has enough for its own needs. However, the actor 'Hospital Inventory Manager' already has a sibling HLG 'Ensure Accurate Inventory Management' which covers the maintenance and tracking of inventory records. Monitoring stock levels is a specific analytical capability derived from the inventory data, distinct from the general maintenance of that data. While 'Ensure Accurate Inventory Management' covers the *data integrity* aspect, 'Monitor Critical Stock Levels' covers the *decision support/alerting* aspect (identifying low stock). These are distinct stakeholder outcomes: one is about keeping records accurate, the other is about acting on those records to prevent shortages. Therefore, it is not redundant. The reconstruction 'Monitor Low Stock Levels' is semantically equivalent but slightly less precise regarding the 'critical' nature defined by the threshold. The original goal is well-scoped, supported, and represents an independent outcome (preventing shortages via threshold monitoring) that is not fully entailed by the general inventory management goal. Thus, it should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs are well-aligned with the parent HLG 'Monitor Critical Stock Levels'. LLG llg_001 ('Set Product Low Stock Threshold') is supported by the documentation's mention of 'inventory thresholds' and the specific example of 'four or fewer items', implying that the system must allow for the definition or configuration of these criteria to enable monitoring. LLG llg_002 ('Retrieve Products Below Threshold') is directly supported by the goal to 'identify when stock levels are low' and 'track inventory thresholds'. The decomposition covers the essential capabilities of defining the criteria and retrieving the data that meets those criteria. There are no unsupported operations (like notifications or automatic transfers) and no essential capabilities are missing. The sibling HLG 'Ensure Accurate Inventory Management' covers the general maintenance of inventory records, while this HLG focuses specifically on the analytical/monitoring aspect of thresholds, so there is no duplication of responsibility.",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Streamline Patient Admission and Discharge' is supported by the project description, which explicitly requires the system to support patient check-in and check-out processes. The bottom-up reconstruction 'Manage Patient Hospital Stays' is a valid semantic equivalent that captures the same stakeholder intention. The goal is distinct from the sibling HLGs 'Access Comprehensive Patient Details' (which focuses on retrieving specific data fields) and 'Provide Timely Patient Placement Recommendations' (which focuses on finding available beds). While 'Admission and Discharge' and 'Manage Patient Hospital Stays' are closely related, the original goal is a clear, supported, and independently scoped workflow outcome for the Hospital Admissions Staff. It is not redundant with the other HLGs, as it specifically addresses the transactional processes of checking patients in and out, rather than just data access or placement logic. Therefore, the original goal should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs 'Register Patient Admission' and 'Record Patient Discharge' directly correspond to the 'patient check-in and check-out processes' explicitly mentioned in the project description and the parent HLG description. These goals are supported by the documentation, which states the system needs to support these specific processes. There are no unsupported capabilities (such as notifications or complex status transitions not mentioned) and no essential capabilities missing from this specific HLG (accessing details is a sibling HLG, recommending placement is a sibling HLG). The decomposition is precise and aligned with the documented requirements.",
       "final_decision": "CONFIRM_BRANCH",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Monitor Critical Stock Levels' is supported by the project description, which explicitly mentions considering inventory thresholds (four or fewer items) to determine if a hospital has enough for its own needs. However, the actor 'Hospital Inventory Manager' already has a sibling HLG 'Ensure Accurate Inventory Management' which covers the maintenance and tracking of inventory records. Monitoring stock levels is a specific analytical capability derived from the inventory data, distinct from the general maintenance of that data. While 'Ensure Accurate Inventory Management' covers the *data integrity* aspect, 'Monitor Critical Stock Levels' covers the *decision support/alerting* aspect (identifying low stock). These are distinct stakeholder outcomes: one is about keeping records accurate, the other is about acting on those records to prevent shortages. Therefore, it is not redundant. The reconstruction 'Monitor Low Stock Levels' is semantically equivalent but slightly less precise regarding the 'critical' nature defined by the threshold. The original goal is well-scoped, supported, and represents an independent outcome (preventing shortages via threshold monitoring) that is not fully entailed by the general inventory management goal. Thus, it should be kept.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Streamline Patient Admission and Discharge' is supported by the project description, which explicitly requires the system to support patient check-in and check-out processes. The bottom-up reconstruction 'Manage Patient Hospital Stays' is a valid semantic equivalent that captures the same stakeholder intention. The goal is distinct from the sibling HLGs 'Access Comprehensive Patient Details' (which focuses on retrieving specific data fields) and 'Provide Timely Patient Placement Recommendations' (which focuses on finding available beds). While 'Admission and Discharge' and 'Manage Patient Hospital Stays' are closely related, the original goal is a clear, supported, and independently scoped workflow outcome for the Hospital Admissions Staff. It is not redundant with the other HLGs, as it specifically addresses the transactional processes of checking patients in and out, rather than just data access or placement logic. Therefore, the original goal should be kept.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
-        "quality_score": 4,
+        "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -75,7 +52,7 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs are well-aligned with the parent HLG 'Monitor Critical Stock Levels'. LLG llg_001 ('Set Product Low Stock Threshold') is supported by the documentation's mention of 'inventory thresholds' and the specific example of 'four or fewer items', implying that the system must allow for the definition or configuration of these criteria to enable monitoring. LLG llg_002 ('Retrieve Products Below Threshold') is directly supported by the goal to 'identify when stock levels are low' and 'track inventory thresholds'. The decomposition covers the essential capabilities of defining the criteria and retrieving the data that meets those criteria. There are no unsupported operations (like notifications or automatic transfers) and no essential capabilities are missing. The sibling HLG 'Ensure Accurate Inventory Management' covers the general maintenance of inventory records, while this HLG focuses specifically on the analytical/monitoring aspect of thresholds, so there is no duplication of responsibility.",
+        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The current LLGs 'Register Patient Admission' and 'Record Patient Discharge' directly correspond to the 'patient check-in and check-out processes' explicitly mentioned in the project description and the parent HLG description. These goals are supported by the documentation, which states the system needs to support these specific processes. There are no unsupported capabilities (such as notifications or complex status transitions not mentioned) and no essential capabilities missing from this specific HLG (accessing details is a sibling HLG, recommending placement is a sibling HLG). The decomposition is precise and aligned with the documented requirements.",
         "decision": "KEEP_LOW_LEVEL_GOALS",
         "quality_score": 5,
         "regeneration_feedback": null,
@@ -89,15 +66,17 @@
         }
       }
     },
-    "branch_007": {
-      "branch_id": "branch_007",
-      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Streamline Patient Admission and Discharge' is supported by the project description, which explicitly mentions the need to 'support patient check-in and check-out processes'. The actor 'Hospital Admissions Staff' is defined as handling these processes. The goal represents a distinct, independently satisfiable stakeholder outcome (managing the patient's status transition) that is separate from 'Access Comprehensive Patient Details' (retrieving static/dynamic info) and 'Provide Timely Patient Placement Recommendations' (finding a bed before admission). While the bottom-up reconstruction 'Manage Patient Admissions and Discharges' is semantically equivalent and perhaps slightly more direct, the original goal is not materially defective, overly generic, or fragmented. It correctly scopes the workflow of admitting and discharging patients. Therefore, it should be kept. Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Streamline Patient Admission and Discharge' is explicitly supported by the project description's requirement to 'support patient check-in and check-out processes'. The current LLGs 'Register Patient Admission' (llg_001) and 'Record Patient Discharge' (llg_002) directly correspond to these check-in and check-out processes. They are essential capabilities for managing the patient's status within the system. No other capabilities are explicitly required by the parent HLG or the documentation that are missing from the current LLGs. The sibling HLGs cover related but distinct responsibilities (accessing details, recommending placement, managing hospital info, inventory), so there is no duplication. The decomposition is complete and supported.",
-      "final_decision": "CONFIRM_BRANCH",
+    "branch_006": {
+      "branch_id": "branch_006",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Access Comprehensive Patient Details' is explicitly supported by the project description, which states the system must 'provide access to patient details such as full name, CPF, date of birth, sex, and admission date.' The bottom-up reconstruction 'Manage Patient Registration and Personal Information' is a valid semantic equivalent that captures the same stakeholder intention of handling patient data. This goal is distinct from the sibling HLGs: 'Streamline Patient Admission and Discharge' focuses on the transactional workflow of check-in/check-out, while 'Provide Timely Patient Placement Recommendations' focuses on finding available beds. Accessing patient details is a separate, independently satisfiable capability required for administrative tasks and care, not merely a sub-step of admission or placement. Therefore, the original goal is supported, correctly scoped, and not redundant. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent HLG is 'Access Comprehensive Patient Details', which explicitly focuses on retrieving and utilizing essential patient information (full name, CPF, date of birth, sex, admission date). The project description supports 'provide access to patient details' and 'register and retrieve detailed information about hospitals' (though patient registration is implied by the check-in process, the specific HLG is about *accessing* details). \n\n1. **llg_001 (Register New Patient Details)**: The parent HLG is 'Access...'. Registration is typically part of the 'Streamline Patient Admission and Discharge' workflow (check-in) or a separate administrative task. However, the project description says 'support patient check-in and check-out processes'. Check-in implies creating a record. But does 'Access Comprehensive Patient Details' include *creating* them? The description says 'provide access to patient details'. It does not explicitly state that this specific goal includes *registration*. Registration is more closely tied to the admission process. Including 'Register' in an 'Access' goal is a scope mismatch. More importantly, the sibling HLG 'Streamline Patient Admission and Discharge' handles check-in, which is where registration logically occurs. If 'Access' includes registration, it overlaps with 'Admission'. If it doesn't, llg_001 is unsupported by the parent's specific wording ('Access').\n2. **llg_003 (Update Patient Personal Information)**: The parent HLG is 'Access...'. Updating is a write operation, not an access/read operation. The project description mentions 'register and retrieve'. It does not explicitly mention 'update' patient details. While 'manage' might imply update, the specific HLG is 'Access'. Updating personal info is not explicitly entailed by 'Access Comprehensive Patient Details'.\n\nThe core capability of the parent is *retrieving* (accessing) the details. llg_002 covers this. llg_001 and llg_003 introduce write operations (Create, Update) that are not explicitly part of the 'Access' goal and are not explicitly documented as part of this specific goal's scope in the description (which focuses on 'provide access'). The description mentions 'register' in the context of hospitals, and 'check-in' for patients. Check-in is handled by the sibling HLG. Therefore, llg_001 and llg_003 are unsupported by the specific parent HLG 'Access Comprehensive Patient Details' and the documentation which separates 'access' from 'check-in' (admission).",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
       "high_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original High-Level Goal 'Streamline Patient Admission and Discharge' is supported by the project description, which explicitly mentions the need to 'support patient check-in and check-out processes'. The actor 'Hospital Admissions Staff' is defined as handling these processes. The goal represents a distinct, independently satisfiable stakeholder outcome (managing the patient's status transition) that is separate from 'Access Comprehensive Patient Details' (retrieving static/dynamic info) and 'Provide Timely Patient Placement Recommendations' (finding a bed before admission). While the bottom-up reconstruction 'Manage Patient Admissions and Discharges' is semantically equivalent and perhaps slightly more direct, the original goal is not materially defective, overly generic, or fragmented. It correctly scopes the workflow of admitting and discharging patients. Therefore, it should be kept.",
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Access Comprehensive Patient Details' is explicitly supported by the project description, which states the system must 'provide access to patient details such as full name, CPF, date of birth, sex, and admission date.' The bottom-up reconstruction 'Manage Patient Registration and Personal Information' is a valid semantic equivalent that captures the same stakeholder intention of handling patient data. This goal is distinct from the sibling HLGs: 'Streamline Patient Admission and Discharge' focuses on the transactional workflow of check-in/check-out, while 'Provide Timely Patient Placement Recommendations' focuses on finding available beds. Accessing patient details is a separate, independently satisfiable capability required for administrative tasks and care, not merely a sub-step of admission or placement. Therefore, the original goal is supported, correctly scoped, and not redundant.",
         "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
         "quality_score": 5,
         "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
@@ -107,17 +86,59 @@
       },
       "replacement_request": null,
       "low_level_evaluation": {
-        "rationale": "Voting result 3/3 for KEEP_LOW_LEVEL_GOALS. The parent HLG 'Streamline Patient Admission and Discharge' is explicitly supported by the project description's requirement to 'support patient check-in and check-out processes'. The current LLGs 'Register Patient Admission' (llg_001) and 'Record Patient Discharge' (llg_002) directly correspond to these check-in and check-out processes. They are essential capabilities for managing the patient's status within the system. No other capabilities are explicitly required by the parent HLG or the documentation that are missing from the current LLGs. The sibling HLGs cover related but distinct responsibilities (accessing details, recommending placement, managing hospital info, inventory), so there is no duplication. The decomposition is complete and supported.",
-        "decision": "KEEP_LOW_LEVEL_GOALS",
-        "quality_score": 5,
-        "regeneration_feedback": null,
-        "unsupported_or_misleading_llg_ids": [],
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The parent HLG is 'Access Comprehensive Patient Details', which explicitly focuses on retrieving and utilizing essential patient information (full name, CPF, date of birth, sex, admission date). The project description supports 'provide access to patient details' and 'register and retrieve detailed information about hospitals' (though patient registration is implied by the check-in process, the specific HLG is about *accessing* details). \n\n1. **llg_001 (Register New Patient Details)**: The parent HLG is 'Access...'. Registration is typically part of the 'Streamline Patient Admission and Discharge' workflow (check-in) or a separate administrative task. However, the project description says 'support patient check-in and check-out processes'. Check-in implies creating a record. But does 'Access Comprehensive Patient Details' include *creating* them? The description says 'provide access to patient details'. It does not explicitly state that this specific goal includes *registration*. Registration is more closely tied to the admission process. Including 'Register' in an 'Access' goal is a scope mismatch. More importantly, the sibling HLG 'Streamline Patient Admission and Discharge' handles check-in, which is where registration logically occurs. If 'Access' includes registration, it overlaps with 'Admission'. If it doesn't, llg_001 is unsupported by the parent's specific wording ('Access').\n2. **llg_003 (Update Patient Personal Information)**: The parent HLG is 'Access...'. Updating is a write operation, not an access/read operation. The project description mentions 'register and retrieve'. It does not explicitly mention 'update' patient details. While 'manage' might imply update, the specific HLG is 'Access'. Updating personal info is not explicitly entailed by 'Access Comprehensive Patient Details'.\n\nThe core capability of the parent is *retrieving* (accessing) the details. llg_002 covers this. llg_001 and llg_003 introduce write operations (Create, Update) that are not explicitly part of the 'Access' goal and are not explicitly documented as part of this specific goal's scope in the description (which focuses on 'provide access'). The description mentions 'register' in the context of hospitals, and 'check-in' for patients. Check-in is handled by the sibling HLG. Therefore, llg_001 and llg_003 are unsupported by the specific parent HLG 'Access Comprehensive Patient Details' and the documentation which separates 'access' from 'check-in' (admission).",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 2,
+        "regeneration_feedback": "Remove 'Register New Patient Details' and 'Update Patient Personal Information' as they are write operations not entailed by the 'Access' goal. Keep 'Retrieve Patient Details by CPF' as it directly supports the 'Access' capability. Consider adding a goal to 'Retrieve Patient Details by Admission Date' or similar if supported, but primarily focus on retrieval capabilities.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_001",
+          "llg_003"
+        ],
         "missing_essential_capabilities": [],
         "voter_count": 3,
         "valid_vote_count": 3,
         "winning_vote_count": 3,
         "vote_distribution": {
-          "KEEP_LOW_LEVEL_GOALS": 3
+          "REGENERATE_LOW_LEVEL_GOALS": 3
+        }
+      }
+    },
+    "branch_007": {
+      "branch_id": "branch_007",
+      "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Facilitate Inter-Hospital Product Transfers' is explicitly supported by the project description, which states the system should 'facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock.' The actor 'Logistics Coordinator' is defined specifically for this purpose. This goal is distinct from the inventory management goals (which focus on local stock levels and item tracking) and hospital information goals. It represents a complete, independently satisfiable stakeholder outcome: coordinating the movement of resources between entities. The bottom-up reconstruction 'Manage Inter-Hospital Product Transfers' is semantically equivalent. There are no other HLGs for the Logistics Coordinator that would make this redundant. The granularity is appropriate for a high-level goal. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include 'Confirm Product Transfer Receipt' (llg_002) and 'Track Product Transfer Status' (llg_003). The project description states the system should 'facilitate the transfer... by identifying the closest facility with available stock.' It does not explicitly document a workflow for tracking status (pending, in transit, etc.) or confirming receipt by the Logistics Coordinator. While 'facilitate' implies coordination, specific lifecycle operations like status tracking and receipt confirmation are not entailed by the text and are not standard CRUD operations explicitly requested. Furthermore, the core capability of 'identifying the closest facility with available stock' is missing from the LLGs; the current LLGs assume the source/destination are already designated in the request initiation, but the HLG description explicitly highlights the identification of the closest facility as a key part of the facilitation. Therefore, llg_002 and llg_003 are unsupported, and the essential capability of identifying the closest facility is missing.",
+      "final_decision": "REGENERATE_LOW_LEVEL_GOALS",
+      "high_level_evaluation": {
+        "rationale": "Voting result 3/3 for KEEP_ORIGINAL_HIGH_LEVEL_GOAL. The original HLG 'Facilitate Inter-Hospital Product Transfers' is explicitly supported by the project description, which states the system should 'facilitate the transfer of necessary products, like blood, between hospitals by identifying the closest facility with available stock.' The actor 'Logistics Coordinator' is defined specifically for this purpose. This goal is distinct from the inventory management goals (which focus on local stock levels and item tracking) and hospital information goals. It represents a complete, independently satisfiable stakeholder outcome: coordinating the movement of resources between entities. The bottom-up reconstruction 'Manage Inter-Hospital Product Transfers' is semantically equivalent. There are no other HLGs for the Logistics Coordinator that would make this redundant. The granularity is appropriate for a high-level goal.",
+        "decision": "KEEP_ORIGINAL_HIGH_LEVEL_GOAL",
+        "quality_score": 5,
+        "rewriting_focus": null,
+        "removal_basis": null,
+        "covered_by_high_level_goal_name": null,
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "KEEP_ORIGINAL_HIGH_LEVEL_GOAL": 3
+        }
+      },
+      "replacement_request": null,
+      "low_level_evaluation": {
+        "rationale": "Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. Voting result 3/3 for REGENERATE_LOW_LEVEL_GOALS. The current LLGs include 'Confirm Product Transfer Receipt' (llg_002) and 'Track Product Transfer Status' (llg_003). The project description states the system should 'facilitate the transfer... by identifying the closest facility with available stock.' It does not explicitly document a workflow for tracking status (pending, in transit, etc.) or confirming receipt by the Logistics Coordinator. While 'facilitate' implies coordination, specific lifecycle operations like status tracking and receipt confirmation are not entailed by the text and are not standard CRUD operations explicitly requested. Furthermore, the core capability of 'identifying the closest facility with available stock' is missing from the LLGs; the current LLGs assume the source/destination are already designated in the request initiation, but the HLG description explicitly highlights the identification of the closest facility as a key part of the facilitation. Therefore, llg_002 and llg_003 are unsupported, and the essential capability of identifying the closest facility is missing.",
+        "decision": "REGENERATE_LOW_LEVEL_GOALS",
+        "quality_score": 1,
+        "regeneration_feedback": "Remove 'Confirm Product Transfer Receipt' and 'Track Product Transfer Status' as they are not explicitly documented. Add a goal to 'Identify Closest Facility with Available Stock' which is explicitly mentioned in the HLG description and project description. Keep 'Initiate Product Transfer Request' but ensure it relies on the identification capability.",
+        "unsupported_or_misleading_llg_ids": [
+          "llg_002",
+          "llg_003"
+        ],
+        "missing_essential_capabilities": [
+          "Identify closest facility with available stock"
+        ],
+        "voter_count": 3,
+        "valid_vote_count": 3,
+        "winning_vote_count": 3,
+        "vote_distribution": {
+          "REGENERATE_LOW_LEVEL_GOALS": 3
         }
       }
     }
@@ -133,8 +154,8 @@
         }
       },
       {
-        "name": "Ensure Accurate Inventory Management",
-        "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
+        "name": "Manage Hospital Inventory Items and Quantities",
+        "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
         "actor": {
           "name": "Hospital Inventory Manager",
           "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
@@ -165,8 +186,8 @@
         }
       },
       {
-        "name": "Manage Patient Registration and Personal Information",
-        "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+        "name": "Access Comprehensive Patient Details",
+        "description": "To retrieve and utilize essential patient information, such as full name, CPF, date of birth, sex, and admission date, to support patient care and administrative tasks.",
         "actor": {
           "name": "Hospital Admissions Staff",
           "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
@@ -174,7 +195,7 @@
       },
       {
         "name": "Facilitate Inter-Hospital Product Transfers",
-        "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+        "description": "To efficiently coordinate and execute the transfer of necessary products, such as blood, between different hospitals by identifying the closest facility with available stock.",
         "actor": {
           "name": "Logistics Coordinator",
           "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
@@ -233,78 +254,6 @@
         }
       },
       {
-        "name": "Add Product to Hospital Inventory",
-        "description": "The system shall allow the Hospital Inventory Manager to add a new product type with an initial quantity to a specific hospital's inventory.",
-        "high_level_associated": {
-          "name": "Ensure Accurate Inventory Management",
-          "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
-          "actor": {
-            "name": "Hospital Inventory Manager",
-            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
-          }
-        }
-      },
-      {
-        "name": "Update Product Quantity in Inventory",
-        "description": "The system shall allow the Hospital Inventory Manager to update the quantity of an existing product in a specific hospital's inventory.",
-        "high_level_associated": {
-          "name": "Ensure Accurate Inventory Management",
-          "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
-          "actor": {
-            "name": "Hospital Inventory Manager",
-            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
-          }
-        }
-      },
-      {
-        "name": "Record Blood Unit Addition",
-        "description": "The system shall allow the Hospital Inventory Manager to record the addition of new blood units (e.g., by type and volume) to a specific hospital's blood bank inventory.",
-        "high_level_associated": {
-          "name": "Ensure Accurate Inventory Management",
-          "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
-          "actor": {
-            "name": "Hospital Inventory Manager",
-            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
-          }
-        }
-      },
-      {
-        "name": "Record Blood Unit Consumption",
-        "description": "The system shall allow the Hospital Inventory Manager to record the consumption or removal of blood units from a specific hospital's blood bank inventory.",
-        "high_level_associated": {
-          "name": "Ensure Accurate Inventory Management",
-          "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
-          "actor": {
-            "name": "Hospital Inventory Manager",
-            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
-          }
-        }
-      },
-      {
-        "name": "Retrieve Hospital Product Inventory",
-        "description": "The system shall allow the Hospital Inventory Manager to retrieve the current inventory levels for all products within a specific hospital.",
-        "high_level_associated": {
-          "name": "Ensure Accurate Inventory Management",
-          "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
-          "actor": {
-            "name": "Hospital Inventory Manager",
-            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
-          }
-        }
-      },
-      {
-        "name": "Retrieve Hospital Blood Bank Inventory",
-        "description": "The system shall allow the Hospital Inventory Manager to retrieve the current blood bank inventory details (e.g., blood types, quantities) for a specific hospital.",
-        "high_level_associated": {
-          "name": "Ensure Accurate Inventory Management",
-          "description": "To maintain precise and up-to-date records of all hospital inventory, including various products, their quantities, and critical blood bank supplies, to support operational needs.",
-          "actor": {
-            "name": "Hospital Inventory Manager",
-            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
-          }
-        }
-      },
-      {
         "name": "Query Hospitals with Available Beds by Location",
         "description": "The system shall allow the Hospital Admissions Staff to query for hospitals with available beds within a specified geographical radius of a given patient location.",
         "high_level_associated": {
@@ -329,47 +278,11 @@
         }
       },
       {
-        "name": "Specify Product and Quantity for Transfer",
-        "description": "Allow the Logistics Coordinator to input the specific product type (e.g., blood type, component) and the exact quantity required for an inter-hospital transfer request.",
-        "high_level_associated": {
-          "name": "Facilitate Inter-Hospital Product Transfers",
-          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
-          "actor": {
-            "name": "Logistics Coordinator",
-            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
-          }
-        }
-      },
-      {
-        "name": "Request List of Hospitals with Available Stock",
-        "description": "Enable the Logistics Coordinator to query the system to retrieve a list of hospitals that currently possess the specified product and quantity in their inventory.",
-        "high_level_associated": {
-          "name": "Facilitate Inter-Hospital Product Transfers",
-          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
-          "actor": {
-            "name": "Logistics Coordinator",
-            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
-          }
-        }
-      },
-      {
-        "name": "Filter Hospitals by Proximity to Requesting Facility",
-        "description": "Allow the Logistics Coordinator to filter or sort the list of hospitals with available stock based on their geographical proximity to the hospital making the transfer request.",
-        "high_level_associated": {
-          "name": "Facilitate Inter-Hospital Product Transfers",
-          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
-          "actor": {
-            "name": "Logistics Coordinator",
-            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
-          }
-        }
-      },
-      {
         "name": "Initiate Product Transfer Request",
-        "description": "Enable the Logistics Coordinator to formally send a request to transfer a specified product and quantity from a selected source hospital to a destination hospital.",
+        "description": "The system shall allow the Logistics Coordinator to initiate a transfer request for a specific product and quantity from a designated source hospital to a destination hospital.",
         "high_level_associated": {
           "name": "Facilitate Inter-Hospital Product Transfers",
-          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "description": "To efficiently coordinate and execute the transfer of necessary products, such as blood, between different hospitals by identifying the closest facility with available stock.",
           "actor": {
             "name": "Logistics Coordinator",
             "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
@@ -377,11 +290,11 @@
         }
       },
       {
-        "name": "Track Status of Product Transfer",
-        "description": "Allow the Logistics Coordinator to view the current status (e.g., pending, approved, in transit, delivered) of an initiated inter-hospital product transfer request.",
+        "name": "Confirm Product Transfer Receipt",
+        "description": "The system shall allow the Logistics Coordinator to confirm the successful receipt of a transferred product at the destination hospital, updating inventory records accordingly.",
         "high_level_associated": {
           "name": "Facilitate Inter-Hospital Product Transfers",
-          "description": "Enable the efficient coordination and facilitation of product transfers, such as blood, between different hospitals by identifying the closest facility with the required available stock to meet urgent needs.",
+          "description": "To efficiently coordinate and execute the transfer of necessary products, such as blood, between different hospitals by identifying the closest facility with available stock.",
           "actor": {
             "name": "Logistics Coordinator",
             "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
@@ -389,11 +302,23 @@
         }
       },
       {
-        "name": "Set Product Low Stock Threshold",
-        "description": "The Hospital Inventory Manager can define a specific low stock threshold (e.g., 4 items/liters) for a given product to trigger monitoring.",
+        "name": "Track Product Transfer Status",
+        "description": "The system shall allow the Logistics Coordinator to track the current status (e.g., pending, in transit, delivered) of an ongoing inter-hospital product transfer.",
         "high_level_associated": {
-          "name": "Monitor Critical Stock Levels",
-          "description": "To effectively track inventory thresholds for all products, identifying when stock levels are low (e.g., four or fewer items/liters) to prevent shortages and ensure hospitals have sufficient supplies for their immediate needs.",
+          "name": "Facilitate Inter-Hospital Product Transfers",
+          "description": "To efficiently coordinate and execute the transfer of necessary products, such as blood, between different hospitals by identifying the closest facility with available stock.",
+          "actor": {
+            "name": "Logistics Coordinator",
+            "description": "Facilitates the transfer of necessary products, such as blood, between hospitals based on stock availability and proximity."
+          }
+        }
+      },
+      {
+        "name": "Register a new inventory item",
+        "description": "The Hospital Inventory Manager can register a new product or blood bank supply item into the hospital inventory system, providing all necessary details such as item name, type, unit, and initial quantity.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Items and Quantities",
+          "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
           "actor": {
             "name": "Hospital Inventory Manager",
             "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
@@ -401,8 +326,68 @@
         }
       },
       {
-        "name": "Retrieve Products Below Threshold",
-        "description": "The Hospital Inventory Manager can query the system to get a list of all products whose current stock level is at or below their defined low stock threshold.",
+        "name": "Retrieve details of a specific inventory item",
+        "description": "The Hospital Inventory Manager can retrieve and view the complete details of a specific inventory item (product or blood bank supply) by its unique identifier.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Items and Quantities",
+          "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Retrieve a list of all inventory items",
+        "description": "The Hospital Inventory Manager can retrieve and view a comprehensive list of all registered inventory items, including products and blood bank supplies, along with their current quantities.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Items and Quantities",
+          "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update details of an existing inventory item",
+        "description": "The Hospital Inventory Manager can modify the non-quantity related details of an existing inventory item, such as its name, description, or unit type.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Items and Quantities",
+          "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Remove an inventory item",
+        "description": "The Hospital Inventory Manager can remove an inventory item (product or blood bank supply) from the hospital inventory system.",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Items and Quantities",
+          "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Update the quantity of an inventory item",
+        "description": "The Hospital Inventory Manager can adjust the current stock quantity of a specific inventory item (e.g., add received stock, subtract dispensed stock).",
+        "high_level_associated": {
+          "name": "Manage Hospital Inventory Items and Quantities",
+          "description": "To effectively oversee the complete lifecycle of all inventory items within a hospital, including products and blood bank supplies, by enabling their registration, retrieval, update, and removal, and accurately tracking their current quantities to support operational needs and resource allocation.",
+          "actor": {
+            "name": "Hospital Inventory Manager",
+            "description": "Manages and tracks hospital inventories, including products, quantities, and blood bank supplies, and monitors inventory thresholds."
+          }
+        }
+      },
+      {
+        "name": "Retrieve Products Below Critical Threshold",
+        "description": "The system should allow the Hospital Inventory Manager to retrieve a list of all products whose current stock level is four or fewer items/liters.",
         "high_level_associated": {
           "name": "Monitor Critical Stock Levels",
           "description": "To effectively track inventory thresholds for all products, identifying when stock levels are low (e.g., four or fewer items/liters) to prevent shortages and ensure hospitals have sufficient supplies for their immediate needs.",
@@ -426,7 +411,7 @@
       },
       {
         "name": "Record Patient Discharge",
-        "description": "The system shall allow the Hospital Admissions Staff to record a patient's discharge, updating their status and completing the check-out process.",
+        "description": "The system shall allow the Hospital Admissions Staff to record a patient's discharge, finalizing their check-out process.",
         "high_level_associated": {
           "name": "Streamline Patient Admission and Discharge",
           "description": "To facilitate efficient and organized processes for patient check-in and check-out, ensuring smooth transitions for patients within the health system.",
@@ -437,11 +422,11 @@
         }
       },
       {
-        "name": "RegisterNewPatient",
-        "description": "The Hospital Admissions Staff can initiate the registration process for a new patient, creating a new patient record in the system.",
+        "name": "Retrieve Patient Details by CPF",
+        "description": "The system shall allow the Hospital Admissions Staff to retrieve a patient's comprehensive details, including full name, CPF, date of birth, sex, and admission date, by providing the patient's CPF.",
         "high_level_associated": {
-          "name": "Manage Patient Registration and Personal Information",
-          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "name": "Access Comprehensive Patient Details",
+          "description": "To retrieve and utilize essential patient information, such as full name, CPF, date of birth, sex, and admission date, to support patient care and administrative tasks.",
           "actor": {
             "name": "Hospital Admissions Staff",
             "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
@@ -449,11 +434,11 @@
         }
       },
       {
-        "name": "RecordPatientPersonalDetails",
-        "description": "The Hospital Admissions Staff can input and save the initial personal details for a newly registered patient, such as name, date of birth, contact information, and address.",
+        "name": "Retrieve Patient Details by Full Name",
+        "description": "The system shall allow the Hospital Admissions Staff to retrieve a patient's comprehensive details, including full name, CPF, date of birth, sex, and admission date, by providing the patient's full name.",
         "high_level_associated": {
-          "name": "Manage Patient Registration and Personal Information",
-          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "name": "Access Comprehensive Patient Details",
+          "description": "To retrieve and utilize essential patient information, such as full name, CPF, date of birth, sex, and admission date, to support patient care and administrative tasks.",
           "actor": {
             "name": "Hospital Admissions Staff",
             "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
@@ -461,11 +446,11 @@
         }
       },
       {
-        "name": "UpdatePatientPersonalDetails",
-        "description": "The Hospital Admissions Staff can modify and save changes to an existing patient's personal details, ensuring the patient record is current and accurate.",
+        "name": "Retrieve Patient Details by Date of Birth",
+        "description": "The system shall allow the Hospital Admissions Staff to retrieve a patient's comprehensive details, including full name, CPF, date of birth, sex, and admission date, by providing the patient's date of birth.",
         "high_level_associated": {
-          "name": "Manage Patient Registration and Personal Information",
-          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "name": "Access Comprehensive Patient Details",
+          "description": "To retrieve and utilize essential patient information, such as full name, CPF, date of birth, sex, and admission date, to support patient care and administrative tasks.",
           "actor": {
             "name": "Hospital Admissions Staff",
             "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
@@ -473,23 +458,11 @@
         }
       },
       {
-        "name": "RetrievePatientDetailsForCheckout",
-        "description": "The Hospital Admissions Staff can search for and retrieve a specific patient's personal details to facilitate the patient check-out process.",
+        "name": "Retrieve Patient Details by Admission Date",
+        "description": "The system shall allow the Hospital Admissions Staff to retrieve a patient's comprehensive details, including full name, CPF, date of birth, sex, and admission date, by providing the patient's admission date.",
         "high_level_associated": {
-          "name": "Manage Patient Registration and Personal Information",
-          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
-          "actor": {
-            "name": "Hospital Admissions Staff",
-            "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
-          }
-        }
-      },
-      {
-        "name": "RetrievePatientDetailsForOngoingCare",
-        "description": "The Hospital Admissions Staff can search for and retrieve a specific patient's personal details to support ongoing patient care processes, such as appointment scheduling or medical record access.",
-        "high_level_associated": {
-          "name": "Manage Patient Registration and Personal Information",
-          "description": "To ensure comprehensive and accurate management of patient records, encompassing the efficient registration of new patients (check-in), the recording and updating of their personal details, and the seamless retrieval of this information to support check-out and ongoing patient care processes. This goal aims to maintain a reliable and up-to-date central repository of patient data.",
+          "name": "Access Comprehensive Patient Details",
+          "description": "To retrieve and utilize essential patient information, such as full name, CPF, date of birth, sex, and admission date, to support patient care and administrative tasks.",
           "actor": {
             "name": "Hospital Admissions Staff",
             "description": "Handles patient check-in and check-out processes, accesses patient details, and utilizes the system to recommend hospitals with available beds."
@@ -500,7 +473,7 @@
   },
   "missing_hlg_evaluation": {
     "decision": "NO_MISSING_HIGH_LEVEL_GOALS",
-    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. A requirement-by-requirement audit confirms that all explicit functional requirements in the project description are covered by the current High-Level Goals. The retired goal 'Optimize Product Distribution Based on Availability' is fully entailed by the current goal 'Facilitate Inter-Hospital Product Transfers', which covers identifying the closest facility with available stock to meet urgent needs. The retired goal 'Optimize Public Health System Resources' is a high-level system objective rather than a specific actor-level functional capability; its constituent parts (managing hospital info, inventory, and transfers) are covered by the specific HLGs for the Public Health System Administrator, Hospital Inventory Manager, and Logistics Coordinator. No new actor-level functional gaps were identified.",
+    "rationale": "Voting result 3/3 for NO_MISSING_HIGH_LEVEL_GOALS. The project description's functional requirements are fully covered by the current High-Level Goals. 1. 'Register and retrieve detailed information about hospitals' is covered by 'Maintain Comprehensive Hospital Information'. 2. 'Manage hospital inventories, tracking various products and their quantities' is covered by 'Manage Hospital Inventory Items and Quantities'. 3. 'Consider inventory thresholds... four or fewer items' is covered by 'Monitor Critical Stock Levels'. 4. 'Support patient check-in and check-out' is covered by 'Streamline Patient Admission and Discharge'. 5. 'Provide access to patient details' is covered by 'Access Comprehensive Patient Details'. 6. 'Recommend the nearest hospital with available beds' is covered by 'Provide Timely Patient Placement Recommendations'. 7. 'Facilitate the transfer of necessary products... by identifying the closest facility with available stock' is covered by 'Facilitate Inter-Hospital Product Transfers'. The retired HLGs ('Optimize Public Health System Resources', 'Optimize Product Distribution Based on Availability', 'Ensure Accurate Inventory Management', 'Ensure Comprehensive Hospital Inventory Management') were either too broad/non-functional or redundant with the more specific current HLGs. No documented actor-level outcome is left uncovered.",
     "quality_score": 5,
     "missing_goal_requests": [],
     "voter_count": 3,
@@ -513,7 +486,8 @@
   "missing_hlg_decision": "NO_MISSING_HIGH_LEVEL_GOALS",
   "llg_regeneration_counts": {
     "hospital inventory manager::monitor critical stock levels": 1,
-    "hospital admissions staff::streamline patient admission and discharge": 1
+    "hospital admissions staff::streamline patient admission and discharge": 1,
+    "hospital admissions staff::access comprehensive patient details": 1
   },
   "warnings": []
 }

@@ -77,11 +77,18 @@ class HighLevelGoalDecision(str, Enum):
     REMOVE = "REMOVE_ORIGINAL_HIGH_LEVEL_GOAL"
 
 
+class HighLevelGoalRemovalBasis(str, Enum):
+    UNSUPPORTED = "UNSUPPORTED"
+    FULLY_REDUNDANT = "FULLY_REDUNDANT"
+
+
 class HighLevelGoalEvaluation(BaseModel):
     rationale: str
     decision: HighLevelGoalDecision
     quality_score: int = Field(ge=0, le=5)
     rewriting_focus: str | None = None
+    removal_basis: HighLevelGoalRemovalBasis | None = None
+    covered_by_high_level_goal_name: str | None = None
     voter_count: int = 1
     valid_vote_count: int = 1
     winning_vote_count: int = 1

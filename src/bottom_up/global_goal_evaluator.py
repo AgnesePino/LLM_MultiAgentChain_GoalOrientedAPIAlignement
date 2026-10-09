@@ -15,6 +15,7 @@ from src.data_model import (
     GoalBranch,
     HighLevelGoalDecision,
     HighLevelGoalEvaluation,
+    HighLevelGoalRemovalBasis,
     HighLevelGoalReplacementRequest,
     HighLevelGoals,
     LowLevelGoalDecision,
@@ -54,13 +55,6 @@ def _key(value: str) -> str:
     return " ".join(value.casefold().split())
 
 
-def _stable_hlg_key(branch: GoalBranch) -> str:
-    return (
-        f"{_key(branch.high_level_goal.actor.name)}::"
-        f"{_key(branch.high_level_goal.name)}"
-    )
-
-
 def _other_high_level_goals(
     current_hlgs: HighLevelGoals,
     branch: GoalBranch,
@@ -80,24 +74,24 @@ HLG_EVALUATOR_EXAMPLES = """Few-shot examples:
 - Correct goal. Description: CatWatch shows repository popularity and active
   contributors. Original HLG: "Monitor GitHub project activity"; reconstruction:
   "Analyze repository popularity and contributors".
-  Output: {"rationale":"Both goals express the same documented stakeholder intention.","decision":"KEEP_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":5,"rewriting_focus":null}
+  Output: {"rationale":"Both goals express the same documented stakeholder intention.","decision":"KEEP_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":5,"rewriting_focus":null,"removal_basis":null,"covered_by_high_level_goal_name":null}
 - Modification error. Description: CatWatch fetches GitHub statistics
   automatically. Original HLG: "Manually enter repository statistics";
   reconstruction: "Collect and analyze GitHub statistics".
-  Output: {"rationale":"Manual entry contradicts the documented automatic collection, but the underlying analytics intention is valid.","decision":"REWRITE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":2,"rewriting_focus":"Express automatic collection and analysis of GitHub statistics."}
+  Output: {"rationale":"Manual entry contradicts the documented automatic collection, but the underlying analytics intention is valid.","decision":"REWRITE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":2,"rewriting_focus":"Express automatic collection and analysis of GitHub statistics.","removal_basis":null,"covered_by_high_level_goal_name":null}
 - Erroneous addition. Description: CatWatch only collects and reports GitHub
   statistics. Original HLG: "Pay contributors"; reconstruction: "Process
   contributor payments".
-  Output: {"rationale":"The payment intention is unsupported by the description in both the original and reconstructed goals.","decision":"REMOVE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":0,"rewriting_focus":null}
+  Output: {"rationale":"The payment intention is unsupported by the description in both the original and reconstructed goals.","decision":"REMOVE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":0,"rewriting_focus":null,"removal_basis":"UNSUPPORTED","covered_by_high_level_goal_name":null}
 - Redundant workflow fragment. Description: customers create, submit, and track
   orders. Original HLG: "Track submitted orders"; another HLG for Customer is
   "Manage the order lifecycle", covering creation through tracking.
-  Output: {"rationale":"Tracking is a documented workflow phase already encompassed by the broader sibling intention.","decision":"REMOVE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":1,"rewriting_focus":null}
+  Output: {"rationale":"Tracking is a documented workflow phase already encompassed by the broader sibling intention.","decision":"REMOVE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":1,"rewriting_focus":null,"removal_basis":"FULLY_REDUNDANT","covered_by_high_level_goal_name":"Manage the order lifecycle"}
 - Fragmented workflow without an umbrella. Description: editors draft, revise,
   publish, and archive one article. Original HLG: "Publish an article";
   siblings separately cover drafting and archiving, but no HLG expresses the
   complete editor intention.
-  Output: {"rationale":"The goal is supported but too narrow: it is one phase of a single end-to-end content-management intention.","decision":"REWRITE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":2,"rewriting_focus":"Express one end-to-end goal covering drafting, revision, publication, and archival of an article."}
+  Output: {"rationale":"The goal is supported but too narrow: it is one phase of a single end-to-end content-management intention.","decision":"REWRITE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":2,"rewriting_focus":"Express one end-to-end goal covering drafting, revision, publication, and archival of an article.","removal_basis":null,"covered_by_high_level_goal_name":null}
 """
 LLG_EVALUATOR_EXAMPLES = """Few-shot examples:
 - Correct decomposition. Parent: "Monitor repository popularity". LLGs retrieve
@@ -277,13 +271,22 @@ granularity as the stakeholder outcome. A workflow phase, state transition,
 validation step, exception path, or CRUD capability is not automatically an
 independent HLG merely because it is explicitly documented.
 
+If the branch has no LLGs, treat that as a decomposition omission, not as
+evidence that the original HLG is unsupported. Judge KEEP, REWRITE, or REMOVE
+from the project description and sibling hierarchy exactly as for a non-empty
+branch. A valid empty HLG must be kept or rewritten so that its LLGs can be
+generated by the subsequent repair step.
+
 Perform this hierarchy-wide consolidation audit before deciding:
 1. Identify the end-to-end functional outcome pursued by this actor.
 2. Group documented capabilities that operate on the same artifact and jointly
    realize that outcome. Do not split creation, draft handling, submission,
    consultation, validation, and exception handling into separate HLGs unless
    the description presents independently satisfiable stakeholder outcomes.
-3. If a broader sibling already entails the original goal, choose REMOVE.
+3. Choose REMOVE only when the goal is wholly unsupported, or when one named
+   sibling for the same actor already entails every documented capability and
+   every distinctive LLG of the original goal. Partial overlap, a shared domain
+   object, or a broader-sounding label is not sufficient.
 4. If the hierarchy is fragmented and no sibling is yet a valid umbrella,
    choose REWRITE for the broadest suitable goal so it can become that umbrella.
 5. Choose KEEP only when the goal is both supported and independently scoped,
@@ -291,7 +294,9 @@ Perform this hierarchy-wide consolidation audit before deciding:
 
 Rewrite an HLG when it is too generic, narrow, ambiguous, incorrectly scoped,
 or less faithful than the reconstruction. Remove it when documentation does not
-support it or another HLG for the same actor already covers its intention.
+support it or another HLG for the same actor demonstrably covers its complete
+intention. When a supported goal contains any distinct stakeholder outcome or
+capability not preserved by one sibling, prefer KEEP or REWRITE over REMOVE.
 Judge semantic entailment, not equal names or superficial thematic overlap. Do
 not justify KEEP merely by saying that two goals concern different workflow
 stages. A supported but materially over-fragmented goal must receive score 0-2
@@ -314,9 +319,13 @@ Other current High-Level Goals:
 
 Do not rewrite a supported HLG merely because its LLGs use API-like wording.
 
+For REMOVE, set removal_basis to UNSUPPORTED or FULLY_REDUNDANT. A
+FULLY_REDUNDANT removal must name exactly one surviving sibling in
+covered_by_high_level_goal_name. Otherwise use null for both fields.
+
 Output JSON:
-{{"rationale":"...","decision":"KEEP_ORIGINAL_HIGH_LEVEL_GOAL | REWRITE_ORIGINAL_HIGH_LEVEL_GOAL | REMOVE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":0,"rewriting_focus":null}}"""
-    return _evaluate(
+{{"rationale":"...","decision":"KEEP_ORIGINAL_HIGH_LEVEL_GOAL | REWRITE_ORIGINAL_HIGH_LEVEL_GOAL | REMOVE_ORIGINAL_HIGH_LEVEL_GOAL","quality_score":0,"rewriting_focus":null,"removal_basis":null,"covered_by_high_level_goal_name":null}}"""
+    evaluation = _evaluate(
         prompt,
         HighLevelGoalEvaluation,
         conversation,
@@ -326,6 +335,44 @@ Output JSON:
             f"'{branch.high_level_goal.name}'"
         ),
     )
+    removal_is_supported = (
+        evaluation.removal_basis == HighLevelGoalRemovalBasis.UNSUPPORTED
+        or (
+            evaluation.removal_basis
+            == HighLevelGoalRemovalBasis.FULLY_REDUNDANT
+            and any(
+                _key(sibling.get("name", ""))
+                == _key(evaluation.covered_by_high_level_goal_name or "")
+                and _key((sibling.get("actor") or {}).get("name", ""))
+                == _key(branch.high_level_goal.actor.name)
+                for sibling in sibling_hlgs
+            )
+        )
+    )
+    if evaluation.decision == HighLevelGoalDecision.REMOVE and (
+        evaluation.winning_vote_count < evaluation.voter_count
+        or not removal_is_supported
+    ):
+        reasons = []
+        if evaluation.winning_vote_count < evaluation.voter_count:
+            reasons.append("REMOVE was not unanimous")
+        if not removal_is_supported:
+            reasons.append(
+                "no valid unsupported/redundant removal basis with a named "
+                "same-actor sibling was supplied"
+            )
+        return evaluation.model_copy(update={
+            "rationale": (
+                f"{evaluation.rationale} Destructive-action gate: "
+                f"{'; '.join(reasons)}; the HLG is retained in this state."
+            ),
+            "decision": HighLevelGoalDecision.KEEP,
+            "quality_score": BOTTOM_UP_QUALITY_THRESHOLD,
+            "rewriting_focus": None,
+            "removal_basis": None,
+            "covered_by_high_level_goal_name": None,
+        })
+    return evaluation
 
 
 def build_replacement_request(
@@ -609,7 +656,6 @@ def evaluate_branch(
     branch: GoalBranch,
     reconstruction: BottomUpHighLevelGoal,
     current_hlgs: HighLevelGoals,
-    llg_stabilized: bool = False,
     conversation: EvaluatorConversation | None = None,
 ) -> GlobalGoalEvaluationResult:
     try:
@@ -642,16 +688,6 @@ def evaluate_branch(
 
         if hlg.decision == HighLevelGoalDecision.REWRITE:
             decision = GlobalGoalEvaluationDecision.REWRITE_ORIGINAL_HIGH_LEVEL_GOAL
-        elif llg_stabilized:
-            llg = LowLevelGoalEvaluation(
-                rationale=(
-                    "The branch reached its bounded LLG repair limit; its latest "
-                    "decomposition is retained without another LLG evaluator call."
-                ),
-                decision=LowLevelGoalDecision.KEEP,
-                quality_score=BOTTOM_UP_QUALITY_THRESHOLD,
-            )
-            decision = GlobalGoalEvaluationDecision.LLG_REGENERATION_LIMIT_REACHED
         else:
             try:
                 llg = evaluate_llg_decomposition(
@@ -672,6 +708,24 @@ def evaluate_branch(
                 if llg.decision == LowLevelGoalDecision.REGENERATE
                 else GlobalGoalEvaluationDecision.CONFIRM_BRANCH
             )
+            if not branch.low_level_goals and decision == GlobalGoalEvaluationDecision.CONFIRM_BRANCH:
+                llg = llg.model_copy(update={
+                    "rationale": (
+                        f"{llg.rationale} Empty-branch invariant: a valid HLG "
+                        "cannot be confirmed without an LLG decomposition."
+                    ),
+                    "decision": LowLevelGoalDecision.REGENERATE,
+                    "quality_score": min(llg.quality_score, 2),
+                    "regeneration_feedback": (
+                        "Generate a complete, non-redundant decomposition of "
+                        "the documented parent HLG into atomic functional "
+                        "interactions."
+                    ),
+                    "missing_essential_capabilities": [
+                        branch.high_level_goal.description
+                    ],
+                })
+                decision = GlobalGoalEvaluationDecision.REGENERATE_LOW_LEVEL_GOALS
 
     rationale_parts = [hlg.rationale]
     if llg is not None:
@@ -717,17 +771,14 @@ def evaluate_all_branches(
     branches: list[GoalBranch],
     reconstructions: dict[str, BottomUpHighLevelGoal],
     current_hlgs: HighLevelGoals,
-    stabilized_hlg_keys: set[str] | None = None,
     conversation: EvaluatorConversation | None = None,
 ):
-    stabilized_hlg_keys = stabilized_hlg_keys or set()
     return {
         branch.branch_id: evaluate_branch(
             project_description,
             branch,
             reconstructions[branch.branch_id],
             current_hlgs,
-            _stable_hlg_key(branch) in stabilized_hlg_keys,
             conversation,
         )
         for branch in branches
